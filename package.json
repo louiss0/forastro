@@ -1,0 +1,38 @@
+{
+  "name": "@forastro/monorepo",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "postinstall": "node ./tools/scripts/patch-nx-cli.js"
+  },
+  "private": true,
+  "devDependencies": {
+    "@astrojs/tailwind": "^3.0.1",
+    "@nrwl/eslint-plugin-nx": "15.8.3",
+    "@nrwl/js": "15.8.3",
+    "@nrwl/linter": "15.8.3",
+    "@nrwl/nx-cloud": "latest",
+    "@nrwl/vite": "15.8.3",
+    "@nrwl/workspace": "15.8.3",
+    "@nxtensions/astro": "^3.3.0",
+    "@typescript-eslint/eslint-plugin": "^5.36.1",
+    "@typescript-eslint/parser": "^5.36.1",
+    "@vitest/coverage-c8": "~0.25.8",
+    "@vitest/ui": "^0.25.8",
+    "astro": "^2.0.17",
+    "eslint": "~8.15.0",
+    "eslint-config-prettier": "8.1.0",
+    "jsdom": "~20.0.3",
+    "nx": "15.8.3",
+    "prettier": "^2.6.2",
+    "tailwindcss": "^3.0.24",
+    "tslib": "^2.5.0",
+    "typescript": "~4.9.5",
+    "vite": "^4.0.1",
+    "vite-plugin-dts": "~1.7.1",
+    "vite-plugin-eslint": "^1.8.1",
+    "vite-tsconfig-paths": "^4.0.2",
+    "vitest": "^0.25.8"
+  },
+  "dependencies": {}
+}
