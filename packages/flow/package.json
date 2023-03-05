@@ -1,16 +1,22 @@
 {
   "name": "@forastro/flow",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "exports": {
     ".": {
-      "default":"./src/index.ts",
+      "default": "./src/index.ts",
       "types": "./src/index.d.ts"
     }
   },
-  "files": ["src"],
-  "keywords": ["astro-component", "ui"],
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "astro-component",
+    "ui"
+  ],
   "peerDependencies": {
-    "astro": "^1.0.0"
+    "astro": "^1.0.0",
+    "@forastro/utilities": "^0.0.0"
   }
 }

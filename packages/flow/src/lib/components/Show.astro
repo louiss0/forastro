@@ -1,7 +1,7 @@
 ---
 type Props = {
   when: unknown;
-  children: Array<astroHTML.JSX.HTMLAttributes> | ((value: unknown) => unknown);
+  children: Array<astroHTML.JSX.HTMLAttributes>;
 };
 
 const { when } = Astro.props;
@@ -9,9 +9,9 @@ const { slots } = Astro;
 
 const html =
   slots.has("default") && when
-    ? await slots.render("default", [when])
+    ? await slots.render("default")
     : slots.has("fallback")
-    ? await slots.render("fallback", [when])
+    ? await slots.render("fallback")
     : "Please use a fallback slot or a child based on what you want to render";
 ---
 
