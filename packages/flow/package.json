@@ -1,9 +1,10 @@
 {
   "name": "@forastro/flow",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "exports": {
     ".": {
+      "import": "./src/index.ts",
       "default": "./src/index.ts",
       "types": "./src/index.d.ts"
     }
@@ -17,6 +18,6 @@
   ],
   "peerDependencies": {
     "astro": "^1.0.0",
-    "@forastro/utilities": "^0.0.0"
+    "@forastro/utilities": "~0.0.0"
   }
 }
