@@ -1,0 +1,15 @@
+---
+import { getCaseFromSwitchState } from "../helpers";
+
+export type Props = {
+  of: unknown;
+  children: astroHTML.JSX.HTMLAttributes | string;
+};
+
+const { of } = Astro.props;
+
+const caseFromSwitchStateValueIsEqualToCase =
+  getCaseFromSwitchState()?.value === of;
+---
+
+{caseFromSwitchStateValueIsEqualToCase && <slot />}

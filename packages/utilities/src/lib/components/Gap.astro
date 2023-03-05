@@ -1,0 +1,223 @@
+---
+type AllowedColors =
+  | "red"
+  | "green"
+  | "blue"
+  | "purple"
+  | "black"
+  | "indigo"
+  | "orange"
+  | "yellow"
+  | "brown"
+  | "white";
+
+export interface Props {
+  spaces: number;
+  color?: AllowedColors;
+}
+
+const { spaces, color = "" } = Astro.props;
+---
+
+<div data-id="gap" data-spaces={spaces} data-color={color}><!--gap  --></div>
+
+<script>
+  {
+    const dataGapSelector = "[data-id='gap']";
+
+    const gaps = document.querySelectorAll<HTMLElement>(dataGapSelector);
+
+    document.addEventListener("DOMContentLoaded", () => {
+      gaps.forEach(function (gap) {
+        const [spaces, color] = [
+          parseInt(gap.getAttribute("data-spaces")!),
+          gap.getAttribute("data-color")!,
+        ];
+
+        const gapParentElement = gap.parentElement!;
+
+        const parentElementStyle = getComputedStyle(gapParentElement);
+
+        const { nextElementSibling, previousElementSibling } = gap;
+
+        gap.setAttribute(
+          "data-id",
+          `gap${Math.ceil(Math.random() * Date.now())}`
+        );
+
+        throwErrorIfThereisNoPreviousElement(
+          previousElementSibling,
+          gap.dataset["id"] as string
+        );
+
+        throwErrorIfThereIsNoNextElement(
+          nextElementSibling,
+          gap.dataset["id"] as string
+        );
+
+        throwErrorIfAPreviousElementSiblingOrANextElementSiblingHasADataId(
+          previousElementSibling,
+          gap,
+          nextElementSibling
+        );
+
+        const previousElementSiblingStyle = getComputedStyle(
+          previousElementSibling
+        );
+
+        changeElementWidthIfTheParentElementFulfilsTheseConditions(
+          parentElementStyle,
+          previousElementSiblingStyle,
+          gap,
+          spaces
+        );
+
+        changeElementHeightIfTheParentElementFulfilsTheseConditions(
+          parentElementStyle,
+          previousElementSiblingStyle,
+          gap,
+          spaces
+        );
+
+        gap.style.backgroundColor = color;
+      });
+    });
+
+    function changeElementWidthIfTheParentElementFulfilsTheseConditions(
+      parentElementStyle: CSSStyleDeclaration,
+      previousElementSiblingStyle: CSSStyleDeclaration,
+      element: HTMLElement,
+      spaces: number
+    ) {
+      const {
+        display: parentElementDisplay,
+        fontSize: parentElementFontSize,
+        gridAutoFlow: parentElementGridAutoFlow,
+        flexDirection: parentElementFlexDirection,
+      } = parentElementStyle;
+
+      const { display: previousElementDisplay } = previousElementSiblingStyle;
+
+      const previousElementDisplayIsInline =
+        previousElementDisplay.includes("inline");
+
+      const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
+
+      const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
+
+      const parentElementStyleFlexDirectionIsRow =
+        parentElementFlexDirection.includes("row");
+
+      const parentElementStyleGridAutoFlowIsColumn =
+        parentElementGridAutoFlow.includes("column");
+
+      const anyOfTheConditionsRequiredToSetTheWidthOfTheElementAreTrue = [
+        previousElementDisplayIsInline,
+        parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsRow,
+        parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsColumn,
+      ].some((value) => value === true);
+
+      if (anyOfTheConditionsRequiredToSetTheWidthOfTheElementAreTrue) {
+        element.style.width = `${parseInt(parentElementFontSize) * spaces}px`;
+
+        element.style.height = "auto";
+      }
+    }
+
+    function changeElementHeightIfTheParentElementFulfilsTheseConditions(
+      parentElementStyle: CSSStyleDeclaration,
+      previousElementSiblingStyle: CSSStyleDeclaration,
+      element: HTMLElement,
+      spaces: number
+    ) {
+      const {
+        display: parentElementDisplay,
+        fontSize: parentElementFontSize,
+        gridAutoFlow: parentElementGridAutoFlow,
+        flexDirection: parentElementFlexDirection,
+      } = parentElementStyle;
+
+      const { display: previousElementDisplay } = previousElementSiblingStyle;
+
+      const previousElementDisplayIsBlock =
+        previousElementDisplay.includes("block");
+
+      const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
+
+      const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
+
+      const parentElementStyleFlexDirectionIsColumn =
+        parentElementFlexDirection.includes("column");
+
+      const parentElementStyleGridAutoFlowIsRow =
+        parentElementGridAutoFlow.includes("row");
+
+      const anyOfTheConditionsRequiredToSetTheHeightOfTheElementAreTrue = [
+        previousElementDisplayIsBlock,
+        parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsRow,
+        parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsColumn,
+      ].some((value) => value === true);
+
+      if (anyOfTheConditionsRequiredToSetTheHeightOfTheElementAreTrue) {
+        element.style.width = "auto";
+        element.style.height = `${parseInt(parentElementFontSize) * spaces}px`;
+      }
+    }
+
+    function throwErrorIfThereIsNoNextElement(
+      nextElementSibling: Element | null,
+      id: string
+    ): asserts nextElementSibling is Element;
+
+    function throwErrorIfThereIsNoNextElement(
+      nextElementSibling: Element | null,
+      id: string
+    ) {
+      if (!nextElementSibling) {
+        throw new Error(
+          `A gap must exist between two elements check for ${id} `
+        );
+      }
+    }
+
+    function throwErrorIfThereisNoPreviousElement(
+      previousElementSibling: Element | null,
+      id: string
+    ): asserts previousElementSibling is Element;
+
+    function throwErrorIfThereisNoPreviousElement(
+      previousElementSibling: Element | null,
+      id: string
+    ) {
+      if (!previousElementSibling) {
+        throw new Error(
+          `A gap must exist between two elements check for ${id} `
+        );
+      }
+    }
+
+    function throwErrorIfAPreviousElementSiblingOrANextElementSiblingHasADataId(
+      previousElementSibling: Element,
+      element: Element,
+      nextElementSibling: Element
+    ) {
+      const previousElementOrNextElementHasADataIdOfGap =
+        previousElementSibling.hasAttribute("data-id") ||
+        nextElementSibling.hasAttribute("data-id");
+
+      const previousElementSiblingDataId =
+        previousElementSibling.getAttribute("data-id");
+
+      const elementDataId = element.getAttribute("data-id");
+
+      const nextElementSiblingDataId =
+        nextElementSibling.getAttribute("data-id");
+
+      if (previousElementOrNextElementHasADataIdOfGap) {
+        throw new Error(
+          `Two gaps cannot exist between each other , Check for these id's  ${previousElementSiblingDataId} ${elementDataId} ${nextElementSiblingDataId} `
+        );
+      }
+    }
+  }
+</script>

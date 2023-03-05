@@ -1,0 +1,21 @@
+---
+import { setCaseInSwitchState, unsetCaseInSwitchState } from "../helpers";
+
+import { Props as CaseProps } from "./Case.astro";
+
+type Props = {
+  of: unknown;
+  children: Array<CaseProps>;
+};
+
+const { of } = Astro.props;
+
+let html = "";
+setCaseInSwitchState(of);
+
+html = Astro.slots.has("default") ? await Astro.slots.render("default") : "";
+
+unsetCaseInSwitchState();
+---
+
+<Fragment set:html={html} />

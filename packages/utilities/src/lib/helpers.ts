@@ -2,9 +2,12 @@
 type HasForEachMethod = {
     forEach<T>(callbackfn: (...args:Array<unknown>) => T, thisArg?: typeof  globalThis): void;
 }
- type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T> = T extends HasForEachMethod
+
+type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T> =
+    T extends HasForEachMethod
 	? Parameters<T["forEach"]>[0] : T extends Generator
-	? <U>(value: ReturnType<T["next"]>["value"])=> U : (...args:Array<unknown>)=> unknown
+    ? <U>(value: ReturnType<T["next"]>["value"]) => U
+    : (...args: Array<unknown>) => unknown
 
 
 const isIterable = (value:unknown):value is Iterable<unknown> =>
@@ -13,10 +16,9 @@ const isIterable = (value:unknown):value is Iterable<unknown> =>
         || typeof value[Symbol.asyncIterator] === 'function'
     )    
 
-const GeneratorFunction = function* () {}.constructor
+const GeneratorFunction = function* () {}.constructor as GeneratorFunctionConstructor
 
-const AsyncGeneratorFunction = async function* () {}.constructor
-
+const AsyncGeneratorFunction = async function* () {}.constructor as AsyncGeneratorFunctionConstructor
 
 
 function isObject(value:unknown): value is Record<PropertyKey, unknown> {
@@ -71,6 +73,8 @@ function isGenerator(value:unknown): value is Generator<unknown> {
     
 
 }
+
+
 function isAsyncGenerator(value:unknown): value is AsyncGenerator<unknown> {
 
 
@@ -79,7 +83,7 @@ function isAsyncGenerator(value:unknown): value is AsyncGenerator<unknown> {
 
 }
 
-async function* iterate<T extends Iterable<unknown> >(iterable:T, cb:GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>) {
+async function* iterate<T extends Iterable<unknown>>(iterable:T, cb:GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>) {
     
 
 
@@ -89,7 +93,7 @@ async function* iterate<T extends Iterable<unknown> >(iterable:T, cb:GetAppropri
         for await (const [key, value] of Object.entries(iterable)) {
             
             
-            yield  cb(key, value, iterable)
+            yield  cb(value, key, iterable)
             
         }
         
@@ -98,7 +102,7 @@ async function* iterate<T extends Iterable<unknown> >(iterable:T, cb:GetAppropri
     if (isGenerator(iterable) || isAsyncGenerator(iterable)) {
         
 
-        for await (const  value of iterable) {
+        for await (const value of iterable) {
             
             
             yield  cb(value)
@@ -111,5 +115,6 @@ async function* iterate<T extends Iterable<unknown> >(iterable:T, cb:GetAppropri
 
 }
 
+export type {GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed}
 
-export {range, iterate, reverseRange}
+export {range, iterate, reverseRange, isIterable }

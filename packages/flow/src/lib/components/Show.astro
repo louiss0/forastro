@@ -1,0 +1,18 @@
+---
+type Props = {
+  when: unknown;
+  children: Array<astroHTML.JSX.HTMLAttributes> | ((value: unknown) => unknown);
+};
+
+const { when } = Astro.props;
+const { slots } = Astro;
+
+const html =
+  slots.has("default") && when
+    ? await slots.render("default", [when])
+    : slots.has("fallback")
+    ? await slots.render("fallback", [when])
+    : "Please use a fallback slot or a child based on what you want to render";
+---
+
+<Fragment set:html={html} />

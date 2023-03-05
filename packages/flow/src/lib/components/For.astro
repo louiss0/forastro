@@ -1,0 +1,15 @@
+---
+import {
+  GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
+  iterate,
+} from "@forastro/utilities";
+
+type Props<T extends Iterable<unknown>> = {
+  of: T;
+  children: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>;
+};
+
+const { of: iterable } = Astro.props as Props<Iterable<unknown>>;
+---
+
+{iterate(iterable, (...args) => Astro.slots.render("default", [...args]))}

@@ -1,5 +1,16 @@
 {
   "name": "@forastro/flow",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "module",
+  "exports": {
+    ".": {
+      "default":"./src/index.ts",
+      "types": "./src/index.d.ts"
+    }
+  },
+  "files": ["src"],
+  "keywords": ["astro-component"],
+  "peerDependencies": {
+    "astro": "^1.0.0"
+  }
 }

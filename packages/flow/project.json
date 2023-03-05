@@ -1,47 +1,11 @@
 {
   "name": "flow",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "packages/flow/src",
+  "sourceRoot": "packages/flow",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nrwl/vite:build",
-      "outputs": [
-        "{options.outputPath}"
-      ],
-      "options": {
-        "outputPath": "dist/packages/flow"
-      }
-    },
-    "publish": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node tools/scripts/publish.mjs flow {args.ver} {args.tag}"
-      },
-      "dependsOn": [
-        "build"
-      ]
-    },
-    "test": {
-      "executor": "@nrwl/vite:test",
-      "outputs": [
-        "coverage/packages/flow"
-      ],
-      "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "../../coverage/packages/flow"
-      }
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "lintFilePatterns": [
-          "packages/flow/**/*.ts"
-        ]
-      }
+    "check": {
+      "executor": "@nxtensions/astro:check"
     }
   },
   "tags": []

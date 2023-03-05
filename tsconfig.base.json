@@ -21,9 +21,6 @@
       "@forastro/flow": [
         "packages/flow/src/index.ts"
       ],
-      "@forastro/gap": [
-        "packages/gap/src/index.ts"
-      ],
       "@forastro/utilities": [
         "packages/utilities/src/index.ts"
       ]
