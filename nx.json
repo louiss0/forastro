@@ -2,7 +2,7 @@
   "plugins": [
     "@nxtensions/astro"
   ],
-  "npmScope": "@forastro",
+  "npmScope": "forastro",
   "namedInputs": {
     "default": [
       "{projectRoot}/**/*",

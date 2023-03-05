@@ -18,10 +18,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@forastro/flow": [
+      "forastro/flow": [
         "packages/flow/src/index.ts"
       ],
-      "@forastro/utilities": [
+      "forastro/utilities": [
         "packages/utilities/src/index.ts"
       ]
     }

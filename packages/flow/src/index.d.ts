@@ -1,4 +1,4 @@
-import { GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed } from "@forastro/utilities";
+import { GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed } from "forastro/utilities";
 
  type ForProps<T extends Iterable<unknown>> = {
   of: T;
