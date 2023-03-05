@@ -1,5 +1,5 @@
 {
-  "name": "forastro/utilities",
+  "name": "@forastro/utilities",
   "version": "0.0.1",
   "type": "module",
   "exports": {
