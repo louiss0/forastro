@@ -1,0 +1,21 @@
+---
+import { iterate, range, reverseRange } from "@forastro/utilities";
+
+type Props = {
+  start: number;
+  stop: number;
+  step?: number;
+};
+
+const { start, step = 1, stop } = Astro.props;
+
+const rangeToActivate =
+  start < stop ? range : start > stop ? reverseRange : null;
+---
+
+{
+  rangeToActivate &&
+    iterate(rangeToActivate.call(start, stop, step), (val) =>
+      Astro.slots.render("default", [val])
+    )
+}

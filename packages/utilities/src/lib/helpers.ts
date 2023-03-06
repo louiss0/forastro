@@ -1,14 +1,4 @@
-/* eslint-disable @typescript-eslint/no-empty-function */
-type HasForEachMethod = {
-    forEach<T>(callbackfn: (...args:Array<unknown>) => T, thisArg?: typeof  globalThis): void;
-}
-
-type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T> =
-    T extends HasForEachMethod
-	? Parameters<T["forEach"]>[0] : T extends Generator
-    ? <U>(value: ReturnType<T["next"]>["value"]) => U
-    : (...args: Array<unknown>) => unknown
-
+import type { GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, HasForEachMethod } from "./types"
 
 const isIterable = (value:unknown):value is Iterable<unknown> =>
     isObject(value) && (
@@ -79,8 +69,6 @@ function isAsyncGenerator(value:unknown): value is AsyncGenerator<unknown> {
 
 
     return value instanceof Function && value.prototype === AsyncGeneratorFunction.prototype  
-    
-
 }
 
 async function* iterate<T extends Iterable<unknown>>(iterable:T, cb:GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>) {

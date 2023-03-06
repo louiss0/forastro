@@ -1,15 +1,24 @@
 ---
 import { getCaseFromSwitchState } from "../helpers";
 
-export type Props = {
+type FilledCase = {
   of: unknown;
   children: astroHTML.JSX.HTMLAttributes | string;
+  default?: never;
 };
 
-const { of } = Astro.props;
+type DefaultCase = {
+  default: true;
+  children: astroHTML.JSX.HTMLAttributes | string;
+  of?: never;
+};
+
+export type Props = FilledCase | DefaultCase;
+
+const { of, default: fallback } = Astro.props;
 
 const caseFromSwitchStateValueIsEqualToCase =
-  getCaseFromSwitchState()?.value === of;
+  getCaseFromSwitchState()?.value === of ? true : fallback;
 ---
 
 {caseFromSwitchStateValueIsEqualToCase && <slot />}
