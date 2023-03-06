@@ -1,4 +1,8 @@
-import { GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed } from "forastro/utilities";
+
+
+import type {
+  GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed
+} from "@forastro/utilities";
 
  type ForProps<T extends Iterable<unknown>> = {
   of: T;
@@ -19,10 +23,10 @@ type ShowProps<T> = {
   children: Array<astroHTML.JSX.HTMLAttributes> | ((value:T) => unknown) 
 }
 
-function For<T>(props: ForProps<T>): unknown 
-function Switch(props: SwitchProps): unknown 
-function Case(props: CaseProps): unknown 
-function Show<T>(props: ShowProps<T>): unknown 
+declare function For<T extends Iterable<unknown> >(props: ForProps<T>): unknown 
+declare function Switch(props: SwitchProps): unknown 
+declare function Case(props: CaseProps): unknown 
+declare function Show<T>(props: ShowProps<T>): unknown 
  
 
 export {For, Switch, Case, Show}

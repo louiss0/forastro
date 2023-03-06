@@ -1,7 +1,7 @@
-# Forastro Monorepo
+# @forastro Monorepo
 
 This repo is the repo for all of the packages that I will create for astro.
-The name of this monorepo is called `forastro/monorepo`. This monorepo uses `nx` as it's monorepo manager. This kind of monorepo is called a _integrated monorepo_. Which means that all of the packages are installed in the root directory. There are two main folders for this monorepo. `demo` `packages`.
+The name of this monorepo is called `@forastro/monorepo`. This monorepo uses `nx` as it's monorepo manager. This kind of monorepo is called a _integrated monorepo_. Which means that all of the packages are installed in the root directory. There are two main folders for this monorepo. `demo` `packages`.
 The demo folder is for testing and demonstrating the power of each package. The packages folder is for all of my packages. It's the one where all of my packages are created.
 
 ## Usage
