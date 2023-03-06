@@ -18,5 +18,8 @@
   ],
   "peerDependencies": {
     "astro": "^1.0.0"
+  },
+  "dependencies": {
+    "@forastro/utilities": "^0.0.3"
   }
 }

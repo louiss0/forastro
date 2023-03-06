@@ -1,0 +1,15 @@
+lockfileVersion: 5.4
+
+specifiers:
+  '@forastro/utilities': ^0.0.3
+
+dependencies:
+  '@forastro/utilities': 0.0.3
+
+packages:
+
+  /@forastro/utilities/0.0.3:
+    resolution: {integrity: sha512-5niUKEvC/BAoi158j61+QeFaRyNNwSXtu6XYUG5v1sJbWgdlZcMZhaeT0mOv6kMwSdi28ykc2+aeksb74EwcgQ==}
+    peerDependencies:
+      astro: ^1.0.0
+    dev: false
