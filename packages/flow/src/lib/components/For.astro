@@ -3,13 +3,38 @@ import {
   GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
   iterate,
 } from "@forastro/utilities";
+import { IterationInfo } from "../helpers";
 
 type Props<T extends Iterable<unknown>> = {
   of: T;
-  children: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>;
+  children: T extends Array<unknown>
+    ? FunctionBasedOnArrayType<T>
+    : GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>;
 };
+
+type GenerateParamsArrayFromArrayType<T extends Array<unknown>> = Parameters<
+  Parameters<T["forEach"]>[0]
+>;
+
+type FunctionBasedOnArrayType<T extends Array<unknown>> = (
+  value: GenerateParamsArrayFromArrayType<T>[0],
+  info: IterationInfo
+) => unknown;
 
 const { of: iterable } = Astro.props as Props<Iterable<unknown>>;
 ---
 
-{iterate(iterable, (...args) => Astro.slots.render("default", [...args]))}
+{
+  iterate(iterable, (...args) => {
+    const [value, key, iterable] = args;
+
+    if (Array.isArray(iterable) && typeof key === "number") {
+      return Astro.slots.render("default", [
+        value,
+        new IterationInfo(0, key, iterable.length - 1),
+      ]);
+    }
+
+    return Astro.slots.render("default", [...args]);
+  })
+}

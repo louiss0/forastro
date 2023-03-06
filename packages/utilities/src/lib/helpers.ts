@@ -8,7 +8,7 @@ const isIterable = (value:unknown):value is Iterable<unknown> =>
 
 const GeneratorFunction = function* () {}.constructor as GeneratorFunctionConstructor
 
-const AsyncGeneratorFunction = async function* () {}.constructor as AsyncGeneratorFunctionConstructor
+//const AsyncGeneratorFunction = async function* () {}.constructor as AsyncGeneratorFunctionConstructor
 
 
 function isObject(value:unknown): value is Record<PropertyKey, unknown> {
@@ -38,6 +38,10 @@ function* range(start:number,stop:number,step=1) {
 
 }
 
+
+const r = range
+
+
 function* reverseRange(start:number,stop:number,step=1) {
     
 
@@ -56,23 +60,26 @@ function* reverseRange(start:number,stop:number,step=1) {
 
 
 
-function isGenerator(value:unknown): value is Generator<unknown> {
+function isGenerator(value: unknown): value is Generator {
 
 
-    return value instanceof Function && value.prototype === GeneratorFunction.prototype  
-    
+    return isIterable(value) && value.toString() === "[object Generator]"
 
 }
 
+function wrapFunctionInAsyncGenerator(fn:(...args:Array<unknown>)=>unknown) {
 
-function isAsyncGenerator(value:unknown): value is AsyncGenerator<unknown> {
-
-
-    return value instanceof Function && value.prototype === AsyncGeneratorFunction.prototype  
+    return  async function* (...args:Array<unknown>) {
+        
+        yield await fn(...args)
+    }
 }
+
 
 async function* iterate<T extends Iterable<unknown>>(iterable:T, cb:GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>) {
     
+
+    const wrappedFunction = wrapFunctionInAsyncGenerator(cb)
 
 
     if (isIterable(iterable) && hasForEachMethod(iterable)) {
@@ -81,23 +88,34 @@ async function* iterate<T extends Iterable<unknown>>(iterable:T, cb:GetAppropria
         for await (const [key, value] of Object.entries(iterable)) {
             
             
-            yield  cb(value, key, iterable)
+            yield*  wrappedFunction(value, key, iterable)
             
         }
-        
+
+        return
     }
     
-    if (isGenerator(iterable) || isAsyncGenerator(iterable)) {
+    
+    for await (const value of iterable) {
+
+   
+       yield* wrappedFunction(value)  
+   
+   }
+  
+    //  if (isGenerator(iterable)) {
+        
+       
+
+    // }
+    
+    
+    
+    
+        
         
 
-        for await (const value of iterable) {
-            
-            
-            yield  cb(value)
-            
-        }
 
-    }
 
 
 
@@ -105,4 +123,4 @@ async function* iterate<T extends Iterable<unknown>>(iterable:T, cb:GetAppropria
 
 export type {GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed}
 
-export {range, iterate, reverseRange, isIterable }
+export {range, iterate, reverseRange, isIterable, isGenerator,  }

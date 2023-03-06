@@ -1,10 +1,15 @@
 ---
 import { iterate, range, reverseRange } from "@forastro/utilities";
+import { IterationInfo } from "../helpers";
 
 type Props = {
   start: number;
   stop: number;
   step?: number;
+  children:
+    | ((val: number) => unknown)
+    | Array<astroHTML.JSX.HTMLAttributes>
+    | string;
 };
 
 const { start, step = 1, stop } = Astro.props;
@@ -15,7 +20,12 @@ const rangeToActivate =
 
 {
   rangeToActivate &&
-    iterate(rangeToActivate.call(start, stop, step), (val) =>
-      Astro.slots.render("default", [val])
-    )
+    iterate(rangeToActivate(start, stop, step), (value) => {
+      if (typeof value === "number") {
+        return Astro.slots.render("default", [
+          value,
+          new IterationInfo(start, value, stop),
+        ]);
+      }
+    })
 }

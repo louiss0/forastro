@@ -1,5 +1,5 @@
 import "astro/types"
-
+import type {IterationInfo} from "./lib/helpers"
 type FilledCase = {
   of: unknown;
   children: astroHTML.JSX.HTMLAttributes | string;
@@ -17,6 +17,15 @@ type DefaultCase = {
 type HasForEachMethod = {
     forEach<T>(callbackfn: (...args:Array<unknown>) => T, thisArg?: typeof  globalThis): void;
 }
+type GenerateParamsArrayFromArrayType<T extends Array<unknown>> = Parameters<
+  Parameters<T["forEach"]>[0]
+>;
+
+
+type FunctionBasedOnArrayType<T extends Array<unknown>> = (
+  value: GenerateParamsArrayFromArrayType<T>[0],
+  info: IterationInfo
+) => unknown;
 
 type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T> =
     T extends HasForEachMethod
@@ -25,9 +34,11 @@ type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEa
     : (...args: Array<unknown>) => unknown
 
 
-type ForProps<T extends Iterable<unknown>> = {
+type ForProps<T extends HasForEachMethod> = {
   of: T;
-  children: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>;
+  children:T extends Array<unknown>
+    ? FunctionBasedOnArrayType<T>
+    : GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>
 };
 type SwitchProps = {
   of: unknown;
@@ -45,9 +56,10 @@ type RangeProps = {
   start: number;
   stop: number;
   step?: number;
+  children: ((value:number, info:IterationInfo)=> number) | Array<astroHTML.JSX.HTMLAttributes> | string 
 };
 
-declare function For<T extends Iterable<unknown> >(props: ForProps<T>): unknown 
+declare function For<T extends HasForEachMethod>(props: ForProps<T>): unknown 
 declare function Switch(props: SwitchProps): unknown 
 declare function Case(props: CaseProps): unknown 
 declare function Show<T>(props: ShowProps<T>): unknown 
