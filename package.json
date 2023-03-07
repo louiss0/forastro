@@ -5,9 +5,11 @@
   "scripts": {
     "postinstall": "node ./tools/scripts/patch-nx-cli.js"
   },
+  
   "private": true,
   "devDependencies": {
     "@astrojs/tailwind": "^3.0.1",
+    "@changesets/cli": "^2.26.0",
     "@nrwl/eslint-plugin-nx": "15.8.3",
     "@nrwl/js": "15.8.3",
     "@nrwl/linter": "15.8.3",
@@ -33,6 +35,5 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-tsconfig-paths": "^4.0.2",
     "vitest": "^0.25.8"
-  },
-  "dependencies": {}
+  }
 }

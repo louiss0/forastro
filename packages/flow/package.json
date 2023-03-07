@@ -1,6 +1,6 @@
 {
   "name": "@forastro/flow",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": {
@@ -20,6 +20,6 @@
     "astro": "^1.0.0"
   },
   "dependencies": {
-    "@forastro/utilities": "^0.0.3"
+    "@forastro/utilities": "^0.1.0"
   }
 }
