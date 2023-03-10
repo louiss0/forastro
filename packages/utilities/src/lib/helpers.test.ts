@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
-import { iterate, iterateRange, IterationInfo, range,  } from "./helpers";
+import { iterate, iterateRange,range,  } from "./helpers";
+import {  IterationInfo } from "./types";
 
 
 
