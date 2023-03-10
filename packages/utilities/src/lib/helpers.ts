@@ -1,4 +1,10 @@
-import type { GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, HasForEachMethod } from "./types"
+import {
+    GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
+    HasForEachMethod,
+    IterateRangeCallback,
+    IterateRangeOptions,
+    IterationInfo
+} from "./types"
 
 const isIterable = (value:unknown):value is Iterable<unknown> =>
     isObject(value) && (
@@ -6,9 +12,7 @@ const isIterable = (value:unknown):value is Iterable<unknown> =>
         || typeof value[Symbol.asyncIterator] === 'function'
     )    
 
-const GeneratorFunction = function* () {}.constructor as GeneratorFunctionConstructor
 
-//const AsyncGeneratorFunction = async function* () {}.constructor as AsyncGeneratorFunctionConstructor
 
 
 function isObject(value:unknown): value is Record<PropertyKey, unknown> {
@@ -25,39 +29,38 @@ function isObject(value:unknown): value is Record<PropertyKey, unknown> {
 function* range(start:number,stop:number,step=1) {
     
 
-    let count = start
-
-    while (count < stop) {
+    if (start === stop) {
         
-        yield count
+        throw Error("Start can't be the same as stop")
+    } 
 
-        count += step
-    }
-
-
-
-}
-
-
-const r = range
-
-
-function* reverseRange(start:number,stop:number,step=1) {
+    let count = start
     
 
-    let count = start
-
-    while (count > stop) {
+    if (start <= stop) {
         
-        yield count
-
-        count -= step
+        while (count < stop) {
+            
+            yield count
+    
+            count += step
+        }
+        return
     }
+    
+    if (start >= stop) {
+        
+        while (count > stop) {
+            
+            yield count
+    
+            count -= step
+        }
 
-
+    }
+    
 
 }
-
 
 
 function isGenerator(value: unknown): value is Generator {
@@ -67,60 +70,89 @@ function isGenerator(value: unknown): value is Generator {
 
 }
 
-function wrapFunctionInAsyncGenerator(fn:(...args:Array<unknown>)=>unknown) {
 
-    return  async function* (...args:Array<unknown>) {
+
+function wrapFunctionInAsyncGenerator<T extends (...args:Array<any>)=> ReturnType<T>>(fn: T) {
+
+    return  async function* (...args:Parameters<T>) {
         
-        yield await fn(...args)
+        const res = fn(...args)
+        
+        if (res instanceof Promise) {
+            yield await res
+            
+            return
+        }
+
+        yield res
+    
     }
 }
 
 
-async function* iterate<T extends Iterable<unknown>>(iterable:T, cb:GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>) {
+async function* iterate<T extends Generator | HasForEachMethod, U>(
+    iterable: T, cb:GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
     
 
-    const wrappedFunction = wrapFunctionInAsyncGenerator(cb)
+    if (!isIterable(iterable)) {
+        
+        throw new Error("You did not pass in an iterable")
+    }
+
+    
+    
+    if (hasForEachMethod(iterable)) {
+       
+
+        const entries:Array<[unknown, unknown]> = []
+
+        iterable.forEach((value, index)=> entries.push([value, index]))
 
 
-    if (isIterable(iterable) && hasForEachMethod(iterable)) {
-        
-        
-        for await (const [key, value] of Object.entries(iterable)) {
+
+        let iteration = 0
+
+        for await (const [value, key] of Object.values(entries)) {
+            iteration = Array.isArray(iterable) ? key as number : iteration + 1  
             
-            
-            yield*  wrappedFunction(value, key, iterable)
+            yield* wrapFunctionInAsyncGenerator(cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<HasForEachMethod, U>)
+                (value, key, new IterationInfo(0, iteration, entries.length))
             
         }
 
+
+
+
+
         return
     }
-    
-    
-    for await (const value of iterable) {
+
+
+    if (isGenerator(iterable)) {
+        
+        for (const value of iterable) {
+
+            yield* wrapFunctionInAsyncGenerator(cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<Generator, U>)(value)
+        }
+
+    }
 
    
-       yield* wrappedFunction(value)  
-   
-   }
-  
-    //  if (isGenerator(iterable)) {
-        
-       
-
-    // }
     
-    
-    
-    
-        
-        
-
 
 
 
 
 }
 
-export type {GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed}
+async function* iterateRange<T>(callback:IterateRangeCallback<T>, options:IterateRangeOptions) {
+    
+    const { start, stop, step = 1 } = options
 
-export {range, iterate, reverseRange, isIterable, isGenerator,  }
+    yield* iterate(range(start, stop, step), (val)=> callback(val as number, new IterationInfo(start, val as number, stop)) )
+
+}
+
+
+
+export {range, iterate, iterateRange,  isIterable,  }

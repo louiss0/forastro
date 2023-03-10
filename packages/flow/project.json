@@ -6,6 +6,16 @@
   "targets": {
     "check": {
       "executor": "@nxtensions/astro:check"
+    },
+    "test": {
+      "executor": "@nrwl/vite:test",
+      "outputs": [
+        "coverage/packages/flow"
+      ],
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "../../coverage/packages/flow"
+      }
     }
   },
   "tags": []

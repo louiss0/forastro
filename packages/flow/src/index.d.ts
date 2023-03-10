@@ -1,5 +1,4 @@
 import "astro/types"
-import type {IterationInfo} from "./lib/helpers"
 type FilledCase = {
   of: unknown;
   children: astroHTML.JSX.HTMLAttributes | string;
@@ -24,7 +23,7 @@ type GenerateParamsArrayFromArrayType<T extends Array<unknown>> = Parameters<
 
 type FunctionBasedOnArrayType<T extends Array<unknown>> = (
   value: GenerateParamsArrayFromArrayType<T>[0],
-  info: IterationInfo
+  info: typeof import("@forastro/utilities/src")
 ) => unknown;
 
 type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T> =
@@ -34,9 +33,9 @@ type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEa
     : (...args: Array<unknown>) => unknown
 
 
-type ForProps<T extends HasForEachMethod> = {
+type ForProps<T extends HasForEachMethod | Generator> = {
   of: T;
-  children:T extends Array<unknown>
+  children: T extends Array<unknown>
     ? FunctionBasedOnArrayType<T>
     : GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>
 };
