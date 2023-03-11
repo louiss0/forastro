@@ -1,4 +1,5 @@
 import "astro/types"
+import type {HasForEachMethod, GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, IterateRangeCallback} from "@forastro/utilities/src"
 type FilledCase = {
   of: unknown;
   children: astroHTML.JSX.HTMLAttributes | string;
@@ -12,32 +13,9 @@ type DefaultCase = {
 };
 
 
-
-type HasForEachMethod = {
-    forEach<T>(callbackfn: (...args:Array<unknown>) => T, thisArg?: typeof  globalThis): void;
-}
-type GenerateParamsArrayFromArrayType<T extends Array<unknown>> = Parameters<
-  Parameters<T["forEach"]>[0]
->;
-
-
-type FunctionBasedOnArrayType<T extends Array<unknown>> = (
-  value: GenerateParamsArrayFromArrayType<T>[0],
-  info: typeof import("@forastro/utilities/src")
-) => unknown;
-
-type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T> =
-    T extends HasForEachMethod
-	? Parameters<T["forEach"]>[0] : T extends Generator
-    ? <U>(value: ReturnType<T["next"]>["value"]) => U
-    : (...args: Array<unknown>) => unknown
-
-
-type ForProps<T extends HasForEachMethod | Generator> = {
+type ForProps<T extends HasForEachMethod | Generator, U> = {
   of: T;
-  children: T extends Array<unknown>
-    ? FunctionBasedOnArrayType<T>
-    : GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T>
+  children: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>
 };
 type SwitchProps = {
   of: unknown;
@@ -51,18 +29,18 @@ type ShowProps<T> = {
   when: T
   children: Array<astroHTML.JSX.HTMLAttributes> | ((value:T) => unknown) 
 }
-type RangeProps = {
+type RangeProps<T> = {
   start: number;
   stop: number;
   step?: number;
-  children: ((value:number, info:IterationInfo)=> number) | Array<astroHTML.JSX.HTMLAttributes> | string 
+  children: IterateRangeCallback<T> | Array<astroHTML.JSX.HTMLAttributes> | string 
 };
 
-declare function For<T extends HasForEachMethod>(props: ForProps<T>): unknown 
+declare function For<T extends HasForEachMethod, U>(props: ForProps<T, U>): unknown 
 declare function Switch(props: SwitchProps): unknown 
 declare function Case(props: CaseProps): unknown 
 declare function Show<T>(props: ShowProps<T>): unknown 
-declare function Range(props: RangeProps): unknown 
+declare function Range<T>(props: RangeProps<T>): unknown 
  
 
 export {For, Switch, Case, Show, Range}

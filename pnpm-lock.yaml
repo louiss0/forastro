@@ -60,6 +60,12 @@ importers:
       vite-tsconfig-paths: 4.0.5_typescript@4.9.5
       vitest: 0.29.2_hjnfa4mohew6fc4mnpzgbfyvpa
 
+  packages/flow:
+    specifiers:
+      '@forastro/utilities': workspace:^1.0.0
+    dependencies:
+      '@forastro/utilities': link:../utilities
+
 packages:
 
   /@ampproject/remapping/2.2.0:
