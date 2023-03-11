@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 1.0.1
+
+### Patch Changes
+
+- I added a ReadME file that contains all you need to know about @forastro/utilities
+
 ## 1.0.0
 
 ### Major Changes
