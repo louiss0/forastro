@@ -1,5 +1,13 @@
 # @forastro/flow
 
+## 0.1.3
+
+### Patch Changes
+
+- Fixed the files folder for both.
+- Updated dependencies
+  - @forastro/utilities@1.0.3
+
 ## 0.1.2
 
 ### Patch Changes

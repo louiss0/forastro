@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 1.0.3
+
+### Patch Changes
+
+- Fixed the files folder for both.
+
 ## 1.0.2
 
 ### Patch Changes
