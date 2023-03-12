@@ -1,18 +1,25 @@
 ---
 type Props = {
   when: unknown;
+  cloak?: true;
   children: Array<astroHTML.JSX.HTMLAttributes> | string;
 };
 
-const { when } = Astro.props;
+const { when, cloak } = Astro.props;
 const { slots } = Astro;
-
-const html =
-  slots.has("default") && when
-    ? await slots.render("default")
-    : slots.has("fallback")
-    ? await slots.render("fallback")
-    : "Please use a fallback slot or a child based on what you want to render";
 ---
 
-<Fragment set:html={html} />
+<Fragment
+  set:html={slots.has("default") && when ? await slots.render("default") : null}
+/>
+<Fragment
+  set:html={slots.has("default") && !when && cloak
+    ? `<div style="display:none">${await slots.render("default")}</div>`
+    : null}
+/>
+
+<Fragment
+  set:html={slots.has("fallback")
+    ? await slots.render("fallback")
+    : "Please use a fallback slot or a child based on what you want to render"}
+/>

@@ -14,10 +14,10 @@ function  getCaseFromSwitchState() {
 
 }
 
-function  setCaseInSwitchState<T>(value:T) {
+function  setCaseInSwitchState<T>(value:T, cloak:boolean) {
 
 
-    return windowWithSwitchState[switchStateSymbol].push(new Case(value))
+    return windowWithSwitchState[switchStateSymbol].push(new Case(value, cloak))
 
 
 }
@@ -36,6 +36,7 @@ class Case<T> {
 
     constructor(
         public readonly value: T,
+        public readonly cloak: boolean,
 
     ) {
         

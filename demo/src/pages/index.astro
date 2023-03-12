@@ -2,7 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
 
-import { Show, For } from "@forastro/flow";
+import { Show, Switch } from "@forastro/flow";
 ---
 
 <Layout title="Welcome to Astro.">
@@ -10,6 +10,9 @@ import { Show, For } from "@forastro/flow";
     <div>nice</div>
     <div slot="fallback">Not true</div>
   </Show>
+  <Switch of={4}>
+    <div></div>
+  </Switch>
   <main>
     <h1>Welcome to <span>Astro</span></h1>
     <p class="instructions">

@@ -1,17 +1,18 @@
 ---
 import { setCaseInSwitchState, unsetCaseInSwitchState } from "../helpers";
 
-import type { Props as CaseProps } from "./Case.astro";
+import type Case from "./Case.astro";
 
 type Props = {
   of: unknown;
-  children: Array<CaseProps>;
+  cloak?: true;
+  children: Array<typeof Case>;
 };
 
-const { of } = Astro.props;
+const { of, cloak } = Astro.props;
 
 let html = "";
-setCaseInSwitchState(of);
+setCaseInSwitchState(of, !!cloak);
 
 html = Astro.slots.has("default")
   ? await Astro.slots.render("default")

@@ -23,7 +23,7 @@ type ForProps<T extends HasForEachMethod | Generator, U> = {
 };
 type SwitchProps = {
   of: unknown;
-  children: Array<CaseProps>;
+  children: Array<typeof Case>;
 };
 
 type CaseProps = FilledCase | DefaultCase;

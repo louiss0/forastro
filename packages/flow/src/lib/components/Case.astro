@@ -22,3 +22,11 @@ const caseFromSwitchStateValueIsEqualToCase =
 ---
 
 {caseFromSwitchStateValueIsEqualToCase && <slot />}
+
+{
+  !caseFromSwitchStateValueIsEqualToCase && getCaseFromSwitchState()?.cloak ? (
+    <div style="display: none;">
+      <slot />
+    </div>
+  ) : null
+}
