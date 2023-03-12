@@ -13,7 +13,9 @@ const { of } = Astro.props;
 let html = "";
 setCaseInSwitchState(of);
 
-html = Astro.slots.has("default") ? await Astro.slots.render("default") : "";
+html = Astro.slots.has("default")
+  ? await Astro.slots.render("default")
+  : "Please render a case here";
 
 unsetCaseInSwitchState();
 ---

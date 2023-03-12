@@ -4,10 +4,10 @@ import { iterateRange } from "@forastro/utilities";
 const { start, step = 1, stop } = Astro.props;
 ---
 
-{
-  iterateRange((...args) => Astro.slots.render("default", args), {
+<Fragment
+  set:html={iterateRange((...args) => Astro.slots.render("default", args), {
     start,
     stop,
     step,
-  })
-}
+  })}
+/>

@@ -1,11 +1,17 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import Card from "../components/Card.astro";
+
+import { Show, For } from "@forastro/flow";
 ---
 
 <Layout title="Welcome to Astro.">
+  <Show when={false}>
+    <div>nice</div>
+    <div slot="fallback">Not true</div>
+  </Show>
   <main>
-    <h1>Welcome to <span class="text-gradient">Astro</span></h1>
+    <h1>Welcome to <span>Astro</span></h1>
     <p class="instructions">
       To get started, open the directory <code>src/pages</code> in your project.<br
       />

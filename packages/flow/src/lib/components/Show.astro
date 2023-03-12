@@ -1,7 +1,7 @@
 ---
 type Props = {
   when: unknown;
-  children: Array<astroHTML.JSX.HTMLAttributes>;
+  children: Array<astroHTML.JSX.HTMLAttributes> | string;
 };
 
 const { when } = Astro.props;

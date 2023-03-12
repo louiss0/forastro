@@ -13,7 +13,7 @@ type DefaultCase = {
   of?: never;
 };
 
-export type Props = FilledCase | DefaultCase;
+type Props = FilledCase | DefaultCase;
 
 const { of, default: fallback } = Astro.props;
 

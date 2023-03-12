@@ -1,11 +1,24 @@
 ---
 import { iterate } from "@forastro/utilities";
+import type {
+  GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
+  HasForEachMethod,
+} from "@forastro/utilities";
 
-const { of: iterable } = Astro.props;
+type Props<T extends HasForEachMethod | Generator, U> = {
+  of: T;
+  children: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<
+    T,
+    U
+  >;
+};
 
-{
-  iterate(iterable, (...args: Array<unknown>) =>
-    Astro.slots.render("default", args)
-  );
-}
+const { of: iterable } = Astro.props as Props<
+  HasForEachMethod & Generator,
+  unknown
+>;
 ---
+
+<Fragment
+  set:html={iterate(iterable, (...args) => Astro.slots.render("default", args))}
+/>

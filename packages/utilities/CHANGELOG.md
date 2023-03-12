@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 1.0.2
+
+### Patch Changes
+
+- Changed where the main file is from src/index to just index types should be from the main package
+
 ## 1.0.1
 
 ### Patch Changes

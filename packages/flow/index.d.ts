@@ -1,5 +1,9 @@
 import "astro/types"
-import type {HasForEachMethod, GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, IterateRangeCallback} from "@forastro/utilities/src"
+import type {
+   HasForEachMethod,
+   GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
+   IterateRangeCallback
+} from "@forastro/utilities"
 type FilledCase = {
   of: unknown;
   children: astroHTML.JSX.HTMLAttributes | string;
