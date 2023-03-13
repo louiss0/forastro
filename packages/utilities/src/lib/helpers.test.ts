@@ -1,4 +1,4 @@
-import { describe, expect, test } from "vitest";
+import { describe, expect, it, test } from "vitest";
 import { iterate, iterateRange,range,  } from "./helpers";
 import {  IterationInfo } from "./types";
 
@@ -138,10 +138,12 @@ describe("Range works", () => {
     
 
     test("Numbers are counted from start to the stop number by one", () => {
+   
+      
     
+      expect(Array.from(range(1, 5, 1)))
+        .toStrictEqual([1,2,3,4])
 
-        expect(Array.from(range(1,5))).toStrictEqual([1,2,3,4,])
-        
         
 
     })
@@ -149,30 +151,90 @@ describe("Range works", () => {
     test("Numbers are counted from start to the stop number depending on step number", () => {
         
 
-        expect(Array.from(range(1,5,2))).toStrictEqual([1,3,])
 
+      expect(Array.from(range(1,5,1))).toHaveLength(4)
 
+      
     })
 
-    test("Numbers are counted down from start to the stop number by one", () => {
+    test("Numbers are counted down from start to the stop number by one when start is greater than stop and step is negative", () => {
     
 
-        expect(Array.from(range(5,1))).toStrictEqual([5,4,3,2,])
-        
+      expect(Array.from(range(6, 1, -1)))
+        .toStrictEqual([6, 5, 4, 3, 2])
+      
+      expect(Array.from(range(6, 1, -1))).toHaveLength(5)
+      
+
+      
+
+      
         
 
     })
 
-    test("Numbers are counted down from start to the stop number depending on step number", () => {
+    test("Numbers are counted up from start to the stop when step is positive", () => {
         
 
-        expect(Array.from(range(5,1,2))).toStrictEqual([5,3,])
-
+       
+      expect(Array.from(range(1,3,1))).toStrictEqual([1,2])
+      
 
     })
+  
+  
+  it("throws when  startIsGreaterThanStopAndStepIsPositive", () => {
+    
+    expect((()=> {
+      
+      for (const _ of range(8, 1, 2)) {}
+
+    }))
+      .toThrowErrorMatchingInlineSnapshot('"If you want start to be greater than stop please make step negative"')
 
 
-})
+  })
+  
+  
+  it("throws when stopIsGreaterThanStartAndStepIsNegative", () => {
+    
+
+    expect(() => {
+      
+      for (const _ of range(1,9,-2)) {}
+      
+
+    }).toThrowErrorMatchingInlineSnapshot('"If you want start to be less than stop please make step positive"')
+
+  })
+
+
+  it("throws when start is equal to stop", () => {
+    
+
+    expect(() => {
+      
+      for (const _ of range(1,1,1)) {}
+      
+
+    }).toThrowErrorMatchingInlineSnapshot('"Start can\'t be the same as stop"')
+
+  })
+
+  it("throws when step is equal to zero", () => {
+    
+
+    expect(() => {
+      
+      for (const _ of range(6,4,0)) {}
+
+    }).toThrowErrorMatchingInlineSnapshot('"Step can\'t be zero pick a negative or positive number"')
+
+  })
+
+
+
+ })
 
 
 

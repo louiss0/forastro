@@ -1,5 +1,25 @@
 # @forastro/utilities
 
+## 2.1.0
+
+### Minor Changes
+
+- I have a new component called IslandsMirror. It's a component that takes every component with a data-attribute of data-islands-key
+
+  then takes it if it has a parent component that has a tag of <astro-island> then it will it will.
+
+  - First have it's attributes grabbed
+  - The attributes will be set on the parent
+  - The children of that element will be taken from it.
+  - The parent will inherit those children
+
+  I have also changed the strategy for range.
+
+  Range works like a normal one
+
+  - It will add when start is less stop and the number is positive
+  - It will do the opposite when start and stop's roles are reversed and the number is negative.
+
 ## 1.0.3
 
 ### Patch Changes

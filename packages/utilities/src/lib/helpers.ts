@@ -6,7 +6,8 @@ import {
     IterationInfo
 } from "./types"
 
-const isIterable = (value:unknown):value is Iterable<unknown> =>
+
+const isIterable = (value: unknown): value is Iterable<unknown> =>
     isObject(value) && (
         typeof value[Symbol.iterator] === 'function'
         || typeof value[Symbol.asyncIterator] === 'function'
@@ -31,35 +32,72 @@ function* range(start:number,stop:number,step=1) {
 
     if (start === stop) {
         
-        throw Error("Start can't be the same as stop")
-    } 
-
-    let count = start
-    
-
-    if (start <= stop) {
-        
-        while (count < stop) {
-            
-            yield count
-    
-            count += step
-        }
-        return
+        throw new Error("Start can't be the same as stop")
     }
     
-    if (start >= stop) {
+    if (step === 0) {
+        
+
+        throw new Error("Step can't be zero pick a negative or positive number")
+
+
+    }
+
+    const numIsNegative = Math.sign(step) === -1
+    const numIsPositive =Math.sign(step) === 1
+
+    const startIsGreaterThanStopAndStepIsPositive = start> stop && numIsPositive
+
+    if (startIsGreaterThanStopAndStepIsPositive) {
+        
+        throw new Error("If you want start to be greater than stop please make step negative")
+
+    }
+    
+    const stopIsGreaterThanStartAndStepIsNegative = start < stop && numIsNegative
+
+    if (stopIsGreaterThanStartAndStepIsNegative) {
+        
+        throw new Error("If you want start to be less than stop please make step positive")
+
+    }
+
+    
+
+    let count = start 
+
+
+    if (numIsPositive) {
+        
+
+        while (count < stop) {
+            
+
+            yield count 
+
+            count += step
+        }
+
+        return
+    } 
+ 
+
+    if (numIsNegative) {
         
         while (count > stop) {
             
-            yield count
-    
-            count -= step
+
+            yield count 
+
+            count += step
         }
 
     }
     
-
+    
+    
+    
+    
 }
 
 
@@ -140,10 +178,10 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
    
     
 
-
-
-
 }
+
+
+
 
 async function* iterateRange<T>(callback:IterateRangeCallback<T>, options:IterateRangeOptions) {
     

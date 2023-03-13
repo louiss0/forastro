@@ -1,0 +1,38 @@
+---
+type Props = {
+  children: astroHTML.JSX.HTMLAttributes;
+};
+---
+
+<slot />
+<script>
+  const elements = document.body.querySelectorAll(`[data-island-key]`);
+
+  const attrsMap = new Map();
+
+  if (elements.length === 0) {
+    throw new Error(
+      "Please use the data-island-key attritibute to tell which components need to affected by this element"
+    );
+  }
+
+  elements.forEach((element) => {
+    if (element?.parentElement?.tagName !== "ASTRO-ISLAND") {
+      throw new Error(
+        "Please only use this component for islands don't use this for anything else"
+      );
+    }
+
+    element
+      .getAttributeNames()
+      .forEach((attrName) =>
+        attrsMap.set(attrName, element.getAttribute(attrName))
+      );
+
+    attrsMap.forEach((value, key) => {
+      element.parentElement?.setAttribute(key, value);
+    });
+
+    element.parentElement.replaceChildren(...Array.from(element.childNodes));
+  });
+</script>

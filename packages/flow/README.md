@@ -51,9 +51,8 @@ This component takes in up to three parameters.
 - `stop=` the final number
 - `step=` the number to increment or decrement by
 
-> [!warning] Warning
-> If the start is lower than stop then the number given to the callback will be
-> the stop number first then minus the stop then minus the previous number till the start is reached.
+- **To increment start must be less than stop and step must be positive**
+- **To decrement start must be greater than stop and step must be negative**
 
 ## Conditional Components
 

@@ -41,7 +41,14 @@ range(start:number,stop:number,step=1):Generator<number, void, unknown>
 
 **Definition**
 
-A generator that will generate a new number based on the numbers that are passed to it. The start is the first number the stop is the final number to be returned. If the start is higher than the stop then the number for each iteration will increase by the previous one till stop is produced. If the start is lower than the stop then the number generated will always subtracted by the step until the start number is seen
+A generator that will generate a new number based on the numbers that are passed to it. The start is the first number the stop is the final number to be returned.
+
+- If the start lower than stop and step is positive
+  - The first number will be the start + step
+  - Then the previous result plus step
+- If the start is higher than stop
+  - The first number will be the start - step
+  - Then the previous result minus step
 
 **Parameters**
 
