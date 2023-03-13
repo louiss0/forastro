@@ -13,7 +13,21 @@ const isIterable = (value: unknown): value is Iterable<unknown> =>
         || typeof value[Symbol.asyncIterator] === 'function'
     )    
 
+type Callback = (...args:Array<unknown>)=> any
 
+function executeIf<T extends Callback>(condition:boolean, cb:T):ReturnType<T> | null  {
+
+
+    return condition ? cb() : null
+
+}
+
+function executeUnless<T extends Callback>(condition:boolean, cb:T) {
+
+
+    return executeIf(!condition, cb)
+
+}
 
 
 function isObject(value:unknown): value is Record<PropertyKey, unknown> {
@@ -193,4 +207,4 @@ async function* iterateRange<T>(callback:IterateRangeCallback<T>, options:Iterat
 
 
 
-export {range, iterate, iterateRange,  isIterable,  }
+export {range, iterate, iterateRange, isIterable, executeIf, executeUnless }

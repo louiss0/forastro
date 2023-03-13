@@ -10,6 +10,9 @@ type FilledCase = {
   default?: never;
 };
 
+
+type Cloak= {cloak?:true}
+
 type DefaultCase = {
   default: true;
   children: astroHTML.JSX.HTMLAttributes | string;
@@ -24,15 +27,19 @@ type ForProps<T extends HasForEachMethod | Generator, U> = {
 type SwitchProps = {
   of: unknown;
   children: Array<typeof Case>;
-};
+} & Cloak;
 
 type CaseProps = FilledCase | DefaultCase;
 
 
-type ShowProps<T> = {
-  when: T
-  children: Array<astroHTML.JSX.HTMLAttributes> | ((value:T) => unknown) 
-}
+type ShowProps = {
+  when: unknown
+  children: Array<astroHTML.JSX.HTMLAttributes> 
+} & Cloak
+
+type HideProps = ShowProps
+
+
 type RangeProps<T> = {
   start: number;
   stop: number;
@@ -43,8 +50,9 @@ type RangeProps<T> = {
 declare function For<T extends HasForEachMethod, U>(props: ForProps<T, U>): unknown 
 declare function Switch(props: SwitchProps): unknown 
 declare function Case(props: CaseProps): unknown 
-declare function Show<T>(props: ShowProps<T>): unknown 
+declare function Show(props: ShowProps): unknown 
+declare function Hide(props: HideProps): unknown 
 declare function Range<T>(props: RangeProps<T>): unknown 
  
 
-export {For, Switch, Case, Show, Range}
+export {For, Switch, Case, Show, Range, Hide}

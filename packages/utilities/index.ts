@@ -1,13 +1,14 @@
 
 import Gap from "./src/lib/components/Gap.astro"
 import Projector from "./src/lib/components/Projector.astro"
-import ProjectorContextConsumer from "./src/lib/components/ProjectorContextConsumer.astro"
 
 
 export {
     iterate,
      range,
-     iterateRange,
+    iterateRange,
+    executeIf,
+    executeUnless
  } from "./src/lib/helpers"
 
 export type {
@@ -21,6 +22,5 @@ export type {
 export {
     Gap,
     Projector,
-    ProjectorContextConsumer
 }
 

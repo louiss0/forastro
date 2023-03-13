@@ -1,18 +1,20 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { Projector } from "@forastro/utilities";
-import { Show, Switch } from "@forastro/flow";
+import { Show, Switch, Hide } from "@forastro/flow";
 ---
 
 <Layout title="Welcome to Astro.">
-  <Show when={false}>
+  <Show when={true}>
     <div>nice</div>
-    <div slot="fallback">Not true</div>
   </Show>
+  <Hide when={true}>
+    <div>Not true</div>
+  </Hide>
   <Switch of={4}>
-    <div></div>
+    <div>It is four</div>
   </Switch>
-  <Projector templateId="foo" />
+
   <main>
     <h1>Welcome to <span>Astro</span></h1>
     <p class="instructions">
