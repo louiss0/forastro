@@ -8,14 +8,30 @@ The demo folder is for testing and demonstrating the power of each package. The 
 
 To use this repo you need to know how `nx` works. The point of this library is to create packages then test them out so what you want to do is start the server. To do that use `nx run demo:dev`.
 
+### Tooling
+
+| Type       | Tool         |
+| ---------- | ------------ |
+| testing    | vitest       |
+| changelogs | changesets   |
+| styling    | tailwind css |
+| linter     | eslint       |
+| formatter  | prettier     |
+
 ## Repositories
 
 This section is about giving you an overview of all of the packages that I have created for this mono-repo. Each title is the name of a folder that exists in this monorepo. I don't know how to do **end-to-end testing** and it's not necessary so I will use the pages in demo as a testing ground. I will do basic testing for individual packages in each folder for the packages
 
 ### Demo
 
-The demo is the place where all of the packages are tested.
+The demo is the place where all of the packages are tested and where what they can do is shown. It uses Taliwind CSS for styling.
 
 ### Flow
 
-### Utils
+Flow is a package that is created to emulate control flow inside of components.
+the package is called `@forastro/flow`. It has a folder called the components folder and a file called helpers. Helpers are a set of functions that are designed to help the flow components work. The components file is where all of the components are. All of them are exported in a index.ts file.
+
+### Utilities
+
+Utilities is a package that is created to emulate control flow inside of components.
+the package is called `@forastro/utilities`. It has a folder called the components folder and a file called helpers. Helpers are a set of functions that are designed to help the flow components work. The components file is where all of the components are. All of them are exported in a index.ts file.
