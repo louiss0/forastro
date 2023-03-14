@@ -1,0 +1,38 @@
+{
+  "name": "astro-snippets",
+  "displayName": "Astro Snippets",
+  "description": "It is set of snippets for Astro JS ",
+  "version": "2.1.4",
+  "scripts": {
+    "release": "vsce package && vsce publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/louiss0/forastro",
+    "directory": "packages/snippets"
+  },
+  "publisher": "SheltonLouis",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "icon": "images/astro-icon.jpg",
+  "categories": [
+    "Snippets"
+  ],
+  "contributes": {
+    "snippets": [
+      {
+        "language": "astro",
+        "path": "./snippets/snippets.code-snippets"
+      },
+      {
+        "language": "javascript",
+        "path": "./snippets/javascript.snippets.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/javascript.snippets.json"
+      }
+    ]
+  }
+}
