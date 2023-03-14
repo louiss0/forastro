@@ -1,5 +1,11 @@
 # Change Log
 
+## 2.2.0
+
+### Minor Changes
+
+- This is the one for the images I think it will make them appear
+
 ## 2.1.4
 
 ### Patch Changes
