@@ -62,9 +62,15 @@ importers:
 
   packages/flow:
     specifiers:
-      '@forastro/utilities': workspace:^1.0.0
+      '@forastro/utilities': workspace:^2.2.0
     dependencies:
       '@forastro/utilities': link:../utilities
+
+  packages/snippets:
+    specifiers: {}
+
+  packages/utilities:
+    specifiers: {}
 
 packages:
 
