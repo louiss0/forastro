@@ -59,7 +59,7 @@ class IterationInfo {
     }
     get remaining() {
 
-        return this.lastIterationNum - this.iterationNum
+        return this.lastIterationNum - this.iteration
 
     }
 

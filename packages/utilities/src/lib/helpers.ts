@@ -156,19 +156,19 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
     if (hasForEachMethod(iterable)) {
        
 
-        const entries:Array<[unknown, unknown]> = []
+        const entries = new Map()
 
-        iterable.forEach((value, index)=> entries.push([value, index]))
+        iterable.forEach((value, index)=> entries.set(index,value))
 
 
 
         let iteration = 0
 
-        for await (const [value, key] of Object.values(entries)) {
+        for await (const [key, value] of entries) {
             iteration = Array.isArray(iterable) ? key as number : iteration + 1  
             
             yield* wrapFunctionInAsyncGenerator(cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<HasForEachMethod, U>)
-                (value, key, new IterationInfo(0, iteration, entries.length))
+                (value, key, new IterationInfo(0, iteration, entries.size))
             
         }
 

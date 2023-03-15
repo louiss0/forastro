@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <meta name="generator" content="Astro v2.1.2">
+    <title>Welcome to Astro.</title>
+  <link rel="stylesheet" href="/_astro/index.7347ed07.css" /><script type="module">{let u=function(e,t,n,r){const{display:o,fontSize:l,gridAutoFlow:i,flexDirection:s}=e,{display:h}=t,E=h.includes("inline"),f=o.includes("flex"),y=o.includes("grid"),w=s.includes("row"),A=i.includes("column");[E,f&&w,y&&A].some(T=>T===!0)&&(n.style.width=`${parseInt(l)*r}px`,n.style.height="auto")},m=function(e,t,n,r){const{display:o,fontSize:l,gridAutoFlow:i,flexDirection:s}=e,{display:h}=t,E=h.includes("block"),f=o.includes("flex"),y=o.includes("grid"),w=s.includes("column"),A=i.includes("row");[E,y&&A,f&&w].some(T=>T===!0)&&(n.style.width="auto",n.style.height=`${parseInt(l)*r}px`)},a=function(e,t){if(!e)throw new Error(`A gap must exist between two elements check for ${t} `)},d=function(e,t){if(!e)throw new Error(`A gap must exist between two elements check for ${t} `)},c=function(e,t,n){const r=e.hasAttribute("data-id")||n.hasAttribute("data-id"),o=e.getAttribute("data-id"),l=t.getAttribute("data-id"),i=n.getAttribute("data-id");if(r)throw new Error(`Two gaps cannot exist between each other , Check for these id's  ${o} ${l} ${i} `)};const p="[data-id='gap']",I=document.querySelectorAll(p);document.addEventListener("DOMContentLoaded",()=>{I.forEach(function(e){const[t,n]=[parseInt(e.getAttribute("data-spaces")),e.getAttribute("data-color")],r=e.parentElement,o=getComputedStyle(r),{nextElementSibling:l,previousElementSibling:i}=e;e.setAttribute("data-id",`gap${Math.ceil(Math.random()*Date.now())}`),d(i,e.dataset.id),a(l,e.dataset.id),c(i,e,l);const s=getComputedStyle(i);u(o,s,e,t),m(o,s,e,t),e.style.backgroundColor=n})})}{const u=document.body.querySelectorAll("br[data-template-name]"),m=document.querySelectorAll("template[id]");u.forEach(a=>{const d=a.getAttribute("data-template-name"),c=Array.from(m).find(p=>p.getAttribute("id")===d);if(!c)throw new Error(`There is no template with the id of ${d} please give a template an id`);a.replaceWith(c.content.cloneNode(!0))})}
+</script></head>
+
+  <body>
+    <div>nice</div>
+
+<div>It is four</div><main>
+    <h1>Welcome to <span>Astro</span></h1>
+    <p class="instructions">
+      To get started, open the directory <code>src/pages</code> in your project.<br>
+      <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
+    </p>
+    <ul role="list" class="link-card-grid"></ul>
+  </main>
+  </body></html>

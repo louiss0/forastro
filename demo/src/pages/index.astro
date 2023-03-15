@@ -1,27 +1,110 @@
 ---
-import Layout from "../layouts/Layout.astro";
 import { Projector } from "@forastro/utilities";
-import { Show, Switch, Hide } from "@forastro/flow";
+import { Show, Switch, Hide, For } from "@forastro/flow";
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/Container.astro";
+import Center from "../components/Center.astro";
+import Link from "../components/Link.astro";
+import AstroFrameworkCircle from "../components/AstroFrameworkCircle.astro";
+
+class PackageKind {
+  constructor(
+    public readonly title: string,
+    public readonly description: string
+  ) {}
+}
+
+const packages: Array<PackageKind> = [
+  new PackageKind(
+    "Flow Components",
+    `
+    Components that allow you to iterate through items, show or hide things and even create random values.
+    `
+  ),
+  new PackageKind(
+    "Utlities",
+    `
+  Functions and components that will help you solve common problems in Astro 
+  `
+  ),
+];
 ---
 
-<Layout title="Welcome to Astro.">
-  <Show when={true}>
-    <div>nice</div>
-  </Show>
-  <Hide when={true}>
-    <div>Not true</div>
-  </Hide>
-  <Switch of={4}>
-    <div>It is four</div>
-  </Switch>
+<Layout
+  title="For Astro"
+  description="This is the intro page for the all of the packages in the @forastro/monorepo"
+>
+  <header class="px-6 py-2">
+    <Container widthClass={"w-3/5"} maxWidthClass={"max-w-screen-md"}>
+      <Center gap={"gap-10"}>
+        <h1>For Astro</h1>
 
-  <main>
-    <h1>Welcome to <span>Astro</span></h1>
-    <p class="instructions">
-      To get started, open the directory <code>src/pages</code> in your project.<br
-      />
-      <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-    </p>
-    <ul role="list" class="link-card-grid"></ul>
-  </main>
+        <p class="text-lg leading-9">
+          This site is a demo of all for the packages that I have created for <Projector
+            templateId="astro-link"
+          />. The pages are created with visual examples of how each component
+          works. Most of the packages that I have created exist in the <Projector
+            templateId="forastro-monorepo-link"
+          />
+          My name is Shelton Louis if you want to find me you can use this link <Link
+            href="https://github.com/louiss0"
+          >
+            My Profile
+          </Link>
+        </p>
+      </Center>
+    </Container>
+  </header>
 </Layout>
+<main class="px-4 py-12">
+  <Container widthClass={"w-3/5"} maxWidthClass={"max-w-screen-lg"}>
+    <Center gap={"gap-10"}>
+      <h2 class="text-center">What kinds of Packages are there?</h2>
+
+      <div class="grid gap-6 md:flex">
+        <For of={packages}>
+          {
+            ({ title, description }: PackageKind) => (
+              <div
+                data-element="package-description-card"
+                class="px-6 py-4 border border-current rounded"
+              >
+                <div data-content={title} class="grid gap-2 ">
+                  <div class="text-xl font-bold">{title}</div>
+                  <p class="text-sm">{description}</p>
+                </div>
+              </div>
+            )
+          }
+        </For>
+      </div>
+    </Center>
+  </Container>
+</main>
+<footer class="px-8 py-4">
+  <Center>
+    <AstroFrameworkCircle
+      revealedFrameworks={["react", "angular", "solid", "svelte", "vue"]}
+    />
+  </Center>
+</footer>
+
+<template id="forastro-utilities-link">
+  <Link href="https://www.npmjs.com/package/@forastro/utilities">
+    <code>@forastro/utilities</code>
+  </Link>
+</template>
+
+<template id="forastro-monorepo-link">
+  <Link href="https://github.com/louiss0/forastro">Monorepo</Link>
+</template>
+
+<template id="forastro-flow-link">
+  <Link href="https://www.npmjs.com/package/@forastro/flow">
+    <code>@forastro/flow</code>
+  </Link>
+</template>
+
+<template id="astro-link">
+  <Link href="https://astro.build">Astro</Link>
+</template>

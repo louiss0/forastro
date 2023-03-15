@@ -34,5 +34,10 @@
     "vite-plugin-eslint": "^1.8.1",
     "vite-tsconfig-paths": "^4.0.5",
     "vitest": "^0.29.2"
+  },
+  "dependencies": {
+    "@fontsource/palanquin": "^4.5.10",
+    "@fontsource/raleway": "^4.5.12",
+    "astro-icon": "^0.8.0"
   }
 }
