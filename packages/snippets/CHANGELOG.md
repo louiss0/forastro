@@ -1,5 +1,17 @@
 # Change Log
 
+## 2.2.1
+
+### Patch Changes
+
+- For images once again
+
+## 2.1.5
+
+### Patch Changes
+
+- Made the images work vsix ships with own version of readme
+
 ## 2.2.0
 
 ### Minor Changes

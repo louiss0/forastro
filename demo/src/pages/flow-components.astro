@@ -1,0 +1,30 @@
+---
+import Layout from "demo/src/layouts/Layout.astro";
+
+import { For } from "@forastro/flow";
+import Container from "demo/src/components/Container.astro";
+import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
+import type { IterationInfo } from "@forastro/utilities";
+import Center from "demo/src/components/Center.astro";
+const names: Array<string> = ["Nick", "Kepano", "Yusuke", "Mirajade"];
+---
+
+<Layout
+  title="Flow"
+  description="This is the page for all flow components based things"
+>
+  <Container>
+    <Center>
+      <div class="w-10/12">
+        <Center>Info From a List of Users</Center>
+      </div>
+      <For of={names}>
+        {
+          (value: string, key: number, info: IterationInfo) => (
+            <IterationInfoTable {...{ key, value, info }} />
+          )
+        }
+      </For>
+    </Center>
+  </Container>
+</Layout>
