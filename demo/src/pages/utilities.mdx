@@ -1,24 +1,21 @@
----
 import { For } from "@forastro/flow";
 import { IterationInfo, Projector } from "@forastro/utilities";
 import Center from "demo/src/components/Center.astro";
 import Container from "demo/src/components/Container.astro";
 import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
-import Layout from "demo/src/layouts/Layout.astro";
+import Demo from "demo/src/layouts/Demo.astro";
+export const names = ["Rich", "Manu", "Theo", "Mack"];
 
-const names = ["Rich", "Manu", "Theo", "Mack"];
----
-
-<Layout
+<Demo
   title="Utilities"
   description="This is the page for all utilities based things"
+  sidebarTitle="Utilities"
+  sidebarLinks={[]}
 >
-  <main class="px-12 py-4">
-    <Container>
-      <Projector templateId={"names-table"} />
-    </Container>
-  </main>
-</Layout>
+  <Container>
+    <Projector templateId={"names-table"} />
+  </Container>
+</Demo>
 
 <template id="names-table">
   <Center gap={"gap-2"}>
@@ -26,11 +23,7 @@ const names = ["Rich", "Manu", "Theo", "Mack"];
       <Center>Names Rendered Using Projector</Center>
     </div>
     <For of={names}>
-      {
-        (value: string, key: number, info: IterationInfo) => (
-          <IterationInfoTable {...{ value, key, info }} />
-        )
-      }
+      {(value, key, info) => <IterationInfoTable {...{ value, key, info }} />}
     </For>
   </Center>
 </template>

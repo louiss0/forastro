@@ -45,7 +45,7 @@ class IterationInfo {
     }
 
     get isLast() {
-        return this.lastIterationNum === this.iterationNum
+        return this.lastIterationNum === this.iteration 
     }
 
     get isEven() {

@@ -1,0 +1,46 @@
+---
+import { iterate } from "@forastro/utilities";
+import Layout from "demo/src/layouts/Layout.astro";
+
+type Props = {
+  title: string;
+  description: string;
+  sidebarTitle: string;
+  sidebarLinks: Array<string>;
+};
+
+const { title, description, sidebarTitle, sidebarLinks } = Astro.props;
+---
+
+<Layout {...{title, description}}>
+  <main class="grid md:grid-cols-[30%,1fr] xl:grid-cols-[20%,1fr]">
+    <aside class="py-4 border-y-2 lg:border-r-2 lg:border-y-0 border-current">
+      <div data-content class="grid gap-2 text-center lg:text-left">
+        <div class="text-xl px-8 py-2">{sidebarTitle}</div>
+
+        <div id="section-links" class="grid gap-2 text-sm">
+          {
+            iterate(sidebarLinks, (sidebarLink) => (
+              <div
+                class="[&>a]:transition-colors [&>a]:duration-200 [&>a]:ease-in"
+                data-wrapper="transition"
+              >
+                <a
+                  href={`#${sidebarLink.toLowerCase()}`}
+                  class="capitalize block focus:outline-none [&:is(:hover,:focus)]:bg-gray-200"
+                >
+                  <div data-wrapper="padding" class="px-10 py-4 ">
+                    {sidebarLink.replaceAll("-", " ")}
+                  </div>
+                </a>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </aside>
+    <div data-element="main-content" class="py-4 px-8">
+      <slot />
+    </div>
+  </main>
+</Layout>
