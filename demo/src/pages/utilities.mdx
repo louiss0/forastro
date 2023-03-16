@@ -10,20 +10,34 @@ export const names = ["Rich", "Manu", "Theo", "Mack"];
   title="Utilities"
   description="This is the page for all utilities based things"
   sidebarTitle="Utilities"
-  sidebarLinks={[]}
+  sidebarLinks={[
+    "iterate",
+    "iterate range",
+    "range",
+    "execute if",
+    "execute unless",
+    "gap",
+    "projector",
+    "island mirror",
+    "page link",
+  ]}
 >
-  <Container>
-    <Projector templateId={"names-table"} />
-  </Container>
-</Demo>
 
-<template id="names-table">
-  <Center gap={"gap-2"}>
-    <div class="w-10/12">
-      <Center>Names Rendered Using Projector</Center>
-    </div>
-    <For of={names}>
-      {(value, key, info) => <IterationInfoTable {...{ value, key, info }} />}
-    </For>
-  </Center>
-</template>
+   <Section title={ "iterate"}>
+
+   </Section>
+    <Section title={"iterate range"}>
+
+    </Section>
+
+   <Section title={ "range"}>
+
+   </Section>
+    <Section title={"execute if"}></Section>
+    <Section title={"execute unless"}></Section>
+   <Section title={ "gap"}></Section>
+   <Section title={ "projector"}></Section>
+    <Section title={"island mirror"}></Section>
+    <Section title={"page link"}></Section>
+
+</Demo>
