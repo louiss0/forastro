@@ -1,0 +1,19 @@
+---
+import Center from "./Center.astro";
+
+type Props = {
+  title: string;
+  children: Array<astroHTML.JSX.HTMLAttributes>;
+};
+
+const { title } = Astro.props;
+
+const dashedTitle = title.replaceAll(" ", "-");
+---
+
+<section class="px-4 py-8 grid gap-4" aria-labelledby={dashedTitle}>
+  <Center>
+    <h2 id={dashedTitle}>{title}</h2>
+  </Center>
+  <slot />
+</section>

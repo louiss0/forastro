@@ -16,7 +16,7 @@ const slotBasedOnDefault = await executeUnless(
 );
 
 const slotBasedOnCloaked = await executeUnless(
-  slots.has("default") && !!when && !cloak,
+  slots.has("default") && !when && !cloak,
   async () => `<div style="display:none">${await slots.render("default")}</div>`
 );
 ---

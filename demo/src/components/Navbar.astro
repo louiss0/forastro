@@ -1,39 +1,16 @@
 ---
-import { PageLink, Projector } from "@forastro/utilities";
+import { PageLink } from "@forastro/utilities";
 import { For } from "@forastro/flow";
 
-const pageNames = ["home", "flow-components", "utility-components"];
+const pageNames = ["home", "flow", "utilities"];
 ---
 
 <nav class="px-6 py-2">
-  <div data-wrapper class="hidden sm:block">
-    <Projector templateId="sm-menu" />
-  </div>
-  <div data-wrapper class="sm:hidden">
-    <Projector templateId="mobile-menu" />
-  </div>
-</nav>
-
-<template id="mobile-menu">
-  <div class="flex gap-6 justify-between">
-    <For of={pageNames}>
-      {
-        (value: string) => (
-          <PageLink href={value === "home" ? "/" : `/${value}`}>
-            <div class="px-2 py-4 capitalize">{value.replace("-", " ")}</div>
-          </PageLink>
-        )
-      }
-    </For>
-  </div>
-</template>
-
-<template id="sm-menu">
-  <div data-content class="flex justify-between items-center">
-    <a href="/">
+  <div data-content class="sm:flex sm:justify-between sm:items-center">
+    <a class="hidden sm:inline-block" href="/">
       <div data-content class="px-6 py-2 text-xl font-bold">For Astro</div>
     </a>
-    <div class="flex gap-6">
+    <div class="grid text-center sm:flex gap-6">
       <For of={pageNames}>
         {
           (value: string) => (
@@ -45,4 +22,4 @@ const pageNames = ["home", "flow-components", "utility-components"];
       </For>
     </div>
   </div>
-</template>
+</nav>
