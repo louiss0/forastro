@@ -4,7 +4,7 @@ import { executeUnless } from "@forastro/utilities";
 type Props = {
   when: unknown;
   cloak?: true;
-  children: Array<astroHTML.JSX.HTMLAttributes>;
+  children: Array<astroHTML.JSX.HTMLAttributes> | string;
 };
 
 const { when, cloak } = Astro.props;

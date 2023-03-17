@@ -30,10 +30,9 @@ function  unsetCaseInSwitchState() {
 
 }
 
-
-
 class Case<T> {
 
+    #isFound: true | null= null
     constructor(
         public readonly value: T,
         public readonly cloak: boolean,
@@ -41,6 +40,18 @@ class Case<T> {
     ) {
         
     }
+
+    get isFound() {
+        
+        return this.#isFound
+    }
+    setIsFoundToTrue() {
+
+        this.#isFound = true
+
+        return this
+    }
+
 }
 
 export {getCaseFromSwitchState, setCaseInSwitchState, unsetCaseInSwitchState, Case,} 

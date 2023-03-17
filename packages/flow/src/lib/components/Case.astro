@@ -17,8 +17,12 @@ type Props = FilledCase | DefaultCase;
 
 const { of, default: fallback } = Astro.props;
 
+const caseFromSwitchState = getCaseFromSwitchState();
+
 const caseFromSwitchStateValueIsEqualToCase =
-  getCaseFromSwitchState()?.value === of ? true : fallback;
+  caseFromSwitchState?.value === of
+    ? caseFromSwitchState?.setIsFoundToTrue()
+    : !caseFromSwitchState?.isFound && fallback;
 ---
 
 {caseFromSwitchStateValueIsEqualToCase && <slot />}

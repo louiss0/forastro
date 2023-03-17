@@ -1,0 +1,199 @@
+---
+import { For } from "@forastro/flow";
+import {
+  iterate,
+  iterateRange,
+  IterationInfo,
+  Projector,
+} from "@forastro/utilities";
+import Container from "demo/src/components/Container.astro";
+import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
+import Demo from "demo/src/layouts/Demo.astro";
+import Section from "../components/Section.astro";
+const names = ["Rich", "Manu", "Theo", "Mack"];
+---
+
+<Demo
+  title="Utilities"
+  description="This is the page for all utilities based things"
+  sidebarTitle="Utilities"
+  sidebarLinks={[
+    "iterate",
+    "iterate range",
+    "range",
+    "execute if",
+    "execute unless",
+    "gap",
+    "projector",
+    "island mirror",
+    "page link",
+  ]}
+>
+  <Section title={"iterate"}>
+    <Container>
+      <p>
+        The <code>iterate()</code>
+        <code>function</code> is a function that takes in an iterable. and a callback
+        function. It will then iterate through the iterable. and pass in three things.
+      </p>
+      <ul role="list">
+        <li>The value</li>
+        <li>The key</li>
+        <li>The <code>IterationInfo</code></li>
+      </ul>
+
+      <strong>The Iteration info class contains the following things</strong>
+      <ul>
+        <li>The iteration</li>
+        {
+          iterate(["first", "last", "odd", "even"], (value) => (
+            <li>
+              Whether or not the iteration is{" "}
+              <div class="capitalize">{value}</div>{" "}
+            </li>
+          ))
+        }
+        <li>How many iterations are remaining</li>
+        <li>How many iterations are there</li>
+      </ul>
+
+      <div class="text-xl text-yellow-300">
+        It works with either generators or iterables.
+      </div>
+
+      <strong
+        >Below is a list of tables that show's the information that is avaliable
+        when iterating through names</strong
+      >
+
+      <div class="flex gap-8 flex-wrap">
+        {
+          iterate(names, (value, key, info) => (
+            <IterationInfoTable {...{ value, key, info }} />
+          ))
+        }
+      </div>
+    </Container>
+  </Section>
+  <Section title={"range"}>
+    <Container>
+      <p>
+        The <code>range()</code> is a function that takes in three parameters.
+      </p>
+      <ul role="list">
+        <li>The start is the number where to start from</li>
+        <li>The stop is the number where to stop from</li>
+        <li>The step the number to add or subtract from</li>
+      </ul>
+      <div class="font-bold">Two things need to be remembered</div>
+    </Container>
+  </Section>
+
+  <Section title={"iterate range"}>
+    <Container>
+      <div class="grid gap-4">
+        <p>
+          The <code>iterateRange()</code> is a function that takes in two parameters.
+        </p>
+        <ul>
+          <li>A callback function</li>
+          <li>A set of options</li>
+        </ul>
+        <div class="font-bold">The set of options are three numbers.</div>
+        <ul role="list">
+          <li>The start</li>
+          <li>The stop</li>
+          <li>The step</li>
+        </ul>
+      </div>
+    </Container>
+  </Section>
+
+  <Section title={"execute if"}>
+    <Container>
+      <p>
+        The <code>executeIf()</code> is a function that takes two parameters
+      </p>
+      <ul>
+        <li>A condition</li>
+        <li>A a callback function</li>
+      </ul>
+      <p>
+        If the condition is true then the callback will be called if not then it
+        will not call it
+      </p>
+    </Container>
+  </Section>
+  <Section title={"execute unless"}>
+    <Container>
+      <p>
+        The <code>executeUnless()</code> is a function that takes two parameters
+      </p>
+      <ul>
+        <li>A condition</li>
+        <li>A a callback function</li>
+      </ul>
+      <p>
+        If the condition is false then the callback will be called if not then
+        it will not call it
+      </p>
+    </Container>
+  </Section>
+  <Section title={"gap"}>
+    <Container>
+      <div class="font-bold">
+        The <code>{`<Gap/>`}</code> component is a component that takes in two props.
+      </div>
+      <ul>
+        <li>The spaces</li>
+        <li>The color</li>
+      </ul>
+      <ul>
+        <li>The spaces are the amount of spaces taken</li>
+        <li>
+          The color is the choice from {
+            iterate(
+              [
+                "black",
+                "red",
+                "green",
+                "blue",
+                "purple",
+                "indigo",
+                "orange",
+                "yellow",
+                "brown",
+                "white",
+              ],
+              (value, _, info) => (info.isLast ? value : `${value},`)
+            )
+          }.
+        </li>
+      </ul>
+    </Container>
+  </Section>
+  <Section title={"projector"}>
+    <Container>
+      The <code>{`<Projector/>`}</code> component is a component that projects the
+      content of a template inside of a html area. It does this by taking in a <code
+        >templateId=</code
+      > as a prop. When that happens the component will search for that template
+      with the id then display it's contents.
+    </Container>
+  </Section>
+  <Section title={"island mirror"}>
+    <Container>
+      The <code>{`<IslandMirror >`}</code> component is a component that takes in
+      a child. Then an id. if it's child's id is equal to the one passed in then
+      it will pass on the child's attributes. To a parent component called the astro-island.
+    </Container>
+  </Section>
+  <Section title={"page link"}>
+    The <code>{`<PageLink />`}</code> component is a component that uses takes in
+    a path. If the current page matches the path that on the page link a <code
+      >`[aria-current="page"]`</code
+    >
+    will be applied to it and it will apply a default class that uses that selectors
+    as it's class selector.
+  </Section>
+</Demo>
