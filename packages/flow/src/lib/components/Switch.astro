@@ -21,4 +21,8 @@ html = Astro.slots.has("default")
 unsetCaseInSwitchState();
 ---
 
-<Fragment set:html={html} />
+<Fragment
+  set:html={html
+    ? html
+    : "Please render a proper case and make sure the default one is at the bottom"}
+/>
