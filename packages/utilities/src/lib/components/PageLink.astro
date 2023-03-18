@@ -8,16 +8,19 @@ type Props = {
 
 const {
   slots,
-  url,
+  url: { pathname },
   props: { href },
 } = Astro;
 
 const defaultSlot = slots.has("default")
   ? await slots.render("default")
   : "Please render something here the like the name of a page";
+
+const urlPathnameIsSameAsHref =
+  pathname === href || href === pathname.replace(/\/$/, "");
 ---
 
-<a aria-current={url.pathname === href ? "page" : null} href={href}>
+<a aria-current={urlPathnameIsSameAsHref ? "page" : null} href={href}>
   <Fragment set:html={defaultSlot} />
 </a>
 
