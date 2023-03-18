@@ -41,8 +41,7 @@ const { title, description } = Astro.props;
         --body-font: "Palanquin", sans-serif;
       }
 
-      body,
-      html {
+      body {
         font-size: var(--step-0);
         font-family: var(--body-font);
       }
@@ -54,7 +53,7 @@ const { title, description } = Astro.props;
       h5,
       h6 {
         @apply capitalize font-bold;
-        font-family: var(--body-font);
+        font-family: var(--heading-font);
       }
 
       h1 {
@@ -71,12 +70,6 @@ const { title, description } = Astro.props;
       h4 {
         font-size: var(--step-2);
       }
-      h5 {
-        font-size: var(--step-1);
-      }
-      h6 {
-        font-size: var(--step-0);
-      }
 
       img {
         @apply aspect-square object-cover;
@@ -84,9 +77,8 @@ const { title, description } = Astro.props;
 
       p {
         @apply leading-relaxed max-w-[60vw] font-light;
-        font-size: var(--step--1);
+        font-size: var(--step-1);
       }
-
       small {
         @apply font-extralight;
         font-size: var(--step--2);
