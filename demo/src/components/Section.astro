@@ -1,5 +1,6 @@
 ---
 import Center from "./Center.astro";
+import Container from "./Container.astro";
 
 type Props = {
   title: string;
@@ -11,9 +12,13 @@ const { title } = Astro.props;
 const dashedTitle = title.replaceAll(" ", "-");
 ---
 
-<section class="px-4 py-8 grid gap-4" aria-labelledby={dashedTitle}>
-  <Center>
-    <h2 id={dashedTitle}>{title}</h2>
-  </Center>
-  <slot />
+<section class="px-4 py-8" aria-labelledby={dashedTitle}>
+  <Container>
+    <div class="grid gap-4">
+      <Center>
+        <h2 id={dashedTitle}>{title}</h2>
+      </Center>
+      <slot />
+    </div>
+  </Container>
 </section>

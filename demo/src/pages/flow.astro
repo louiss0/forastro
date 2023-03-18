@@ -6,7 +6,10 @@ import Container from "demo/src/components/Container.astro";
 import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
 import Center from "demo/src/components/Center.astro";
 import Section from "demo/src/components/Section.astro";
-const names = ["Nick", "Kepano"];
+/**
+ * ? These names come from obsidian people.
+ */
+const names = ["Nick", "Kepano", "Elanor"];
 import { Code } from "astro/components";
 import Case from "packages/flow/src/lib/components/Case.astro";
 import type { IterationInfo } from "@forastro/utilities";
@@ -32,8 +35,7 @@ import type { IterationInfo } from "@forastro/utilities";
           <Code
             lang={"tsx"}
             wrap
-            code={`<For of={iterable}>{(value, key, info: IterationInfo) => unknown}</For>`}
-            wrap
+            code={`<For of={iterable}>{(value:unknown, key:unknown, info: IterationInfo) => unknown}</For>`}
           />
           <Center gap="gap-4">
             <div class="font-bold">
@@ -75,7 +77,12 @@ import type { IterationInfo } from "@forastro/utilities";
         <Code
           lang={"tsx"}
           wrap
-          code={`<Show when={unknown} cloak={boolean} />`}
+          code={`
+          <Show 
+            when={unknown} 
+            cloak={boolean} 
+          />
+          `}
         />
 
         <p>
@@ -117,8 +124,12 @@ import type { IterationInfo } from "@forastro/utilities";
         </p>
         <Code
           lang={"tsx"}
-          wrap
-          code={`<Hide when={unknown} cloak={true | undefined} />`}
+          code={`
+          <Hide
+          when={unknown} 
+          cloak={true|undefined} 
+          />
+          `}
         />
       </div>
     </Container>
@@ -158,7 +169,13 @@ import type { IterationInfo } from "@forastro/utilities";
     <Code
       lang={"tsx"}
       wrap
-      code={`<Range start={number} stop={number} step={number}>`}
+      code={`
+      <Range 
+        start={number} 
+        stop={number} 
+        step={number}
+      />
+      `}
     />
 
     <div class="flex items-center space-between gap-4">

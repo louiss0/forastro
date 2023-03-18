@@ -30,7 +30,7 @@ const { spaces, color = "" } = Astro.props;
     document.addEventListener("DOMContentLoaded", () => {
       gaps.forEach(function (gap) {
         const [spaces, color] = [
-          parseInt(gap.getAttribute("data-spaces")!),
+          parseFloat(gap.getAttribute("data-spaces")!),
           gap.getAttribute("data-color")!,
         ];
 
@@ -61,20 +61,14 @@ const { spaces, color = "" } = Astro.props;
           nextElementSibling
         );
 
-        const previousElementSiblingStyle = getComputedStyle(
-          previousElementSibling
-        );
-
         changeElementWidthIfTheParentElementFulfilsTheseConditions(
           parentElementStyle,
-          previousElementSiblingStyle,
           gap,
           spaces
         );
 
         changeElementHeightIfTheParentElementFulfilsTheseConditions(
           parentElementStyle,
-          previousElementSiblingStyle,
           gap,
           spaces
         );
@@ -85,7 +79,6 @@ const { spaces, color = "" } = Astro.props;
 
     function changeElementWidthIfTheParentElementFulfilsTheseConditions(
       parentElementStyle: CSSStyleDeclaration,
-      previousElementSiblingStyle: CSSStyleDeclaration,
       element: HTMLElement,
       spaces: number
     ) {
@@ -95,11 +88,6 @@ const { spaces, color = "" } = Astro.props;
         gridAutoFlow: parentElementGridAutoFlow,
         flexDirection: parentElementFlexDirection,
       } = parentElementStyle;
-
-      const { display: previousElementDisplay } = previousElementSiblingStyle;
-
-      const previousElementDisplayIsInline =
-        previousElementDisplay.includes("inline");
 
       const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
 
@@ -112,21 +100,18 @@ const { spaces, color = "" } = Astro.props;
         parentElementGridAutoFlow.includes("column");
 
       const anyOfTheConditionsRequiredToSetTheWidthOfTheElementAreTrue = [
-        previousElementDisplayIsInline,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsRow,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsColumn,
       ].some((value) => value === true);
 
       if (anyOfTheConditionsRequiredToSetTheWidthOfTheElementAreTrue) {
-        element.style.width = `${parseInt(parentElementFontSize) * spaces}px`;
-
+        element.style.width = `${parseFloat(parentElementFontSize) * spaces}px`;
         element.style.height = "auto";
       }
     }
 
     function changeElementHeightIfTheParentElementFulfilsTheseConditions(
       parentElementStyle: CSSStyleDeclaration,
-      previousElementSiblingStyle: CSSStyleDeclaration,
       element: HTMLElement,
       spaces: number
     ) {
@@ -136,11 +121,6 @@ const { spaces, color = "" } = Astro.props;
         gridAutoFlow: parentElementGridAutoFlow,
         flexDirection: parentElementFlexDirection,
       } = parentElementStyle;
-
-      const { display: previousElementDisplay } = previousElementSiblingStyle;
-
-      const previousElementDisplayIsBlock =
-        previousElementDisplay.includes("block");
 
       const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
 
@@ -153,7 +133,6 @@ const { spaces, color = "" } = Astro.props;
         parentElementGridAutoFlow.includes("row");
 
       const anyOfTheConditionsRequiredToSetTheHeightOfTheElementAreTrue = [
-        previousElementDisplayIsBlock,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsRow,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsColumn,
       ].some((value) => value === true);

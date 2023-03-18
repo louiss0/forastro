@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 2.2.1
+
+### Patch Changes
+
+- I have made it so that the Gap component and the PageLink work properly.
+
 ## 2.2.0
 
 ### Minor Changes
