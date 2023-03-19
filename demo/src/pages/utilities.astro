@@ -1,5 +1,4 @@
 ---
-import { For } from "@forastro/flow";
 import {
   iterate,
   iterateRange,
@@ -82,7 +81,7 @@ const allowedColors = [
 
     <div class="flex gap-8 flex-wrap">
       {
-        iterate(names, (value, key, info) => (
+        iterate(names, (value, info, key) => (
           <IterationInfoTable {...{ value, key, info }} />
         ))
       }
@@ -205,7 +204,7 @@ const allowedColors = [
       <li>The spaces are the amount of spaces taken</li>
       <li>
         The color is the choice from {
-          iterate(allowedColors, (value, _, info) =>
+          iterate(allowedColors, (value, info) =>
             info.isLast ? value : `${value}, `
           )
         }.
@@ -219,7 +218,7 @@ const allowedColors = [
       >
       <div class="flex justify-center flex-wrap">
         {
-          iterate(allowedColors, (value, _, info) => {
+          iterate(allowedColors, (value, info) => {
             return info.isLast ? (
               <div class="px-4 py-2">{value}</div>
             ) : (

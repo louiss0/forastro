@@ -7,7 +7,7 @@
   },
   "private": true,
   "devDependencies": {
-    "@astrojs/tailwind": "^3.1.0",
+    "@astrojs/tailwind":   "^3.1.0",
     "@changesets/cli": "^2.26.0",
     "@nrwl/eslint-plugin-nx": "15.8.5",
     "@nrwl/js": "15.8.5",

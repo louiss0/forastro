@@ -7,7 +7,7 @@ type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> = P
 
 type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U> =
     T extends HasForEachMethod
-    ? (value: GetParametersFromIterableWithAForEachMethod<T>[0], key: GetParametersFromIterableWithAForEachMethod<T>[1], info: IterationInfo) => U
+    ? (value: GetParametersFromIterableWithAForEachMethod<T>[0], info: IterationInfo, key: GetParametersFromIterableWithAForEachMethod<T>[1]) => U
     : T extends Generator
     ? (value: ReturnType<T["next"]>["value"]) => U
     : never

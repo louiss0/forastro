@@ -55,7 +55,7 @@ import type { IterationInfo } from "@forastro/utilities";
         <div class="flex gap-6 justify-center flex-wrap">
           <For of={names}>
             {
-              (value: string, key: number, info: IterationInfo) => (
+              (value: string, info: IterationInfo, key: number) => (
                 <IterationInfoTable {...{ value, key, info }} />
               )
             }
@@ -92,7 +92,7 @@ import type { IterationInfo } from "@forastro/utilities";
 
         <For of={["Mack", "James", "Rudy"]}>
           {
-            (value: string, _: number, info: IterationInfo) =>
+            (value: string, info: IterationInfo) =>
               info.isLast ? `<div>${value}</div>` : `<div>${value},</div>`
           }
         </For>
