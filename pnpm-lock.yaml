@@ -69,7 +69,7 @@ importers:
 
   packages/flow:
     specifiers:
-      '@forastro/utilities': workspace:^2.2.0
+      '@forastro/utilities': workspace:^2.2.2
     dependencies:
       '@forastro/utilities': link:../utilities
 
