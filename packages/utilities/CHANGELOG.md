@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 2.2.2
+
+### Patch Changes
+
+- Changed arguments for the iterate function and its internal logic. The <For/> component has changed as well.
+
 ## 2.2.1
 
 ### Patch Changes

@@ -1,5 +1,13 @@
 # @forastro/flow
 
+## 2.2.2
+
+### Patch Changes
+
+- Changed arguments for the iterate function and its internal logic. The <For/> component has changed as well.
+- Updated dependencies
+  - @forastro/utilities@2.2.2
+
 ## 2.2.0
 
 ### Minor Changes
