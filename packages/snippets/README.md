@@ -3,11 +3,11 @@
 This extension is a set of Snippets for Astro. They are created so that scaffolding with Astro can be easy. You can try to remember most of these but.
 Before reading the full snippets down below. The snippets are made so that you write your HTML before writing your scripts and styles.
 
-![Basic Snippets](images/base-snippets.gif)
+![Basic Snippets](./images/base-snippets.gif)
 
 <br/>
 
-![Expression Snippets](images/expression-snippets.gif)
+![Expression Snippets](./images/expression-snippets.gif)
 
 I created list for you to understand the fundamental things about these snippets.
 
