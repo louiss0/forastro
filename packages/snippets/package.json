@@ -2,7 +2,7 @@
   "name": "astro-snippets",
   "displayName": "Astro Snippets",
   "description": "It is set of snippets for Astro JS ",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "scripts": {
     "release": "vsce package && vsce publish"
   },
