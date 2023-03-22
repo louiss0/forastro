@@ -57,8 +57,7 @@ Here is a table with a list of all the snippets you can use. Hope this is helpfu
 | a-tern          | A ternary expression scaffold                                 |
 | a-map           | This is a simple map expression for Astro                     |
 | a-map-ft        | This is a map expression for Astro using a anonymous function |
-
-| a-slot-ft | A fragment slot with a function to return HTML |
+| a-slot-ft       | A fragment slot with a function to return HTML                |
 
 ### Javascript Snippets
 

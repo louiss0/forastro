@@ -9,8 +9,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/louiss0/forastro",
-    "directory": "packages/snippets"
+    "directory": "packages/snippets" 
   },
+  "homepage": "/packages/snippets/README.md",
   "publisher": "SheltonLouis",
   "engines": {
     "vscode": "^1.74.0"
