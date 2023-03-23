@@ -1,18 +1,16 @@
 ---
 import Demo from "demo/src/layouts/Demo.astro";
 
-import { For, Show, Hide, Range, Switch } from "@forastro/flow";
+import { For, Show, Hide, Range, Switch, Case } from "@forastro/flow";
 import Container from "demo/src/components/Container.astro";
 import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
 import Center from "demo/src/components/Center.astro";
 import Section from "demo/src/components/Section.astro";
+import { Code } from "astro/components";
 /**
  * ? These names come from obsidian people.
  */
 const names = ["Nick", "Kepano", "Elanor"];
-import { Code } from "astro/components";
-import Case from "packages/flow/src/lib/components/Case.astro";
-import type { IterationInfo } from "@forastro/utilities";
 ---
 
 <Demo
@@ -55,7 +53,7 @@ import type { IterationInfo } from "@forastro/utilities";
         <div class="flex gap-6 justify-center flex-wrap">
           <For of={names}>
             {
-              (value: string, info: IterationInfo, key: number) => (
+              (value, info, key: number) => (
                 <IterationInfoTable {...{ value, key, info }} />
               )
             }
@@ -87,7 +85,7 @@ import type { IterationInfo } from "@forastro/utilities";
 
         <For of={["Mack", "James", "Rudy"]}>
           {
-            (value: string, info: IterationInfo) =>
+            (value, info) =>
               info.isLast ? `<div>${value}</div>` : `<div>${value},</div>`
           }
         </For>
@@ -97,7 +95,7 @@ import type { IterationInfo } from "@forastro/utilities";
       <div class="grid gap-2">
         <For of={["Mack", "James", "Rudy"]}>
           {
-            (value: string) => (
+            (value) => (
               <Show when={value !== "James"}>
                 <div class=" before:content-['--'] before:text-gray-400 before:text-lg">
                   {value}
@@ -135,7 +133,7 @@ import type { IterationInfo } from "@forastro/utilities";
       <div class="flex items-center space-between gap-4">
         <Range start={1} stop={10}>
           {
-            (value: number, info: IterationInfo) => (
+            (value, info) => (
               <Hide when={info.isOdd} cloak>
                 <div>{value}</div>
               </Hide>
@@ -166,7 +164,7 @@ import type { IterationInfo } from "@forastro/utilities";
     <div class="flex items-center space-between gap-4">
       <Range start={1} stop={10}>
         {
-          (value: number, info: IterationInfo) => (
+          (value, info) => (
             <Hide when={info.isOdd} cloak>
               <div>{value}</div>
             </Hide>
@@ -178,7 +176,7 @@ import type { IterationInfo } from "@forastro/utilities";
     <div class="flex items-center space-between gap-4">
       <Range start={1} stop={10}>
         {
-          (value: number, info: IterationInfo) => (
+          (value, info) => (
             <Show when={info.isOdd} cloak>
               <div>{value}</div>
             </Show>
@@ -198,18 +196,18 @@ import type { IterationInfo } from "@forastro/utilities";
     <Code
       lang={"tsx"}
       wrap
-      code={`<Switch of={unknown} cloak={true| undefined} >`}
+      code={`<Switch of={unknown} cloak={true|undefined} >`}
     />
     <Code
       lang={"tsx"}
       wrap
-      code={`<Case of={unknown} cloak={true| undefined} >`}
+      code={`<Case of={unknown} cloak={true|undefined} >`}
     />
 
-    <Center gap="gap-8">
+    <div class="flex gap-8 flex-wrap">
       <Range start={1} stop={10}>
         {
-          (value: number) => (
+          (value) => (
             <Switch of={value}>
               <Case of={value % 5}>
                 <div>Got fives</div>
@@ -224,6 +222,6 @@ import type { IterationInfo } from "@forastro/utilities";
           )
         }
       </Range>
-    </Center>
+    </div>
   </Section>
 </Demo>

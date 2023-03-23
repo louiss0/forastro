@@ -3,6 +3,7 @@
   "displayName": "Astro Snippets",
   "description": "It is set of snippets for Astro JS ",
   "version": "2.2.3",
+  "private":"true",
   "scripts": {
     "release": "vsce package && vsce publish"
   },
