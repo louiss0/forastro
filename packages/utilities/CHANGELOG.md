@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 2.2.3
+
+### Patch Changes
+
+- Fixed iterate function makes sure that the key that is passed is a number when an array is passed. and Fixed the hide component
+
 ## 2.2.2
 
 ### Patch Changes

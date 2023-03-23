@@ -155,22 +155,20 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
     
     if (hasForEachMethod(iterable)) {
        
-
-        
-
-
         let iteration = 0
 
         const convertedIterable = Object.entries(iterable)
         for await (const [key, value] of  convertedIterable) {
             
-            iteration = Array.isArray(iterable) ? parseInt(key) : iteration + 1  
+            const numberFromParseIntOrStringKey = Number.isNaN(key)? key: parseInt(key)
+            iteration = iterable instanceof Array ?  parseInt(key) : iteration + 1  
             
-            yield* wrapFunctionInAsyncGenerator(cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<HasForEachMethod, U>)
+            yield* wrapFunctionInAsyncGenerator(
+                cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<HasForEachMethod, U>)
                 (
                 value,
                 new IterationInfo(0, iteration, convertedIterable.length),
-                key
+                numberFromParseIntOrStringKey
                 )
             
         }

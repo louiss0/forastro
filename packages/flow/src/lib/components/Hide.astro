@@ -1,5 +1,5 @@
 ---
-import { executeUnless } from "@forastro/utilities";
+import { executeUnless, executeIf } from "@forastro/utilities";
 
 type Props = {
   when: unknown;
@@ -15,8 +15,8 @@ const slotBasedOnDefault = await executeUnless(
   () => slots.render("default")
 );
 
-const slotBasedOnCloaked = await executeUnless(
-  slots.has("default") && !when && !cloak,
+const slotBasedOnCloaked = await executeIf(
+  slots.has("default") && !!when && !!cloak,
   async () => `<div style="display:none">${await slots.render("default")}</div>`
 );
 ---

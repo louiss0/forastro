@@ -1,6 +1,7 @@
 ---
 import { iterate } from "@forastro/utilities";
 import Layout from "demo/src/layouts/Layout.astro";
+import FloatingActionButton from "../components/FloatingActionButton.astro";
 
 type Props = {
   title: string;
@@ -10,15 +11,24 @@ type Props = {
 };
 
 const { title, description, sidebarTitle, sidebarLinks } = Astro.props;
+
+sidebarLinks.forEach((link) => {
+  if (link.match(/(\s+)/g)) {
+    throw new Error(`This ${link} has a space in it use a dash instead`);
+  }
+});
 ---
 
 <Layout {...{title, description}}>
   <main class="grid md:grid-cols-[30%,1fr] xl:grid-cols-[20%,1fr]">
-    <aside class="py-4 border-y-2 lg:border-r-2 lg:border-y-0 border-current">
-      <div class="md:fixed">
+    <aside
+      id="secondary-nav"
+      class="py-4 border-y-2 lg:border-r-2 lg:border-y-0 border-current"
+    >
+      <div class="md:fixed md:w-1/3 xl:w-1/5">
         <div data-content class="grid gap-2 text-center lg:text-left">
-          <div class="text-xl px-8 py-2">{sidebarTitle}</div>
-          <div id="section-links" class="grid gap-2 text-sm">
+          <div class="px-8 py-2 text-2xl lg:text-3xl">{sidebarTitle}</div>
+          <div id="section-links" class="grid gap-2">
             {
               iterate(sidebarLinks, (sidebarLink) => (
                 <div
@@ -27,7 +37,7 @@ const { title, description, sidebarTitle, sidebarLinks } = Astro.props;
                 >
                   <a
                     href={`#${sidebarLink.toLowerCase()}`}
-                    class="capitalize block focus:outline-none [&:is(:hover,:focus)]:bg-gray-200"
+                    class="capitalize block focus:outline-none text-base [&:is(:hover,:focus)]:bg-gray-200"
                   >
                     <div data-wrapper="padding" class="px-10 py-4 ">
                       {sidebarLink.replaceAll("-", " ")}
@@ -44,4 +54,11 @@ const { title, description, sidebarTitle, sidebarLinks } = Astro.props;
       <slot />
     </div>
   </main>
+
+  <div class="max-md:block hidden">
+    <FloatingActionButton
+      elementToScrollToId="secondary-nav"
+      id="secondary-nav-button"
+    />
+  </div>
 </Layout>

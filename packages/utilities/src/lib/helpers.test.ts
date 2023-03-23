@@ -30,7 +30,7 @@ describe("Iterate  works", () => {
     
     test('When array is passed in the value is the first param index is second and iterable is the iteration info ',  async () => { 
         
-        for await (const [value, key, info] of iterate(["james", "mary", "john"], (...args) => args)) {
+        for await (const [value, info, key] of iterate(["james", "mary", "john"], (...args) => args)) {
             
             
             expect(value).toBeTypeOf("string")
@@ -46,7 +46,7 @@ describe("Iterate  works", () => {
      
     test('When set is passed in the value is the first param key is second and set is third ',  async () => { 
         
-        for await (const [value, key, info] of iterate(new Set(["Mack", "Cain", "Ashton"]), (value, key, info) => [value, key,info ])) {
+        for await (const [value, info, key] of iterate(new Set(["Mack", "Cain", "Ashton"]), (value, key, info) => [value, key,info ])) {
             expect(value).toBeTypeOf("string")
             expect(key).toBeTypeOf("string")
             expect(info).toBeInstanceOf(IterationInfo)
@@ -57,7 +57,7 @@ describe("Iterate  works", () => {
     
     test('When map is passed in the value is the first param key is second and map is third ',  async () => { 
         
-        for await (const [value, key, info] of iterate(new Map([[1, "mary"]]), (value, key, info) => [value, key, info])) {
+        for await (const [value, info, key] of iterate(new Map([[1, "mary"]]), (value, key, info) => [value, key, info])) {
             
             expect(value).toBeTypeOf("string")
             expect(key).toBeTypeOf("number")
@@ -72,7 +72,7 @@ describe("Iterate  works", () => {
     test("IterationInfo's iteration number is plus one  the current index in an array ", async () => {
         
 
-        for await (const [key, info] of iterate([2,3,5], (_, key, info)=> [key, info] as const)) {
+        for await (const [key, info] of iterate([2,3,5], (_, info, key)=> [key, info] as const)) {
             
             expect(key).toBeTypeOf("number")
 
@@ -97,30 +97,30 @@ describe("Iterate  works", () => {
           [
             [
               "a",
-              0,
               IterationInfo {
                 "firstIterationNum": 0,
                 "iterationNum": 0,
                 "lastIterationNum": 3,
               },
+              0,
             ],
             [
               "b",
-              1,
               IterationInfo {
                 "firstIterationNum": 0,
                 "iterationNum": 1,
                 "lastIterationNum": 3,
               },
+              1,
             ],
             [
               "c",
-              2,
               IterationInfo {
                 "firstIterationNum": 0,
                 "iterationNum": 2,
                 "lastIterationNum": 3,
               },
+              2,
             ],
           ]
         `)
@@ -290,7 +290,7 @@ describe("Test iteration info", () => {
         expect(res.isFirst).toBe(false)
         expect(res.isLast).toBe(false)
         expect(res.iteration).toBe(4)
-        expect(res.remaining).toBe(2)
+        expect(res.remaining).toBe(1)
         expect(res.isOdd).toBe(true)
 
 
@@ -324,7 +324,7 @@ describe("Test iteration info", () => {
           }
         `)
 
-        expect(iterationInfo.remaining).toBe(2)
+        expect(iterationInfo.remaining).toBe(1)
 
     })
 
