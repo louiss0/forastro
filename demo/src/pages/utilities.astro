@@ -32,14 +32,14 @@ const allowedColors = [
   sidebarTitle="Utilities"
   sidebarLinks={[
     "iterate",
-    "iterate range",
+    "iterate-range",
     "range",
-    "execute if",
-    "execute unless",
+    "execute-if",
+    "execute-unless",
     "gap",
     "projector",
-    "island mirror",
-    "page link",
+    "island-mirror",
+    "page-link",
   ]}
 >
   <Section title={"iterate"}>
@@ -52,14 +52,12 @@ const allowedColors = [
 
     <Code
       lang={"ts"}
-      code={`
-      iterate(value:unknown, key:unknown, info:IterationInfo)
-      `}
+      code={`iterate(value:unknown, info:IterationInfo,key:unknown )`}
     />
 
-    <div class="grid gap-4">
+    <div class="grid gap-6">
       <strong>The Iteration info class contains the following things</strong>
-      <ul role="list" class="text-sm grid gap-2">
+      <ul role="list" class="grid gap-2">
         <li>The iteration</li>
         {
           iterate(["first", "last", "odd", "even"], (value) => (
@@ -171,12 +169,7 @@ const allowedColors = [
         >true</code
       > then the callback will be called if not nothing will happen.
     </p>
-    <Code
-      lang={"ts"}
-      code={`
-    executeIf(value:boolean, callback:Function)
-    `}
-    />
+    <Code lang={"ts"} code={`executeIf(value:boolean, callback:Function)`} />
   </Section>
   <Section title={"execute unless"}>
     <p>
@@ -187,9 +180,7 @@ const allowedColors = [
     </p>
     <Code
       lang={"ts"}
-      code={`
-      executeUnless(value:boolean, callback:Function)
-      `}
+      code={`executeUnless(value:boolean, callback:Function)`}
     />
   </Section>
   <Section title={"gap"}>
@@ -241,17 +232,17 @@ const allowedColors = [
       with the id then display it's contents.
     </p>
 
+    <Code lang={"tsx"} code={`<Projector templateId={string} />`} />
+
     <div class="grid gap-6">
       <strong>This element will be displayed by The projector</strong>
       <Code
         lang={"html"}
-        code={`
-        <template id="message">
-          <span class="text-lg">
+        code={`    <template id="message">
+        <span class="text-lg">
           I come from a template
-          </span>
-        </template>
-        `}
+        </span>
+    </template>`}
         wrap
       />
     </div>
@@ -263,6 +254,8 @@ const allowedColors = [
       a child. Then an id. if it's child's id is equal to the one passed in then
       it will pass on the child's attributes. To a parent component called the astro-island.
     </p>
+
+    <Code lang={"tsx"} code={`<IslandMirror id={string} />`} />
   </Section>
   <Section title={"page link"}>
     <p>
@@ -273,6 +266,8 @@ const allowedColors = [
       will be applied to it and it will apply a default class that uses that selectors
       as it's class selector.
     </p>
+
+    <Code lang={"tsx"} code={`<PageLink href={string} />`} />
 
     <PageLink href={Astro.url.pathname as `/${string}`}>
       Click to reload this page

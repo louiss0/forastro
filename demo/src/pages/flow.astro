@@ -35,7 +35,7 @@ import type { IterationInfo } from "@forastro/utilities";
           <Code
             lang={"tsx"}
             wrap
-            code={`<For of={iterable}>{(value:unknown, key:unknown, info: IterationInfo) => unknown}</For>`}
+            code={`<For of={iterable}>{(value:unknown, info: IterationInfo, key:unknown) => unknown}</For>`}
           />
           <Center gap="gap-4">
             <div class="font-bold">
@@ -77,12 +77,7 @@ import type { IterationInfo } from "@forastro/utilities";
         <Code
           lang={"tsx"}
           wrap
-          code={`
-          <Show 
-            when={unknown} 
-            cloak={boolean} 
-          />
-          `}
+          code={`<Show when={unknown} cloak={boolean} />`}
         />
 
         <p>
@@ -124,12 +119,8 @@ import type { IterationInfo } from "@forastro/utilities";
         </p>
         <Code
           lang={"tsx"}
-          code={`
-          <Hide
-          when={unknown} 
-          cloak={true|undefined} 
-          />
-          `}
+          wrap
+          code={`<Hide when={unknown} cloak={true|undefined} />`}
         />
       </div>
     </Container>
@@ -169,13 +160,7 @@ import type { IterationInfo } from "@forastro/utilities";
     <Code
       lang={"tsx"}
       wrap
-      code={`
-      <Range 
-        start={number} 
-        stop={number} 
-        step={number}
-      />
-      `}
+      code={`<Range start={number} stop={number} step={number} />`}
     />
 
     <div class="flex items-center space-between gap-4">
@@ -209,6 +194,17 @@ import type { IterationInfo } from "@forastro/utilities";
       to make sure that an element will exist if the value inside of it is the same
       as the one inside of the {`<Case />`} You can also cloak the value as well.
     </p>
+
+    <Code
+      lang={"tsx"}
+      wrap
+      code={`<Switch of={unknown} cloak={true| undefined} >`}
+    />
+    <Code
+      lang={"tsx"}
+      wrap
+      code={`<Case of={unknown} cloak={true| undefined} >`}
+    />
 
     <Center gap="gap-8">
       <Range start={1} stop={10}>

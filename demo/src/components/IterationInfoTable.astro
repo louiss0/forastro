@@ -1,6 +1,7 @@
 ---
 import type { IterationInfo } from "@forastro/utilities";
 import { For } from "@forastro/flow";
+import { Debug } from "astro/components";
 
 type Props = {
   key: string | number;
@@ -8,25 +9,24 @@ type Props = {
   value: string | number;
 };
 
-const { key, info, value } = Astro.props;
+const {
+  key,
+  info: { count, isEven, isFirst, isLast, isOdd, iteration, remaining },
+  value,
+} = Astro.props;
 
 const tableHeaderValues = ["Type", "Value"];
-type IterationInfoValuesOrString = IterationInfo[keyof IterationInfo] | string;
-type AllowedMapKeysForTableInfo = keyof IterationInfo | "key" | "value";
-const tableInfo = new Map<
-  AllowedMapKeysForTableInfo,
-  IterationInfoValuesOrString
->([
-  ["key", key],
-  ["value", value],
-  ["isFirst", info.isFirst],
-  ["isLast", info.isLast],
-  ["isOdd", info.isOdd],
-  ["isEven", info.isEven],
-  ["iteration", info.iteration],
-  ["remaining", info.remaining],
-  ["count", info.count],
-]);
+const tableInfo = {
+  key,
+  value,
+  isFirst,
+  isLast,
+  isOdd,
+  isEven,
+  iteration,
+  remaining,
+  count,
+};
 ---
 
 <table class="w-48 shadow-sm shadow-gray-800 rounded">
@@ -43,12 +43,12 @@ const tableInfo = new Map<
       </For>
     </tr>
   </thead>
-  <tbody class="block text-sm py-2 px-4 font-light">
-    <For of={tableInfo}>
+  <tbody class="block text-sm font-light">
+    <For of={Object.entries(tableInfo)}>
       {
-        (value: IterationInfoValuesOrString, key: string) => (
-          <tr class="grid grid-cols-2 gap-4">
-            <td class="px-4 py-2">{key}</td>
+        ([key, value]) => (
+          <tr class="grid grid-cols-2 ">
+            <td class="px-4 py-2 ">{key}</td>
             <td class="px-4 py-2">{`${value}`}</td>
           </tr>
         )
