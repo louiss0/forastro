@@ -19,10 +19,10 @@
     "baseUrl": ".",
     "paths": {
       "@forastro/flow": [
-        "packages/flow/index.ts"
+        "packages/flow"
       ],
       "@forastro/utilities": [
-        "packages/utilities/index.ts"
+        "packages/utilities"
       ]
     }
   },
