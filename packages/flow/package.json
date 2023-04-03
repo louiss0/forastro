@@ -1,6 +1,6 @@
 {
   "name": "@forastro/flow",
-  "version": "2.2.2",
+  "version": "2.2.4",
   "type": "module",
   "exports": {
     ".": {
@@ -19,9 +19,9 @@
     "ui"
   ],
   "peerDependencies": {
-    "astro": "^1.0.0"
+    "astro": ">1.0.0"
   },
   "dependencies": {
-    "@forastro/utilities": "workspace:^2.2.2"
+    "@forastro/utilities": "workspace:^2.2.4"
   }
 }

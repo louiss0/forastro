@@ -1,5 +1,13 @@
 # @forastro/flow
 
+## 2.2.4
+
+### Patch Changes
+
+- Fixed: Peer dependecy is now greater than 1.0.0 instead of just ^1.0.0
+- Updated dependencies
+  - @forastro/utilities@2.2.4
+
 ## 2.2.2
 
 ### Patch Changes
