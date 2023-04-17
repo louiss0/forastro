@@ -1,0 +1,18 @@
+---
+import { defineGlobalTemplateMap, setToGlobalTemplateMap } from "../helpers";
+
+type Props = {
+  templateName: Lowercase<string>;
+  children: (
+    ...args: Array<any>
+  ) => unknown | Array<astroHTML.JSX.HTMLAttributes>;
+};
+
+const { templateName } = Astro.props;
+
+defineGlobalTemplateMap();
+
+setToGlobalTemplateMap(templateName, (...args) =>
+  Astro.slots.render("default", args)
+);
+---

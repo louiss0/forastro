@@ -6,6 +6,7 @@ import {
   Projector,
   range,
   Gap,
+  DefineTemplate,
 } from "@forastro/utilities";
 import { Code } from "astro/components";
 import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
@@ -25,6 +26,10 @@ const allowedColors = [
   "white",
 ] as const;
 ---
+
+<DefineTemplate templateName="message">
+  <span class="text-lg">I come from a template</span>
+</DefineTemplate>
 
 <Demo
   title="Utilities"
@@ -227,12 +232,12 @@ const allowedColors = [
     <p>
       The <code>{`<Projector/>`}</code> component is a component that projects the
       content of a template inside of a html area. It does this by taking in a <code
-        >templateId=</code
+        >templateName=</code
       > as a prop. When that happens the component will search for that template
       with the id then display it's contents.
     </p>
 
-    <Code lang={"tsx"} code={`<Projector templateId={string} />`} />
+    <Code lang={"tsx"} code={`<Projector templateName={string} />`} />
 
     <div class="grid gap-6">
       <strong>This element will be displayed by The projector</strong>
@@ -246,7 +251,7 @@ const allowedColors = [
         wrap
       />
     </div>
-    <Projector templateId="message" />
+    <Projector templateName="message" context={[]} />
   </Section>
   <Section title={"island mirror"}>
     <p>
@@ -274,7 +279,3 @@ const allowedColors = [
     </PageLink>
   </Section>
 </Demo>
-
-<template id="message">
-  <span class="text-lg">I come from a template</span>
-</template>
