@@ -1,0 +1,29 @@
+---
+import { FluidPercentages, SpacingNumbers } from "~/types";
+
+type AllowedFlexClasses =
+  | "justify-between"
+  | "justify-around"
+  | "justify-evenly"
+  | "justify-center";
+``;
+interface Props {
+  widthClass?: `w-${FluidPercentages}`;
+  gap?: `gap-${SpacingNumbers}`;
+  flexClasses?: `flex ${AllowedFlexClasses | ""}`;
+}
+
+const { widthClass, gap = "gap-4", flexClasses } = Astro.props;
+---
+
+<div
+  class:list={[
+    flexClasses?.substring(5) ? "grid place-items-center" : null,
+    widthClass || "",
+    gap,
+    flexClasses,
+    flexClasses && "items-center",
+  ]}
+>
+  <slot />
+</div>

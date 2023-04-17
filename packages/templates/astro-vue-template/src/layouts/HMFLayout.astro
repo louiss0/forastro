@@ -1,0 +1,36 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+
+import Navbar from "~/components/Navbar.vue";
+
+interface Props {
+  title: string;
+}
+const { slots } = Astro
+
+const header = 
+slots.has("header") 
+? `${await slots.render("header")} `
+: ` <p> You must have a header if you want to use this layout</p>`
+
+
+const footer = 
+slots.has("footer") 
+? `<footer>${await slots.render("footer")}</footer>`
+: ` <p>  You must have a footer if you want to use this layout</p>`
+
+const { title  } = Astro.props;
+---
+
+<BaseLayout title={title}>
+  <header>
+    <Navbar client:load />
+    <Fragment set:html={header} />
+  </header>
+  <main>
+    <div class="dark:bg-gray-900 dark:text-gray-50">
+      <slot />
+    </div>
+  </main>
+    <Fragment set:html={footer} />
+</BaseLayout>
