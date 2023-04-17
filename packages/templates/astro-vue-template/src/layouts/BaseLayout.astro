@@ -1,0 +1,115 @@
+---
+import "@fontsource/lato/100.css";
+import "@fontsource/lato/300.css";
+import "@fontsource/lato/400.css";
+import "@fontsource/lato/700.css";
+import "@fontsource/lato/900.css";
+import "@fontsource/raleway";
+import "primeicons/primeicons.css";
+import "primevue/resources/primevue.min.css";
+import "primevue/resources/themes/tailwind-light/theme.css";
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <slot name="head">
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width" />
+      <meta name="generator" content={Astro.generator} />
+      <link rel="stylesheet" href="style.css" />
+      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+      <style lang="postcss" is:global>
+        :root {
+          --step--2: clamp(0.69rem, calc(0.58rem + 0.48vw), 0.96rem);
+          --step--1: clamp(0.78rem, calc(0.6rem + 0.75vw), 1.2rem);
+          --step-0: clamp(0.88rem, calc(0.62rem + 1.1vw), 1.5rem);
+          --step-1: clamp(0.98rem, calc(0.62rem + 1.57vw), 1.88rem);
+          --step-2: clamp(1.11rem, calc(0.6rem + 2.19vw), 2.34rem);
+          --step-3: clamp(1.25rem, calc(0.55rem + 2.98vw), 2.93rem);
+          --step-4: clamp(1.4rem, calc(0.47rem + 4vw), 3.66rem);
+          --step-5: clamp(1.58rem, calc(0.33rem + 5.3vw), 4.58rem);
+
+          --heading-font: "Raleway", sans-serif;
+          --body-font: "Lato", sans-serif;
+        }
+
+        body {
+          @apply text-gray-900 bg-gray-50 min-h-screen;
+          @apply grid grid-rows-[auto_1fr_auto];
+          font-size: var(--step-0);
+          font-family: var(--body-font);
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          @apply capitalize font-bold;
+          font-family: var(--body-font);
+        }
+
+        h1 {
+          @apply font-black;
+          font-size: var(--step-5);
+        }
+
+        h2 {
+          font-size: var(--step-4);
+        }
+        h3 {
+          font-size: var(--step-3);
+        }
+        h4 {
+          font-size: var(--step-2);
+        }
+        h5 {
+          font-size: var(--step-1);
+        }
+        h6 {
+          font-size: var(--step-0);
+        }
+
+        img {
+          @apply aspect-square object-cover;
+        }
+
+        p {
+          @apply leading-relaxed max-w-[60vw];
+          font-size: var(--step--1);
+        }
+
+        small {
+          @apply font-light;
+          font-size: var(--step--2);
+        }
+
+        /** 
+          This is the default class for prime vue I decided to overwrite it to change the default colors
+        */
+        .p-button {
+          @apply bg-gray-800;
+          @apply dark:bg-gray-200 dark:text-gray-800;
+          @apply border-2 border-current;
+          @apply px-6 py-2;
+          
+          &:enabled:hover {
+            @apply bg-gray-200 text-gray-800 border-current;
+          }
+        }
+      </style>
+      <title>{title}</title>
+    </slot>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

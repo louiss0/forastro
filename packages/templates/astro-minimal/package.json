@@ -1,0 +1,23 @@
+{
+  "name": "@forastro/minimal-template",
+  "type": "module",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@forastro/utilities": "^2.2.4",
+    "astro": "^2.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "^3.1.1",
+    "@fontsource/lato": "^4.5.10",
+    "@fontsource/raleway": "^4.5.12",
+    "tailwindcss": "^3.3.1"
+  }
+}
