@@ -1,38 +1,25 @@
 ---
+import { getFromGlobalTemplateMap } from "../helpers";
+
 interface Props {
-  templateId: string;
+  templateName: Parameters<typeof getFromGlobalTemplateMap>[0];
+  context?: Array<any>;
 }
 
-const { templateId } = Astro.props;
+const { templateName, context } = Astro.props;
+
+const render = getFromGlobalTemplateMap(templateName);
+
+if (!render) {
+  throw new Error(
+    `There is not template with this ${templateName} please use define template before using this component. 
+    The id must be the same as templateName
+    
+    `
+  );
+}
+
+const html = context ? await render(...context) : await render();
 ---
 
-<br data-template-name={templateId} />
-
-<script>
-  // Write your component's code here!
-  {
-    const templateOutlets = document.body.querySelectorAll(
-      "br[data-template-name]"
-    );
-
-    const templates =
-      document.querySelectorAll<HTMLTemplateElement>("template[id]");
-
-    templateOutlets.forEach((templateOutlet) => {
-      const templateOutletName =
-        templateOutlet.getAttribute("data-template-name");
-
-      const template = Array.from(templates).find(
-        (template) => template.getAttribute("id") === templateOutletName
-      );
-
-      if (!template) {
-        throw new Error(
-          `There is no template with the id of ${templateOutletName} please give a template an id`
-        );
-      }
-
-      templateOutlet.replaceWith(template.content.cloneNode(true));
-    });
-  }
-</script>
+<Fragment set:html={html} />

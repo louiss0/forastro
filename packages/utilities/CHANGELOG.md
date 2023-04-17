@@ -1,5 +1,11 @@
 # @forastro/utilities
 
+## 2.3.0
+
+### Minor Changes
+
+- Added Define template. Changed projector templateId is no longer the only argument that you can pass Added context to the template It's a set of arguments that are passed
+
 ## 2.2.4
 
 ### Patch Changes

@@ -6,6 +6,7 @@ import {
     IterationInfo
 } from "./types"
 
+const templateMapSymbol = Symbol("template-map");
 
 const isIterable = (value: unknown): value is Iterable<unknown> =>
     isObject(value) && (
@@ -195,7 +196,39 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
 
 }
 
+type AstroRenderSlotFunction = (slotName: string, args: Array<any>) => Promise<string>
+    
+type TemplateMapObject<T extends Lowercase<string> = Lowercase<string> > = {[templateMapSymbol]: Map<T, (...args:Array<any>)=>ReturnType<AstroRenderSlotFunction>> }
 
+let globalTemplateMap: typeof globalThis & TemplateMapObject
+    
+function defineGlobalTemplateMap() {
+    
+
+    if(globalTemplateMap) { return }
+
+   globalTemplateMap = Object.assign(globalThis, {
+        [templateMapSymbol]: new Map(),
+    })
+
+    return globalTemplateMap;
+    
+    
+}
+
+function setToGlobalTemplateMap<T extends Lowercase<string> >(templateName:T, astroRenderFunction:(...args:Array<any>)=>ReturnType<AstroRenderSlotFunction>) {
+
+
+    return globalTemplateMap && globalTemplateMap[templateMapSymbol].set(templateName, astroRenderFunction)
+
+
+}
+
+function getFromGlobalTemplateMap<T extends Lowercase<string> >(templateName:T) {
+
+    return globalTemplateMap && globalTemplateMap[templateMapSymbol].get(templateName)
+    
+}
 
 
 async function* iterateRange<T>(callback:IterateRangeCallback<T>, options:IterateRangeOptions) {
@@ -208,4 +241,4 @@ async function* iterateRange<T>(callback:IterateRangeCallback<T>, options:Iterat
 
 
 
-export {range, iterate, iterateRange, isIterable, executeIf, executeUnless }
+export {range, iterate, iterateRange, isIterable, executeIf, executeUnless, defineGlobalTemplateMap, setToGlobalTemplateMap, getFromGlobalTemplateMap }
