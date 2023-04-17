@@ -1,6 +1,6 @@
 ---
 import { Icon } from "astro-icon";
-import { Projector } from "@forastro/utilities";
+import { Projector, DefineTemplate } from "@forastro/utilities";
 const topFiveFrameworks = [
   "react",
 
@@ -20,6 +20,51 @@ export interface Props {
 const { revealedFrameworks } = Astro.props;
 ---
 
+<DefineTemplate templateName="astro-icon">
+  <div data-element="astro-icon" class="rounded-full bg-purple-700">
+    <div data-padding-wrapper class="p-2">
+      <Icon name="vscode-icons:file-type-astro" class="w-full h-full" />
+    </div>
+  </div>
+</DefineTemplate>
+
+<DefineTemplate templateName="solid-icon">
+  <div
+    class="transform transition-transform duration-200 ease-in hover:scale-125"
+  >
+    <Icon name="logos:solidjs-icon" class="w-6" />{" "}
+  </div>
+</DefineTemplate>
+
+<DefineTemplate templateName="svelte-icon">
+  <div
+    class="transform transition-transform duration-200 ease-in hover:scale-125"
+  >
+    <Icon name="logos:svelte-icon" class="w-6" />{" "}
+  </div>
+</DefineTemplate>
+<DefineTemplate templateName="angular-icon">
+  <div
+    class="transform transition-transform duration-200 ease-in hover:scale-125"
+  >
+    <Icon name="logos:angular-icon" class="w-6" />{" "}
+  </div>
+</DefineTemplate>
+<DefineTemplate templateName="react-icon">
+  <div
+    class="transform transition-transform duration-200 ease-in hover:scale-125"
+  >
+    <Icon name="logos:react" class="w-6" />{" "}
+  </div>
+</DefineTemplate>
+<DefineTemplate templateName="vue-icon">
+  <div
+    class="transform transition-transform duration-200 ease-in hover:scale-125"
+  >
+    <Icon name="logos:vue" class="w-6" />{" "}
+  </div>
+</DefineTemplate>
+
 <div data-element="icon-container" class="relative w-20 h-20">
   <!-- Screen reader text  -->
 
@@ -33,7 +78,7 @@ const { revealedFrameworks } = Astro.props;
   >
     {
       revealedFrameworks.includes("react") && (
-        <Projector templateId="react-icon" />
+        <Projector templateName="react-icon" />
       )
     }
   </div>
@@ -44,7 +89,7 @@ const { revealedFrameworks } = Astro.props;
   >
     {
       revealedFrameworks.includes("angular") && (
-        <Projector templateId="angular-icon" />
+        <Projector templateName="angular-icon" />
       )
     }
   </div>
@@ -53,7 +98,11 @@ const { revealedFrameworks } = Astro.props;
     data-top-left-icon
     class="absolute z-20 top-1/4 -left-6 transform -translate-y-1/2"
   >
-    {revealedFrameworks.includes("vue") && <Projector templateId="vue-icon" />}
+    {
+      revealedFrameworks.includes("vue") && (
+        <Projector templateName="vue-icon" />
+      )
+    }
   </div>
 
   <div
@@ -62,7 +111,7 @@ const { revealedFrameworks } = Astro.props;
   >
     {
       revealedFrameworks.includes("svelte") && (
-        <Projector templateId="svelte-icon" />
+        <Projector templateName="svelte-icon" />
       )
     }
   </div>
@@ -73,7 +122,7 @@ const { revealedFrameworks } = Astro.props;
   >
     {
       revealedFrameworks.includes("solid") && (
-        <Projector templateId="solid-icon" />
+        <Projector templateName="solid-icon" />
       )
     }
   </div>
@@ -85,52 +134,7 @@ const { revealedFrameworks } = Astro.props;
       data-transition-wrapper
       class="transition-opacity duration-300 ease-in hover:opacity-80"
     >
-      <Projector templateId="astro-icon" />
+      <Projector templateName="astro-icon" />
     </div>
   </div>
 </div>
-
-<template id="astro-icon">
-  <div data-element="astro-icon" class="rounded-full bg-purple-700">
-    <div data-padding-wrapper class="p-2">
-      <Icon name="vscode-icons:file-type-astro" class="w-full h-full" />
-    </div>
-  </div>
-</template>
-
-<template id="solid-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
-  >
-    <Icon name="logos:solidjs-icon" class="w-6" />{" "}
-  </div>
-</template>
-
-<template id="svelte-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
-  >
-    <Icon name="logos:svelte-icon" class="w-6" />{" "}
-  </div>
-</template>
-<template id="angular-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
-  >
-    <Icon name="logos:angular-icon" class="w-6" />{" "}
-  </div>
-</template>
-<template id="react-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
-  >
-    <Icon name="logos:react" class="w-6" />{" "}
-  </div>
-</template>
-<template id="vue-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
-  >
-    <Icon name="logos:vue" class="w-6" />{" "}
-  </div>
-</template>

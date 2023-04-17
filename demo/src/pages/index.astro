@@ -1,5 +1,5 @@
 ---
-import { Projector } from "@forastro/utilities";
+import { Projector, DefineTemplate } from "@forastro/utilities";
 import { For } from "@forastro/flow";
 import Layout from "../layouts/Layout.astro";
 import Container from "../components/Container.astro";
@@ -30,6 +30,26 @@ const packages: Array<PackageKind> = [
 ];
 ---
 
+<DefineTemplate templateName="forastro-utilities-link">
+  <Link href="https://www.npmjs.com/package/@forastro/utilities">
+    <code>@forastro/utilities</code>
+  </Link>
+</DefineTemplate>
+
+<DefineTemplate templateName="forastro-monorepo-link">
+  <Link href="https://github.com/louiss0/forastro">Monorepo</Link>
+</DefineTemplate>
+
+<DefineTemplate templateName="forastro-flow-link">
+  <Link href="https://www.npmjs.com/package/@forastro/flow">
+    <code>@forastro/flow</code>
+  </Link>
+</DefineTemplate>
+
+<DefineTemplate templateName="astro-link">
+  <Link href="https://astro.build">Astro</Link>
+</DefineTemplate>
+
 <Layout
   title="For Astro"
   description="This is the intro page for the all of the packages in the @forastro/monorepo"
@@ -41,10 +61,10 @@ const packages: Array<PackageKind> = [
 
         <p class="text-lg leading-8">
           This site is a demo of all for the packages that I have created for <Projector
-            templateId="astro-link"
+            templateName="astro-link"
           />. The pages are created with visual examples of how each component
           works. Most of the packages that I have created exist in the <Projector
-            templateId="forastro-monorepo-link"
+            templateName="forastro-monorepo-link"
           />
           My name is Shelton Louis if you want to find me you can use this link <Link
             href="https://github.com/louiss0"
@@ -88,23 +108,3 @@ const packages: Array<PackageKind> = [
     />
   </Center>
 </footer>
-
-<template id="forastro-utilities-link">
-  <Link href="https://www.npmjs.com/package/@forastro/utilities">
-    <code>@forastro/utilities</code>
-  </Link>
-</template>
-
-<template id="forastro-monorepo-link">
-  <Link href="https://github.com/louiss0/forastro">Monorepo</Link>
-</template>
-
-<template id="forastro-flow-link">
-  <Link href="https://www.npmjs.com/package/@forastro/flow">
-    <code>@forastro/flow</code>
-  </Link>
-</template>
-
-<template id="astro-link">
-  <Link href="https://astro.build">Astro</Link>
-</template>

@@ -1,5 +1,6 @@
 
 import Gap from "./src/lib/components/Gap.astro"
+import DefineTemplate from "./src/lib/components/DefineTemplate.astro"
 import Projector from "./src/lib/components/Projector.astro"
 import PageLink from "./src/lib/components/PageLink.astro"
 import IslandMirror from "./src/lib/components/IslandMIrror.astro"
@@ -23,6 +24,7 @@ export type {
 
 export {
     Gap,
+    DefineTemplate,
     Projector,
     PageLink,
     IslandMirror,
