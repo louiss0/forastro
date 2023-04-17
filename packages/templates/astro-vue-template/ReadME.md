@@ -4,7 +4,7 @@ This is the Astro vue Template that I use for my projects. The only page is the 
 
 Tailwind css is the CSS tool that I use for styling. Vue is the Component Renderer that I use for interactivity.
 
-I use primevue as my UI framework that works with vue. The configuration for each vue instance is found in the bootstrap folder. When it comes to components I just put them in the components folder. This template also uses `postcss-nesting` as it's nesting library for CSS. There are two packages that come with this template that will help `astro-gap` and `astro-template-outlet`. Astro Gap is good for creating spaces between elements. Astro Template Outlet is good for rendering template content.
+When it comes to components I just put them in the components folder. This template also uses `postcss-nesting` as it's nesting library for CSS. There are two packages that come with this template that will help `astro-gap` and `astro-template-outlet`. Astro Gap is good for creating spaces between elements. Astro Template Outlet is good for rendering template content.
 
 This template also comes with `astro-icon` a library that is used for rendering icons. go to [icones](https://icones.js.org/) to find names for astro icon.
 
@@ -89,56 +89,7 @@ export default defineConfig({
       },
     }),
   ],
-  server: {
-    host: true,
-  },
-  vite: {
-    plugins: [],
-    ssr: {
-      external: ["primevue"],
-    },
-    server: {
-      watch: {
-        usePolling: true,
-      },
-    },
-  },
 });
-```
-
-- The `appEntrypoint:` `"/src/bootstrap"` references the index file where I put the function that is supposed to be exported so that vue can be used.
-
-- `enableObjectSlotsTrue:` allows me to be able to use [object slots](https://vuejs.org/guide/extras/render-function.html#rendering-slots)
-
-- The `external:` array prevents primevue from being compiled into the server build for vite.
-
-- The `usePolling:` allows the server to be run when using docker.
-
-### Ts Config
-
-```
-"baseUrl": ".",
-"paths": {
-    "~/*": ["./src/*"],
-}
-
-```
-
-The `baseURL:` is a reference to the root folder.
-The `paths` object is used to tell typescript what to use as an alias for a certain file.
-
-I decided to use this `"~/*": ["./src/*"],`. This makes to so that all I have to do is refer to the src folder and I can import and file I want from anywhere.
-
-### PostCSS Config
-
-```
-module.exports = {
-  plugins: {
-    "tailwindcss/nesting": {},
-    tailwindcss: {},
-  },
-};
-
 ```
 
 This configuration is required by tailwind to tell postcss to run the nesting plugin before tailwind

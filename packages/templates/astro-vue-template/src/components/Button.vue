@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-import { ButtonProps } from "primevue/button";
 
-interface Props extends ButtonProps {}
+interface Props {}
 
 defineProps<Props>();
 </script>
