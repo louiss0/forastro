@@ -5,11 +5,11 @@ import {
   PageLink,
   Projector,
   range,
+  Gap,
 } from "@forastro/utilities";
 import { Code } from "astro/components";
 import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
 import Demo from "demo/src/layouts/Demo.astro";
-import Gap from "packages/utilities/src/lib/components/Gap.astro";
 import Section from "../components/Section.astro";
 const names = ["Rich", "Manu", "Theo", "Mack"];
 const allowedColors = [
@@ -115,7 +115,7 @@ const allowedColors = [
     <div class="grid gap-4">
       <p>
         The <code>iterateRange()</code> is a function that takes in a function and
-        a an object of options. It will call the <a href="#/range"
+        a an object of options. It will call the <a href="#range"
           >Range function</a
         >
         Behind the scenes and then return the values that was returned by the callback
