@@ -1,6 +1,17 @@
 ---
 import { HTMLAttributes } from "astro/types";
 
+/** 
+ 
+ ** This component is a component that accepts a tag for a component 
+ ** It will render a tag with a specific set of classes based on the choice
+ ** ! It is best practice to only use h1-4 and no less than two
+ ** The paragraph is a large one 
+ ** THe small tag is super small 
+ **  
+
+*/
+
 type TypographyObject = {
   h1: HTMLAttributes<"h1">;
   h2: HTMLAttributes<"h2">;

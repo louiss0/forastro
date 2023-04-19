@@ -5,23 +5,27 @@ import { allTailwindColors } from "~/utilities/constants";
 /**
  ** The border component by default creates a border that surrounds a component
  ** It allows the user to pass in a border size for the border size
- ** It allows you to pass in a border color class
- ** This border color is valid is there to make sure that a valid tailwind class is passed in.
- ** Right now ts can't take the type that is appropriate for this.
+ ** Or you can just pass in tailwind classes
+ * This component will give you an error if not all of them are border classes
  */
 
-type Props = {
-  borderSizeClass?: `border-${BorderOrOutlineSizes}`;
-  borderColorClass?: string;
-};
+type Props =
+  | {
+      borderSizeClass?: `border-${BorderOrOutlineSizes}`;
+      class?: never;
+    }
+  | {
+      class: string;
+      borderSizeClass?: never;
+    };
 
 const borderColors = allTailwindColors.map((value) => `border-${value}`);
-const { borderSizeClass, borderColorClass } = Astro.props;
+const { borderSizeClass, class: $class } = Astro.props;
 
-const borderColorIsValid =
-  typeof borderColorClass === "undefined"
+const borderClassesAreValid =
+  typeof $class === "undefined"
     ? true
-    : borderColorClass
+    : $class
         .split(" ")
         .every((classColor) =>
           borderColors.some((borderColor) => classColor.includes(borderColor))
@@ -36,7 +40,7 @@ const errorMessage =
 <div
   data-border-box
   class="border border-current"
-  class:list={[borderColorClass, borderSizeClass]}
+  class:list={[borderSizeClass, $class]}
 >
-  {borderColorIsValid ? <slot /> : errorMessage()}
+  {borderClassesAreValid ? <slot /> : errorMessage()}
 </div>

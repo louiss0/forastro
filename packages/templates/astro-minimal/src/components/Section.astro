@@ -1,23 +1,38 @@
 ---
-type Props =
+/**  
+ * This section component is a component that takes in a title or a label
+ * If a title is used then it will then render the title if not a label must be passed
+ * An id must be supplied with the title so I have decided to just lowercase the tile and use it as an id.
+ *   
+
+*/
+
+type Props = (
   | {
       title: string;
-      children: Array<astroHTML.JSX.HTMLAttributes>;
       label?: never;
     }
   | {
       title?: never;
-      children: Array<astroHTML.JSX.HTMLAttributes>;
       label: Lowercase<string>;
-    };
+    }
+) & {
+  class?: string;
+  children: Array<astroHTML.JSX.HTMLAttributes>;
+};
 
-const { title, label } = Astro.props;
+const { title, label, class: $class } = Astro.props;
 
 const dashedTitle = title?.toLowerCase()?.replaceAll(" ", "-");
 ---
 
-<section class="px-4 py-8" aria-label={label} aria-labelledby={dashedTitle}>
-  <div class="grid gap-4">
+<section
+  class="px-4 py-8"
+  class:list={$class}
+  aria-label={label}
+  aria-labelledby={dashedTitle}
+>
+  <div data-content-box class="grid gap-4">
     {title ? <h2 id={dashedTitle}>{title}</h2> : null}
     <slot />
   </div>
