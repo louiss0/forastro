@@ -8,12 +8,14 @@ It does not use a framework at all it will try to only use lit. If necessary. It
 
 Inside of your Astro project, you'll see the following folders and files:
 
-| Folder     | Files                                                          |
-| ---------- | -------------------------------------------------------------- |
-| pages      | index                                                          |
-| misc       | types                                                          |
+| Folder | Files |
+| ------ | ----- |
+| pages  | index |
+
+| utilities
+| types |
 | components | Image, Picture, ButtonControl, Navbar, Head, Center, Container |
-| layouts    | Base, HMF                                                      |
+| layouts | Base, HMF |
 
 Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
 
