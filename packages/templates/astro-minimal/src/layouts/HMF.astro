@@ -1,5 +1,5 @@
 ---
-import Base from "./Base.astro";
+import Default from "./Default.astro";
 
 import Navbar from "~/components/Navbar.astro";
 
@@ -11,16 +11,16 @@ const { slots } = Astro;
 
 const header = slots.has("header")
   ? `${await slots.render("header")} `
-  : ` <p> You must have a header content for this layout</p>`;
+  : ` <p>You must have a header content for this layout</p>`;
 
 const footer = slots.has("footer")
-  ? `<footer>${await slots.render("footer")}</footer>`
-  : ` <p>  You must have a footer content for this layout</p>`;
+  ? await slots.render("footer")
+  : ` <p>You must have a footer content for this layout</p>`;
 
 const { title, description } = Astro.props;
 ---
 
-<Base {...{title, description}}>
+<Default {...{title, description}}>
   <header>
     <Navbar client:load />
     <Fragment set:html={header} />
@@ -28,5 +28,7 @@ const { title, description } = Astro.props;
   <main>
     <slot />
   </main>
-  <Fragment set:html={footer} />
-</Base>
+  <footer>
+    <Fragment set:html={footer} />
+  </footer>
+</Default>
