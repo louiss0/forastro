@@ -1,0 +1,72 @@
+---
+import { HTMLAttributes } from "astro/types";
+
+type TypographyObject = {
+  h1: HTMLAttributes<"h1">;
+  h2: HTMLAttributes<"h2">;
+  h3: HTMLAttributes<"h3">;
+  h4: HTMLAttributes<"h4">;
+  p: HTMLAttributes<"p">;
+  small: HTMLAttributes<"small">;
+};
+
+type Props = {
+  tag: keyof TypographyObject;
+};
+
+const { tag } = Astro.props;
+---
+
+{
+  (() => {
+    const typographyObject: TypographyObject = {
+      h1: (
+        <h1
+          class="capitalize font-bold"
+          style="font-family: var(--heading-font) ; font-size: var(--step-5) "
+        >
+          <slot />
+        </h1>
+      ),
+      h2: (
+        <h2
+          class="capitalize font-bold"
+          style="font-family: var(--heading-font) ; font-size: var(--step-4) "
+        >
+          <slot />
+        </h2>
+      ),
+      h3: (
+        <h3
+          class="capitalize font-bold"
+          style="font-family: var(--heading-font) ; font-size: var(--step-3) "
+        >
+          <slot />
+        </h3>
+      ),
+      h4: (
+        <h4
+          class="capitalize font-bold"
+          style="font-family: var(--heading-font) ; font-size: var(--step-2) "
+        >
+          <slot />
+        </h4>
+      ),
+      p: (
+        <p
+          style="font-size: var(--step-1)"
+          class="leading-relaxed max-w-[60vw]"
+        >
+          <slot />
+        </p>
+      ),
+      small: (
+        <small style="font-size: var(--step--2);" class="font-light">
+          <slot />
+        </small>
+      ),
+    };
+
+    return typographyObject[tag];
+  })()
+}

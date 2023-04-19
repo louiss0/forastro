@@ -241,4 +241,14 @@ async function* iterateRange<T>(callback:IterateRangeCallback<T>, options:Iterat
 
 
 
-export {range, iterate, iterateRange, isIterable, executeIf, executeUnless, defineGlobalTemplateMap, setToGlobalTemplateMap, getFromGlobalTemplateMap }
+export {
+    range,
+     iterate,
+     iterateRange,
+     isIterable,
+     executeIf,
+     executeUnless,
+     defineGlobalTemplateMap,
+     setToGlobalTemplateMap,
+     getFromGlobalTemplateMap
+}

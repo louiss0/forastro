@@ -11,7 +11,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@forastro/utilities": "^2.2.4",
+    "@forastro/flow": "workspace:^",
+    "@forastro/utilities": "workspace:^",
     "astro": "^2.3.0"
   },
   "devDependencies": {

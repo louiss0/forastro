@@ -2,7 +2,7 @@
 import type {
   FluidPercentages,
   AllowedTailwindScreenWidths,
-} from "~/misc/types";
+} from "~/utilities/types";
 
 interface Props {
   widthClass?: WidthClasses;
@@ -17,6 +17,6 @@ const { widthClass = "w-4/5", maxWidthClass = "max-w-screen-lg" } =
   Astro.props as Props;
 ---
 
-<div class={`mx-auto ${widthClass} ${maxWidthClass}`}>
-  <slot> <span>Noting to contain</span></slot>
+<div data-container class={`mx-auto ${widthClass} ${maxWidthClass}`}>
+  <slot><span>Noting to contain</span></slot>
 </div>
