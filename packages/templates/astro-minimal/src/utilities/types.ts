@@ -1,4 +1,11 @@
+import { allTailwindColors, allowedTailwindScreenWidths } from "./constants";
+
 type NavLinks = Record<"path" | "text", string>;
+
+type BorderOrOutlineSizes = 2 | 4 | 8;
+
+
+type TailwindColors = typeof allTailwindColors[number]
 
 type FluidPercentages =
   | "1/5"
@@ -27,6 +34,7 @@ type FluidPercentages =
   | "2/4"
   | "3/4"
   | "1/2";
+
 type SpacingNumbers =
   0 |
   0.5 |
@@ -62,14 +70,15 @@ type SpacingNumbers =
   72 |
   80 |
   96;
-type AllowedTailwindScreenWidths = "sm" | "md" | "lg" | "xl" | "2xl";
 
-
+type AllowedTailwindScreenWidths = typeof allowedTailwindScreenWidths[number];
 
 
 export type {
-    NavLinks,
-    FluidPercentages,
-    AllowedTailwindScreenWidths,
-    SpacingNumbers
+  NavLinks,
+  TailwindColors,
+  BorderOrOutlineSizes,
+  FluidPercentages,
+  AllowedTailwindScreenWidths,
+  SpacingNumbers
 }

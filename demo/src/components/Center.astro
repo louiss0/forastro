@@ -1,5 +1,5 @@
 ---
-import type { FluidPercentages, SpacingNumbers } from "../misc/types";
+import type { SpacingNumbers } from "../misc/types";
 
 interface Props {
   gap?: `gap-${SpacingNumbers}`;
@@ -8,6 +8,6 @@ interface Props {
 const { gap = "gap-4" } = Astro.props;
 ---
 
-<div class:list={["grid place-items-center", gap]}>
+<div class="grid place-items-center">
   <slot />
 </div>

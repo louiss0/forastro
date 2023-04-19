@@ -1,5 +1,6 @@
 type NavLinks = Record<"path" | "text", string>;
 
+
 type FluidPercentages =
   | "1/5"
   | "2/5"
@@ -68,8 +69,10 @@ type AllowedTailwindScreenWidths = "sm" | "md" | "lg" | "xl" | "2xl";
 
 
 export type {
-    NavLinks,
-    FluidPercentages,
-    AllowedTailwindScreenWidths,
-    SpacingNumbers
+  NavLinks,
+  TailwindColors,
+  BorderOrOutlineSizes,
+  FluidPercentages,
+  AllowedTailwindScreenWidths,
+  SpacingNumbers,
 }

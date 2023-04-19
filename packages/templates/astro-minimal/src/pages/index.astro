@@ -1,13 +1,44 @@
 ---
-import Base from "~/layouts/Base.astro";
+import Default from "~/layouts/Default.astro";
+import { SpacedBox, Center, Container, Typography, List } from "~/components";
+import { DefineTemplate, Projector } from "@forastro/utilities";
 ---
 
-<Base title="Welcome to Astro" description="">
-  it works good nice for me
-  <!-- <app-center></app-center> -->
+<DefineTemplate templateName={"link-to-sheltons-github"}>
+  <a href="https://github.com/louiss0" target="_blank" class="p-2">
+    Shelton Louis &rarr;
+  </a>
+</DefineTemplate>
 
-  <div class="py-3 px-9 bg-red-400">This is red</div>
-  <app-container></app-container>
-</Base>
-
-<script src="../components/index.ts"></script>
+<Default title="Welcome to Astro" description="This is the minimal template">
+  <div class="h-screen">
+    <Center gapClass="gap-16" lgGapClass={"lg:gap-12"}>
+      <Container widthClass={"w-3/5"}>
+        <Center gapClass={"gap-4"}>
+          <Typography tag={"h1"}>
+            Welcome to the Astro Minimal Template
+          </Typography>
+          <Typography tag={"p"}>
+            This template is created so that simple sites can be made without
+            the need of to much boilerplate.
+          </Typography>
+          <div class="w-full">
+            <SpacedBox vertical gapClass={"gap-4"}>
+              <List
+                title="These are the only packages in here."
+                listClass="list-disc marker:text-gray-600"
+                items={[
+                  "@forastro/flow",
+                  "@forastro/utilities",
+                  "@fontsource/raleway",
+                  "@fontsource/lato",
+                ]}
+              />
+            </SpacedBox>
+          </div>
+        </Center>
+      </Container>
+      <div>Created by <Projector templateName="link-to-sheltons-github" /></div>
+    </Center>
+  </div>
+</Default>

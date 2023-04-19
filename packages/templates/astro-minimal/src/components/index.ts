@@ -1,50 +1,19 @@
-import { LitElement, html,  } from 'lit'
-import { customElement, property,  } from 'lit/decorators.js'
-import { AllowedTailwindScreenWidths, FluidPercentages, SpacingNumbers } from '../misc/types';
-
-type WidthClasses = `w-${FluidPercentages}`;
-type Gap = `gap-${SpacingNumbers}`
-type MaxScreenWidthClasses = `max-w-screen-${AllowedTailwindScreenWidths}`;
-
-@customElement("app-container")
-class Container extends LitElement {
-    
-    
-    @property({
-        type: String
-    })
-    widthClass:WidthClasses = "w-4/5";
-    
-    @property({
-        type: String
-    })
-    maxWidthClass:MaxScreenWidthClasses = "max-w-screen-lg";
-
-    protected render(): unknown {
-        return html`      
-        <div class=${`mx-auto ${this.widthClass} ${this.maxWidthClass}`}>
-          <slot><span>Noting to contain</span></slot>
-        </div>
-        `
-    }
-}
-
-@customElement("app-center")
-class Center extends LitElement {
+export { default as Center }from "./Center.astro";
+export { default as Container }from "./Container.astro";
+export { default as SpacedBox }from "./SpacedBox.astro";
+export { default as Border }from "./Border.astro";
+export { default as Typography }from "./Typography.astro";
+export { default as Navbar }from "./Navbar.astro";
+export { default as Section }from "./Section.astro";
+export { default as ButtonControl }from "./ButtonControl.astro";
+export { default as Image} from "./Image.astro";
+export { default as Card} from "./Card.astro";
+export { default as Head} from "./Head.astro";
+export { default as List} from "./List.astro";
 
 
 
-    @property({type:String}) gap:Gap 
-
-    protected render(): unknown {
-        
-        return html`<div class=${`grid place-items-center ${this.gap}`}>
-            <slot >Nothing to center</slot>
-        </div>
-            `
-
-    }
-}
 
 
-export {Container, Center}
+
+

@@ -1,8 +1,16 @@
 ---
+/**
+ * This is a component that is used for creating a wide vertical space that expands to a specific width
+ * This component will always be centered on the screen. 
+ * The max width class is used to decide how far the containers should stretch
+ * The width is the initial one. 
+
+*/
+
 import type {
   FluidPercentages,
   AllowedTailwindScreenWidths,
-} from "~/misc/types";
+} from "~/utilities/types";
 
 interface Props {
   widthClass?: WidthClasses;
@@ -17,6 +25,6 @@ const { widthClass = "w-4/5", maxWidthClass = "max-w-screen-lg" } =
   Astro.props as Props;
 ---
 
-<div class={`mx-auto ${widthClass} ${maxWidthClass}`}>
-  <slot> <span>Noting to contain</span></slot>
+<div data-container class={`mx-auto ${widthClass} ${maxWidthClass}`}>
+  <slot><span>Noting to contain</span></slot>
 </div>
