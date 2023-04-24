@@ -1,13 +1,15 @@
----
-import type { SpacingNumbers } from "../misc/types";
+<script lang="ts" setup>
+  import type { SpacingNumbers } from "~/utilities/types";
 
-interface Props {
-  gap?: `gap-${SpacingNumbers}`;
-}
+  interface Props {
+    gap?: `gap-${SpacingNumbers}`;
+  }
 
-const { gap = "gap-4" } = Astro.props;
----
+  const { gap = "gap-4" } = defineProps<Props>();
+</script>
 
-<div class="grid place-items-center">
-  <slot />
-</div>
+<template>
+  <div class="grid place-items-center">
+    <slot />
+  </div>
+</template>
