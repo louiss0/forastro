@@ -22,7 +22,7 @@ const { title, description } = Astro.props;
 
 <Default {...{title, description}}>
   <header>
-    <Navbar client:load />
+    <Navbar client:idle />
     <Fragment set:html={header} />
   </header>
   <main>

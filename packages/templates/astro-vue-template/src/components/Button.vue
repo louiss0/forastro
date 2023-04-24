@@ -1,12 +1,32 @@
 <script lang="ts" setup>
+import { ButtonHTMLAttributes, useAttrs } from 'vue';
 
-interface Props {}
 
-defineProps<Props>();
+interface Props extends ButtonHTMLAttributes {
+  id: string
+  label:string
+}
+
+const { label, id } = defineProps<Props>();
+
+defineEmits(["click"])
+
+const {class:$class, ...attrs } = useAttrs()
+
 </script>
 
 <template>
-  <Button v-bind="$props" />
+  <button 
+  :id="id" 
+  v-bind="attrs" 
+  @click="$emit('click', $event)" 
+  :class="[
+  'py-1 px-3', 
+  '[&:is(:hover,:focus)]:border-current', 
+  '[&:is(:hover,:focus)]:outline-current',
+    $class
+  ]">
+  {{ label }}
+  </button>
 </template>
 
-<style lang="scss" scoped></style>
