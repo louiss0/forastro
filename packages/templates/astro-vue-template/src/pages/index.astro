@@ -1,18 +1,20 @@
 ---
-import AstroTemplateOutlet from "astro-template-outlet";
+import { DefineTemplate, Gap, Projector } from "@forastro/utilities";
 import AstroTopFrameWorksCircle from "~/components/AstroTopFrameWorksCircle.astro";
-import Center from "~/components/Center.astro";
-import Container from "~/components/Container.astro";
-import Gap from "astro-gap";
+import Center from "~/components/Center.vue";
+import Container from "~/components/Container.vue";
 import HMFLayout from "~/layouts/HMFLayout.astro";
 import Button from "~/components/Button.vue";
 
 const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
 ---
 
-<HMFLayout title="Home">
+<DefineTemplate templateName="centered-content">
+  <Center>I'm from the center component</Center>
+</DefineTemplate>
+<HMFLayout title="Home" description="This is the home page">
   <Container slot="header">
-    <AstroTemplateOutlet templateName="centered-content" />
+    <Projector templateName="centered-content" />
 
     <h1>This is the astro template</h1>
 
@@ -27,7 +29,12 @@ const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
       Go to the readme for more information.
     </p>
 
-    <Button label="This button comes from prime vue" />
+    <Button
+      id="button"
+      client:load
+      class="bg-red-300"
+      label="This button comes from prime vue"
+    />
 
     <div class="text-xl text-red-400">
       Please remember to use the containers with the slot's provided for content
@@ -53,9 +60,3 @@ const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
     </div>
   </Container>
 </HMFLayout>
-
-<template id="centered-content">
-  <Center widthClass={"w-4/5"} flexClasses={"flex "}>
-    I'm from the center component
-  </Center>
-</template>
