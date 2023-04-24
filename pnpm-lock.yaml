@@ -135,50 +135,50 @@ importers:
   packages/templates/astro-vue-template:
     dependencies:
       '@fontsource/lato':
-        specifier: ^4.5.10
+        specifier: '*'
         version: 4.5.10
       '@fontsource/raleway':
-        specifier: ^4.5.12
+        specifier: '*'
         version: 4.5.12
       '@forastro/utilities':
-        specifier: ^2.3.0
+        specifier: '*'
         version: link:../../utilities
       '@iconify/json':
-        specifier: ^2.2.55
+        specifier: '*'
         version: 2.2.55
       '@vueuse/core':
-        specifier: ^10.1.0
+        specifier: '*'
         version: 10.1.0(vue@3.2.47)
       astro:
-        specifier: ^2.3.0
+        specifier: '*'
         version: 2.3.0
       unplugin-icons:
-        specifier: ^0.16.1
+        specifier: '*'
         version: 0.16.1
       unplugin-vue-components:
-        specifier: ^0.24.1
+        specifier: '*'
         version: 0.24.1(vue@3.2.47)
     devDependencies:
       '@astrojs/tailwind':
-        specifier: ^3.1.1
+        specifier: '*'
         version: 3.1.1(astro@2.3.0)(tailwindcss@3.3.1)
       '@astrojs/vue':
-        specifier: ^2.1.1
+        specifier: '*'
         version: 2.1.1(@babel/core@7.21.4)(astro@2.3.0)(vite@4.3.1)(vue@3.2.47)
       astro-icon:
-        specifier: ^0.8.0
+        specifier: '*'
         version: 0.8.0
       tailwindcss:
-        specifier: ^3.3.1
+        specifier: '*'
         version: 3.3.1(postcss@8.4.23)
       typescript:
-        specifier: ^5.0.4
+        specifier: '*'
         version: 5.0.4
       vue:
-        specifier: ^3.2.47
+        specifier: '*'
         version: 3.2.47
       vue-tsc:
-        specifier: ^1.4.4
+        specifier: '*'
         version: 1.4.4(typescript@5.0.4)
 
   packages/utilities:
@@ -357,14 +357,14 @@ packages:
     dependencies:
       '@ampproject/remapping': 2.2.1
       '@babel/code-frame': 7.21.4
-      '@babel/generator': 7.21.1
+      '@babel/generator': 7.21.4
       '@babel/helper-compilation-targets': 7.21.4(@babel/core@7.21.0)
       '@babel/helper-module-transforms': 7.21.2
       '@babel/helpers': 7.21.0
-      '@babel/parser': 7.21.2
+      '@babel/parser': 7.21.4
       '@babel/template': 7.20.7
-      '@babel/traverse': 7.21.2
-      '@babel/types': 7.21.2
+      '@babel/traverse': 7.21.4
+      '@babel/types': 7.21.4
       convert-source-map: 1.9.0
       debug: 4.3.4
       gensync: 1.0.0-beta.2
@@ -400,7 +400,7 @@ packages:
     resolution: {integrity: sha512-1lT45bAYlQhFn/BHivJs43AiW2rg3/UbLyShGfF3C0KmHvO5fSghWd5kBJy30kpRRucGzXStvnnCFniCR2kXAA==}
     engines: {node: '>=6.9.0'}
     dependencies:
-      '@babel/types': 7.21.2
+      '@babel/types': 7.21.4
       '@jridgewell/gen-mapping': 0.3.3
       '@jridgewell/trace-mapping': 0.3.18
       jsesc: 2.5.2
@@ -660,7 +660,7 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
     dependencies:
-      '@babel/types': 7.21.2
+      '@babel/types': 7.21.4
     dev: false
 
   /@babel/parser@7.21.4:
@@ -1629,13 +1629,13 @@ packages:
     engines: {node: '>=6.9.0'}
     dependencies:
       '@babel/code-frame': 7.21.4
-      '@babel/generator': 7.21.1
+      '@babel/generator': 7.21.4
       '@babel/helper-environment-visitor': 7.18.9
       '@babel/helper-function-name': 7.21.0
       '@babel/helper-hoist-variables': 7.18.6
       '@babel/helper-split-export-declaration': 7.18.6
-      '@babel/parser': 7.21.2
-      '@babel/types': 7.21.2
+      '@babel/parser': 7.21.4
+      '@babel/types': 7.21.4
       debug: 4.3.4
       globals: 11.12.0
     transitivePeerDependencies:
@@ -4995,7 +4995,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.5
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
     dev: true
