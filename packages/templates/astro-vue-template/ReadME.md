@@ -1,123 +1,104 @@
-# Astro Vue Base Template
+# For Astro Vue Template
 
-This is the Astro vue Template that I use for my projects. The only page is the index html page.
 
-Tailwind css is the CSS tool that I use for styling. Vue is the Component Renderer that I use for interactivity.
+This template is a template that is useful for building simple websites. With bits of interactivity throughout each stage of development. The table below should show you what tools are used in the app. All the things that are required for vue are installed. You can Auto import other Vue Components from inside of an island. This template also contains a set of practical components that will allow you to create websites faster in a practical way.
 
-When it comes to components I just put them in the components folder. This template also uses `postcss-nesting` as it's nesting library for CSS. There are two packages that come with this template that will help `astro-gap` and `astro-template-outlet`. Astro Gap is good for creating spaces between elements. Astro Template Outlet is good for rendering template content.
+The `@forastro/utilities` package is featured here so that you can use it for pages. It's useful for solving common challenges with astro. Remember that the components used are in-fact astro components.   
 
-This template also comes with `astro-icon` a library that is used for rendering icons. go to [icones](https://icones.js.org/) to find names for astro icon.
+For icons `astro-icon` is useful for icons in an astro page while iconify is for ones used in vue. They are automatically imported and you have  access to all sets.
 
-## Using the Project
 
-To activate the server use.
 
+| Type                | Name       |
+| ------------------- | ---------- |
+| CSS Framework       | Tailwind   |
+| Icon Library        | Iconify    |
+| Font Library        | Fontsource |
+| Vue Utility Library | Vue Use    |
+
+## Table of Contents
+- [For Astro Vue Template](#for-astro-vue-template)
+  - [Table of Contents](#table-of-contents)
+  - [Start Command](#start-command)
+  - [Main Folders](#main-folders)
+  - [Configuration](#configuration)
+    - [Astro Config](#astro-config)
+    - [Tailwind Config](#tailwind-config)
+  - [Recommendations](#recommendations)
+    - [Warnings](#warnings)
+
+
+## Start Command
+
+**To start the app use:** 
 ```
-p?npm start
-```
-
-To create a preview of the site.
-
-```
-p?npm preview
-```
-
-## Sections
-
-[Project Folder Structure](#project-folder-structure)
-
-[Config Files](#config-files)
-
-[Bootstrapping the Application](#bootstrapping-the-application)
-
-[Rules Regarding Projects](#rules-regarding-projects)
-
-## [Project Folder Structure](#sections)
-
-```
-app__src
-        |___layouts
-        |___bootstrap
-        |___components
-        |___composables
-        |___components
-        |___stores
-        |___types
-
+p?npm run start 
 ```
 
-## [Config Files](#sections)
+## Main Folders
 
-There are three config files that are very important to keep the way they are.
+  - components - for components
+  - composables - for composables
+  - utilities for - constants, util functions, and types. 
+  - layouts 
+  - pages  
 
-- `tailwind.config.cjs`
-- `astro.config.ts`
-- `tsconfig.json`
+## Configuration 
 
-### Tailwind Config
+There are only two config files in this repo. `astro.config` and `tailwind.config`. I will split this into two sections.
 
-```js
-{
-darkMode: "class",
-content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
-safelist: [
-    "hidden",
-    "fixed",
-    "translate-x-full",
-    "translate-y-full",
-    "opacity-0",
-  ],
-}
-```
+The `Default.astro` file contains the main stylesheet for tailwind. The CSS Variables come from a website called [Utopia](https://utopia.fyi/) which is a site that is good for using typography and fluid spacing. I decided to use a 12 - 16 font range with a transition from a minor third to a major third. 
 
-- The `darkMode:"class"` is used to enable the use of dark mode for most classes
+The `--heading-font` variable is used for headings the `--body-font` variable is used for the body. The step variables are used in the Typography component.
 
-- The `content:` allows tailwind to search for all files with classes in them in order to write them to the style sheet
 
-- The `safelist:` is there so that these classes will be compiled in the final build. In most projects you will inevitably have to add or remove classes based on whether or not an element should appear or disappear. THese classes are the classses that will not be applied at first but will be when when a user clicks on a button to make something interactive.
 
 ### Astro Config
 
-```ts
-export default defineConfig({
-  integrations: [
-    tailwind(),
-    vue({
-      appEntrypoint: "/src/bootstrap",
-      jsx: {
-        enableObjectSlots: true,
-      },
-    }),
-  ],
-});
-```
+The astro config uses the astro and the vue integrations. Object Slots are enabled for JSX. Iconify and the auto importing of vue components are configured for vite in plugins.    
 
-This configuration is required by tailwind to tell postcss to run the nesting plugin before tailwind
+### Tailwind Config
 
-### [Bootstrapping the application](#sections)
+Tailwind is configured to use dark mode class `vue-use` needs this so that it can trigger dark mode. The safelisted classes are `hidden, fixed, translate-x-full, translate-y-full, opacity-0`. This is so that no one ever has to turn them on per project. Most of the time hidden and fixed will be used but, I have found that the translate classes can be used in some projects to make it so that something moves in a specific direction. 
 
-The application relies on the `bootstrap/` folder to plan out how vue is used. When it comes to styling [Tailwind](https://tailwindcss.com/) is used
 
-I created two layouts the BaseLayout and the HMFLayout. The BaseLayout is a layout that is used to set up all of the necessary styles and scripts for each page.
-The HMFLayout is the one that should be used for most situations except when you don't need the navbar.
+## Recommendations
 
-## [Rules Regarding Projects](#sections)
+This is a list of extensions for this library.
 
-Astro is a framework that does not allow me to create real apps from now on I will need to follow a set of restrictions regarding This framework.  
-Because of the limitations oof astro and the fact that I need to make sure that I remain consistent. I'm going to have to follow these rules.
+- VsCode Extensions
+  - Iconify Intellisense 
+  - Icones 
+  - Volar 
+  - Tailwind Intellisense
+  - Astro 
+  - Astro Snippets
 
-1. The `BaseLayout` component is the root layout it will only be used to create other layouts
 
-2. Global Styles must only be declared in the `BaseLayout` layout.
+To use the icons please go to [Icones](https://icones.netlify.app/) for a long list of icons. 
 
-   - This means `<style is:global>` cannot be used on other layouts
 
-3. The `index.astro` file must always be used to create all my first pages unless told otherwise
+### Warnings 
+  
+Don't use pinia at all it's not worth it. An island is a new Vue app instance. The state will not be shared across components at all. Instead use `useSharedComposable`. If you feel like you need pinia then just use Nuxt. 
 
-4. The articles that are written must be written by using `"remark-html-directives"`
+When it comes to using icons remember `[prefix]-[icon pack]-[icon name]`.
 
-5. New layouts will not change anything about The styles that were created in the `BaseLayout`
+  - The **prefix** is **i**.
+  - The **icon name** is the name of the icon.
+  - THe **icon pack** is the pack of the 
 
-6. The `HMFLayout will not change under any circumstances`
 
-7. The `HMFLayout only be used if Two slots are to be used`
+
+
+
+
+
+
+
+
+
+
+
+
+

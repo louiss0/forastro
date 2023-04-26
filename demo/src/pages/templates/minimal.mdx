@@ -1,0 +1,36 @@
+
+import Layout from "demo/src/layouts/Layout.astro";
+import Center from "demo/src/components/Center.astro";
+import Section from "demo/src/components/Section.astro"
+
+export const components = {
+  section: Section
+}
+
+<Layout
+  title="Templates__Minimal"
+  description="This is about the minimal astro template"
+>
+
+
+::::section{title="gap-4"}
+ 
+ ```jsx
+<Foo 
+  ex={n5}
+/>
+```
+
+
+  :::details
+
+    :::summary 
+      ::span[This was a long time comming] 
+    :::
+
+    This tag is nice I think it should be used more.
+  :::
+::::
+
+
+</Layout>
