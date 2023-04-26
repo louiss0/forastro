@@ -1,6 +1,7 @@
 ---
 import { Icon } from "astro-icon";
 import { Projector, DefineTemplate } from "@forastro/utilities";
+import RotationCircleWithTopPosittionedWrapper from "demo/src/components/RotationCircleWithTopPosittionedWrapper.astro";
 const topFiveFrameworks = [
   "react",
 
@@ -15,126 +16,89 @@ const topFiveFrameworks = [
 
 export interface Props {
   revealedFrameworks: Array<(typeof topFiveFrameworks)[number]>;
-}
-
+  }
+          
 const { revealedFrameworks } = Astro.props;
 ---
 
-<DefineTemplate templateName="astro-icon">
-  <div data-element="astro-icon" class="rounded-full bg-purple-700">
-    <div data-padding-wrapper class="p-2">
-      <Icon name="vscode-icons:file-type-astro" class="w-full h-full" />
-    </div>
-  </div>
+<DefineTemplate templateName="solid-icon-container">
+  <RotationCircleWithTopPosittionedWrapper
+    rotateCircleClass={"-rotate-[135deg]"}
+    rotateIconClass={"rotate-[135deg]"}
+  >
+    <Icon name="logos:solidjs-icon" class="w-6" />
+  </RotationCircleWithTopPosittionedWrapper>
 </DefineTemplate>
 
-<DefineTemplate templateName="solid-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
+<DefineTemplate templateName="svelte-icon-container">
+  <RotationCircleWithTopPosittionedWrapper
+    rotateCircleClass={"rotate-[135deg]"}
+    rotateIconClass={"-rotate-[135deg]"}
   >
-    <Icon name="logos:solidjs-icon" class="w-6" />{" "}
-  </div>
+    <Icon name="logos:svelte-icon" class="w-6" />
+  </RotationCircleWithTopPosittionedWrapper>
 </DefineTemplate>
-
-<DefineTemplate templateName="svelte-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
+<DefineTemplate templateName="angular-icon-container">
+  <RotationCircleWithTopPosittionedWrapper
+    rotateCircleClass={"rotate-45"}
+    rotateIconClass={"-rotate-45"}
   >
-    <Icon name="logos:svelte-icon" class="w-6" />{" "}
-  </div>
+    <Icon name="logos:angular-icon" class="w-6" />
+  </RotationCircleWithTopPosittionedWrapper>
 </DefineTemplate>
-<DefineTemplate templateName="angular-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
+<DefineTemplate templateName="react-icon-container">
+  <RotationCircleWithTopPosittionedWrapper
+    rotateCircleClass={"rotate-0"}
+    rotateIconClass={"rotate-0"}
   >
-    <Icon name="logos:angular-icon" class="w-6" />{" "}
-  </div>
+    <Icon name="logos:react" class="w-6" />
+  </RotationCircleWithTopPosittionedWrapper>
 </DefineTemplate>
-<DefineTemplate templateName="react-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
+<DefineTemplate templateName="vue-icon-container">
+  <RotationCircleWithTopPosittionedWrapper
+    rotateCircleClass={"-rotate-45"}
+    rotateIconClass={"rotate-45"}
   >
-    <Icon name="logos:react" class="w-6" />{" "}
-  </div>
+    <Icon name="logos:vue" class="w-6" />
+  </RotationCircleWithTopPosittionedWrapper>
 </DefineTemplate>
-<DefineTemplate templateName="vue-icon">
-  <div
-    class="transform transition-transform duration-200 ease-in hover:scale-125"
-  >
-    <Icon name="logos:vue" class="w-6" />{" "}
-  </div>
-</DefineTemplate>
-
-<div data-element="icon-container" class="relative w-20 h-20">
+<div
+  data-element="icon-container"
+  class="relative bg-purple-700 rounded-full w-20 h-20"
+>
   <!-- Screen reader text  -->
 
   <div class="sr-only">Astro Icon Circle</div>
 
-  <!-- Icons area -->
+  {
+    revealedFrameworks.includes("react") && (
+      <Projector templateName={"react-icon-container"} />
+    )
+  }
+  {
+    revealedFrameworks.includes("vue") && (
+      <Projector templateName={"vue-icon-container"} />
+    )
+  }
+  {
+    revealedFrameworks.includes("angular") && (
+      <Projector templateName={"angular-icon-container"} />
+    )
+  }
+  {
+    revealedFrameworks.includes("solid") && (
+      <Projector templateName={"solid-icon-container"} />
+    )
+  }
+  {
+    revealedFrameworks.includes("svelte") && (
+      <Projector templateName={"svelte-icon-container"} />
+    )
+  }
 
-  <div
-    data-top-icon
-    class="absolute z-20 -top-8 left-1/2 transform -translate-x-1/2"
-  >
-    {
-      revealedFrameworks.includes("react") && (
-        <Projector templateName="react-icon" />
-      )
-    }
-  </div>
-
-  <div
-    data-top-right-icon
-    class="absolute z-20 top-1/4 -right-8 transform -translate-y-1/2"
-  >
-    {
-      revealedFrameworks.includes("angular") && (
-        <Projector templateName="angular-icon" />
-      )
-    }
-  </div>
-
-  <div
-    data-top-left-icon
-    class="absolute z-20 top-1/4 -left-6 transform -translate-y-1/2"
-  >
-    {
-      revealedFrameworks.includes("vue") && (
-        <Projector templateName="vue-icon" />
-      )
-    }
-  </div>
-
-  <div
-    data-bottom-left-icon
-    class="absolute z-20 bottom-1/4 -left-8 transform translate-y-1/2"
-  >
-    {
-      revealedFrameworks.includes("svelte") && (
-        <Projector templateName="svelte-icon" />
-      )
-    }
-  </div>
-
-  <div
-    data-bottom-right-icon
-    class="absolute z-20 bottom-1/4 -right-8 transform translate-y-1/2"
-  >
-    {
-      revealedFrameworks.includes("solid") && (
-        <Projector templateName="solid-icon" />
-      )
-    }
-  </div>
-
-  <!-- Astro Icon area -->
-
-  <div data-positioning-wrapper class="absolute z-10">
-    <div
-      data-transition-wrapper
-      class="transition-opacity duration-300 ease-in hover:opacity-80"
-    >
-      <Projector templateName="astro-icon" />
+  <div data-wrapper class="absolute inset-0">
+    <div data-content class="p-2">
+      <Icon data-element="astro-icon" name="vscode-icons:file-type-astro" />
     </div>
   </div>
 </div>

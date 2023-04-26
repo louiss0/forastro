@@ -13,6 +13,8 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+
+const siteName = "ForAstro";
 ---
 
 <!DOCTYPE html>
@@ -23,7 +25,7 @@ const { title, description } = Astro.props;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
 
-    <title>{title}</title>
+    <title>{`${siteName} | ${title}`}</title>
     <meta name="description" content={description} />
 
     <style lang="postcss" is:global>

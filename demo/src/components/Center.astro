@@ -1,15 +1,60 @@
-<script lang="ts" setup>
-  import type { SpacingNumbers } from "~/utilities/types";
+---
+import type {
+  AllowedTailwindScreenWidths,
+  SpacingNumbers,
+} from "../utilities/types";
 
-  interface Props {
-    gap?: `gap-${SpacingNumbers}`;
-  }
+interface Props {
+  gapClass?: `gap-${SpacingNumbers}`;
+  smGapClass?: `sm:gap-${SpacingNumbers}`;
+  mdGapClass?: `md:gap-${SpacingNumbers}`;
+  lgGapClass?: `lg:gap-${SpacingNumbers}`;
+  xlGapClass?: `xl:gap-${SpacingNumbers}`;
+  "2xlGapClass"?: `2xl:gap-${SpacingNumbers}`;
+  flexDirectionClass?: "flex-col" | "flex-row";
+  until?: AllowedTailwindScreenWidths[number];
+}
+const {
+  gapClass = "gap-4",
+  flexDirectionClass = "flex-col",
+  until,
+} = Astro.props;
 
-  const { gap = "gap-4" } = defineProps<Props>();
-</script>
+const flexRowMap = new Map<
+  AllowedTailwindScreenWidths[number],
+  `${AllowedTailwindScreenWidths[number]}:flex-row`
+>([
+  ["sm", "sm:flex-row"],
+  ["md", "md:flex-row"],
+  ["lg", "lg:flex-row"],
+  ["xl", "xl:flex-row"],
+  ["2xl", "2xl:flex-row"],
+]);
+const flexColMap = new Map<
+  AllowedTailwindScreenWidths[number],
+  `${AllowedTailwindScreenWidths[number]}:flex-col`
+>([
+  ["sm", "sm:flex-col"],
+  ["md", "md:flex-col"],
+  ["lg", "lg:flex-col"],
+  ["xl", "xl:flex-col"],
+  ["2xl", "2xl:flex-col"],
+]);
 
-<template>
-  <div class="grid place-items-center">
-    <slot />
-  </div>
-</template>
+const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap =
+  flexDirectionClass === "flex-row" && until
+    ? flexRowMap.get(until)
+    : flexColMap.get(until);
+---
+
+<div
+  data-center-box
+  class:list={[
+    "flex justify-center items-center h-full",
+    flexDirectionClass,
+    gapClass,
+    ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
+  ]}
+>
+  <slot />
+</div>

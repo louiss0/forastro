@@ -11,7 +11,7 @@ import {
 import { Code } from "astro/components";
 import IterationInfoTable from "demo/src/components/IterationInfoTable.astro";
 import Demo from "demo/src/layouts/Demo.astro";
-import Section from "../components/Section.astro";
+import Section from "../../components/Section.astro";
 const names = ["Rich", "Manu", "Theo", "Mack"];
 const allowedColors = [
   "black",
@@ -32,7 +32,7 @@ const allowedColors = [
 </DefineTemplate>
 
 <Demo
-  title="Utilities"
+  title=" Libraries__Utilities"
   description="This is the page for all utilities based things"
   sidebarTitle="Utilities"
   sidebarLinks={[
@@ -43,7 +43,6 @@ const allowedColors = [
     "execute-unless",
     "gap",
     "projector",
-    "island-mirror",
     "page-link",
   ]}
 >
@@ -251,16 +250,7 @@ const allowedColors = [
         wrap
       />
     </div>
-    <Projector templateName="message" context={[]} />
-  </Section>
-  <Section title={"island mirror"}>
-    <p>
-      The <code>{`<IslandMirror >`}</code> component is a component that takes in
-      a child. Then an id. if it's child's id is equal to the one passed in then
-      it will pass on the child's attributes. To a parent component called the astro-island.
-    </p>
-
-    <Code lang={"tsx"} code={`<IslandMirror id={string} />`} />
+    <Projector templateName="message" />
   </Section>
   <Section title={"page link"}>
     <p>

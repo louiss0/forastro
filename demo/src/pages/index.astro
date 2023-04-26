@@ -24,7 +24,21 @@ const packages: Array<PackageKind> = [
   new PackageKind(
     "Utlities",
     `
-  Functions and components that will help you solve common problems in Astro 
+  Functions and components that will help you solve common problems in Astro. 
+  `
+  ),
+  new PackageKind(
+    "Templates",
+    `
+    You can use a series of templates created by me.
+    Each pages is dedicated to each one I have created.  
+  `
+  ),
+  new PackageKind(
+    "Extensions",
+    `
+    I have created Snippets for use inside of Astro.
+    The library is called Astro Snippets   
   `
   ),
 ];
@@ -55,8 +69,8 @@ const packages: Array<PackageKind> = [
   description="This is the intro page for the all of the packages in the @forastro/monorepo"
 >
   <header class="px-6 py-2">
-    <Container widthClass={"w-3/5"} maxWidthClass={"max-w-screen-md"}>
-      <Center gap={"gap-10"}>
+    <Container widthClass={"w-3/5"}>
+      <Center>
         <h1>For Astro</h1>
 
         <p class="text-lg leading-8">
@@ -77,14 +91,14 @@ const packages: Array<PackageKind> = [
   </header>
 </Layout>
 <main class="px-4 py-12">
-  <Container widthClass={"w-3/5"} maxWidthClass={"max-w-screen-lg"}>
-    <Center gap={"gap-10"}>
+  <Container maxWidthClass={"max-w-screen-md"}>
+    <Center gapClass={"gap-10"}>
       <h2 class="text-center">What kinds of Packages are there?</h2>
 
       <div class="grid gap-6 md:flex">
         <For of={packages}>
           {
-            ({ title, description }: PackageKind) => (
+            ({ title, description }) => (
               <div
                 data-element="package-description-card"
                 class="px-6 py-4 border border-current rounded"
