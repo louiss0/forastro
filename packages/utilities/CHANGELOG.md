@@ -1,5 +1,12 @@
 # @forastro/utilities
 
+## 2.4.0
+
+### Minor Changes
+
+- Removed: Island Mirror this component does not work due to how web components works.
+  Changed: The types for define template functions are clear
+
 ## 2.3.0
 
 ### Minor Changes
@@ -10,7 +17,7 @@
 
 ### Patch Changes
 
-- Fixed: Peer dependecy is now greater than 1.0.0 instead of just ^1.0.0
+- Fixed: Peer dependency is now greater than 1.0.0 instead of just ^1.0.0
 
 ## 2.2.3
 
