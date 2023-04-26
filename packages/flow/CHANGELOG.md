@@ -1,5 +1,13 @@
 # @forastro/flow
 
+## 2.4.0
+
+### Patch Changes
+
+- Updated: Readme
+- Updated dependencies
+  - @forastro/utilities@2.4.0
+
 ## 2.2.4
 
 ### Patch Changes
