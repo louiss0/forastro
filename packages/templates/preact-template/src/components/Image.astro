@@ -1,0 +1,18 @@
+---
+import type { getImage } from "astro:assets";
+
+type Props<T extends string> = Omit<
+  Parameters<typeof getImage>[0],
+  "format"
+> & {
+  src: string;
+  alt: string;
+  height: number;
+  class?: T extends "object-cover" ? never : T;
+  width: number;
+};
+
+const { src, alt, width, height, class: $class } = Astro.props;
+---
+
+<img class="object-cover" class:list={$class} {...{src, alt, width, height}} />
