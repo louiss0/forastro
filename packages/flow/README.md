@@ -12,4 +12,4 @@ This package is a package that allows you to use flow components inside of [Astr
 
 ## Docs
 
-Please checkout the demo for [For Astro Flow](https://forastro.vercel.app/flow)
+Please checkout the demo for [For Astro Flow](https://forastro.vercel.app/libraries/flow)

@@ -70,8 +70,6 @@ type AllowedTailwindScreenWidths = "sm" | "md" | "lg" | "xl" | "2xl";
 
 export type {
   NavLinks,
-  TailwindColors,
-  BorderOrOutlineSizes,
   FluidPercentages,
   AllowedTailwindScreenWidths,
   SpacingNumbers,

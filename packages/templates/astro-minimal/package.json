@@ -13,7 +13,8 @@
   "dependencies": {
     "@forastro/flow": "*",
     "@forastro/utilities": "*",
-    "astro": "*"
+    "astro": "*",
+    "astro-icon": "*"
   },
   "devDependencies": {
     "@astrojs/tailwind": "*",
