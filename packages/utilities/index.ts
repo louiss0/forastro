@@ -1,8 +1,8 @@
 
-import Gap from "./src/lib/components/Gap.astro"
-import DefineTemplate from "./src/lib/components/DefineTemplate.astro"
-import Projector from "./src/lib/components/Projector.astro"
-import PageLink from "./src/lib/components/PageLink.astro"
+export { default as Gap } from "./src/lib/components/Gap.astro"
+export { default as DefineTemplate } from "./src/lib/components/DefineTemplate.astro"
+export { default as Projector } from "./src/lib/components/Projector.astro"
+export { default as PageLink } from "./src/lib/components/PageLink.astro"
 
 
 export {
@@ -21,10 +21,4 @@ export type {
     IterateRangeOptions
 } from "./src/lib/types"
 
-export {
-    Gap,
-    DefineTemplate,
-    Projector,
-    PageLink,
-}
 
