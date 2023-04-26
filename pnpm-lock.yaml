@@ -108,7 +108,7 @@ importers:
   packages/flow:
     dependencies:
       '@forastro/utilities':
-        specifier: workspace:^2.2.4
+        specifier: workspace:^2.4.0
         version: link:../utilities
       astro:
         specifier: '>1.0.0'
@@ -127,6 +127,9 @@ importers:
       astro:
         specifier: '*'
         version: 2.3.0
+      astro-icon:
+        specifier: '*'
+        version: 0.8.0
     devDependencies:
       '@astrojs/tailwind':
         specifier: '*'
