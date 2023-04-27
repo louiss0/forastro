@@ -4,5 +4,11 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact",
     "verbatimModuleSyntax": true,
-  }
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./src/*"
+      ],
+    }
+  },
 }

@@ -1,4 +1,4 @@
----
+
 /**
  * This component is created to make sure that everything in between it is in the center 
  * The gap class has only sm and lg because this is as far as typescript can go I don't know what the limit is
@@ -7,23 +7,35 @@
   
  */
 
-import { AllowedTailwindScreenWidths, SpacingNumbers } from "~/utilities/types";
-
+import type { FunctionComponent } from "preact";
+import type { AllowedTailwindScreenWidths, SpacingNumbers } from "~/utilities/types";
+import { clsx } from 'clsx'
 interface Props {
   gapClass?: `gap-${SpacingNumbers}`;
   smGapClass?: `sm:gap-${SpacingNumbers}`;
   mdGapClass?: `md:gap-${SpacingNumbers}`;
   lgGapClass?: `lg:gap-${SpacingNumbers}`;
   xlGapClass?: `xl:gap-${SpacingNumbers}`;
-  "2xlGapClass"?: `2xl:gap-${SpacingNumbers}`;
+  xl2GapClass?: `2xl:gap-${SpacingNumbers}`;
   flexDirectionClass?: "flex-col" | "flex-row";
   until?: AllowedTailwindScreenWidths[number];
 }
+
+
+const Center: FunctionComponent<Props> = (props) => {
+
+
 const {
   gapClass = "gap-4",
   flexDirectionClass = "flex-col",
   until,
-} = Astro.props;
+  smGapClass,
+  mdGapClass,
+  lgGapClass,
+  xlGapClass,
+  xl2GapClass,
+  children
+} = props;
 
 const flexRowMap = new Map<
   AllowedTailwindScreenWidths[number],
@@ -50,16 +62,25 @@ const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetF
   flexDirectionClass === "flex-row" && until
     ? flexRowMap.get(until)
     : flexColMap.get(until);
----
 
-<div
+  
+  
+return <div
   data-center-box
-  class:list={[
+  class={clsx(
     "flex justify-center items-center h-full",
-    flexDirectionClass,
     gapClass,
+    smGapClass,
+    mdGapClass,
+    lgGapClass,
+    xlGapClass,
+    xl2GapClass,
+    flexDirectionClass,
     ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
-  ]}
+  )}
 >
-  <slot />
+  {children}
 </div>
+}
+
+export { Center }

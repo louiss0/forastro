@@ -23,6 +23,11 @@ const {
   gapClass = "gap-4",
   flexDirectionClass = "flex-col",
   until,
+  smGapClass,
+  mdGapClass,
+  lgGapClass,
+  xlGapClass,
+  xl2GapClass,
 } = Astro.props;
 
 const flexRowMap = new Map<
@@ -58,6 +63,11 @@ const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetF
     "flex justify-center items-center h-full",
     flexDirectionClass,
     gapClass,
+    smGapClass,
+    mdGapClass,
+    lgGapClass,
+    xlGapClass,
+    xl2GapClass,
     ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
   ]}
 >
