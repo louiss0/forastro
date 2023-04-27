@@ -24,12 +24,12 @@ type MaxScreenWidthClasses = `max-w-screen-${AllowedTailwindScreenWidths}`;
 
 export const Container:FunctionalComponent<Props> =(props) => {
 
-  const { widthClass = "w-4/5", maxWidthClass = "max-w-screen-lg" } =
+  const { widthClass = "w-4/5", maxWidthClass = "max-w-screen-lg", children } =
   props
 
 
   return <div data-container class={`mx-auto ${widthClass} ${maxWidthClass}`}>
-    <slot><span>Noting to contain</span></slot>
+      {children && <span>Noting to contain</span>}
   </div>
   
 } 
