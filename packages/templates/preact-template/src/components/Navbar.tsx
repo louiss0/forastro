@@ -1,5 +1,6 @@
----
-import Container from "./Container.astro";
+
+import type { FunctionComponent } from "preact";
+import { Container } from "~/components/Container";
 
 const linkTexts = ["about", "services", "contact"];
 
@@ -8,8 +9,9 @@ const formattedLinks = linkTexts.map((linkText) => {
 
   return { href, linkText };
 });
----
 
+
+export const Navbar: FunctionComponent = () => (  
 <nav class="py-2 px-4">
   <Container data-content widthClass={"w-4/5"}>
     <div class="flex justify-between">
@@ -25,3 +27,5 @@ const formattedLinks = linkTexts.map((linkText) => {
     </div>
   </Container>
 </nav>
+)
+

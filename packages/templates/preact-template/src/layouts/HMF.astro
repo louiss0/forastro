@@ -1,7 +1,7 @@
 ---
 import Default from "./Default.astro";
 
-import Navbar from "~/components/Navbar.astro";
+import { Navbar } from "~/components/Navbar";
 
 interface Props {
   title: string;
@@ -22,7 +22,7 @@ const { title, description } = Astro.props;
 
 <Default {...{title, description}}>
   <header>
-    <Navbar client:idle />
+    <Navbar />
     <Fragment set:html={header} />
   </header>
   <main>
