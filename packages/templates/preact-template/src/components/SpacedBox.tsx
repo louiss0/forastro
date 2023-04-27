@@ -1,4 +1,4 @@
----
+
 /** 
  * The point of this component is to just create space between elements.
  * The vertical prop is to add flex col and make sure that there is vertical spacing. 
@@ -8,6 +8,7 @@
  
  */
 
+import type { FunctionalComponent } from "preact";
 import { SpacingNumbers } from "../utilities/types";
 
 type Props = {
@@ -21,19 +22,22 @@ type Props = {
   spacingClass?: `justify-${"between" | "evenly" | "around"}`;
 };
 
-const {
-  gapClass,
-  spacingClass,
-  xlGapClass,
-  lgGapClass,
-  smGapClass,
-  vertical,
-  mdGapClass,
-  xl2GapClass,
-} = Astro.props;
----
 
-<div
+
+export const SpacedBox: FunctionalComponent<Props> = (props) => {
+  const {
+    gapClass,
+    spacingClass,
+    xlGapClass,
+    lgGapClass,
+    smGapClass,
+    vertical,
+    mdGapClass,
+    xl2GapClass,
+    children
+  } = props;
+  
+  return <div
   data-spaced-box
   class="flex flex-wrap"
   class:list={[
@@ -47,5 +51,8 @@ const {
     xl2GapClass,
   ]}
 >
-  <slot />
+  {children}
 </div>
+
+}
+

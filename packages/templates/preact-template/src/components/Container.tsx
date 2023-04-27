@@ -1,4 +1,4 @@
----
+
 /**
  * This is a component that is used for creating a wide vertical space that expands to a specific width
  * This component will always be centered on the screen. 
@@ -7,6 +7,7 @@
 
 */
 
+import type { FunctionalComponent } from "preact";
 import type {
   FluidPercentages,
   AllowedTailwindScreenWidths,
@@ -21,10 +22,15 @@ type WidthClasses = `w-${FluidPercentages}`;
 
 type MaxScreenWidthClasses = `max-w-screen-${AllowedTailwindScreenWidths}`;
 
-const { widthClass = "w-4/5", maxWidthClass = "max-w-screen-lg" } =
-  Astro.props as Props;
----
+export const Container:FunctionalComponent<Props> =(props) => {
 
-<div data-container class={`mx-auto ${widthClass} ${maxWidthClass}`}>
-  <slot><span>Noting to contain</span></slot>
-</div>
+  const { widthClass = "w-4/5", maxWidthClass = "max-w-screen-lg" } =
+  props
+
+
+  return <div data-container class={`mx-auto ${widthClass} ${maxWidthClass}`}>
+    <slot><span>Noting to contain</span></slot>
+  </div>
+  
+} 
+

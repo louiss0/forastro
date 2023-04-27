@@ -1,6 +1,8 @@
----
+
 import { BorderOrOutlineSizes } from "~/utilities/types";
 import { allTailwindColors } from "~/utilities/constants";
+import type { FunctionComponent } from "preact";
+import clsx from "clsx";
 
 /**
  ** The border component by default creates a border that surrounds a component
@@ -20,7 +22,16 @@ type Props =
     };
 
 const borderColors = allTailwindColors.map((value) => `border-${value}`);
-const { borderSizeClass, class: $class } = Astro.props;
+
+const errorMessage =
+  () => `This class can only use border classes  you can use responsive and media classes but nothing else  
+    remember the valid tailwind classes ${borderColors.join(", ")}
+    `;
+
+
+export const Border:FunctionComponent<Props> = (props) => {
+  
+const { borderSizeClass, class: $class, children } = props;
 
 const borderClassesAreValid =
   typeof $class === "undefined"
@@ -31,16 +42,19 @@ const borderClassesAreValid =
           borderColors.some((borderColor) => classColor.includes(borderColor))
         );
 
-const errorMessage =
-  () => `This class can only use border classes  you can use responsive and media classes but nothing else  
-    remember the valid tailwind classes ${borderColors.join(", ")}
-    `;
----
 
-<div
+
+return <div
   data-border-box
-  class="border border-current"
-  class:list={[borderSizeClass, $class]}
+  class={clsx(
+    "border border-current",
+    borderSizeClass, 
+    $class  
+  )
+  }
 >
-  {borderClassesAreValid ? <slot /> : errorMessage()}
+  {borderClassesAreValid ? children : errorMessage()}
 </div>
+
+}
+

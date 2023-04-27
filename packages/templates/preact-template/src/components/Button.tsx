@@ -16,7 +16,7 @@ return <button
   class={["[is(:hover,:focus)]:text-gray-400", $class].filter(Boolean).join(' ')}
   {...rest}
 >
-  <slot />
+  {children}
 </button>
 
  } 

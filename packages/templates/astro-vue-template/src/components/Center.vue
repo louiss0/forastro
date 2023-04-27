@@ -15,13 +15,18 @@ interface Props {
   mdGapClass?: `md:gap-${SpacingNumbers}`;
   lgGapClass?: `lg:gap-${SpacingNumbers}`;
   xlGapClass?: `xl:gap-${SpacingNumbers}`;
-  "2xlGapClass"?: `2xl:gap-${SpacingNumbers}`;
+  xl2GapClass?: `2xl:gap-${SpacingNumbers}`;
   flexDirectionClass?: "flex-col" | "flex-row";
   until?: AllowedTailwindScreenWidths[number];
 }
 const {
   gapClass = "gap-4",
   flexDirectionClass = "flex-col",
+  smGapClass,
+  mdGapClass,
+  lgGapClass,
+  xlGapClass,
+  xl2GapClass,
   until,
 } = defineProps<Props>();
 
@@ -59,6 +64,11 @@ const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetF
     data-center-box
     :class="[
       'flex justify-center items-center h-full',
+      smGapClass,
+      mdGapClass,
+      lgGapClass,
+      xlGapClass,
+      xl2GapClass,
       flexDirectionClass,
       gapClass,
       ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
