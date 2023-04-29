@@ -47,9 +47,13 @@ describe("Iterate  works", () => {
 
   test('When set is passed in the value is the first param key is second and set is third ', async () => {
 
+
     for await (const [value, info, key] of iterate(new Set(["Mack", "Cain", "Ashton"]), (value, key, info) => [value, key, info])) {
+
       expect(value).toBeTypeOf("string")
+
       expect(key).toBeTypeOf("string")
+
       expect(info).toBeInstanceOf(IterationInfo)
 
     }
@@ -405,7 +409,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
             "iterationNum": 1,
             "lastIterationNum": 4,
           },
-          "numberFromParseIntOrStringKey": "name",
+          "key": "name",
           "value": "Riku",
         },
         {
@@ -414,7 +418,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
             "iterationNum": 2,
             "lastIterationNum": 4,
           },
-          "numberFromParseIntOrStringKey": "trait",
+          "key": "trait",
           "value": "Quiet",
         },
         {
@@ -423,7 +427,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
             "iterationNum": 3,
             "lastIterationNum": 4,
           },
-          "numberFromParseIntOrStringKey": "speed",
+          "key": "speed",
           "value": 8,
         },
         {
@@ -432,7 +436,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
             "iterationNum": 4,
             "lastIterationNum": 4,
           },
-          "numberFromParseIntOrStringKey": "defense",
+          "key": "defense",
           "value": 96,
         },
       ]

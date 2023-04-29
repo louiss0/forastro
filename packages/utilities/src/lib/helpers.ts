@@ -157,7 +157,7 @@ async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
     if (hasForEachMethod(iterable)) {
 
 
-        for (const { value, info, numberFromParseIntOrStringKey } of generateIterationInfoForIterablesThatAreNotGenerators(iterable)) {
+        for (const { value, info, key } of generateIterationInfoForIterablesThatAreNotGenerators(iterable)) {
 
 
 
@@ -166,7 +166,7 @@ async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
                 GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<
                     HasForEachMethod,
                     U>
-            >(cb)(value, info, numberFromParseIntOrStringKey)
+            >(cb)(value, info, key)
 
         }
 
@@ -204,22 +204,22 @@ export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends
 
     const firstIterationNumber = 0
 
+    type ParametersOfIterable = Parameters<Parameters<typeof iterable["forEach"]>[0]>
 
-
-    const convertedIterable = iterable instanceof Map
-        ? Object.entries(Object.fromEntries(iterable))
-        : Object.entries(iterable)
-
-    const convertedIterableLength =
-        convertedIterable.length
+    const iterableEntriesMap: Map<ParametersOfIterable[1], ParametersOfIterable[0]> = new Map()
 
     let iteration = firstIterationNumber
 
-    for (const [key, value] of convertedIterable) {
 
-        const numberFromParseIntOrStringKey = /^\D+$/.test(key) ? key : parseInt(key)
+    iterable.forEach((value, key) => iterableEntriesMap.set(key, value))
 
-        iteration = iterable instanceof Array ? parseInt(key) : iteration + 1
+
+    const iterableEntriesMapLength = iterableEntriesMap.size
+
+    for (const [key, value] of iterableEntriesMap) {
+
+
+        iteration = !(typeof key === "string") ? key : iteration + 1
 
 
         yield {
@@ -227,9 +227,9 @@ export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends
             info: new IterationInfo(
                 firstIterationNumber,
                 iteration,
-                convertedIterableLength
+                iterableEntriesMapLength
             ),
-            numberFromParseIntOrStringKey
+            key
 
         }
     }
@@ -255,7 +255,7 @@ function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
     if (hasForEachMethod(iterable)) {
 
 
-        for (const { value, info, numberFromParseIntOrStringKey } of generateIterationInfoForIterablesThatAreNotGenerators(iterable)) {
+        for (const { value, info, key } of generateIterationInfoForIterablesThatAreNotGenerators(iterable)) {
 
 
 
@@ -265,7 +265,7 @@ function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
             )(
                 value,
                 info,
-                numberFromParseIntOrStringKey
+                key
             )
 
         }
