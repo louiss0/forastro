@@ -1,10 +1,10 @@
-import {
+import type {
     GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
     HasForEachMethod,
     IterateRangeCallback,
     IterateRangeOptions,
-    IterationInfo
 } from "./types"
+import { IterationInfo } from "./types"
 
 
 const isIterable = (value: unknown): value is Iterable<unknown> =>
@@ -35,7 +35,7 @@ function isObject(value: unknown): value is Record<PropertyKey, unknown> {
     return typeof value === "object" && value != null
 }
 
-function hasForEachMethod(value: unknown): value is HasForEachMethod {
+export function hasForEachMethod(value: unknown): value is HasForEachMethod {
     return isObject(value) && 'forEach' in value
 }
 
@@ -131,6 +131,7 @@ function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnT
         const res = fn(...args)
 
         if (res instanceof Promise) {
+
             yield await res
 
             return
@@ -142,8 +143,8 @@ function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnT
 }
 
 
-async function* iterate<T extends Generator | HasForEachMethod, U>(
-    iterable: T, cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
+async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
+    cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
 
 
     if (!isIterable(iterable)) {
@@ -155,21 +156,17 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
 
     if (hasForEachMethod(iterable)) {
 
-        let iteration = 0
 
-        const convertedIterable = Object.entries(iterable)
-        for await (const [key, value] of convertedIterable) {
+        for (const { value, info, numberFromParseIntOrStringKey } of generateIterationInfoForIterablesThatAreNotGenerators(iterable)) {
 
-            const numberFromParseIntOrStringKey = Number.isNaN(key) ? key : parseInt(key)
-            iteration = iterable instanceof Array ? parseInt(key) : iteration + 1
 
-            yield* wrapFunctionInAsyncGenerator(
-                cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<HasForEachMethod, U>)
-                (
-                    value,
-                    new IterationInfo(0, iteration, convertedIterable.length),
-                    numberFromParseIntOrStringKey
-                )
+
+
+            yield* wrapFunctionInAsyncGenerator<
+                GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<
+                    HasForEachMethod,
+                    U>
+            >(cb)(value, info, numberFromParseIntOrStringKey)
 
         }
 
@@ -185,7 +182,12 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
 
         for (const value of iterable) {
 
-            yield* wrapFunctionInAsyncGenerator(cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<Generator, U>)(value)
+            yield* wrapFunctionInAsyncGenerator<
+                GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<
+                    Generator, U
+                >
+            >(cb)
+                (value)
         }
 
     }
@@ -193,13 +195,116 @@ async function* iterate<T extends Generator | HasForEachMethod, U>(
 
 
 
+
 }
 
-async function* iterateRange<T>(callback: IterateRangeCallback<T>, options: IterateRangeOptions) {
+
+export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends Iterable<any> & HasForEachMethod>(iterable: T) {
+
+
+    const firstIterationNumber = 0
+
+
+
+    const convertedIterable = iterable instanceof Map
+        ? Object.entries(Object.fromEntries(iterable))
+        : Object.entries(iterable)
+
+    const convertedIterableLength =
+        convertedIterable.length
+
+    let iteration = firstIterationNumber
+
+    for (const [key, value] of convertedIterable) {
+
+        const numberFromParseIntOrStringKey = /^\D+$/.test(key) ? key : parseInt(key)
+
+        iteration = iterable instanceof Array ? parseInt(key) : iteration + 1
+
+
+        yield {
+            value,
+            info: new IterationInfo(
+                firstIterationNumber,
+                iteration,
+                convertedIterableLength
+            ),
+            numberFromParseIntOrStringKey
+
+        }
+    }
+
+
+
+}
+
+
+
+
+function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
+    cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
+
+
+    if (!isIterable(iterable)) {
+
+        throw new Error("You did not pass in an iterable")
+    }
+
+
+
+    if (hasForEachMethod(iterable)) {
+
+
+        for (const { value, info, numberFromParseIntOrStringKey } of generateIterationInfoForIterablesThatAreNotGenerators(iterable)) {
+
+
+
+
+            yield (
+                cb as GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<HasForEachMethod, U>
+            )(
+                value,
+                info,
+                numberFromParseIntOrStringKey
+            )
+
+        }
+
+
+
+
+
+        return
+    }
+
+
+    if (isGenerator(iterable)) {
+
+        for (const value of iterable) {
+
+            yield cb(value)
+        }
+
+    }
+
+
+
+}
+
+async function* iterateRange<U>(callback: IterateRangeCallback<U>, options: IterateRangeOptions) {
 
     const { start, stop, step = 1 } = options
 
-    yield* iterate(range(start, stop, step), (val) => callback(val as number, new IterationInfo(start, val as number, stop)))
+
+    yield* iterate(
+        range(start, stop, step),
+        (val: number | void) =>
+            callback(
+                val as number,
+                new IterationInfo(start, val as number, stop
+                )
+            )
+    )
 
 }
 
@@ -264,6 +369,7 @@ export {
     iterateRange,
     isIterable,
     executeIf,
+    syncIterate,
     executeUnless,
     defineGlobalTemplateMap,
     setToGlobalTemplateMap,
