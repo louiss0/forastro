@@ -5,6 +5,7 @@ import Center from "~/components/Center.vue";
 import Container from "~/components/Container.vue";
 import HMFLayout from "~/layouts/HMFLayout.astro";
 import Button from "~/components/Button.vue";
+import List from "~/components/List.vue";
 
 const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
 ---
@@ -33,7 +34,7 @@ const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
       id="button"
       client:load
       class="bg-red-300"
-      label="This button comes from prime vue"
+      label="This button is pure"
     />
 
     <div class="text-xl text-red-400">
@@ -47,11 +48,12 @@ const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
       want to either remove or add a framework go to the HMFLayout in order to
       change the component framework.
     </p>
-    <strong>Your options are.</strong>
 
-    <ul class="grid gap-2" role="list">
-      {frameworkChoices.map((choice) => <li>{choice}</li>)}
-    </ul>
+    <List
+      title={"Your options are."}
+      listClass={"flex flex-col gap-2 [&>*]:px-3 [&>*]:py-1 [&>*]:bg-gray-700 [&>*]:text-gray-200 "}
+      items={frameworkChoices}
+    />
   </Container>
 
   <Container slot="footer">

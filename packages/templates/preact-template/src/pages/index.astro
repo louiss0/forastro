@@ -1,16 +1,30 @@
 ---
 import Default from "../layouts/Default.astro";
 import { Card } from "../components/Card.tsx";
+import { List } from "~/components/List";
 ---
 
 <Default title="Welcome to Astro." description="this is good">
   <main>
-    <h1>Welcome to <span class="text-gradient">Astro</span></h1>
+    <h1>
+      Welcome to <span
+        class="bg-clip-text text-xl text-transparent bg-gradient-to-r from-gray-200 to-gray-500"
+        >Astro</span
+      >
+    </h1>
+
     <p class="instructions">
       To get started, open the directory <code>src/pages</code> in your project.<br
       />
       <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
     </p>
+
+    <List
+      title="This is a list of letters"
+      listClass="bg-gray-500 px-2 py-1"
+      items={["a", "b", "c", "d"]}
+    />
+
     <ul role="list" class="link-card-grid">
       <Card href="https://docs.astro.build/" title="Documentation">
         Learn how Astro works and explore the official API docs."
