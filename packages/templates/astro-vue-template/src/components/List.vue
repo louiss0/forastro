@@ -1,5 +1,3 @@
----
-import { For } from "@forastro/flow";
 
 /**  
 
@@ -9,29 +7,38 @@ import { For } from "@forastro/flow";
 *! You want the list style position to always be on the inside when writing text so keep that class on.
 *! The classes that are suppossed be used with this componnent are marker and list classes.
 */
+<script setup lang="ts" >
+import {  syncIterate,  } from "@forastro/utilities";
+
 
 type Props = {
   title?: string;
   listClass?: string;
   items: Array<string>;
-  children?: Parameters<typeof For<Props["items"], string>>[0]["children"];
 };
 
-const { title, items, listClass } = Astro.props;
-const { slots } = Astro;
----
+const { title, items, listClass } = defineProps<Props>()
 
-{title ? <strong>{title}</strong> : null}
-<ul title={title} class:list={["list-inside", listClass]} role="list">
-  <For of={items}>
-    {
-      (value, info, key) => (
-        <li>
-          {slots.has("default")
-            ? slots.render("default", [value, info, key])
-            : value}
-        </li>
-      )
-    }
-  </For>
-</ul>
+</script>
+
+
+<template>
+   <strong v-if="title" >
+    {{title}}
+  </strong> 
+  
+   <ul :title="title" :class="['list-inside', listClass]" role="list">
+    <li v-for="item of syncIterate(items, (value, info,)=>({value, info,}))">
+    
+    <template v-if="$slots.default">
+      <slot v-bind="item" />
+
+    </template>
+    <template v-else>
+      {{ item.value }}
+    </template>
+    </li>
+   
+  </ul>
+
+</template>

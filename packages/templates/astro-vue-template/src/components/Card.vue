@@ -1,15 +1,15 @@
 
 <script setup lang="ts" >
-import { getImage } from "astro:assets";
 interface Props {
   title: string;
   src: string;
   alt?: string;
+  width:number
+  height:number
 }
 
-const { title, src, alt } = defineProps<Props>();
+const { title, src, alt, height, width } = defineProps<Props>();
 
-const imageMetadata = await getImage({ src });
 
 </script>
 ---
@@ -18,7 +18,12 @@ const imageMetadata = await getImage({ src });
   
   <div class="grid">
   <header>
-    <img v-bind="{...imageMetadata.attributes}" :alt="alt" />
+    <img 
+    :src="src" 
+    :height="height" 
+    :width="width" 
+    :alt="alt" 
+    />
   </header>
   <div class="py-2 px-4">
     <div class="text-xl">{{title}}</div>
