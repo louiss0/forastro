@@ -406,7 +406,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
         {
           "info": IterationInfo {
             "firstIterationNum": 0,
-            "iterationNum": 1,
+            "iterationNum": 0,
             "lastIterationNum": 4,
           },
           "key": "name",
@@ -415,7 +415,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
         {
           "info": IterationInfo {
             "firstIterationNum": 0,
-            "iterationNum": 2,
+            "iterationNum": 1,
             "lastIterationNum": 4,
           },
           "key": "trait",
@@ -424,7 +424,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
         {
           "info": IterationInfo {
             "firstIterationNum": 0,
-            "iterationNum": 3,
+            "iterationNum": 2,
             "lastIterationNum": 4,
           },
           "key": "speed",
@@ -433,7 +433,7 @@ describe("generateIterationInfoForIterablesThatAreNotGenerators works well", () 
         {
           "info": IterationInfo {
             "firstIterationNum": 0,
-            "iterationNum": 4,
+            "iterationNum": 3,
             "lastIterationNum": 4,
           },
           "key": "defense",

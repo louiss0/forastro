@@ -219,7 +219,6 @@ export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends
     for (const [key, value] of iterableEntriesMap) {
 
 
-        iteration = !(typeof key === "string") ? key : iteration + 1
 
 
         yield {
@@ -230,8 +229,11 @@ export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends
                 iterableEntriesMapLength
             ),
             key
-
         }
+
+        iteration++
+
+
     }
 
 
