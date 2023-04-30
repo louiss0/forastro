@@ -1,0 +1,65 @@
+{
+    "Astro Ternary with Slots has": {
+        "prefix": "a-slot-tern",
+        "description": "This is a ternary using Astro.slots.has and Astro.slots.render",
+        "isFileTemplate": false,
+        "body": [
+            "const ${1:slot} = Astro.slots.has('${1:slot}')",
+            "? ${2}",
+            ": ${3}"
+        ]
+    },
+    "Collection Config Setup": {
+        "prefix": "a-base-cc",
+        "description": "This is for scaffolding a Collection Config",
+        
+        "isFileTemplate": true,
+        "body": [
+            "import {z, defineCollection} from 'astro:content'",
+            "",
+            "",
+            "const ${1:blog} = defineCollection({",
+            "",
+            "", 
+            "schema: z.object({",
+            "",
+            
+            "${2:title}:${3:title}",
+            "",
+            
+            "})",
+            "",
+            "",
+            "})",
+            "",
+            "export const collections = {",
+            "",
+            "${1:blog}",
+            "",
+            "}"
+
+        ]
+    },
+
+    "Single Collection": {
+        "prefix":"a-sc",
+        "isFileTemplate":false,
+        "description": "This is the single collection setup",
+        "body":[
+            "const ${1:blog} = defineCollection({",
+            "",
+            "", 
+            "schema: z.object({",
+            "",
+            
+            "${2:title}:${3:title}",
+            "",
+            
+            "})",
+            "",
+            "",
+            "})"
+        ]
+    }
+
+}

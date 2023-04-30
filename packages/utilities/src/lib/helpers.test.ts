@@ -108,6 +108,7 @@ describe("Iterate  works", () => {
                 "lastIterationNum": 3,
               },
               0,
+              0,
             ],
             [
               "b",
@@ -117,6 +118,7 @@ describe("Iterate  works", () => {
                 "lastIterationNum": 3,
               },
               1,
+              1,
             ],
             [
               "c",
@@ -125,6 +127,7 @@ describe("Iterate  works", () => {
                 "iterationNum": 2,
                 "lastIterationNum": 3,
               },
+              2,
               2,
             ],
           ]

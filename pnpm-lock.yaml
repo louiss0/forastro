@@ -284,6 +284,7 @@ packages:
       astro: ^2.1.0
     dependencies:
       '@astrojs/prism': 2.1.1
+      '@astrojs/prism': 2.1.1
       astro: 2.1.2
       github-slugger: 1.5.0
       image-size: 1.0.2

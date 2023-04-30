@@ -59,7 +59,9 @@ function* range(start: number, stop: number, step = 1) {
 
     const numIsNegative = Math.sign(step) === -1
     const numIsPositive = Math.sign(step) === 1
+    const numIsPositive = Math.sign(step) === 1
 
+    const startIsGreaterThanStopAndStepIsPositive = start > stop && numIsPositive
     const startIsGreaterThanStopAndStepIsPositive = start > stop && numIsPositive
 
     if (startIsGreaterThanStopAndStepIsPositive) {
