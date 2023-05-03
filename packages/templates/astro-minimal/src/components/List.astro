@@ -13,11 +13,12 @@ import { For } from "@forastro/flow";
 type Props = {
   title?: string;
   listClass?: string;
+  itemClass?: string;
   items: Array<string>;
   children?: Parameters<typeof For<Props["items"], string>>[0]["children"];
 };
 
-const { title, items, listClass } = Astro.props;
+const { title, items, listClass, itemClass } = Astro.props;
 const { slots } = Astro;
 ---
 
@@ -26,7 +27,7 @@ const { slots } = Astro;
   <For of={items}>
     {
       (value, info, key) => (
-        <li>
+        <li class={itemClass}>
           {slots.has("default")
             ? slots.render("default", [value, info, key])
             : value}

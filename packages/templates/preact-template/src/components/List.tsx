@@ -16,6 +16,7 @@ import  { useState, useEffect } from "preact/hooks";
 type Props = {
   title?: string;
   listClass?: string;
+  itemClass?: string
   items: Array<string>;
 };
 
@@ -24,7 +25,7 @@ export const List:FunctionComponent<Props> = (props) => {
  
   
   
-  const { title, items,  listClass, children } = props;
+  const { title, items,  listClass, itemClass, children } = props;
 
  
   return <>
@@ -33,7 +34,7 @@ export const List:FunctionComponent<Props> = (props) => {
 
   <ul title={title} class={clsx("list-inside", listClass)} role="list">
   
-      {items.map(item => <li>{item}</li>)}
+      {items.map(item => <li class={itemClass} >{item}</li>)}
   
   </ul>
   

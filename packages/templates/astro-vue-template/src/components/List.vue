@@ -10,34 +10,36 @@
 <script setup lang="ts" >
 import {  syncIterate,  } from "@forastro/utilities";
 
-
 type Props = {
   title?: string;
   listClass?: string;
+  itemClass: string
   items: Array<string>;
 };
 
-const { title, items, listClass } = defineProps<Props>()
+const { title, items, listClass, itemClass } = defineProps<Props>()
+
+
 
 </script>
 
 
 <template>
-   <strong v-if="title" >
-    {{title}}
-  </strong> 
-  
-   <ul :title="title" :class="['list-inside', listClass]" role="list">
-    <li v-for="item of syncIterate(items, (value, info,)=>({value, info,}))">
-    
-    <template v-if="$slots.default">
-      <slot v-bind="item" />
+   <strong v-if="title" > {{title}} </strong>
 
-    </template>
-    <template v-else>
-      {{ item.value }}
-    </template>
-    </li>
+   <ul :title="title" :class="['list-inside', listClass]" role="list">
+
+    <template v-for="item of syncIterate(items, (value, info,)=>({value, info,}))">
+
+      <li  :class="itemClass" >
+        
+        <slot v-if="$slots.default" v-bind="item" />
+        
+        <template v-else>
+          {{ item.value }}
+        </template>
+      </li>
+  </template>
    
   </ul>
 
