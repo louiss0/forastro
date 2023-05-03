@@ -12,9 +12,12 @@ const isIterable = (value: unknown): value is Iterable<unknown> =>
         typeof value[Symbol.iterator] === 'function'
         || typeof value[Symbol.asyncIterator] === 'function'
     )
+    )
 
 type Callback = (...args: Array<unknown>) => any
+type Callback = (...args: Array<unknown>) => any
 
+function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 
 
@@ -23,6 +26,7 @@ function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T>
 }
 
 function executeUnless<T extends Callback>(condition: boolean, cb: T) {
+function executeUnless<T extends Callback>(condition: boolean, cb: T) {
 
 
     return executeIf(!condition, cb)
@@ -30,6 +34,7 @@ function executeUnless<T extends Callback>(condition: boolean, cb: T) {
 }
 
 
+function isObject(value: unknown): value is Record<PropertyKey, unknown> {
 function isObject(value: unknown): value is Record<PropertyKey, unknown> {
 
     return typeof value === "object" && value != null
@@ -43,13 +48,18 @@ export function hasForEachMethod(value: unknown): value is HasForEachMethod {
 
 function* range(start: number, stop: number, step = 1) {
 
+function* range(start: number, stop: number, step = 1) {
+
 
     if (start === stop) {
+
 
         throw new Error("Start can't be the same as stop")
     }
 
+
     if (step === 0) {
+
 
 
         throw new Error("Step can't be zero pick a negative or positive number")
@@ -66,13 +76,16 @@ function* range(start: number, stop: number, step = 1) {
 
     if (startIsGreaterThanStopAndStepIsPositive) {
 
+
         throw new Error("If you want start to be greater than stop please make step negative")
 
     }
 
+
     const stopIsGreaterThanStartAndStepIsNegative = start < stop && numIsNegative
 
     if (stopIsGreaterThanStartAndStepIsNegative) {
+
 
         throw new Error("If you want start to be less than stop please make step positive")
 
@@ -80,15 +93,20 @@ function* range(start: number, stop: number, step = 1) {
 
 
 
+
+    let count = start
     let count = start
 
 
     if (numIsPositive) {
 
 
+
         while (count < stop) {
 
 
+
+            yield count
             yield count
 
             count += step
@@ -97,18 +115,28 @@ function* range(start: number, stop: number, step = 1) {
         return
     }
 
+    }
+
 
     if (numIsNegative) {
+
 
         while (count > stop) {
 
 
+
+            yield count
             yield count
 
             count += step
         }
 
     }
+
+
+
+
+
 
 
 
@@ -127,19 +155,25 @@ function isGenerator(value: unknown): value is Generator {
 
 
 function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
+function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
+
+    return async function* (...args: Parameters<T>) {
 
     return async function* (...args: Parameters<T>) {
 
         const res = fn(...args)
 
+
         if (res instanceof Promise) {
 
             yield await res
+
 
             return
         }
 
         yield res
+
 
     }
 }
@@ -251,8 +285,11 @@ function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
 
     if (!isIterable(iterable)) {
 
+
         throw new Error("You did not pass in an iterable")
     }
+
+
 
 
 
@@ -283,6 +320,7 @@ function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
 
 
     if (isGenerator(iterable)) {
+
 
         for (const value of iterable) {
 
