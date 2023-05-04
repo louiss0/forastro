@@ -11,7 +11,7 @@ async function generateArrayFromGenerator<T extends AsyncGenerator>(generator: A
 
 
   for await (const iterator of generator) {
-
+    console.log(iterator)
 
     array.push(iterator)
 
@@ -99,39 +99,36 @@ describe("Iterate  works", () => {
     const res = await generateArrayFromGenerator(iterate(["a", "b", "c"], (...args) => args))
 
     expect(res).toMatchInlineSnapshot(`
-          [
-            [
-              "a",
-              IterationInfo {
-                "firstIterationNum": 0,
-                "iterationNum": 0,
-                "lastIterationNum": 3,
-              },
-              0,
-              0,
-            ],
-            [
-              "b",
-              IterationInfo {
-                "firstIterationNum": 0,
-                "iterationNum": 1,
-                "lastIterationNum": 3,
-              },
-              1,
-              1,
-            ],
-            [
-              "c",
-              IterationInfo {
-                "firstIterationNum": 0,
-                "iterationNum": 2,
-                "lastIterationNum": 3,
-              },
-              2,
-              2,
-            ],
-          ]
-        `)
+      [
+        [
+          "a",
+          IterationInfo {
+            "firstIterationNum": 0,
+            "iterationNum": 0,
+            "lastIterationNum": 3,
+          },
+          0,
+        ],
+        [
+          "b",
+          IterationInfo {
+            "firstIterationNum": 0,
+            "iterationNum": 1,
+            "lastIterationNum": 3,
+          },
+          1,
+        ],
+        [
+          "c",
+          IterationInfo {
+            "firstIterationNum": 0,
+            "iterationNum": 2,
+            "lastIterationNum": 3,
+          },
+          2,
+        ],
+      ]
+    `)
 
 
   })

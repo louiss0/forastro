@@ -98,7 +98,6 @@ function* range(start: number, stop: number, step = 1) {
 
 
             yield count
-            yield count
 
             count += step
         }
@@ -115,7 +114,6 @@ function* range(start: number, stop: number, step = 1) {
 
 
 
-            yield count
             yield count
 
             count += step
@@ -146,25 +144,23 @@ function isGenerator(value: unknown): value is Generator {
 
 function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
 
+
     return async function* (...args: Parameters<T>) {
 
-        return async function* (...args: Parameters<T>) {
-
-            const res = fn(...args)
+        const res = fn(...args)
 
 
-            if (res instanceof Promise) {
+        if (res instanceof Promise) {
 
-                yield await res
-
-
-                return
-            }
-
-            yield res
+            yield await res
 
 
+            return
         }
+
+        yield res
+
+
     }
 
 }
@@ -192,7 +188,8 @@ async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
                 GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<
                     HasForEachMethod,
                     U>
-            >(cb)(value, info, key)
+            >(cb)
+                (value, info, key)
 
         }
 
