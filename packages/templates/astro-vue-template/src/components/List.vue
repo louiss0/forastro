@@ -14,7 +14,7 @@ type Props = {
   title?: string;
   listClass?: string;
   itemClass: string
-  items: Array<string>;
+  items: ReadonlyArray<string>;
 };
 
 const { title, items, listClass, itemClass } = defineProps<Props>()

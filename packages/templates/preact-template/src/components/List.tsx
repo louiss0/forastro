@@ -17,7 +17,7 @@ type Props = {
   title?: string;
   listClass?: string;
   itemClass?: string
-  items: Array<string>;
+  items: ReadonlyArray<string>;
 };
 
 
@@ -30,7 +30,7 @@ export const List:FunctionComponent<Props> = (props) => {
  
   return <>
   
-  {title ? <strong>{title}</strong> : null}
+  {title ? <strong  class={"text-xl"}>{title}</strong> : null}
 
   <ul title={title} class={clsx("list-inside", listClass)} role="list">
   
