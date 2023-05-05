@@ -8,6 +8,9 @@
       "types": "./index.ts"
     }
   },
+  "scripts": {
+    "release": "release-it"
+  },
   "files": [
     "src",
     "index.ts"

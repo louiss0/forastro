@@ -18,6 +18,9 @@
     "astro-component",
     "ui"
   ],
+  "scripts": {
+    "release": "release-it"
+  },
   "peerDependencies": {
     "astro": ">1.0.0"
   },
