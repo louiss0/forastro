@@ -1,5 +1,6 @@
 
-  import type { FunctionalComponent } from "preact";
+import clsx from "clsx";
+import type { FunctionalComponent } from "preact";
 /**
  * This component is created to make sure that everything in between it is in the center 
  * The gap class has only sm and lg because this is as far as typescript can go I don't know what the limit is
@@ -61,21 +62,25 @@ const flexColMap = new Map<
 const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap =
   flexDirectionClass === "flex-row" && until
     ? flexRowMap.get(until)
-    : flexColMap.get(until);
+    : flexDirectionClass === "flex-row" && until
+      ? flexColMap.get(until)
+      : null;
 
 
 
     
 return <div
   data-center-box
-  class:list={[
+  class={clsx([
     "flex justify-center items-center h-full",
     flexDirectionClass,
     gapClass,
     ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
-  ]}
+  ])}
 >
   {children}
 </div>
 
 }
+
+export { Center }
