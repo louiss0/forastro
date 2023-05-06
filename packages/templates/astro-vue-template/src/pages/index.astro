@@ -1,64 +1,70 @@
 ---
-import { DefineTemplate, Gap, Projector } from "@forastro/utilities";
-import AstroTopFrameWorksCircle from "~/components/AstroTopFrameWorksCircle.astro";
 import Center from "~/components/Center.vue";
 import Container from "~/components/Container.vue";
-import HMFLayout from "~/layouts/HMFLayout.astro";
-import Button from "~/components/Button.vue";
 import List from "~/components/List.vue";
+import Default from "~/layouts/Default.astro";
+import Typography from "~/components/Typography.astro";
+import SpacedBox from "~/components/SpacedBox.vue";
+const DOCUMENTATION_NAMES_AND_LINKS = [
+  { name: "Astro", link: "https://docs.astro.build/" },
+  { name: "Vue", link: "https://vuejs.org" },
+  {
+    name: "For Astro Utilities",
+    link: "https://forastro-louiss0.vercel.app/libraries/utilities",
+  },
+  { name: "Tailwind", link: "https://tailwindcss.com" },
+] as const;
 
-const frameworkChoices = ["React", "Vue", "Angular", "Svelte", "Solid"];
+const CORE_LIBRARY_SENTENCES = [
+  "Astro Components and Utility Functions  @forastro/utilities",
+  "Essential Vue Utilities @vueuse/core",
+  "Icon Library unplugin-icons",
+  "Styling tailwindcss",
+] as const;
 ---
 
-<DefineTemplate templateName="centered-content">
-  <Center>I'm from the center component</Center>
-</DefineTemplate>
-<HMFLayout title="Home" description="This is the home page">
-  <Container slot="header">
-    <Projector templateName="centered-content" />
+<Default title="Welcome to Astro." description="this is good">
+  <header class="px-4 py-12 text-center">
+    <Center>
+      <Typography tag={"h1"}>Welcome to the Vue Astro template.</Typography>
+    </Center>
+  </header>
+  <main class="px-2 py-6">
+    <Container>
+      <Center gapClass="gap-16">
+        <Typography tag={"p"}>
+          This template is created by <a
+            class="p-1"
+            href="https://github.com/louiss0">Shelton Louis</a
+          >. It uses <code>@fontsource</code> for fonts. Tailwind for styles. Preact
+          of course for UI interactivty. You also get a nice set of Components for
+          you to work faster. Look into the README for more information about this
+          template.
+        </Typography>
 
-    <h1>This is the astro template</h1>
-
-    <Gap spaces={3} />
-
-    <p>
-      This template is designed with the TailwindCSS intergration. Vue installed
-      and has a few basic utility components to use. The styles will be found in
-      the base layout component.
-
-      <br />
-      Go to the readme for more information.
-    </p>
-
-    <Button
-      id="button"
-      client:load
-      class="bg-red-300"
-      label="This button is pure"
-    />
-
-    <div class="text-xl text-red-400">
-      Please remember to use the containers with the slot's provided for content
-    </div>
-  </Container>
-
-  <Container>
-    <p>
-      The logo on the footer is a representation of five framework logos. If you
-      want to either remove or add a framework go to the HMFLayout in order to
-      change the component framework.
-    </p>
-
-    <List
-      title={"Your options are."}
-      listClass={"flex flex-col gap-2 [&>*]:px-3 [&>*]:py-1 [&>*]:bg-gray-700 [&>*]:text-gray-200 "}
-      items={frameworkChoices}
-    />
-  </Container>
-
-  <Container slot="footer">
-    <div class="grid place-items-center">
-      <AstroTopFrameWorksCircle revealedFrameworks={["vue"]} />
-    </div>
-  </Container>
-</HMFLayout>
+        <Center gapClass="gap-6">
+          <List
+            title="List of core depedencies "
+            listClass="grid gap-4 list-disc"
+            itemClass="py-2 px-4"
+            items={CORE_LIBRARY_SENTENCES}
+          />
+        </Center>
+      </Center>
+    </Container>
+  </main>
+  <footer class="px-20 py-6">
+    <Center gapClass="gap-2">
+      <strong class="text-lg"> Docs</strong>
+      <SpacedBox gapClass="gap-4">
+        {
+          DOCUMENTATION_NAMES_AND_LINKS.map(({ name, link }) => (
+            <a class="px-3 py-1" href={link}>
+              {name}
+            </a>
+          ))
+        }
+      </SpacedBox>
+    </Center>
+  </footer>
+</Default>
