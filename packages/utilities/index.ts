@@ -7,6 +7,7 @@ export { default as PageLink } from "./src/lib/components/PageLink.astro"
 
 export {
     iterate,
+    syncIterate,
     range,
     iterateRange,
     executeIf,

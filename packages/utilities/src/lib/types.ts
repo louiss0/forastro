@@ -1,43 +1,47 @@
 type HasForEachMethod = {
-    forEach<T>(callbackfn: (...args:Array<unknown>) => T, thisArg?: typeof  globalThis): void;
+    forEach<T>(callbackfn: (...args: Array<any>) => T, thisArg?: typeof globalThis): void;
 }
 
 
-type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> = Parameters<Parameters<T["forEach"]>[0] >
+type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> = Parameters<Parameters<T["forEach"]>[0]>
 
 type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U> =
     T extends HasForEachMethod
-    ? (value: GetParametersFromIterableWithAForEachMethod<T>[0], info: IterationInfo, key: GetParametersFromIterableWithAForEachMethod<T>[1]) => U
+    ? (
+        value: GetParametersFromIterableWithAForEachMethod<T>[0],
+        info: IterationInfo,
+        key: GetParametersFromIterableWithAForEachMethod<T>[1]
+    ) => U
     : T extends Generator
     ? (value: ReturnType<T["next"]>["value"]) => U
     : never
 
 type IterateRangeOptions = {
-    start:number
-    stop:number
-    step?:number
+    start: number
+    stop: number
+    step?: number
 }
 
 class IterationInfo {
 
-    constructor(
-        private readonly firstIterationNum:number,
-        private readonly iterationNum:number,
-        private readonly lastIterationNum:number,
+    constructor (
+        private readonly firstIterationNum: number,
+        private readonly iterationNum: number,
+        private readonly lastIterationNum: number,
 
     ) {
-        
+
     }
 
     get count() {
-        
+
         return this.lastIterationNum - this.firstIterationNum
 
     }
 
     get iteration() {
 
-        return this.iterationNum  + 1
+        return this.iterationNum + 1
     }
 
     get isFirst() {
@@ -45,14 +49,14 @@ class IterationInfo {
     }
 
     get isLast() {
-        return this.lastIterationNum === this.iteration 
+        return this.lastIterationNum === this.iteration
     }
 
     get isEven() {
         return this.iterationNum % 2 === 0
-         
+
     }
-    
+
     get isOdd() {
         return this.iterationNum % 2 !== 0
 
@@ -66,7 +70,7 @@ class IterationInfo {
 
 }
 
-type IterateRangeCallback<U> = (value:number, info:IterationInfo) => U 
+type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U
 
 export type {
     HasForEachMethod,
@@ -75,4 +79,4 @@ export type {
     IterateRangeCallback
 }
 
-export {IterationInfo}
+export { IterationInfo }

@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>78/78</span>
+                <span class='fraction'>82/82</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>78/78</span>
+                <span class='fraction'>82/82</span>
             </div>
         
             
@@ -140,7 +140,11 @@
 <a name='L75'></a><a href='#L75'>75</a>
 <a name='L76'></a><a href='#L76'>76</a>
 <a name='L77'></a><a href='#L77'>77</a>
-<a name='L78'></a><a href='#L78'>78</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -163,13 +167,17 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
-<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-yes">32x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -178,9 +186,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -218,45 +226,49 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">type HasForEachMethod = {
-    forEach&lt;T&gt;(callbackfn: (...args:Array&lt;unknown&gt;) =&gt; T, thisArg?: typeof  globalThis): void;
+    forEach&lt;T&gt;(callbackfn: (...args: Array&lt;any&gt;) =&gt; T, thisArg?: typeof globalThis): void;
 }
 &nbsp;
 &nbsp;
-type GetParametersFromIterableWithAForEachMethod&lt;T extends HasForEachMethod&gt; = Parameters&lt;Parameters&lt;T["forEach"]&gt;[0] &gt;
+type GetParametersFromIterableWithAForEachMethod&lt;T extends HasForEachMethod&gt; = Parameters&lt;Parameters&lt;T["forEach"]&gt;[0]&gt;
 &nbsp;
 type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed&lt;T, U&gt; =
     T extends HasForEachMethod
-    ? (value: GetParametersFromIterableWithAForEachMethod&lt;T&gt;[0], key: GetParametersFromIterableWithAForEachMethod&lt;T&gt;[1], info: IterationInfo) =&gt; U
+    ? (
+        value: GetParametersFromIterableWithAForEachMethod&lt;T&gt;[0],
+        info: IterationInfo,
+        key: GetParametersFromIterableWithAForEachMethod&lt;T&gt;[1]
+    ) =&gt; U
     : T extends Generator
     ? (value: ReturnType&lt;T["next"]&gt;["value"]) =&gt; U
     : never
 &nbsp;
 type IterateRangeOptions = {
-    start:number
-    stop:number
-    step?:number
+    start: number
+    stop: number
+    step?: number
 }
 &nbsp;
 class IterationInfo {
 &nbsp;
-    constructor(
-        private readonly firstIterationNum:number,
-        private readonly iterationNum:number,
-        private readonly lastIterationNum:number,
+    constructor (
+        private readonly firstIterationNum: number,
+        private readonly iterationNum: number,
+        private readonly lastIterationNum: number,
 &nbsp;
     ) {
-        
+&nbsp;
     }
 &nbsp;
     get count() {
-        
+&nbsp;
         return this.lastIterationNum - this.firstIterationNum
 &nbsp;
     }
 &nbsp;
     get iteration() {
 &nbsp;
-        return this.iterationNum  + 1
+        return this.iterationNum + 1
     }
 &nbsp;
     get isFirst() {
@@ -264,28 +276,28 @@ class IterationInfo {
     }
 &nbsp;
     get isLast() {
-        return this.lastIterationNum === this.iterationNum
+        return this.lastIterationNum === this.iteration
     }
 &nbsp;
     get isEven() {
         return this.iterationNum % 2 === 0
-         
+&nbsp;
     }
-    
+&nbsp;
     get isOdd() {
         return this.iterationNum % 2 !== 0
 &nbsp;
     }
     get remaining() {
 &nbsp;
-        return this.lastIterationNum - this.iterationNum
+        return this.lastIterationNum - this.iteration
 &nbsp;
     }
 &nbsp;
 &nbsp;
 }
 &nbsp;
-type IterateRangeCallback&lt;U&gt; = (value:number, info:IterationInfo) =&gt; U 
+type IterateRangeCallback&lt;U&gt; = (value: number, info: IterationInfo) =&gt; U
 &nbsp;
 export type {
     HasForEachMethod,
@@ -294,14 +306,14 @@ export type {
     IterateRangeCallback
 }
 &nbsp;
-export {IterationInfo}</pre></td></tr></table></pre>
+export { IterationInfo }</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-03-10T22:21:54.879Z
+                at 2023-04-29T19:07:14.219Z
             </div>
         <script src="prettify.js"></script>
         <script>

@@ -11,9 +11,9 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "importsNotUsedAsValues": "error",
+    "verbatimModuleSyntax": true,
     "types": [
       "vitest"
-    ]
+    ],
   }
 }

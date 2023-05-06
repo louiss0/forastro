@@ -1,4 +1,3 @@
----
 /** 
  * The point of this component is to just create space between elements.
  * The vertical prop is to add flex col and make sure that there is vertical spacing. 
@@ -7,9 +6,8 @@
  ** The rest of the gap classes are there to make sure that gaps exist on different screen sizes.
  
  */
-
-import { SpacingNumbers } from "../utilities/types";
-
+<script lang="ts" setup>
+  import { SpacingNumbers } from "../utilities/types";
 type Props = {
   gapClass?: `gap-${SpacingNumbers}`;
   smGapClass?: `sm:gap-${SpacingNumbers}`;
@@ -21,31 +19,28 @@ type Props = {
   spacingClass?: `justify-${"between" | "evenly" | "around"}`;
 };
 
-const {
-  gapClass,
-  spacingClass,
-  xlGapClass,
-  lgGapClass,
-  smGapClass,
-  vertical,
-  mdGapClass,
-  xl2GapClass,
-} = Astro.props;
----
+defineProps<Props>()
 
-<div
-  data-spaced-box
-  class="flex flex-wrap"
-  class:list={[
-    spacingClass,
-    gapClass,
-    vertical && "flex-col",
-    smGapClass,
-    mdGapClass,
-    lgGapClass,
-    xlGapClass,
-    xl2GapClass,
-  ]}
->
+</script>
+
+
+
+<template>
+  <div
+    data-spaced-box
+    :class="[
+      'flex flex-wrap',
+      spacingClass,
+      gapClass,
+      vertical && 'flex-col',
+      smGapClass,
+      mdGapClass,
+      lgGapClass,
+      xlGapClass,
+      xl2GapClass,
+    ]"
+  >
   <slot />
-</div>
+  </div>
+
+</template>

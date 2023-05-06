@@ -44,7 +44,9 @@ const flexColMap = new Map<
 const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap =
   flexDirectionClass === "flex-row" && until
     ? flexRowMap.get(until)
-    : flexColMap.get(until);
+    : flexDirectionClass === "flex-col" && until
+    ? flexColMap.get(until)
+    : null;
 ---
 
 <div

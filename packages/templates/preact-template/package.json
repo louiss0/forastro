@@ -1,0 +1,21 @@
+{
+  "name": "@forastro/preact-template",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/preact": "*",
+    "@astrojs/tailwind": "*",
+    "@forastro/utilities": "*",
+    "astro": "*",
+    "clsx": "*",
+    "preact": "*",
+    "tailwindcss": "*"
+  }
+}
