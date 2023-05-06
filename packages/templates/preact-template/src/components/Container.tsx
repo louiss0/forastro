@@ -29,7 +29,7 @@ export const Container:FunctionalComponent<Props> =(props) => {
 
 
   return <div data-container class={`mx-auto ${widthClass} ${maxWidthClass}`}>
-      {children && <span>Noting to contain</span>}
+      {children ?? <span>Noting to contain</span>}
   </div>
   
 } 
