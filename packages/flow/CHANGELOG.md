@@ -8,7 +8,7 @@
 
 - Updated: Readme
 - Updated dependencies
-  - @forastro/utilities@2.4.0
+- @forastro/utilities@2.4.0
 
 ## 2.2.4
 
