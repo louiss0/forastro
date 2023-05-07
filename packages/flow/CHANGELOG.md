@@ -2,7 +2,9 @@
 
 ## [Unreleased]
 
-## 2.4.0
+### [2.5.0]
+
+## [2.4.0]
 
 ### Patch Changes
 
@@ -10,7 +12,7 @@
 - Updated dependencies
 - @forastro/utilities@2.4.0
 
-## 2.2.4
+## [2.2.4]
 
 ### Patch Changes
 
@@ -18,7 +20,7 @@
 - Updated dependencies
   - @forastro/utilities@2.2.4
 
-## 2.2.2
+## [2.2.2]
 
 ### Patch Changes
 
@@ -26,7 +28,7 @@
 - Updated dependencies
   - @forastro/utilities@2.2.2
 
-## 2.2.0
+## [2.2.0]
 
 ### Minor Changes
 
@@ -38,20 +40,20 @@
 - Updated dependencies
   - @forastro/utilities@2.2.0
 
-## 2.1.0
+## [2.1.0]
 
 ### Patch Changes
 
 - Updated dependencies
   - @forastro/utilities@2.1.0
 
-## 2.0.0
+## [2.0.0]
 
 ### Major Changes
 
 - This package has all of the practical features that are needed for an Astro app to be built.
 
-## 0.1.3
+## [0.1.3]
 
 ### Patch Changes
 
@@ -59,7 +61,7 @@
 - Updated dependencies
   - @forastro/utilities@1.0.3
 
-## 0.1.2
+## [0.1.2]
 
 ### Patch Changes
 
@@ -67,7 +69,7 @@
 - Updated dependencies
   - @forastro/utilities@1.0.2
 
-## 0.1.1
+## [0.1.1]
 
 ### Patch Changes
 
@@ -75,7 +77,7 @@
 - Updated dependencies
   - @forastro/utilities@1.0.0
 
-## 0.1.0
+## [0.1.0]
 
 ### Minor Changes
 
