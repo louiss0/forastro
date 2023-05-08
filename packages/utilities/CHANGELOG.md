@@ -1,11 +1,11 @@
 # @forastro/utilities
 
 
-## [2.5.0] - 2023-05-07
+## [Unreleased]
 
 ### [2.6.0]
 
-## [2.5.0]
+## [2.5.0] - 2023-05-07
 
 With this release the Sync Iterate function is added to the library. 
 This function is a `function` that takes in an iterable that needs a `forEach()`
