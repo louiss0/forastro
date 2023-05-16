@@ -20,6 +20,9 @@
     "src/**/*",
     ".vitepress/**/*"
   ],
+  "exclude": [
+    "**/cache"
+  ],
   "vueCompilerOptions": {
     "plugins": [
       "vite-plugin-vue-nested-sfc/tooling"
