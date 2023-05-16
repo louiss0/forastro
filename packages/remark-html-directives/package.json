@@ -1,0 +1,38 @@
+{
+  "name": "@forastro/remark-html-directives",
+  "version": "1.0.5",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/remark-html-directives.umd.cjs",
+  "module": "./dist/remark-html-directives.js",
+  "exports": {
+    ".": {
+      "import": "./dist/remark-html-directives.js",
+      "require": "./dist/remark-html-directives.umd.cjs"
+    }
+  },
+  "scripts": {
+    "coverage": "vitest run --coverage",
+    "dev": "vitest",
+    "build": "vite build",
+    "release": "vite build && pnpm publish"
+  },
+  "dependencies": {
+    "hastscript": "^7.0.2",
+    "unist-util-visit": "^4.1.0"
+  },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro"
+  },
+  "author": {
+    "name": "Shelton Louis"
+  },
+  "keywords": [
+    "markdown",
+    "html",
+    "remark",
+    "directives"
+  ]
+}
