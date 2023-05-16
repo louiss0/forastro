@@ -28,7 +28,7 @@ export default defineConfig({
         items: [
           { link: "/libraries/flow/index", text: "Flow" },
           { link: "/libraries/remark-html-directives/index", text: "Remark HTML Directives" },
-          { link: "/libraries/utilities", text: "Utilities" }
+          { link: "/libraries/utilities/index", text: "Utilities" }
         ]
       },
     ],
@@ -40,10 +40,23 @@ export default defineConfig({
           {
             text: "Flow",
             items: [
-              { text: "For", link: "/libraries/flow/for" }
+              { text: "For", link: "/libraries/flow/for" },
+              { text: "Switch And Case", link: "/libraries/flow/switch-and-case" },
+              { text: "Show And Hide", link: "/libraries/flow/show-and-hide" },
+              { text: "Range", link: "/libraries/flow/range" },
             ]
           },
-          { link: "/libraries/utilities", text: "Utilities" },
+          {
+            text: "Utilities",
+            items: [
+              { text: "Iteration Functions", link: "/libraries/utilities/iteration-functions" },
+              { text: "Range Functions", link: "/libraries/utilities/range-functions" },
+              { text: "Conditional Functions", link: "/libraries/utilities/conditional-functions" },
+              { text: "Template Projection", link: "/libraries/utilities/template-projection" },
+              { text: "Page Link", link: "/libraries/utilities/page-link" },
+            ]
+          },
+          { link: "/libraries/remark-html-directives/index", text: "Remark HTML Directives" },
         ]
       },
 
