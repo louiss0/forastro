@@ -18,7 +18,9 @@ All of them are generators. Some async some not They are created to be well type
 
 The iteration info is an object that is created to pass on information about the current iteration.
 
-:::info This table is a decscription of all the properties of the IterationInfo.
+:::info
+This table below is a decscription of all the properties of the IterationInfo.
+:::
 
 | key       | type    | Definition                                  |
 | --------- | ------- | ------------------------------------------- |
@@ -28,7 +30,6 @@ The iteration info is an object that is created to pass on information about the
 | isEven    | boolean | Value is true if the iteration is even      |
 | count     | number  | The total amount of iterations              |
 | remaining | number  | The total amount of iterations remaining    |
-:::
 
 <!-- :::info Iteration Info Props Table
    
