@@ -58,9 +58,22 @@ iterateRange<U>(
 
 While range is nice it's problem is that as a developer. Using HTML and creating conditions on what to do with the value that a range produces is cumbersome. That is where `iterateRange()` comes in. It's a generator that. takes in a callback then a object. That specifies the **start,stop** and **,step**.
 
-### Usage 
+### Usage
 
+```jsx
+    {iterateRange(
+        (value, info)=> 
+        (<div style={{backgroundColor: info.isFirst ?'blue': 'green'}} >
+        {value}
+        </div>) , 
+        {start:3, stop:15, step:3}
+    )}
+```
 
+:::warning  
+ This function only works like this in astro.
+ To make it work in other frameworks use a for loop.
+:::
 
 ### Types  
 
@@ -73,4 +86,3 @@ type IterateRangeOptions = {
     step?: number
 }
 ```
-
