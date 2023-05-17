@@ -4,9 +4,13 @@
             <section aria-label="extra-info">
                 <div class="container">
                     <div class="spaced-box">
-                        <p>This repo is a large collection of libraries that are created by
-                            <LinkToSheltonsGitHub />
+                        <p>
+                            This documentation site is a site that is about all the tools that are created in the For Astro Mono Repo.
+                            This mono repo as all things that I <LinkToSheltonsGitHub/> find necessary for Astro development.
+                            By looking into this site you will gain a through understanding of all the things built here. 
+                            
                         </p>
+                        <p>If there are any problems please go to <LinkToTheForAstroMonoRepo/> </p>
                     </div>
                 </div>
             </section>
@@ -15,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-import DefaultTheme from 'vitepress/theme';
+import DefaultTheme from '`vitepress/theme';
 
 const { Layout } = DefaultTheme;
 
@@ -23,7 +27,29 @@ const { Layout } = DefaultTheme;
 
 </script>
 
+
+<component lang="vue" name="LinkToSheltonsGitHub">
+    <template>
+        <a href="https://github.com/louiss0" class="shelton-link" target="_blank">
+            Shelton Louis
+        </a>
+    </template>
+</component>
+
+
+<component lang="vue" name="LinkToTheForAstroMonoRepo">
+    <template>
+        <a href="https://github.com/louiss0/forastro" class="shelton-link" target="_blank">
+            For Astro Mono Repo
+        </a>
+    </template>
+</component>
+
+
+
 <style lang="postcss">
+
+
 :root {
     --primary-text-color: hsl(0, 0%, 0%, .8);
 
@@ -68,8 +94,8 @@ section[aria-label="extra-info"] {
         text-decoration: underline;
         text-underline-offset: .25rem;
         text-decoration-color: currentColor;
-        padding: .25rem .50rem;
-
+        padding: .5rem .10rem;
+        color: var(--vp-c-brand);
         &:is(:focus-visible, :hover) {
             color: var(--primary-bg-color);
             outline: none;
@@ -83,16 +109,5 @@ section[aria-label="extra-info"] {
 }
 </style>
 
-<component lang="vue" name="LinkToSheltonsGitHub">
-    <template>
-        <a href="https://github.com/louiss0" class="shelton-link">
-            Shelton Louis
-        </a>
-    </template>
-</component>
 
 
-<style>
-@import "../styles/dark-theme.css";
-
-</style>
