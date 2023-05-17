@@ -38,9 +38,8 @@ export default defineConfig({
         text: 'Libraries',
         items: [
           {
+            collapsed: false,
             text: "Flow",
-            collapsed: true,
-
             items: [
               { text: "For", link: "/libraries/flow/for" },
               { text: "Switch And Case", link: "/libraries/flow/switch-and-case" },
@@ -50,11 +49,10 @@ export default defineConfig({
           },
           {
             text: "Utilities",
-            collapsed: true,
-
+            collapsed: false,
             items: [
-              { text: "Iteration Functions", link: "/libraries/utilities/iteration-functions" },
-              { text: "Range Functions", link: "/libraries/utilities/range-functions" },
+              { text: "Iteration Generators", link: "/libraries/utilities/iteration-generators" },
+              { text: "Range Generators", link: "/libraries/utilities/range-generators" },
               { text: "Conditional Functions", link: "/libraries/utilities/conditional-functions" },
               { text: "Template Projection", link: "/libraries/utilities/template-projection" },
               { text: "Page Link", link: "/libraries/utilities/page-link" },
