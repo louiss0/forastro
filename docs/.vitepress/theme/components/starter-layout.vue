@@ -6,11 +6,14 @@
                     <div class="spaced-box">
                         <p>
                             This documentation site is a site that is about all the tools that are created in the For Astro Mono Repo.
-                            This mono repo as all things that I <LinkToSheltonsGitHub/> find necessary for Astro development.
-                            By looking into this site you will gain a through understanding of all the things built here. 
-                            
+                            This mono repo as all things that I
+                            <LinkToSheltonsGitHub /> find necessary for Astro development.
+                            By looking into this site you will gain a through understanding of all the things built here.
+
                         </p>
-                        <p>If there are any problems please go to <LinkToTheForAstroMonoRepo/> </p>
+                        <p>If there are any problems please go to
+                            <LinkToTheForAstroMonoRepo />
+                        </p>
                     </div>
                 </div>
             </section>
@@ -19,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import DefaultTheme from '`vitepress/theme';
+import DefaultTheme from 'vitepress/theme';
 
 const { Layout } = DefaultTheme;
 
@@ -48,8 +51,6 @@ const { Layout } = DefaultTheme;
 
 
 <style lang="postcss">
-
-
 :root {
     --primary-text-color: hsl(0, 0%, 0%, .8);
 
@@ -96,6 +97,7 @@ section[aria-label="extra-info"] {
         text-decoration-color: currentColor;
         padding: .5rem .10rem;
         color: var(--vp-c-brand);
+
         &:is(:focus-visible, :hover) {
             color: var(--primary-bg-color);
             outline: none;
