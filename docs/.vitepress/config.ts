@@ -20,7 +20,7 @@ export default defineConfig({
         items: [
           { link: "/templates/preact-template", text: "Preact" },
           { link: "/templates/vue-template", text: "Vue" },
-          { link: "/templates/minimal-template", text: "minimal" }
+          { link: "/templates/minimal-template", text: "Minimal" }
         ]
       },
       {
@@ -39,6 +39,8 @@ export default defineConfig({
         items: [
           {
             text: "Flow",
+            collapsed: true,
+
             items: [
               { text: "For", link: "/libraries/flow/for" },
               { text: "Switch And Case", link: "/libraries/flow/switch-and-case" },
@@ -48,6 +50,8 @@ export default defineConfig({
           },
           {
             text: "Utilities",
+            collapsed: true,
+
             items: [
               { text: "Iteration Functions", link: "/libraries/utilities/iteration-functions" },
               { text: "Range Functions", link: "/libraries/utilities/range-functions" },
@@ -59,7 +63,14 @@ export default defineConfig({
           { link: "/libraries/remark-html-directives/index", text: "Remark HTML Directives" },
         ]
       },
-
+      {
+        text: 'Templates',
+        items: [
+          { link: "/templates/preact-template", text: "Preact" },
+          { link: "/templates/vue-template", text: "Vue" },
+          { link: "/templates/minimal-template", text: "Minimal" }
+        ]
+      },
     ],
     footer: {
       message: "All Libraries are MIT",
