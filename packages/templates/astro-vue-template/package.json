@@ -27,6 +27,7 @@
     "@astrojs/tailwind": "*",
     "@astrojs/vue": "*",
     "astro-icon": "*",
+    "vite-plugin-vue-nested-sfc": "*",
     "tailwindcss": "*",
     "typescript": "*",
     "vue": "*",
