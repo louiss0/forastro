@@ -1,8 +1,11 @@
 ---
+import type { HTMLAttributes } from "astro/types";
+
 type Props = {
   href: `/${string}`;
   children:
-    | ((isActive: boolean) => string | Array<astroHTML.JSX.HTMLAttributes>)
+    | ((isActive: boolean) => string | Array<HTMLAttributes<"div">>)
+    | Array<astroHTML.JSX.HTMLAttributes>
     | string;
 };
 
@@ -12,12 +15,12 @@ const {
   props: { href },
 } = Astro;
 
-const defaultSlot = slots.has("default")
-  ? await slots.render("default")
-  : "Please render something here the like the name of a page";
-
 const urlPathnameIsSameAsHref =
   pathname === href || href === pathname.replace(/\/$/, "");
+
+const defaultSlot = slots.has("default")
+  ? await slots.render("default", [urlPathnameIsSameAsHref])
+  : "Please render something here the like the name of a page";
 ---
 
 <a aria-current={urlPathnameIsSameAsHref ? "page" : null} href={href}>
@@ -30,6 +33,6 @@ const urlPathnameIsSameAsHref =
   */
 
   :where(a[aria-current="page"]) {
-    border-bottom: 2px solid hsl(0, 0%, 80%);
+    border-bottom: 2px solid hsl(0, 0%, 20%);
   }
 </style>
