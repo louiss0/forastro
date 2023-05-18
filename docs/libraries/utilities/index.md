@@ -25,16 +25,15 @@ that are used for development with [Astro.js](https://astro.build).
 :::code-group
 
  ```[pnpm]
-    pnpm install @forastro/utilities
+    pnpm add @forastro/utilities
  ```
 
  ```[yarn]
-    yarn install @forastro/utilities
+    yarn add @forastro/utilities
  ```
 
  ```[npm]
-    npm install @forastro/utilities
+    npm i @forastro/utilities
  ```
 
 :::
-
