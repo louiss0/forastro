@@ -71,7 +71,7 @@ While range is nice it's problem is that as a developer. Using HTML and creating
 ```
 
 :::warning  
- This function only works like this in astro.
+ This function only works like this in Astro components like that.
  To make it work in other frameworks use a for loop.
 :::
 
