@@ -17,6 +17,7 @@ const supportedBlockLevelTags = [
   "summary",
   'div',
   'dl',
+  'picture',
   'figcaption',
   'figure',
   'footer',
@@ -38,6 +39,7 @@ const supportedBlockLevelTags = [
   'thead',
   'tbody',
 ] as const;
+
 const supportedInlineLevelTags = [
   'br',
   'button',
@@ -45,8 +47,10 @@ const supportedInlineLevelTags = [
   'img',
   'map',
   'iframe',
+  "source",
   'span',
 ] as const;
+
 const supportedTableTags = [
   "tr",
   "th",
@@ -54,6 +58,15 @@ const supportedTableTags = [
   "col",
   "caption",
   "colgroup",
+] as const
+
+const headings = [
+  "h1",
+  "h2",
+  "h3",
+  "h4",
+  "h5",
+  "h6",
 ] as const
 
 const supportedTextBasedTags = [
@@ -75,12 +88,6 @@ const supportedTextBasedTags = [
   'abbr',
   'bdo',
   "data",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "h6",
   'dd',
   'dt',
 ] as const;
@@ -88,44 +95,45 @@ const supportedTextBasedTags = [
 
 
 
-function checkIfNodeTypeIsAViableContainerDirective(node:NodeDirectiveObject){
+function checkIfNodeTypeIsAViableContainerDirective(node: NodeDirectiveObject) {
 
 
   return [
-    node.type === "containerDirective" &&  supportedBlockLevelTags.includes(node.name as any),
-    node.type === "containerDirective" &&  supportedTableTags.includes(node.name as any),
-  ].some((value)=>value)
+    node.type === "containerDirective" && supportedBlockLevelTags.includes(node.name as any),
+    node.type === "containerDirective" && supportedTableTags.includes(node.name as any),
+  ].some((value) => value)
 
 }
 
-function checkIfNodeTypeIsAViableLeafDirective(node:NodeDirectiveObject){
+function checkIfNodeTypeIsAViableLeafDirective(node: NodeDirectiveObject) {
 
   return [
-    node.type === "leafDirective" &&  supportedInlineLevelTags.includes(node.name as any),
-    node.type === "leafDirective" &&  supportedTextBasedTags.includes(node.name as any),
-    node.type === "leafDirective" &&  supportedTableTags.includes(node.name as any),
-  ].some((value)=>value)
-  
-  
+    node.type === "leafDirective" && supportedInlineLevelTags.includes(node.name as any),
+    node.type === "leafDirective" && headings.includes(node.name as any),
+    node.type === "leafDirective" && supportedTextBasedTags.includes(node.name as any),
+    node.type === "leafDirective" && supportedTableTags.includes(node.name as any),
+  ].some((value) => value)
+
+
 }
 
-function checkIfNodeTypeIsAViableTextDirective(node:NodeDirectiveObject){
+function checkIfNodeTypeIsAViableTextDirective(node: NodeDirectiveObject) {
 
-  return node.type === "textDirective" &&  supportedTextBasedTags.includes(node.name as any)
+  return node.type === "textDirective" && supportedTextBasedTags.includes(node.name as any)
 }
 
 
-function throwErrorIfANodeIsNotAViableNode(node:NodeDirectiveObject) {
+function throwErrorIfANodeIsNotAViableNode(node: NodeDirectiveObject) {
 
 
   const directiveIsViable = [
     checkIfNodeTypeIsAViableContainerDirective(node),
     checkIfNodeTypeIsAViableLeafDirective(node),
     checkIfNodeTypeIsAViableTextDirective(node),
-  ].some((value)=> value)
+  ].some((value) => value)
 
 
-  if(!directiveIsViable) {
+  if (!directiveIsViable) {
 
     throw Error(`
 
@@ -135,7 +143,7 @@ function throwErrorIfANodeIsNotAViableNode(node:NodeDirectiveObject) {
     Remember to use ::: a name then put ::: at the bottom for them  
 
     A leaf directive must use these tag names 
-    ${supportedInlineLevelTags.join(',')}
+    ${supportedInlineLevelTags.join(',')}${headings.join(",")}
     ${supportedTextBasedTags.join(' , ')}${supportedTableTags.join(' , ')}
 
     Remember to use :: for them 
@@ -157,7 +165,7 @@ export {
   supportedBlockLevelTags,
   nodeDirectiveTypes,
   throwErrorIfANodeIsNotAViableNode,
-  checkIfNodeTypeIsAViableContainerDirective,  
+  checkIfNodeTypeIsAViableContainerDirective,
   checkIfNodeTypeIsAViableTextDirective,
   checkIfNodeTypeIsAViableLeafDirective,
 }
