@@ -1,13 +1,13 @@
 
-import {Node, visit} from 'unist-util-visit'
-import {h} from 'hastscript'
+import { Visitor, BuildVisitor, visit } from 'unist-util-visit'
+import { h } from 'hastscript'
 import {
-   nodeDirectiveTypes,
-     throwErrorIfANodeIsNotAViableNode,
-     } from './utils'
+  nodeDirectiveTypes,
+  throwErrorIfANodeIsNotAViableNode,
+} from './utils'
 import type {
-  NodeDirectiveObject, 
-}from "./types"
+  NodeDirectiveObject,
+} from "./types"
 
 
 
@@ -16,38 +16,38 @@ import type {
 
 
 
-export default function HTMLDirectives(){
+export default function HTMLDirectives() {
 
-  return  (tree:Node) => {
+  return (tree: BuildVisitor) => {
 
 
     visit(tree, (node) => {
-      
+
       const nodeDirectiveObject = node as NodeDirectiveObject
 
       const nodeTypeIsAnyOfTheseDirectives = nodeDirectiveTypes.includes(node.type as any)
-      
-      
+
+
       if (!nodeTypeIsAnyOfTheseDirectives) return;
 
-      
+
       throwErrorIfANodeIsNotAViableNode(nodeDirectiveObject)
 
 
-      const data = nodeDirectiveObject.data || (nodeDirectiveObject.data ={})
+      const data = nodeDirectiveObject.data || (nodeDirectiveObject.data = {})
 
 
       const hast = h(nodeDirectiveObject.name, nodeDirectiveObject.attributes)
 
-        data.hName = hast.tagName
-        
-        data.hProperties = hast.properties
-        
+      data.hName = hast.tagName
 
-      
-     
-      
-        
+      data.hProperties = hast.properties
+
+
+
+
+
+
 
     })
   }

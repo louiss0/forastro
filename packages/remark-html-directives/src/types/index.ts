@@ -1,6 +1,5 @@
 import { supportedBlockLevelTags, nodeDirectiveTypes, supportedInlineLevelTags, supportedTableTags, supportedTextBasedTags } from "src/utils";
-
-import {Node,} from 'unist-util-visit'
+import { Child, } from 'hastscript';
 
 type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
 
@@ -8,15 +7,15 @@ type BlockElementNames = typeof supportedBlockLevelTags[number];
 
 type InlineElementNames = typeof supportedInlineLevelTags[number];
 
-type TableTagNames= typeof supportedTableTags[number];
+type TableTagNames = typeof supportedTableTags[number];
 
 type TextTags = typeof supportedTextBasedTags[number]
 
-type RareNodeTypes =  "root" | "paragraph" | "listItem" | "thematicBreak"| "text"
+type RareNodeTypes = "root" | "paragraph" | "listItem" | "thematicBreak" | "text"
 
-interface NodeDirectiveObject extends Node {
+type NodeDirectiveObject = Child & {
   type: NodeDirectiveTypes | RareNodeTypes
-  children: Array<Node>
+  children: Array<Child>
   name: BlockElementNames | InlineElementNames | TableTagNames | TextTags
   attributes: Record<string, string>
 }
