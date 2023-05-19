@@ -4,7 +4,8 @@
         link: /libraries/flow/for
 ---
 
-# Flow
+<!-- markdownlint-disable-next-line MD033 -->
+# Flow <Badge type="info" text="2.4.0" />
 
 The `@forastro/flow` library is a library of control flow components.
 It has all of the ones that you would typically use in an app. They are written in typescript Which means that you will get good type inference you need.
