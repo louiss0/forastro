@@ -18,9 +18,9 @@ export default defineConfig({
       {
         text: 'Templates',
         items: [
-          { link: "/templates/preact-template", text: "Preact" },
-          { link: "/templates/vue-template", text: "Vue" },
-          { link: "/templates/minimal-template", text: "Minimal" }
+          { link: "/templates/astro-preact", text: "Preact" },
+          { link: "/templates/astro-vue", text: "Vue" },
+          { link: "/templates/astro-minimal", text: "Minimal" }
         ]
       },
       {
@@ -64,9 +64,9 @@ export default defineConfig({
       {
         text: 'Templates',
         items: [
-          { link: "/templates/preact-template", text: "Preact" },
-          { link: "/templates/vue-template", text: "Vue" },
-          { link: "/templates/minimal-template", text: "Minimal" }
+          { link: "/templates/astro-preact", text: "Preact" },
+          { link: "/templates/astro-vue", text: "Vue" },
+          { link: "/templates/astro-minimal", text: "Minimal" }
         ]
       },
     ],
