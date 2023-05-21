@@ -9,6 +9,9 @@
       "~/*": [
         "./src/*"
       ],
-    }
+    },
+    "types": [
+      "unplugin-icons/types/preact",
+    ]
   }
 }

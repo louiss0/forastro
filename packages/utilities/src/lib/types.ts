@@ -16,6 +16,8 @@ type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEa
     ? (value: ReturnType<T["next"]>["value"]) => U
     : never
 
+type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U
+
 type IterateRangeOptions = {
     start: number
     stop: number
@@ -70,7 +72,6 @@ class IterationInfo {
 
 }
 
-type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U
 
 export type {
     HasForEachMethod,

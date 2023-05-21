@@ -4,10 +4,10 @@
     "jsx": "preserve",
     "skipLibCheck": true,
     "baseUrl": ".",
+    "experimentalDecorators": true,
     "paths": {
       "~/*": [
         "src/*"
       ],
     }
   }
-}

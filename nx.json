@@ -1,6 +1,7 @@
 {
   "plugins": [
-    "@nxtensions/astro"
+    "@nxtensions/astro",
+    "@ahryman40k/nx-vitepress"
   ],
   "npmScope": "@forastro",
   "namedInputs": {
@@ -65,5 +66,5 @@
       }
     }
   },
-  "defaultProject": "demo"
+  "defaultProject": "docs"
 }

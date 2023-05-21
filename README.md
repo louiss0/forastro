@@ -35,3 +35,5 @@ the package is called `@forastro/flow`. It has a folder called the components fo
 
 Utilities is a package that is created to emulate control flow inside of components.
 the package is called `@forastro/utilities`. It has a folder called the components folder and a file called helpers. Helpers are a set of functions that are designed to help the flow components work. The components file is where all of the components are. All of them are exported in a index.ts file.
+
+<!-- TODO:Remember to add the templates section -->

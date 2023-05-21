@@ -10,12 +10,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/preact": "*",
-    "@astrojs/tailwind": "*",
-    "@forastro/utilities": "*",
     "astro": "*",
     "clsx": "*",
+    "@forastro/utilities": "*",
     "preact": "*",
     "tailwindcss": "*"
+  },
+  "devDependencies": {
+    "@svgr/core": "*",
+    "@astrojs/preact": "*",
+    "@astrojs/tailwind": "*",
+    "unplugin-icons": "*",
+    "@iconify/json": "*"
   }
 }
