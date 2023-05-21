@@ -7,6 +7,5 @@ This package is a set of components and functions that make things easier to acc
 To install this package `npm i @forastro/utilities`
 
 ## Docs
-## Docs
 
-Please checkout the demo for [For Astro Utilities](https://forastro.vercel.app/libraries/utilities)
+Please checkout the docs for [For Astro Utilities](https://forastro-docs.onrender.com/libraries/utilities)
