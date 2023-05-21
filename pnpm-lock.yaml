@@ -111,7 +111,7 @@ importers:
   packages/flow:
     dependencies:
       '@forastro/utilities':
-        specifier: workspace:^2.5.0
+        specifier: '*'
         version: link:../utilities
       astro:
         specifier: '>1.0.0'
@@ -161,7 +161,7 @@ importers:
         version: link:../../utilities
       '@vueuse/core':
         specifier: '*'
-        version: 0.0.0-alpha.2(@vue/composition-api@0.3.4)(@vue/runtime-dom@3.3.4)(vue@3.3.4)
+        version: 9.13.0(vue@3.3.4)
       astro:
         specifier: '*'
         version: 2.5.1(@types/node@20.2.1)
@@ -3501,15 +3501,6 @@ packages:
       '@vue/compiler-dom': 3.3.4
       '@vue/shared': 3.3.4
 
-  /@vue/composition-api@0.3.4(vue@3.3.4):
-    resolution: {integrity: sha512-aMbg/pEk0PSQAIFyWWLqbAmaCCTx1kFq+49KZslIBJH9Wqos7eEPLtMv4gGxd/EcciBIgfbtUXaXGg/O3mheRA==}
-    peerDependencies:
-      vue: ^2.5.22
-    dependencies:
-      tslib: 1.14.1
-      vue: 3.3.4
-    dev: false
-
   /@vue/devtools-api@6.5.0:
     resolution: {integrity: sha512-o9KfBeaBmCKl10usN4crU53fYtC1r7jJwdGKjPT24t348rHxgfpZ0xL3Xm/gLUYnc0oTp8LAmrxOeLyu6tbk2Q==}
 
@@ -3570,18 +3561,6 @@ packages:
       - react
       - react-dom
       - vue
-    dev: false
-
-  /@vueuse/core@0.0.0-alpha.2(@vue/composition-api@0.3.4)(@vue/runtime-dom@3.3.4)(vue@3.3.4):
-    resolution: {integrity: sha512-B9HQcY5ADc3TtiVWIywDGCc8zY5r08jJNhmO065J8XVU3FrHYnnxIanL/n5Wa6qQpt3HGhsatVqwKpoj3KAAeg==}
-    peerDependencies:
-      '@vue/composition-api': ^0.3.4
-      '@vue/runtime-dom': ^3.0.0
-      vue: ^2.6.11
-    dependencies:
-      '@vue/composition-api': 0.3.4(vue@3.3.4)
-      '@vue/runtime-dom': 3.3.4
-      vue: 3.3.4
     dev: false
 
   /@vueuse/core@10.1.2(vue@3.3.4):
@@ -5816,7 +5795,7 @@ packages:
       fs.realpath: 1.0.0
       inflight: 1.0.6
       inherits: 2.0.4
-      minimatch: 3.0.5
+      minimatch: 3.1.2
       once: 1.4.0
       path-is-absolute: 1.0.1
     dev: true
@@ -7985,7 +7964,7 @@ packages:
       got: 12.6.0
       registry-auth-token: 5.0.2
       registry-url: 6.0.1
-      semver: 7.5.0
+      semver: 7.5.1
     dev: true
 
   /parent-module@1.0.1:
@@ -8827,7 +8806,7 @@ packages:
     resolution: {integrity: sha512-0Ju4+6A8iOnpL/Thra7dZsSlOHYAHIeMxfhWQRI1/VLcT3WDBZKKtQt/QkBOsiIN9ZpuvHE6cGZ0x4glCMmfiA==}
     engines: {node: '>=12'}
     dependencies:
-      semver: 7.5.0
+      semver: 7.5.1
     dev: true
 
   /semver@6.3.0:
@@ -9467,6 +9446,7 @@ packages:
 
   /tslib@1.14.1:
     resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
+    dev: true
 
   /tslib@2.5.2:
     resolution: {integrity: sha512-5svOrSA2w3iGFDs1HibEVBGbDrAY82bFQ3HZ3ixB+88nsbsWQoKqDRb5UBYAUPEzbBn6dAp5gRNXglySbx1MlA==}
