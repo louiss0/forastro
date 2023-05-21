@@ -15,6 +15,9 @@
     "src",
     "index.ts"
   ],
+  "peerDependencies": {
+    "astro": ">1.0.0"
+  },
   "keywords": [
     "astro-component",
     "ui"
