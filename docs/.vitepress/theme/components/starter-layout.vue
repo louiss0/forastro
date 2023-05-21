@@ -50,7 +50,7 @@ const { Layout } = DefaultTheme;
 
 
 
-<style lang="postcss">
+<style >
 :root {
     --primary-text-color: hsl(0, 0%, 0%, .8);
 
@@ -78,36 +78,38 @@ section[aria-label="extra-info"] {
     padding: 2rem 4rem;
     min-height: 10rem;
 
-    .container {
-        width: 60%;
-        max-width: 768px;
-        margin: 0 auto;
-    }
 
 
-    .spaced-box {
-        display: flex;
-        flex-direction: column;
-        gap: 1.25rem;
-    }
-
-    .shelton-link {
-        text-decoration: underline;
-        text-underline-offset: .25rem;
-        text-decoration-color: currentColor;
-        padding: .5rem .10rem;
-        color: var(--vp-c-brand);
-
-        &:is(:focus-visible, :hover) {
-            color: var(--primary-bg-color);
-            outline: none;
-            background-color: var(--accent-text-color);
-            transition: background-color 300ms ease-in;
-        }
-    }
+}
 
 
+section[aria-label="extra-info"] .container {
+    width: 60%;
+    max-width: 768px;
+    margin: 0 auto;
+}
 
+
+section[aria-label="extra-info"] .spaced-box {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+section[aria-label="extra-info"] .shelton-link {
+    text-decoration: underline;
+    text-underline-offset: .25rem;
+    text-decoration-color: currentColor;
+    padding: .5rem .10rem;
+    color: var(--vp-c-brand);
+
+}
+
+section[aria-label="extra-info"] .shelton-link:is(:focus-visible, :hover) {
+    color: var(--primary-bg-color);
+    outline: none;
+    background-color: var(--accent-text-color);
+    transition: background-color 300ms ease-in;
 }
 </style>
 
