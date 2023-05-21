@@ -25,6 +25,6 @@
     "astro": ">1.0.0"
   },
   "dependencies": {
-    "@forastro/utilities": "workspace:^2.4.0"
+    "@forastro/utilities": "workspace:^"
   }
 }
