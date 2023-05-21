@@ -23,5 +23,8 @@
   },
   "peerDependencies": {
     "astro": ">1.0.0"
+  },
+  "dependencies": {
+    "@forastro/utilities": "workspace:^2.5.0"
   }
 }
