@@ -108,11 +108,7 @@ importers:
         specifier: 0.31.1
         version: 0.31.1(@vitest/ui@0.31.1)(jsdom@22.0.0)
 
-  packages/flow:
-    dependencies:
-      astro:
-        specifier: '>1.0.0'
-        version: 2.5.1(@types/node@20.2.1)
+  packages/flow: {}
 
   packages/remark-html-directives:
     dependencies:
