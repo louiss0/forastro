@@ -21,6 +21,9 @@
   "scripts": {
     "release": "release-it"
   },
+  "peerDependencies": {
+    "astro": ">1.0.0"
+  },
   "dependencies": {
     "@forastro/utilities": "workspace:^"
   }
