@@ -19,11 +19,6 @@ export default defineConfig({
   },
   integrations: [
     tailwind(),
-    vue({
-
-      jsx: {
-        enableObjectSlots: true,
-      },
-    }),
+    vue(),
   ],
 });

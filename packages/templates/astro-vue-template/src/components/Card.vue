@@ -1,5 +1,5 @@
+<script setup lang="ts">
 
-<script setup lang="ts" >
 interface Props {
   title: string;
   src: string;
@@ -9,7 +9,6 @@ interface Props {
 }
 
 const { title, src, alt, height, width } = defineProps<Props>();
-
 
 </script>
 ---

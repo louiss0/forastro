@@ -14,22 +14,22 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@fontsource/lato": "*",
-    "@fontsource/raleway": "*",
-    "@forastro/utilities": "*",
-    "@iconify/json": "*",
     "@vueuse/core": "*",
+    "@forastro/utilities": "*",
     "astro": "*",
-    "unplugin-icons": "*",
-    "unplugin-vue-components": "*"
+    "vue": "*"
   },
   "devDependencies": {
+    "@fontsource/lato": "*",
+    "@fontsource/raleway": "*",
+    "@iconify/json": "*",
+    "unplugin-icons": "*",
+    "unplugin-vue-components": "*",
     "@astrojs/tailwind": "*",
     "@astrojs/vue": "*",
-    "astro-icon": "*",
+    "vite-plugin-vue-nested-sfc": "*",
     "tailwindcss": "*",
     "typescript": "*",
-    "vue": "*",
     "vue-tsc": "*"
   }
 }
