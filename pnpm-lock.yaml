@@ -110,9 +110,6 @@ importers:
 
   packages/flow:
     dependencies:
-      '@forastro/utilities':
-        specifier: workspace:^2.5.0
-        version: link:../utilities
       astro:
         specifier: '>1.0.0'
         version: 2.5.1(@types/node@20.2.1)
