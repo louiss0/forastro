@@ -13,9 +13,21 @@ It uses a class library called `clsx`. The table below should tell you more.
 
 **To start the app use:**
 
-```console
-p?npm run start 
+:::code-group
+
+```[pnpm]
+pnpm run start 
 ```
+
+```[npm]
+npm run start 
+```
+
+```[yarn]
+yarn run start 
+```
+
+:::
 
 ## Main Folders
 
