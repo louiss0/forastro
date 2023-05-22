@@ -18,5 +18,8 @@
   "keywords": [
     "astro-component",
     "ui"
-  ]
+  ],
+  "peerDependencies": {
+    "astro": ">1.0.0"
+  }
 }
