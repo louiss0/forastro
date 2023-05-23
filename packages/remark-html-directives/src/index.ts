@@ -1,13 +1,9 @@
 
 import { Visitor, visit } from 'unist-util-visit'
 import { h } from 'hastscript'
-import {
-  nodeDirectiveTypes,
-  throwErrorIfANodeIsNotAViableNode,
-} from './utils'
-import type {
-  NodeDirectiveObject,
-} from "./types"
+import { nodeDirectiveTypes } from 'src/constants'
+import { NodeDirectiveObject } from 'src/types'
+import { throwErrorIfANodeIsNotAViableNode } from 'src/utils'
 
 
 
@@ -28,7 +24,7 @@ export default function HTMLDirectives() {
       const nodeTypeIsAnyOfTheseDirectives = nodeDirectiveTypes.includes(node.type as any)
 
 
-      if (!nodeTypeIsAnyOfTheseDirectives) return;
+      if (!nodeTypeIsAnyOfTheseDirectives) return "skip";
 
 
       throwErrorIfANodeIsNotAViableNode(nodeDirectiveObject)
@@ -43,6 +39,7 @@ export default function HTMLDirectives() {
 
       data.hProperties = hast.properties
 
+      return null
 
 
 

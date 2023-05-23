@@ -1,8 +1,13 @@
 import { supportedBlockLevelTags, nodeDirectiveTypes, supportedInlineLevelTags, supportedTableTags, supportedTextBasedTags } from "src/utils";
 import { Visitor } from "unist-util-visit";
 
+
+export type { NodeDirectiveTypes, BlockElementNames, InlineElementNames, NodeDirectiveObject };
+
 type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
+
 type Node = Parameters<Visitor>[0]
+
 type BlockElementNames = typeof supportedBlockLevelTags[number];
 
 type InlineElementNames = typeof supportedInlineLevelTags[number];
@@ -21,5 +26,4 @@ type NodeDirectiveObject = Node & {
 }
 
 
-export type { NodeDirectiveTypes, BlockElementNames, InlineElementNames, NodeDirectiveObject };
 
