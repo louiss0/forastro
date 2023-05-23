@@ -69,4 +69,4 @@ This is a list of extensions for this library.
 
 To use the icons please go to [Icones](https://icones.netlify.app/) for a long list of icons.
 
-For more information on `@forastro/flow` and `@forastro/utilities` go [here](https://forastro-louiss0.vercel.app/)  
+For more information on `@forastro/flow` and `@forastro/utilities` go [here](https://forastro-docs.onrender.com)  
