@@ -1,5 +1,5 @@
 
-import { Visitor, BuildVisitor, visit } from 'unist-util-visit'
+import { Visitor, visit } from 'unist-util-visit'
 import { h } from 'hastscript'
 import {
   nodeDirectiveTypes,
@@ -18,7 +18,7 @@ import type {
 
 export default function HTMLDirectives() {
 
-  return (tree: BuildVisitor) => {
+  return (tree: Parameters<Visitor>[0]) => {
 
 
     visit(tree, (node) => {
