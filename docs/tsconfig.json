@@ -21,7 +21,8 @@
     ".vitepress/**/*"
   ],
   "exclude": [
-    "**/cache"
+    "**/cache",
+    "**/dist"
   ],
   "vueCompilerOptions": {
     "plugins": [
