@@ -21,7 +21,7 @@ export type {
 };
 
 type RemarkHTMLDirectivesConfig = {
-  mode: keyof typeof HTML_DIRECTIVE_MODES
+  mode: typeof HTML_DIRECTIVE_MODES[keyof typeof HTML_DIRECTIVE_MODES]
   elements: Record<string, HTMLAttributes<"div">>
 }
 
@@ -39,7 +39,6 @@ type TextTags = typeof supportedTextBasedTags[number]
 
 type RareNodeTypes = "root" | "paragraph" | "listItem" | "thematicBreak" | "text"
 
-type NodeDirectiveObject = Node & {
 type NodeDirectiveObject = Node & {
   type: NodeDirectiveTypes | RareNodeTypes
   children: Array<Node>
