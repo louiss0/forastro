@@ -4,9 +4,13 @@
 
 ### [2.4.2]
 
-This release is a readme fix release. From nom on this read Me will contain all important info about this library.
+This release is a readme fix release. I messed up realease it.
 
 ### [2.5.0]
+
+## [2.4.1]
+
+This release is a readme fix release. From nom on this read Me will contain all important info about this library.
 
 ## [2.4.0]
 
