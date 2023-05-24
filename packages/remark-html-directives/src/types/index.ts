@@ -21,7 +21,7 @@ export type {
 };
 
 type RemarkHTMLDirectivesConfig = {
-  mode: keyof typeof HTML_DIRECTIVE_MODES
+  mode: typeof HTML_DIRECTIVE_MODES[keyof typeof HTML_DIRECTIVE_MODES]
   elements: Record<string, HTMLAttributes<"div">>
 }
 
