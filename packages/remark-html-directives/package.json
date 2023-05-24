@@ -1,6 +1,6 @@
 {
   "name": "@forastro/remark-html-directives",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "type": "module",
   "files": [
     "dist"
@@ -17,11 +17,14 @@
     "coverage": "vitest run --coverage",
     "dev": "vitest",
     "build": "vite build",
-    "release": "vite build && pnpm publish"
+    "release": "vite build && release-it"
   },
   "dependencies": {
     "hastscript": "^7.0.2",
     "unist-util-visit": "^4.1.0"
+  },
+  "peerDependencies": {
+    "astro": ">2.0.0"
   },
   "repository": {
     "url": "https://github.com/louiss0/forastro"
