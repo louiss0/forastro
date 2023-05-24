@@ -37,6 +37,14 @@ const supportedBlockLevelTags = [
     'tbody',
 ] as const;
 
+
+const HTML_DIRECTIVE_MODES = Object.freeze({
+    PAGE: "page",
+    ARTICLE: "article"
+})
+
+
+
 const supportedInlineLevelTags = [
     'br',
     'button',
@@ -94,6 +102,7 @@ export {
     supportedInlineLevelTags,
     supportedTableTags,
     headings,
+    HTML_DIRECTIVE_MODES,
     nodeDirectiveTypes,
     supportedTextBasedTags
 }

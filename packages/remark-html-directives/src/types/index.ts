@@ -1,8 +1,29 @@
-import { supportedBlockLevelTags, nodeDirectiveTypes, supportedInlineLevelTags, supportedTableTags, supportedTextBasedTags } from "src/utils";
+import {
+  supportedBlockLevelTags,
+  nodeDirectiveTypes,
+  supportedInlineLevelTags,
+  supportedTableTags,
+  HTML_DIRECTIVE_MODES,
+  supportedTextBasedTags
+
+} from "src/constants";
+
 import { Visitor } from "unist-util-visit";
 
+import { HTMLAttributes } from "astro/types"
 
-export type { NodeDirectiveTypes, BlockElementNames, InlineElementNames, NodeDirectiveObject };
+export type {
+  RemarkHTMLDirectivesConfig,
+  NodeDirectiveTypes,
+  BlockElementNames,
+  InlineElementNames,
+  NodeDirectiveObject
+};
+
+type RemarkHTMLDirectivesConfig = {
+  mode: keyof typeof HTML_DIRECTIVE_MODES
+  elements: Record<string, HTMLAttributes<"div">>
+}
 
 type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
 

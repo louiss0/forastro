@@ -3,12 +3,13 @@ import { Visitor, visit } from 'unist-util-visit'
 import { h } from 'hastscript'
 import { nodeDirectiveTypes } from 'src/constants'
 import { NodeDirectiveObject } from 'src/types'
-import { throwErrorIfANodeIsNotAViableNode } from 'src/utils'
+import { throwErrorIfANodeIsNotAViableNodeForPages } from 'src/utils'
 
 
 
 
-// attributes: 
+// attributes:
+
 
 
 
@@ -27,7 +28,7 @@ export default function HTMLDirectives() {
       if (!nodeTypeIsAnyOfTheseDirectives) return "skip";
 
 
-      throwErrorIfANodeIsNotAViableNode(nodeDirectiveObject)
+      throwErrorIfANodeIsNotAViableNodeForPages(nodeDirectiveObject)
 
 
       const data = nodeDirectiveObject.data || (nodeDirectiveObject.data = {})

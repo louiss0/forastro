@@ -11,35 +11,29 @@ import {
 
 
 
-function checkIfNodeTypeIsAViableContainerDirective(node: NodeDirectiveObject) {
+const checkIfNodeTypeIsAViableContainerDirective = (node: NodeDirectiveObject) => [
+  node.type === "containerDirective" && supportedBlockLevelTags.includes(node.name as any),
+  node.type === "containerDirective" && supportedTableTags.includes(node.name as any),
+].some((value) => value)
 
 
-  return [
-    node.type === "containerDirective" && supportedBlockLevelTags.includes(node.name as any),
-    node.type === "containerDirective" && supportedTableTags.includes(node.name as any),
-  ].some((value) => value)
 
-}
-
-function checkIfNodeTypeIsAViableLeafDirective(node: NodeDirectiveObject) {
-
-  return [
-    node.type === "leafDirective" && supportedInlineLevelTags.includes(node.name as any),
-    node.type === "leafDirective" && headings.includes(node.name as any),
-    node.type === "leafDirective" && supportedTextBasedTags.includes(node.name as any),
-    node.type === "leafDirective" && supportedTableTags.includes(node.name as any),
-  ].some((value) => value)
+const checkIfNodeTypeIsAViableLeafDirective = (node: NodeDirectiveObject) => [
+  node.type === "leafDirective" && supportedInlineLevelTags.includes(node.name as any),
+  node.type === "leafDirective" && headings.includes(node.name as any),
+  node.type === "leafDirective" && supportedTextBasedTags.includes(node.name as any),
+  node.type === "leafDirective" && supportedTableTags.includes(node.name as any),
+].some((value) => value)
 
 
-}
-
-function checkIfNodeTypeIsAViableTextDirective(node: NodeDirectiveObject) {
-
-  return node.type === "textDirective" && supportedTextBasedTags.includes(node.name as any)
-}
 
 
-function throwErrorIfANodeIsNotAViableNode(node: NodeDirectiveObject) {
+const checkIfNodeTypeIsAViableTextDirective = (node: NodeDirectiveObject) =>
+  node.type === "textDirective" && supportedTextBasedTags.includes(node.name as any)
+
+
+
+function throwErrorIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject) {
 
 
   const directiveIsViable = [
@@ -74,9 +68,38 @@ function throwErrorIfANodeIsNotAViableNode(node: NodeDirectiveObject) {
 
 }
 
+function throwErrorIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject) {
+
+
+
+  const directiveIsViable = [
+    checkIfNodeTypeIsAViableLeafDirective(node),
+    checkIfNodeTypeIsAViableTextDirective(node),
+  ].some((value) => value)
+
+
+  if (!directiveIsViable) {
+
+    throw Error(`
+
+    A leaf directive must use these tag names 
+    ${supportedInlineLevelTags.join(',')}${headings.join(",")}
+    ${supportedTextBasedTags.join(' , ')}${supportedTableTags.join(' , ')}
+
+    Remember to use :: for them 
+
+    A text based directive must contain these tags ${supportedTextBasedTags.join(' , ')}
+    
+    Remember to use : for them 
+
+  `)
+
+
+  }
+
+}
+
 export {
-  throwErrorIfANodeIsNotAViableNode,
-  checkIfNodeTypeIsAViableContainerDirective,
-  checkIfNodeTypeIsAViableTextDirective,
-  checkIfNodeTypeIsAViableLeafDirective,
+  throwErrorIfANodeIsNotAViableNodeForArticles,
+  throwErrorIfANodeIsNotAViableNodeForPages,
 }
