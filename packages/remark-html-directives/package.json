@@ -27,10 +27,13 @@
     "astro": ">2.0.0"
   },
   "repository": {
-    "url": "https://github.com/louiss0/forastro"
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "packages/remark-html-directives"
   },
   "author": {
-    "name": "Shelton Louis"
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
   },
   "keywords": [
     "markdown",
