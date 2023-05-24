@@ -1,6 +1,6 @@
 # @forastro/utilities
 
-## [Unreleased]
+## [2.5.1] - 2023-05-24
 
 ### [2.5.0]
 
