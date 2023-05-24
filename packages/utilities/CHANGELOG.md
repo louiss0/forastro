@@ -1,9 +1,10 @@
 # @forastro/utilities
 
-
 ## [Unreleased]
 
-### [2.4.1] 
+### [2.4.1]
+
+This release is a readme fix release. From nom on this read Me will contain all important info about this library.
 
 ## [2.4.0]
 
