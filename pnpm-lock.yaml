@@ -116,9 +116,6 @@ importers:
 
   packages/remark-html-directives:
     dependencies:
-      astro:
-        specifier: '>2.0.0'
-        version: 2.5.1(@types/node@20.2.2)
       hastscript:
         specifier: ^7.0.2
         version: 7.0.2
@@ -414,6 +411,7 @@ packages:
       vfile: 5.3.7
     transitivePeerDependencies:
       - supports-color
+    dev: true
 
   /@astrojs/preact@0.0.0-cloudcannon-fix-20230306211609(preact@1.2.0):
     resolution: {integrity: sha512-VdTgxmzfx5HTiybvWdMwsckoVZHukuuRZRUaDOyG8UehYqVjurmAKqvjh7qp0QzaPmIvTMa8WS8R59huixF88Q==}
@@ -3954,6 +3952,7 @@ packages:
 
   /argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==}
+    dev: true
 
   /array-buffer-byte-length@1.0.0:
     resolution: {integrity: sha512-LPuwb2P+NrQw3XhxGc36+XSvuBPopovXYTR9Ew++Du9Yb/bx5AzBfrIsBoj0EZUifjQU+sHL21sseZ3jerWO/A==}
@@ -4154,6 +4153,7 @@ packages:
       - sugarss
       - supports-color
       - terser
+    dev: true
 
   /async-retry@1.3.3:
     resolution: {integrity: sha512-wfr/jstw9xNi/0teMHrRW7dsz3Lt5ARhYNZ2ewpadnhaIp5mbALhOAP+EAdsC7t4Z6wqsDVv9+W6gm1Dk9mEyw==}
@@ -6852,6 +6852,7 @@ packages:
     hasBin: true
     dependencies:
       argparse: 2.0.1
+    dev: true
 
   /jsdom@22.0.0:
     resolution: {integrity: sha512-p5ZTEb5h+O+iU02t0GfEjAnkdYPrQSkfuTSMkMYyIoMvUNEHsbG0bHHbfXIcfTqD2UfvjQX7mmgiFsyRwGscVw==}

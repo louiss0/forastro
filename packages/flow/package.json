@@ -18,6 +18,9 @@
     "type": "git",
     "directory": "packages/flow"
   },
+  "peerDependencies": {
+    "astro": ">1.0.0"
+  },
   "author": {
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
