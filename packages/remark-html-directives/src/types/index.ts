@@ -40,6 +40,7 @@ type TextTags = typeof supportedTextBasedTags[number]
 type RareNodeTypes = "root" | "paragraph" | "listItem" | "thematicBreak" | "text"
 
 type NodeDirectiveObject = Node & {
+type NodeDirectiveObject = Node & {
   type: NodeDirectiveTypes | RareNodeTypes
   children: Array<Node>
   name: BlockElementNames | InlineElementNames | TableTagNames | TextTags
