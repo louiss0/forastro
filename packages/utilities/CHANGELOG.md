@@ -1,8 +1,10 @@
 # @forastro/utilities
 
-## [Unreleased]
+## [2.5.1] - 2023-05-24
 
-### [2.4.1]
+### [2.5.0]
+
+This release is a readme fix release. From nom on this read Me will contain all important info about this library.
 
 This release is a readme fix release. From nom on this read Me will contain all important info about this library.
 
