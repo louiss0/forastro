@@ -1,25 +1,17 @@
 ---
-import Default from "../layouts/Default.astro";
-import { Card } from "../components/Card.tsx";
-import { List } from "~/components/List";
-import Typography from "~/components/Typography.astro";
-import { Center } from "~/components/Center";
-import { Container } from "~/components/Container";
-import { SpacedBox } from "~/components/SpacedBox";
-
+import { List, Container, Center, SpacedBox, Typography } from "~/components";
+import Default from "~/layouts/Default.astro";
 const DOCUMENTATION_NAMES_AND_LINKS = [
   { name: "Astro", link: "https://docs.astro.build/" },
-  { name: "Preact", link: "https://preactjs.com" },
   {
     name: "For Astro Utilities",
-    link: "https://forastro-louiss0.vercel.app/libraries/utilities",
+    link: "https://forastro-docs.onrender.com/libraries/utilities",
   },
   { name: "Tailwind", link: "https://tailwindcss.com" },
 ] as const;
 
 const CORE_LIBRARY_SENTENCES = [
   "Astro Components and Utility Functions  @forastro/utilities",
-  "Class Evaluation clsx",
   "Styling tailwindcss",
 ] as const;
 ---
@@ -27,7 +19,7 @@ const CORE_LIBRARY_SENTENCES = [
 <Default title="Welcome to Astro." description="this is good">
   <header class="px-4 py-12">
     <Center>
-      <Typography tag={"h1"}>Welcome to the Preact Astro template.</Typography>
+      <Typography tag={"h1"}>Welcome to the Astro template.</Typography>
     </Center>
   </header>
   <main class="px-2 py-6">
@@ -43,7 +35,7 @@ const CORE_LIBRARY_SENTENCES = [
           template.
         </Typography>
 
-        <Center gapClass="gap-6 ">
+        <Center gapClass="gap-6">
           <List
             title="List of core depedencies "
             listClass="grid gap-4 list-disc"
