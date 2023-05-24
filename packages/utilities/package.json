@@ -1,6 +1,6 @@
 {
   "name": "@forastro/utilities",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "type": "module",
   "exports": {
     ".": {
@@ -10,6 +10,15 @@
   },
   "scripts": {
     "release": "release-it"
+  },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "packages/utilities"
+  },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
   },
   "files": [
     "src",
