@@ -1,11 +1,12 @@
 
-import { Visitor, BuildVisitor, visit } from 'unist-util-visit'
+import { visit } from 'unist-util-visit'
 import { h } from 'hastscript'
 import {
   nodeDirectiveTypes,
   throwErrorIfANodeIsNotAViableNode,
 } from './utils'
 import type {
+  Node,
   NodeDirectiveObject,
 } from "./types"
 
@@ -18,7 +19,7 @@ import type {
 
 export default function HTMLDirectives() {
 
-  return (tree: BuildVisitor) => {
+  return (tree: Node) => {
 
 
     visit(tree, (node) => {
