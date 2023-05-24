@@ -161,7 +161,7 @@ A directive that must wrap around markdown content.
 
 :::info The syntax is written like this.
 
-```console
+```shell
  :::[name]{key=val}
     content here
     :::    
@@ -228,7 +228,7 @@ A directive that must be used stand alone they are elements that are meant to ju
 
 :::info The syntax is written like this.
 
-```console
+```shell
     ::[name]{key=val}
          
 ```
@@ -252,7 +252,7 @@ A directive that is meant to be surrounded by text. These directives are used to
 
 :::info The syntax is written like this.
 
-```console
+```shell
     :[name]{key=val}
          
 ```
