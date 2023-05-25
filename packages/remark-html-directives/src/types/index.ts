@@ -2,10 +2,11 @@ import {
   supportedBlockLevelTags,
   nodeDirectiveTypes,
   supportedInlineLevelTags,
-  supportedTableTags,
+  supportedBlockTableTags,
+  supportedInlineTableTags,
   HTML_DIRECTIVE_MODES,
-  supportedTextBasedTags
-
+  supportedTextBasedTags,
+  headings
 } from "src/constants";
 
 import { Visitor } from "unist-util-visit";
@@ -19,30 +20,42 @@ export type {
   InlineElementNames,
   NodeDirectiveObject
 };
+type ViableArticleTags = TextTags | InlineElementNames | InlineTableTagNames| BlockTableTagNames | Headings;
 
 type RemarkHTMLDirectivesConfig = {
-  mode: typeof HTML_DIRECTIVE_MODES[keyof typeof HTML_DIRECTIVE_MODES]
-  elements: Record<string, HTMLAttributes<"div">>
+  mode: typeof HTML_DIRECTIVE_MODES.PAGE
+  elements?: Record<string, HTMLAttributes<"div">>
+} | {
+  mode: typeof HTML_DIRECTIVE_MODES.ARTICLE
+  elements?: Partial<{
+    [K in ViableArticleTags]:HTMLAttributes<K>
+  }>
 }
 
-type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
+
+  type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
 
 type Node = Parameters<Visitor>[0]
 
 type BlockElementNames = typeof supportedBlockLevelTags[number];
+type Headings = typeof headings[number];
 
 type InlineElementNames = typeof supportedInlineLevelTags[number];
 
-type TableTagNames = typeof supportedTableTags[number];
+type InlineTableTagNames = typeof supportedInlineTableTags[number];
+
+type BlockTableTagNames = typeof supportedBlockTableTags[number];
 
 type TextTags = typeof supportedTextBasedTags[number]
 
 type RareNodeTypes = "root" | "paragraph" | "listItem" | "thematicBreak" | "text"
 
-type NodeDirectiveObject = Node & {
+// type Optional<T extends PropertyKey, U=string> = T | Omit<U, T>  
+
+  type NodeDirectiveObject = Node & {
   type: NodeDirectiveTypes | RareNodeTypes
   children: Array<Node>
-  name: BlockElementNames | InlineElementNames | TableTagNames | TextTags
+  name: string 
   attributes: Record<string, string>
 }
 
