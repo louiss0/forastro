@@ -31,10 +31,7 @@ const supportedBlockLevelTags = [
     'video',
     'audio',
     "hgroup",
-    'table',
-    'tfoot',
-    'thead',
-    'tbody',
+    
 ] as const;
 
 
@@ -44,6 +41,12 @@ const HTML_DIRECTIVE_MODES = Object.freeze({
 })
 
 
+const supportedBlockTableTags = [
+    'table',
+    'tfoot',
+    'thead',
+    'tbody',
+] as const
 
 const supportedInlineLevelTags = [
     'br',
@@ -56,7 +59,7 @@ const supportedInlineLevelTags = [
     'span',
 ] as const;
 
-const supportedTableTags = [
+const supportedInlineTableTags = [
     "tr",
     "th",
     "td",
@@ -99,8 +102,9 @@ const supportedTextBasedTags = [
 
 export {
     supportedBlockLevelTags,
+    supportedBlockTableTags,
     supportedInlineLevelTags,
-    supportedTableTags,
+    supportedInlineTableTags,
     headings,
     HTML_DIRECTIVE_MODES,
     nodeDirectiveTypes,
