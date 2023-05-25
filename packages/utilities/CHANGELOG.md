@@ -1,10 +1,42 @@
 # @forastro/utilities
 
+## [Unreleased]
+
+### [2.7.0]
+
+### [2.6.0]
+
+### [2.5.9]
+
+### [2.5.8]
+
+### [2.5.7]
+
+### [2.5.6]
+
+### [2.5.5]
+
+### [2.5.4]
+
+### [2.5.3]
+
+### [2.5.2]
+
 ## [2.5.1] - 2023-05-24
 
-### [2.5.0]
-
 This release is a readme fix release. From nom on this read Me will contain all important info about this library.
+
+## [2.5.0]
+
+With this release the Sync Iterate function is added to the library.
+This function is a `function` that takes in an iterable that needs a `forEach()`
+It uses that iterable to loop through all keys and values just like iterate.
+
+> [Warning] This function is meant to be used in Non Astro Components.
+
+### Added
+
+The function `syncIterate()` was added.
 
 ## [2.4.0]
 
