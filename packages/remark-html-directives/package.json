@@ -5,23 +5,26 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/remark-html-directives.umd.cjs",
-  "module": "./dist/remark-html-directives.js",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/remark-html-directives.js",
-      "require": "./dist/remark-html-directives.umd.cjs"
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
     }
   },
   "scripts": {
     "coverage": "vitest run --coverage",
-    "dev": "vitest",
-    "build": "vite build",
+    "dev": "tsup --watch",
+    "build": "tsup",
     "release": "vite build && release-it"
   },
   "dependencies": {
     "hastscript": "^7.0.2",
     "unist-util-visit": "^4.1.0"
+  },
+  "devDependencies": {
+    "tsup": "^6.7.0"
   },
   "peerDependencies": {
     "astro": ">2.0.0"
