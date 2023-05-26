@@ -29,7 +29,7 @@ type ViablePageTags = ComponentElementNames | RegionElementNames | ViableArticle
 
 type RemarkHTMLDirectivesConfig = {
   mode: typeof HTML_DIRECTIVE_MODES.PAGE
-  elements?: Record<string, HTMLAttributes<"div">> & {[K in ViablePageTags]: never}
+  elements?: Record<string, HTMLAttributes<"div">> & {[K in ViablePageTags]?: never}
 } | {
   mode: typeof HTML_DIRECTIVE_MODES.ARTICLE
   elements?: Partial<{
