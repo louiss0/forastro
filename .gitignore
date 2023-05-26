@@ -1,4 +1,5 @@
 node_modules
 .astro
 dist
+mock-app
 ***/cache

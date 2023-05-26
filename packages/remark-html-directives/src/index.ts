@@ -1,24 +1,28 @@
 
-import { Visitor, visit } from 'unist-util-visit'
+import { visit,Node,  } from 'unist-util-visit'
 import { h } from 'hastscript'
 import { HTML_DIRECTIVE_MODES, nodeDirectiveTypes } from 'src/constants'
 import { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'src/types'
 import {
-  throwErrorIfANodeIsNotAViableNodeForArticles,
-  throwErrorIfANodeIsNotAViableNodeForPages,
-  overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten
+  failFileIfANodeIsNotAViableNodeForArticles,
+  failFileIfANodeIsNotAViableNodeForPages,
+  overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten,
+  throwIfAnyElementKeyIsOneOfTheSupportedOnes
 } from 'src/utils'
 
 
 
 
-// attributes:
 
 
 
-export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig> = { mode: HTML_DIRECTIVE_MODES.ARTICLE }) {
+export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig>) {
 
-  return (tree: Parameters<Visitor>[0]) => {
+
+  const { mode= HTML_DIRECTIVE_MODES.ARTICLE, elements} = config
+
+  return () => (tree: Node, file: {fail(message: string, node: Node):void}) => {
+
 
 
     visit(tree, (node) => {
@@ -26,32 +30,39 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
       const nodeDirectiveObject = node as NodeDirectiveObject
 
       const nodeTypeIsAnyOfTheseDirectives = nodeDirectiveTypes.includes(node.type as any)
+    
 
 
-      if (!nodeTypeIsAnyOfTheseDirectives) return "skip";
+      if (!nodeTypeIsAnyOfTheseDirectives) return null;
 
 
 
-      if (config.mode === "page") {
+      if (mode === "page") {
   
+
         
-        
-        if (config?.elements && nodeDirectiveObject.name in config.elements) {
+        if (elements && nodeDirectiveObject.name in elements) {
+          
+          throwIfAnyElementKeyIsOneOfTheSupportedOnes(elements)
+          
           
           if (nodeDirectiveObject.type !== "containerDirective") {
             
 
-            throw new Error(`
-              The node with this ${nodeDirectiveObject.name} must be a containerDirective.
+            file.fail(`
+              In pages Mode The node with this ${nodeDirectiveObject.name} must be a containerDirective.
               in line ${nodeDirectiveObject.position ?? ""}   
-            `)
+            `, node)
 
           }
 
-          overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, config.elements)
+          overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
           
            
-          Object.assign(nodeDirectiveObject.attributes, { dataElement: nodeDirectiveObject.name, dataForAstroRemarkDirective:true })
+          Object.assign(
+            nodeDirectiveObject.attributes,
+            { dataElement: nodeDirectiveObject.name, dataForAstroRemarkHtmlDirective: true }
+          )
           
 
           nodeDirectiveObject.name = "div"
@@ -59,24 +70,27 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
         }
 
 
-        throwErrorIfANodeIsNotAViableNodeForPages(nodeDirectiveObject)
+        failFileIfANodeIsNotAViableNodeForPages(nodeDirectiveObject, file)
 
       }
 
       
-      if (config.mode === "article") {
-     
+      
+      if (mode === "article") {
         
-        throwErrorIfANodeIsNotAViableNodeForArticles(nodeDirectiveObject)
+        failFileIfANodeIsNotAViableNodeForArticles(nodeDirectiveObject, file)
         
 
-        if (config?.elements && nodeDirectiveObject.name in config.elements) {
+        
+        if (elements && nodeDirectiveObject.name in elements) {
   
-
-          overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, config.elements)
+          overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
 
           
-          Object.assign(nodeDirectiveObject.attributes, { dataForAstroRemarkDirective: true })
+          Object.assign(
+            nodeDirectiveObject.attributes,
+            { dataForAstroRemarkHtmlDirective: true }
+          )
 
   
   

@@ -29,6 +29,7 @@
     "nx": "16.2.1",
     "nx-cloud": "16.0.5",
     "prettier": "^2.8.8",
+    "publint": "^0.1.12",
     "release-it": "^15.10.3",
     "tslib": "^2.5.2",
     "typescript": "~5.0.4",
