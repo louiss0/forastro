@@ -1,7 +1,8 @@
 import { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'src/types';
 import {
   headings,
-  supportedBlockLevelTags,
+  supportedComponentTags,
+  supportedRegionTags,
   supportedInlineLevelTags,
   supportedBlockTableTags,
   supportedInlineTableTags,
@@ -13,7 +14,8 @@ import {
 
 
 const checkIfNodeTypeIsAViableContainerDirective = (node: NodeDirectiveObject) => [
-  node.type === "containerDirective" && supportedBlockLevelTags.includes(node.name as any),
+  node.type === "containerDirective" && supportedComponentTags.includes(node.name as any),
+  node.type === "containerDirective" && supportedRegionTags.includes(node.name as any),
   node.type === "containerDirective" && supportedBlockTableTags.includes(node.name as any),
 ].some((value) => value)
 
@@ -34,7 +36,7 @@ const checkIfNodeTypeIsAViableTextDirective = (node: NodeDirectiveObject) =>
 
 
 
-function throwErrorIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject) {
+function failFileIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject, file:{fail(message:string, node:NodeDirectiveObject):void}) {
 
 
   const directiveIsViable = [
@@ -46,34 +48,66 @@ function throwErrorIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject) {
 
   if (!directiveIsViable) {
 
-    throw Error(`
+    file.fail(`
+    You are in Pages Mode only the Directives only below are allowed. 
 
     A container directive must be written using these tag names 
-    ${supportedBlockLevelTags.join(' , ')}${supportedBlockTableTags.join(' , ')}.
-    
+    ${supportedComponentTags.join(' , ')}
+    ${supportedRegionTags.join(' , ')}
+    ${supportedBlockTableTags.join(' , ')}. 
     Remember to use ::: a name then put ::: at the bottom for them  
 
     A leaf directive must use these tag names 
-    ${supportedInlineLevelTags.join(',')}${headings.join(",")}
-    ${supportedTextBasedTags.join(' , ')}${supportedInlineLevelTags.join(' , ')}
+    ${supportedInlineLevelTags.join(',')}
+    ${headings.join(",")}
+    ${supportedTextBasedTags.join(' , ')}
+    ${supportedInlineTableTags.join(' , ')}
+    Remember to use :: for them.
 
-    Remember to use :: for them 
-
-    A text based directive must contain these tags ${supportedTextBasedTags.join(' , ')}
-    
+    A text based directive must contain these tags
+    ${supportedTextBasedTags.join(' , ')}
     Remember to use : for them 
-
-  `)
+  `, node)
 
   }
 
 }
 
-function throwErrorIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject) {
+
+function throwIfAnyElementKeyIsOneOfTheSupportedOnes(elements: Exclude<RemarkHTMLDirectivesConfig["elements"], undefined>) {
+  
+  const allSupportedTags = [
+    ...supportedBlockTableTags,
+    ...supportedInlineLevelTags,
+    ...supportedInlineTableTags,
+    ...supportedComponentTags,
+    ...supportedRegionTags,
+    ...supportedTextBasedTags,
+    ...headings
+  ]
+  
+  const elementKeys = Object.keys(elements)
+  
+  if (allSupportedTags.join().includes(elementKeys.join())) {
+    
+
+    throw new Error(`Don't use one of these tags in your element keys 
+      ${allSupportedTags.map((value, i) => i % 6 === 0 ? `${value}\n` : value).join(",")}
+      
+      These are the keys used ${elementKeys.join(" , ")}
+    `)
+
+  }
+
+}
+
+
+function failFileIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject, file: { fail(message: string, node: NodeDirectiveObject): void }) {
 
 
 
   const directiveIsViable = [
+    supportedComponentTags.includes(node.name as any),
     supportedBlockTableTags.includes(node.name as any),
     checkIfNodeTypeIsAViableLeafDirective(node),
     checkIfNodeTypeIsAViableTextDirective(node),
@@ -82,19 +116,25 @@ function throwErrorIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject)
 
   if (!directiveIsViable) {
 
-    throw Error(`
+    file.fail(`
+    You are in Article Mode only the Directives only below are allowed. 
 
-    A leaf directive must use these tag names 
-    ${supportedInlineLevelTags.join(',')}${headings.join(",")}
-    ${supportedTextBasedTags.join(' , ')}${supportedInlineLevelTags.join(' , ')}
+    A container tag must use these tag names.
+    ${supportedComponentTags.join(",")}
+    ${supportedBlockTableTags.join(",")}
+    Remember to use ::: a name then put ::: at the bottom for them  
 
-    Remember to use :: for them 
+    A leaf directive must use these tag names. 
+    ${supportedInlineLevelTags.join(',')} 
+    ${headings.join(",")}
+    ${supportedTextBasedTags.join(',')} 
+    ${supportedInlineLevelTags.join(',')}
+    Remember to use :: for them. 
 
-    A text based directive must contain these tags ${supportedTextBasedTags.join(' , ')}
-    
-    Remember to use : for them 
-
-  `)
+    A text based directive must use these tags.
+    ${supportedTextBasedTags.join(',')}
+    Remember to use : for them. 
+  `, node)
 
 
   }
@@ -140,7 +180,8 @@ function throwErrorIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject)
 
 
 export {
-  throwErrorIfANodeIsNotAViableNodeForArticles,
-  throwErrorIfANodeIsNotAViableNodeForPages,
+  failFileIfANodeIsNotAViableNodeForArticles, 
+  failFileIfANodeIsNotAViableNodeForPages,
+  throwIfAnyElementKeyIsOneOfTheSupportedOnes,
   overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten
 }
