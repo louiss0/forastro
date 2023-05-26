@@ -6,8 +6,8 @@ import { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'src/types'
 import {
   failFileIfANodeIsNotAViableNodeForArticles,
   failFileIfANodeIsNotAViableNodeForPages,
+  isASupportedTag,
   overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten,
-  throwIfAnyElementKeyIsOneOfTheSupportedOnes
 } from 'src/utils'
 
 
@@ -43,29 +43,37 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
         
         if (elements && nodeDirectiveObject.name in elements) {
           
-          throwIfAnyElementKeyIsOneOfTheSupportedOnes(elements)
           
+
+          if (isASupportedTag(nodeDirectiveObject.name)) {
           
-          if (nodeDirectiveObject.type !== "containerDirective") {
+            overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
+            
+             
+            Object.assign(
+              nodeDirectiveObject.attributes,
+              { dataForAstroRemarkHtmlDirective: true }
+            )
+
+          } 
+          
+          if (!isASupportedTag(nodeDirectiveObject.name) && nodeDirectiveObject.type === "containerDirective") {
             
 
-            file.fail(`
-              In pages Mode The node with this ${nodeDirectiveObject.name} must be a containerDirective.
-              in line ${nodeDirectiveObject.position ?? ""}   
-            `, node)
+            
+            overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
+            
+             
+            Object.assign(
+              nodeDirectiveObject.attributes,
+              { dataElement: nodeDirectiveObject.name, dataForAstroRemarkHtmlDirective: true }
+            )
 
+            nodeDirectiveObject.name = "div"
           }
 
-          overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
-          
-           
-          Object.assign(
-            nodeDirectiveObject.attributes,
-            { dataElement: nodeDirectiveObject.name, dataForAstroRemarkHtmlDirective: true }
-          )
-          
 
-          nodeDirectiveObject.name = "div"
+          
           
         }
 
@@ -105,12 +113,21 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
       const data = nodeDirectiveObject.data || (nodeDirectiveObject.data = {})
 
 
-      const hast = h(nodeDirectiveObject.name, nodeDirectiveObject.attributes)
+      const hast = h(nodeDirectiveObject.name, nodeDirectiveObject.attributes,)
 
       
       data.hName = hast.tagName
-
+      
       data.hProperties = hast.properties
+      
+      // The changes are experimental.
+
+      // data.hType = hast.type
+      
+      // data.hPosition = hast.position
+      
+
+      
 
       return null
 
