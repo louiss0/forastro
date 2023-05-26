@@ -115,7 +115,7 @@ importers:
     dependencies:
       '@forastro/remark-html-directives':
         specifier: workspace:^
-        version: link:../packages/remark-html-directives
+        version: link:../../packages/remark-html-directives
       remark-directive:
         specifier: ^2.0.1
         version: 2.0.1
@@ -128,6 +128,15 @@ importers:
       astro:
         specifier: '>1.0.0'
         version: 2.5.1(@types/node@20.2.2)
+
+  packages/mock-app:
+    dependencies:
+      '@forastro/remark-html-directives':
+        specifier: workspace:^
+        version: link:../remark-html-directives
+      remark-directive:
+        specifier: ^2.0.1
+        version: 2.0.1
 
   packages/remark-html-directives:
     dependencies:

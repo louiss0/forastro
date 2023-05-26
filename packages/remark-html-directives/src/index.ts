@@ -19,7 +19,7 @@ import {
 export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig>) {
 
 
-  const { mode= HTML_DIRECTIVE_MODES.ARTICLE, elements} = config
+  const { mode = HTML_DIRECTIVE_MODES.ARTICLE, elements} = config
 
   return () => (tree: Node, file: {fail(message: string, node: Node):void}) => {
 
