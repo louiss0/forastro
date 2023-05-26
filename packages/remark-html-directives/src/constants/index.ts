@@ -7,7 +7,6 @@ const nodeDirectiveTypes = [
 const supportedComponentTags = [
     'address',
     'code',
-    'aside',
     'blockquote',
     "details",
     "summary",
@@ -32,6 +31,7 @@ const supportedRegionTags = [
     'article',
     'main',
     'div',
+    'aside',
     'nav',
 ] as const
 
