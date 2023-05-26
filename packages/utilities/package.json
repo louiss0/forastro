@@ -4,12 +4,13 @@
   "type": "module",
   "exports": {
     ".": {
-      "default": "./index.ts",
-      "types": "./index.ts"
+      "types": "./index.ts",
+      "default": "./index.ts"
     }
   },
   "scripts": {
-    "release": "release-it"
+    "release": "release-it",
+    "publint" : "publint "
   },
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
