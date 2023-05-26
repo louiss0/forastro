@@ -1,12 +1,13 @@
 import {
-  supportedBlockLevelTags,
   nodeDirectiveTypes,
   supportedInlineLevelTags,
   supportedBlockTableTags,
   supportedInlineTableTags,
   HTML_DIRECTIVE_MODES,
   supportedTextBasedTags,
-  headings
+  headings,
+  supportedComponentTags,
+  supportedRegionTags
 } from "src/constants";
 
 import { Visitor } from "unist-util-visit";
@@ -16,15 +17,19 @@ import { HTMLAttributes } from "astro/types"
 export type {
   RemarkHTMLDirectivesConfig,
   NodeDirectiveTypes,
-  BlockElementNames,
+  supportedRegionTags,
+  supportedComponentTags,
   InlineElementNames,
   NodeDirectiveObject
 };
-type ViableArticleTags = TextTags | InlineElementNames | InlineTableTagNames| BlockTableTagNames | Headings;
+
+type ViableArticleTags = TextTags | InlineElementNames | InlineTableTagNames | BlockTableTagNames | Headings;
+
+type ViablePageTags = ComponentElementNames | RegionElementNames | ViableArticleTags;
 
 type RemarkHTMLDirectivesConfig = {
   mode: typeof HTML_DIRECTIVE_MODES.PAGE
-  elements?: Record<string, HTMLAttributes<"div">>
+  elements?: Record<string, HTMLAttributes<"div">> & {[K in ViablePageTags]: never}
 } | {
   mode: typeof HTML_DIRECTIVE_MODES.ARTICLE
   elements?: Partial<{
@@ -33,11 +38,15 @@ type RemarkHTMLDirectivesConfig = {
 }
 
 
-  type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
+type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
 
 type Node = Parameters<Visitor>[0]
 
-type BlockElementNames = typeof supportedBlockLevelTags[number];
+type ComponentElementNames = typeof supportedComponentTags[number];
+
+type RegionElementNames = typeof supportedRegionTags[number];
+
+
 type Headings = typeof headings[number];
 
 type InlineElementNames = typeof supportedInlineLevelTags[number];
