@@ -73,33 +73,36 @@ function failFileIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject, file
 
 }
 
+const allSupportedTags = Object.freeze([
+  ...supportedBlockTableTags,
+  ...supportedInlineLevelTags,
+  ...supportedInlineTableTags,
+  ...supportedComponentTags,
+  ...supportedRegionTags,
+  ...supportedTextBasedTags,
+  ...headings
+])
 
-function throwIfAnyElementKeyIsOneOfTheSupportedOnes(elements: Exclude<RemarkHTMLDirectivesConfig["elements"], undefined>) {
+
+const isASupportedTag = (string:string)=>  allSupportedTags.includes(string as any)
+
+// function throwIfAnyElementKeyIsOneOfTheSupportedOnes(elements: Exclude<RemarkHTMLDirectivesConfig["elements"], undefined>) {
   
-  const allSupportedTags = [
-    ...supportedBlockTableTags,
-    ...supportedInlineLevelTags,
-    ...supportedInlineTableTags,
-    ...supportedComponentTags,
-    ...supportedRegionTags,
-    ...supportedTextBasedTags,
-    ...headings
-  ]
   
-  const elementKeys = Object.keys(elements)
+//   const elementKeys = Object.keys(elements)
   
-  if (allSupportedTags.join().includes(elementKeys.join())) {
+//   if (allSupportedTags.join().includes(elementKeys.join())) {
     
 
-    throw new Error(`Don't use one of these tags in your element keys 
-      ${allSupportedTags.map((value, i) => i % 6 === 0 ? `${value}\n` : value).join(",")}
+//     throw new Error(`Don't use one of these tags in your element keys 
+//       ${allSupportedTags.map((value, i) => i % 6 === 0 ? `${value}\n` : value).join(",")}
       
-      These are the keys used ${elementKeys.join(" , ")}
-    `)
+//       These are the keys used ${elementKeys.join(" , ")}
+//     `)
 
-  }
+//   }
 
-}
+// }
 
 
 function failFileIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject, file: { fail(message: string, node: NodeDirectiveObject): void }) {
@@ -182,6 +185,6 @@ function failFileIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject, f
 export {
   failFileIfANodeIsNotAViableNodeForArticles, 
   failFileIfANodeIsNotAViableNodeForPages,
-  throwIfAnyElementKeyIsOneOfTheSupportedOnes,
+  isASupportedTag,
   overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten
 }
