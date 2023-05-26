@@ -4,36 +4,36 @@ const nodeDirectiveTypes = [
     'containerDirective',
 ] as const;
 
-const supportedBlockLevelTags = [
+const supportedComponentTags = [
     'address',
     'code',
-    'article',
     'aside',
     'blockquote',
     "details",
     "summary",
-    'div',
     'dl',
     'picture',
     'figcaption',
     'figure',
-    'footer',
-    'header',
-    'hr',
     'li',
-    'main',
-    'nav',
     'ol',
     'p',
     'pre',
-    'section',
     'ul',
     'video',
     'audio',
     "hgroup",
-    
 ] as const;
 
+const supportedRegionTags = [
+    'footer',
+    'header',
+    'section',
+    'article',
+    'main',
+    'div',
+    'nav',
+] as const
 
 const HTML_DIRECTIVE_MODES = Object.freeze({
     PAGE: "page",
@@ -53,6 +53,7 @@ const supportedInlineLevelTags = [
     'button',
     'i',
     'img',
+    'hr',
     'map',
     'iframe',
     "source",
@@ -101,7 +102,8 @@ const supportedTextBasedTags = [
 ] as const;
 
 export {
-    supportedBlockLevelTags,
+    supportedComponentTags,
+    supportedRegionTags,
     supportedBlockTableTags,
     supportedInlineLevelTags,
     supportedInlineTableTags,
