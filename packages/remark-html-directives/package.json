@@ -7,8 +7,10 @@
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
@@ -16,6 +18,7 @@
   "scripts": {
     "coverage": "vitest run --coverage",
     "dev": "tsup --watch",
+    "publint" : "publint",
     "build": "tsup",
     "release": "vite build && release-it"
   },

@@ -4,8 +4,8 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./index.ts",
-      "types": "./index.d.ts"
+      "types": "./index.d.ts",
+      "import": "./index.ts"
     }
   },
   "files": [
@@ -31,7 +31,8 @@
     "ui"
   ],
   "scripts": {
-    "release": "release-it"
+    "release": "release-it",
+    "publint" : "publint "
   },
   "dependencies": {
     "@forastro/utilities": "workspace:^"
