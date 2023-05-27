@@ -31,7 +31,7 @@
     "ui"
   ],
   "scripts": {
-    "release": "dotenv release-it",
+    "release": "release-it",
     "publint" : "publint "
   },
   "dependencies": {

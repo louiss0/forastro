@@ -9,7 +9,7 @@
     }
   },
   "scripts": {
-    "release": "release-it",
+    "release": "dotenv release-it",
     "publint" : "publint "
   },
   "repository": {

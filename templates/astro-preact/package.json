@@ -1,5 +1,5 @@
 {
-  "name": "@forastro/preact-template",
+  "name": "@forastro/template_astro-preact",
   "type": "module",
   "version": "0.0.1",
   "scripts": {

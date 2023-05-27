@@ -14,12 +14,10 @@ import {
 
 
 
+export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig> = { mode:HTML_DIRECTIVE_MODES.ARTICLE, } ) {
 
 
-export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig>) {
-
-
-  const { mode = HTML_DIRECTIVE_MODES.ARTICLE, elements} = config
+  const { mode, elements} = config
 
   return () => (tree: Node, file: {fail(message: string, node: Node):void}) => {
 
@@ -33,7 +31,7 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
     
 
 
-      if (!nodeTypeIsAnyOfTheseDirectives) return null;
+      if (!nodeTypeIsAnyOfTheseDirectives) return;
 
 
 
@@ -126,14 +124,6 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
       
       // data.hPosition = hast.position
       
-
-      
-
-      return null
-
-
-
-
 
 
     })

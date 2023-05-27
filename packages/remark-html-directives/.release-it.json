@@ -15,8 +15,5 @@
     },
     "plugins": {
         "@release-it/keep-a-changelog": true
-    },
-    "npm": {
-        "publishArgs":["--access public"]
     }
 }
