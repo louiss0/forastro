@@ -14,8 +14,6 @@ import {
 
 
 
-
-
 export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig> = { mode:HTML_DIRECTIVE_MODES.ARTICLE, } ) {
 
 
@@ -33,7 +31,7 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
     
 
 
-      if (!nodeTypeIsAnyOfTheseDirectives) return null;
+      if (!nodeTypeIsAnyOfTheseDirectives) return;
 
 
 
@@ -126,14 +124,6 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
       
       // data.hPosition = hast.position
       
-
-      
-
-      return null
-
-
-
-
 
 
     })
