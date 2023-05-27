@@ -13,7 +13,7 @@
     }
   },
   "files": [
-    "src"
+    "dist"
   ],
   "scripts": {
     "release": "tsup && dotenv release-it"
