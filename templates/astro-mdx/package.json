@@ -6,9 +6,13 @@
     "dev": "astro dev",
     "start": "astro dev",
     "build": "astro build",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "integrate": "astro add"
   },
   "keywords": [],
   "author": "Shelton Louis",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@forastro/remark-html-directives-integration": "workspace:^"
+  }
 }
