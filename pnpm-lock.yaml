@@ -86,9 +86,6 @@ importers:
       publint:
         specifier: ^0.1.12
         version: 0.1.12
-      publint:
-        specifier: ^0.1.12
-        version: 0.1.12
       release-it:
         specifier: ^15.10.3
         version: 15.10.3
