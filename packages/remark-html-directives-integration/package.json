@@ -1,0 +1,22 @@
+{
+  "name": "@forastro/remark-html-directives-integration",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "files": [
+    "src"
+  ],
+  "keywords": [
+    "astro-integration",
+    "remark"
+  ],
+  "peerDependencies": {
+    "astro": ">1.0.0"
+  },
+  "dependencies": {
+    "@forastro/remark-html-directives": "workspace:^",
+    "remark-directive": "^2.0.1"
+  }
+}

@@ -1,7 +1,7 @@
 
 import { visit,Node,  } from 'unist-util-visit'
 import { h } from 'hastscript'
-import { HTML_DIRECTIVE_MODES, nodeDirectiveTypes } from 'src/constants'
+import {  HTML_DIRECTIVE_MODES, nodeDirectiveTypes } from 'src/constants'
 import { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'src/types'
 import {
   failFileIfANodeIsNotAViableNodeForArticles,
@@ -16,10 +16,10 @@ import {
 
 
 
-export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig>) {
+export default function remarkHTMLDirectives(config: RemarkHTMLDirectivesConfig = { mode: HTML_DIRECTIVE_MODES.ARTICLE}) {
 
 
-  const { mode = HTML_DIRECTIVE_MODES.ARTICLE, elements} = config
+  const { mode , elements } = config
 
   return () => (tree: Node, file: {fail(message: string, node: Node):void}) => {
 
@@ -47,7 +47,10 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
 
           if (isASupportedTag(nodeDirectiveObject.name)) {
           
-            overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
+            overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(
+              nodeDirectiveObject,
+              elements
+            )
             
              
             Object.assign(
@@ -61,7 +64,10 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
             
 
             
-            overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
+            overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(
+              nodeDirectiveObject,
+              elements
+            )
             
              
             Object.assign(
