@@ -1,6 +1,6 @@
 {
   "name": "@forastro/remark-html-directives",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "files": [
     "dist"
@@ -18,7 +18,7 @@
   "scripts": {
     "coverage": "vitest run --coverage",
     "dev": "tsup --watch",
-    "publint" : "publint",
+    "publint": "publint",
     "build": "tsup",
     "release": "pnpm build && dotenv release-it"
   },
