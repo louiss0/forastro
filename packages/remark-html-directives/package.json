@@ -20,7 +20,7 @@
     "dev": "tsup --watch",
     "publint" : "publint",
     "build": "tsup",
-    "release": "pnpm build && release-it"
+    "release": "pnpm build && dotenv release-it"
   },
   "dependencies": {
     "hastscript": "^7.0.2",
