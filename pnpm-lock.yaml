@@ -154,6 +154,18 @@ importers:
         specifier: ^6.7.0
         version: 6.7.0(typescript@5.0.4)
 
+  packages/remark-html-directives-integration:
+    dependencies:
+      '@forastro/remark-html-directives':
+        specifier: ^1.0.0
+        version: 1.0.0(astro@2.5.1)
+      astro:
+        specifier: '>1.0.0'
+        version: 2.5.1(@types/node@20.2.2)
+      remark-directive:
+        specifier: ^2.0.1
+        version: 2.0.1
+
   packages/utilities:
     dependencies:
       astro:
@@ -1845,6 +1857,16 @@ packages:
   /@fontsource/raleway@5.0.0:
     resolution: {integrity: sha512-b07xJO1X5CnjgFs5xZnQTp/wN5+OMyb0n7g/9lyHgzN6ZtAYx53P5vsbR3i0tIPajhVMmmlRof4mayY3vzL/zQ==}
     dev: true
+
+  /@forastro/remark-html-directives@1.0.0(astro@2.5.1):
+    resolution: {integrity: sha512-Q8VO6AHTi/uWKyBlOFNLlclplqIheTPv/vC22l4kv1D1LYpoRAXAszIBiX+OBnf9L6BlcobjEo6B3whDEmuidA==}
+    peerDependencies:
+      astro: '>2.0.0'
+    dependencies:
+      astro: 2.5.1(@types/node@20.2.2)
+      hastscript: 7.2.0
+      unist-util-visit: 4.1.2
+    dev: false
 
   /@humanwhocodes/config-array@0.11.8:
     resolution: {integrity: sha512-UybHIJzJnR5Qc/MsD9Kr+RpO2h+/P1GhOwdiLPXK5TWk5sgTdu88bTD9UP+CKbPPh5Rni1u0GjAdYQLemG8g+g==}
