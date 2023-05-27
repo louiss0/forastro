@@ -2,12 +2,22 @@
   "name": "@forastro/remark-html-directives-integration",
   "version": "0.0.1",
   "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
   },
   "files": [
     "src"
   ],
+  "scripts": {
+    "release": "tsup && dotenv release-it"
+  },
   "keywords": [
     "astro-integration",
     "remark"
