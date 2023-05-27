@@ -1,8 +1,14 @@
 # @forastro/remark-html-directives
 
-## [1.0.0] - 2023-05-26
+## [Unreleased]
 
-### [1.0.0]
+### [1.0.1]
+
+### Fixed
+
+- The config is now by default in article mode.
+
+## [1.0.0] - 2023-05-26
 
  Initial release.
 
