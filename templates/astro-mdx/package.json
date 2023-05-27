@@ -1,0 +1,14 @@
+{
+  "name": "@forastro/template_astro-mdx",
+  "version": "1.0.0",
+  "description": "This is the mdx template for astro",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [],
+  "author": "Shelton Louis",
+  "license": "ISC"
+}

@@ -1,8 +1,7 @@
 {
-  "name": "@forastro/template_minimal",
+  "name": "@forastro/template_astro-preact",
   "type": "module",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -11,15 +10,17 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@forastro/flow": "*",
     "@forastro/utilities": "*",
     "astro": "*",
-    "astro-icon": "*"
+    "clsx": "*",
+    "preact": "*",
+    "tailwindcss": "*"
   },
   "devDependencies": {
+    "@astrojs/preact": "*",
     "@astrojs/tailwind": "*",
-    "@fontsource/lato": "*",
-    "@fontsource/raleway": "*",
-    "tailwindcss": "*"
+    "@iconify/json": "*",
+    "@svgr/core": "*",
+    "unplugin-icons": "*"
   }
 }

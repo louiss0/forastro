@@ -1,0 +1,35 @@
+{
+  "name": "@forastro/template_astro-vue",
+  "version": "1.0.0",
+  "private": true,
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "astro dev",
+    "build": "vue-tsc && astro build",
+    "preview": "astro preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vueuse/core": "*",
+    "@forastro/utilities": "*",
+    "astro": "*",
+    "vue": "*"
+  },
+  "devDependencies": {
+    "@fontsource/lato": "*",
+    "@fontsource/raleway": "*",
+    "@iconify/json": "*",
+    "unplugin-icons": "*",
+    "unplugin-vue-components": "*",
+    "@astrojs/tailwind": "*",
+    "@astrojs/vue": "*",
+    "vite-plugin-vue-nested-sfc": "*",
+    "tailwindcss": "*",
+    "typescript": "*",
+    "vue-tsc": "*"
+  }
+}
