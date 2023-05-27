@@ -1,5 +1,5 @@
 <!-- markdownlint-disable-next-line MD033 -->
-# Remark HTML Directives <Badge type="info" text="1.0.5" />
+# Remark HTML Directives <Badge type="info" text="1.0.0" />
 
 The `@forastro/remark-html-directives` package is a package that makes it go that you can use Markdown Container Directives. In [Astro](https://astro.build). It relies on another plugin called
 `remark-directive` in order to generate directives.  
