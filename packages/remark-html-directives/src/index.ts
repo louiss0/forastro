@@ -16,10 +16,10 @@ import {
 
 
 
-export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig>) {
+export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig> = { mode:HTML_DIRECTIVE_MODES.ARTICLE, } ) {
 
 
-  const { mode = HTML_DIRECTIVE_MODES.ARTICLE, elements} = config
+  const { mode, elements} = config
 
   return () => (tree: Node, file: {fail(message: string, node: Node):void}) => {
 
