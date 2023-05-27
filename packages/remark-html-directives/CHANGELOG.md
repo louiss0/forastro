@@ -4,6 +4,10 @@
 
 ### [1.0.1]
 
+
+## [1.0.1] - 2023-05-27
+
+
 ### Fixed
 
 - The config is now by default in article mode.
