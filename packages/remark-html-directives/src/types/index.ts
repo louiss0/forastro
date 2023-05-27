@@ -10,7 +10,7 @@ import {
   supportedRegionTags
 } from "src/constants";
 
-import { Visitor } from "unist-util-visit";
+import { Node } from "unist-util-visit";
 
 import { HTMLAttributes } from "astro/types"
 
@@ -23,24 +23,27 @@ export type {
   NodeDirectiveObject
 };
 
-type ViableArticleTags = TextTags | InlineElementNames | InlineTableTagNames | BlockTableTagNames | Headings;
+type HTMLAttributesWithoutAstroDirectives<Tag extends keyof astroHTML.JSX.DefinedIntrinsicElements> = 
+Omit<HTMLAttributes<Tag> ,`set:${string}` | "is:raw"|"class:list" |`on${string}`>
 
-type ViablePageTags = ComponentElementNames | RegionElementNames | ViableArticleTags;
+  
+type ViableArticleTags = ComponentElementNames | TextTags | InlineElementNames | InlineTableTagNames | BlockTableTagNames | Headings;
+
+type ViablePageTags =  RegionElementNames | ViableArticleTags;
 
 type RemarkHTMLDirectivesConfig = {
   mode: typeof HTML_DIRECTIVE_MODES.PAGE
-  elements?: Record<string, HTMLAttributes<"div">> & {[K in ViablePageTags]?: never}
+  elements?: Record<string, HTMLAttributes<"div">> & {[K in ViablePageTags]?: HTMLAttributesWithoutAstroDirectives<K> }
 } | {
   mode: typeof HTML_DIRECTIVE_MODES.ARTICLE
   elements?: Partial<{
-    [K in ViableArticleTags]:HTMLAttributes<K>
+    [K in ViableArticleTags]:HTMLAttributesWithoutAstroDirectives<K>
   }>
 }
 
 
 type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
 
-type Node = Parameters<Visitor>[0]
 
 type ComponentElementNames = typeof supportedComponentTags[number];
 
@@ -59,7 +62,6 @@ type TextTags = typeof supportedTextBasedTags[number]
 
 type RareNodeTypes = "root" | "paragraph" | "listItem" | "thematicBreak" | "text"
 
-// type Optional<T extends PropertyKey, U=string> = T | Omit<U, T>  
 
   type NodeDirectiveObject = Node & {
   type: NodeDirectiveTypes | RareNodeTypes
