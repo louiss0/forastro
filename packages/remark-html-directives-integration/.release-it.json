@@ -1,6 +1,7 @@
 {
     "hooks": {
         "before:init": [
+            "nx run-many --target=check --all=true",
             "nx run @forastro/remark-html-directives:publint"
         ],
         "after:git:release": "echo After git push, before github release",
@@ -14,5 +15,8 @@
     },
     "plugins": {
         "@release-it/keep-a-changelog": true
+    },
+    "npm":{
+        "publishArgs":["--access public"] 
     }
 }

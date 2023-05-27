@@ -58,7 +58,24 @@ export default defineConfig({
               { text: "Page Link", link: "/libraries/utilities/page-link" },
             ]
           },
-          { link: "/libraries/remark-html-directives/index", text: "Remark HTML Directives" },
+          {
+            text: "Remark HTML Directives",
+            collapsed: false,
+            items: [
+              {
+                text: "Introduction",
+                link: "/libraries/remark-html-directives/index",
+              },
+              {
+                text: "Tags",
+                link: "/libraries/remark-html-directives/tags",
+              },
+              {
+                text: "Modes",
+                link: "/libraries/remark-html-directives/modes",
+              },
+            ]
+          },
         ]
       },
       {
