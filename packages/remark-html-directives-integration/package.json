@@ -1,0 +1,32 @@
+{
+  "name": "@forastro/remark-html-directives-integration",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "release": "tsup && dotenv release-it"
+  },
+  "keywords": [
+    "astro-integration",
+    "remark"
+  ],
+  "peerDependencies": {
+    "astro": ">1.0.0"
+  },
+  "dependencies": {
+    "@forastro/remark-html-directives": "workspace:^",
+    "remark-directive": "^2.0.1"
+  }
+}
