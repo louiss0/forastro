@@ -1,6 +1,6 @@
 # @forastro/remark-html-directives-integration
 
-## [1.0.0] - 2023-05-27
+## [Unreleased]
 
 Initial release. Users can integrate `remark-directive` and `@forastro/remark-html-directives` into Astro and it will automatically work.
 
