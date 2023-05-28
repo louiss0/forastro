@@ -12,7 +12,14 @@
   "keywords": [],
   "author": "Shelton Louis",
   "license": "ISC",
-  "dependencies": {
+  "devDependencies": {
+    "@fontsource/raleway": "5.0.1",
+    "@fontsource/lato": "5.0.1",
+    "@astrojs/mdx": "^0.19.4",
     "@forastro/remark-html-directives-integration": "workspace:^"
+  },
+  "dependencies": {
+    "@forastro/utilities": "workspace:^",
+    "astro": ">1.0.0"
   }
 }
