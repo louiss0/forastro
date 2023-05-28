@@ -13,9 +13,9 @@
   "author": "Shelton Louis",
   "license": "ISC",
   "devDependencies": {
-    "@fontsource/raleway": "5.0.1",
-    "@fontsource/lato": "5.0.1",
-    "@astrojs/mdx": "^0.19.4",
+    "@fontsource/raleway": "*",
+    "@fontsource/lato": "*",
+    "@astrojs/mdx": "*",
     "@forastro/remark-html-directives-integration": "workspace:^"
   },
   "dependencies": {
