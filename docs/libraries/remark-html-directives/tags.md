@@ -2,7 +2,7 @@
 
 To make sure that Markdown is written well I have decided to restrict the way that tags are used. This library only supports HTML tags that are supposed to be written inside of the body and no form tags. There are a list of supported tags that are meant to be used.
 
-:::info Region Tags
+## Region
 
 - footer
 - header
@@ -11,9 +11,8 @@ To make sure that Markdown is written well I have decided to restrict the way th
 - section
 - nav
 - aside
-:::
 
-:::info Component Tags
+## Component
 
 - address
 - code
@@ -35,17 +34,14 @@ To make sure that Markdown is written well I have decided to restrict the way th
 - picture
 - hgroup
 
-:::
-
-::: info Block Table Tags
+## Block Table
 
 - table
 - tfoot
 - thead
 - tbody
-:::
 
-:::info Inline Tags
+## Inline
 
 - br
 - button
@@ -56,9 +52,7 @@ To make sure that Markdown is written well I have decided to restrict the way th
 - span
 - source
 
-:::
-
-:::info Text Tags
+## Text
 
 - cite
 - code
@@ -81,9 +75,7 @@ To make sure that Markdown is written well I have decided to restrict the way th
 - dd
 - dt
 
-:::
-
-:::info Heading Tags
+## Heading
 
 - h1
 - h2
@@ -92,9 +84,7 @@ To make sure that Markdown is written well I have decided to restrict the way th
 - h5
 - h6
 
-:::
-
-:::info Inline Table Tags
+## Inline Table
 
 - tr
 - th
@@ -102,5 +92,3 @@ To make sure that Markdown is written well I have decided to restrict the way th
 - col
 - caption
 - colgroup
-
-:::

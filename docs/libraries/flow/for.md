@@ -53,4 +53,3 @@ This function runs throughout every iteration of the loop inside of the componen
 ```
 
 :::
-
