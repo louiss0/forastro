@@ -26,15 +26,15 @@ You can't use them inside of Client Components.
 
 :::code-group
 
- ```[pnpm]
+ ```[pnpm] shell
     pnpm add @forastro/flow
  ```
 
- ```[yarn]
+ ```[yarn] shell
     yarn add @forastro/flow
  ```
 
- ```[npm]
+ ```[npm] shell
     npm i @forastro/flow
  ```
 
