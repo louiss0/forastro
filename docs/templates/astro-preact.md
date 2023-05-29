@@ -15,15 +15,15 @@ It uses a class library called `clsx`. The table below should tell you more.
 
 :::code-group
 
-```[pnpm]
+```[pnpm] shell
 pnpm run start 
 ```
 
-```[npm]
+```[npm] shell
 npm run start 
 ```
 
-```[yarn]
+```[yarn] shell
 yarn run start 
 ```
 
