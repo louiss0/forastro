@@ -17,16 +17,16 @@ The `@forastro/utilities` package is featured here so that you can use it for pa
 
 :::code-group
 
-```[pnpm]
+```[pnpm] shell
 pnpm run start 
 ```
 
-```[npm]
-npm run start 
+```[npm] shell
+`npm run start 
 ```
 
-```[yarn]
-yarn run start 
+```[yarn] shell
+`yarn run start 
 ```
 
 :::

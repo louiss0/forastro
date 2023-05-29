@@ -1,19 +1,13 @@
-const {
-  createGlobPatternsForDependencies,
-} = require("@nxtensions/astro/tailwind");
-const { join } = require("path");
-
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: [
-    join(
-      __dirname,
-      "src/**/!(*.stories|*.spec).{astro,html,js,jsx,md,svelte,ts,tsx,vue}"
-    ),
-    ...createGlobPatternsForDependencies(__dirname),
+  darkMode: "class",
+  content: ["./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}"],
+  safelist: [
+    "hidden",
+    "fixed",
+    "translate-x-full",
+    "translate-y-full",
+    "opacity-0",
   ],
-  theme: {
-    extend: {},
-  },
   plugins: [],
 };

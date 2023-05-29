@@ -1,6 +1,14 @@
 import { defineConfig } from 'vitepress'
 import vueNestedSFC from 'vite-plugin-vue-nested-sfc';
 // https://vitepress.dev/reference/site-config
+
+const TEMPLATES =  [
+  { link: "/templates/astro-preact", text: "Preact" },
+  { link: "/templates/astro-vue", text: "Vue" },
+  { link: "/templates/astro-minimal", text: "Minimal" },
+  { link: "/templates/astro-mdx", text: "MDX" }
+]
+
 export default defineConfig({
   vite: {
     plugins: [
@@ -17,11 +25,7 @@ export default defineConfig({
     nav: [
       {
         text: 'Templates',
-        items: [
-          { link: "/templates/astro-preact", text: "Preact" },
-          { link: "/templates/astro-vue", text: "Vue" },
-          { link: "/templates/astro-minimal", text: "Minimal" }
-        ]
+        items: TEMPLATES
       },
       {
         text: 'Libraries',
@@ -70,21 +74,14 @@ export default defineConfig({
                 text: "Tags",
                 link: "/libraries/remark-html-directives/tags",
               },
-              {
-                text: "Modes",
-                link: "/libraries/remark-html-directives/modes",
-              },
+              
             ]
           },
         ]
       },
       {
         text: 'Templates',
-        items: [
-          { link: "/templates/astro-preact", text: "Preact" },
-          { link: "/templates/astro-vue", text: "Vue" },
-          { link: "/templates/astro-minimal", text: "Minimal" }
-        ]
+        items: TEMPLATES
       },
     ],
     footer: {

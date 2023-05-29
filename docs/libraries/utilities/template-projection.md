@@ -1,7 +1,7 @@
 # Template Projection
 
 In Astro you are normally not allowed to split chunks of HTML into
-reuable pieces of HTML in a page. But with this pair of components. 
+reuable pieces of HTML in a page. But with this pair of components.
 It's possible. They are called `<DefineTemplate/>` and `<Projector/>`.
 Define template allows you to create components while. Projector allows you to use the templates.
 
@@ -20,8 +20,10 @@ Define template allows you to create components while. Projector allows you to u
 
 ```
 
-A component that takes in a child and a name. The name is the name of the template that is supposed to be used by **Projector**. The child is the template. Define template will store the template in a *Map of templates*.
-When it ready to be used then the projector will take from that *Map* and use one of the names from that map to render the template.
+A component that takes in a child and a name. The name is the name of the template that is supposed to be used by **Projector**.
+The child is the template. Define template will store the template in a *Map of templates*.
+When it ready to be used then the projector will take from that *Map*
+and use one of the names from that map to render the template.
 
 ### Props
 
