@@ -1,6 +1,10 @@
 # Range Generators
 
-A set of Generators that allow you to generate a set of numbers based on three numbers a **start stop and step**. If the start is greater than stop the number step must be negative. If the stop is greater than the start the step must be positive. If the former condition is fulfilled the numbers generated will be less than the previous one until the stop is reached. If the latter condition is fulfilled the numbers generated will be greater than the previous one until the stop is reached.
+A set of Generators that allow you to generate a set of numbers based on three numbers a **start stop and step**.
+If the start is greater than stop the number step must be negative.
+If the stop is greater than the start the step must be positive.
+If the former condition is fulfilled the numbers generated will be less than the previous one until the stop is reached.
+If the latter condition is fulfilled the numbers generated will be greater than the previous one until the stop is reached.
 
 :::info
  Astro transforms all values yielded from generators into Text.
