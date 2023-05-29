@@ -1,8 +1,12 @@
 # For Astro Minimal Template
 
-This template is a template that is created with purpose of creating simple sites with taliwind and Astro. You can create simple sites with this template by making good use of `@forastro/flow`and `@forastro/utilities`. They will help with making Non to minimally interactive pages quickly.
+This template is a template that is created with purpose of creating simple sites with
+taliwind and Astro. You can create simple sites with this template by making good use of
+`@forastro/flow`and `@forastro/utilities`. They will help with making Non to minimally interactive pages quickly.
 
-The `@forastro/utilities` package is featured here so that you can use it for pages. It's useful for solving common challenges with astro. Remember that the components used are in-fact astro components.
+The `@forastro/utilities` package is featured here so that you can use it for pages.
+It's useful for solving common challenges with astro.
+Remember that the components used are in-fact astro components.
 
 For icons `astro-icon` is useful for icons.
 
@@ -18,15 +22,15 @@ For icons `astro-icon` is useful for icons.
 
 :::code-group
 
-```[pnpm]
+```[pnpm] shell
 pnpm run start 
 ```
 
-```[npm]
+```[npm] shell
 npm run start 
 ```
 
-```[yarn]
+```[yarn] shell
 yarn run start 
 ```
 
