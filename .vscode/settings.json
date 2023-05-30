@@ -16,5 +16,12 @@
     },
     "peacock.color": "#557c9b",
     "git.ignoreLimitWarning": true,
-    "peacock.remoteColor": "#2f3640"
+    "peacock.remoteColor": "#2f3640",
+    "cSpell.words": [
+        "clsx",
+        "Fontsource",
+        "Icones",
+        "Iconify",
+        "Preact"
+    ]
 }
