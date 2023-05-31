@@ -1,4 +1,4 @@
-# For Astro Minimal Template
+# For Astro MDX Template
 
 [Astro Site]: https://astro.build
 
