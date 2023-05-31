@@ -1,6 +1,6 @@
 # @forastro/remark-html-directives-integration
 
-## [Unreleased]
+## [1.0.1] - 2023-05-31
 
 ### Fixed
 
