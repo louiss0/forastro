@@ -1,9 +1,10 @@
 # @forastro/remark-html-directives-integration
 
-
 ## [Unreleased]
 
-### Added
+### Fixed
+
+- The Read ME is now properly documented in this library.  
 
 ## [1.0.0] - 2023-05-27
 
