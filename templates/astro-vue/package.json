@@ -10,6 +10,11 @@
     "build": "vue-tsc && astro build",
     "preview": "astro preview"
   },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "/packages/astro-vue"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
