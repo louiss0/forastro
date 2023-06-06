@@ -8,6 +8,7 @@
         "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
+        "tagName": "${name}@${version}",
         "commitMessage": "chore: release v${version}"
     },
     "github": {
@@ -15,8 +16,5 @@
     },
     "plugins": {
         "@release-it/keep-a-changelog": true
-    },
-    "npm":{
-        "publishArgs":["--access public"] 
     }
 }

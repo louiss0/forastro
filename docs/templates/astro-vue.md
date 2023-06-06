@@ -1,8 +1,13 @@
 # For Astro Vue Template
 
-This template is a template that is useful for building simple websites. With bits of interactivity throughout each stage of development. The table below should show you what tools are used in the app. All the things that are required for vue are installed. You can Auto import other Vue Components from inside of an island. This template also contains a set of practical components that will allow you to create websites faster in a practical way.
+This template is a template that is useful for building simple websites.
+With bits of interactivity throughout each stage of development.
+The table below should show you what tools are used in the app. All the things that are required for vue are installed.
+You can Auto import other Vue Components from inside of an island.
+This template also contains a set of practical components that will allow you to create websites faster in a practical way.
 
-The `@forastro/utilities` package is featured here so that you can use it for pages. It's useful for solving common challenges with astro. Remember that the components used are in-fact astro components.
+The `@forastro/utilities` package is featured here so that you can use it for pages.
+It's useful for solving common challenges with astro. Remember that the components used are in-fact astro components.
 
 | Type                | Name       |
 | ------------------- | ---------- |
