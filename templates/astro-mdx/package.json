@@ -9,6 +9,11 @@
     "preview": "astro preview",
     "integrate": "astro add"
   },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "/packages/astro-mdx"
+  },
   "keywords": [],
   "author": "Shelton Louis",
   "license": "ISC",
