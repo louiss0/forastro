@@ -1,5 +1,8 @@
 {
   "name": "@forastro/markdoc-html-tags",
   "version": "0.0.1",
-  "type": "commonjs"
+  "type": "commonjs",
+  "dependencies": {
+    "@markdoc/markdoc": "^0.3.0"
+  }
 }

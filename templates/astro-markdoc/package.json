@@ -1,8 +1,7 @@
 {
-  "name": "@forastro/template_astro-minimal",
+  "name": "@forastro/templates_astro-markdoc",
   "type": "module",
   "version": "0.0.1",
-  "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -13,7 +12,7 @@
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
     "type": "git",
-    "directory": "/packages/astro-minimal"
+    "directory": "/packages/astro-markdoc"
   },
   "dependencies": {
     "@forastro/flow": "*",
