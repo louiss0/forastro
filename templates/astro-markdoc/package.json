@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@forastro/flow": "*",
+    "@forastro/markdoc-html-tags": "workspace:^",
     "@forastro/utilities": "*",
     "astro": "*",
     "astro-icon": "*"

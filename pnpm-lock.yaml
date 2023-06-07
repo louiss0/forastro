@@ -1,7 +1,7 @@
 lockfileVersion: '6.1'
 
 settings:
-  autoInstallPeers: false
+  autoInstallPeers: true
   excludeLinksFromLockfile: false
 
 importers:
@@ -168,6 +168,9 @@ importers:
       '@forastro/flow':
         specifier: '*'
         version: link:../../packages/flow
+      '@forastro/markdoc-html-tags':
+        specifier: workspace:^
+        version: link:../../packages/markdoc-html-tags
       '@forastro/utilities':
         specifier: '*'
         version: link:../../packages/utilities
