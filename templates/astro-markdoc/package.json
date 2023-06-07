@@ -1,5 +1,5 @@
 {
-  "name": "@forastro/templates_astro-markdoc",
+  "name": "@forastro/template_astro-markdoc",
   "type": "module",
   "version": "0.0.1",
   "scripts": {

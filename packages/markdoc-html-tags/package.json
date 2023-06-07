@@ -1,8 +1,48 @@
 {
   "name": "@forastro/markdoc-html-tags",
-  "version": "0.0.1",
+  "version": "0.0.0",
   "type": "commonjs",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@markdoc/markdoc": "^0.3.0"
-  }
+  },
+  "peerDependencies": {
+    "@markdoc/markdoc": ">0.0.0",
+    "astro": ">2.0.0"
+  },
+  "scripts": {
+    "dev": "tsup --watch",
+    "publint": "publint",
+    "build": "tsup",
+    "release": "pnpm build && dotenv release-it"
+  },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "packages/markdoc-html-tags"
+  },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
+  },
+  "keywords": [
+    "markdown",
+    "markdoc",
+    "astro"
+  ]
 }
