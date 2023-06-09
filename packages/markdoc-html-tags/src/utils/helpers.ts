@@ -32,6 +32,9 @@ type SchemaAttributesWithNoPrimaryKey<T extends Array<string | number>> =
     & Record<string, MarkdocAttributeSchema<T>>
 
 
+/* TODO: Refactor the generatePrimarySchema to use two different options.
+ * One for children or self closing tag the other for options that will sometimes apply
+*/
 type SelfClosing = {
     selfClosing: true
     children?: never
@@ -77,7 +80,12 @@ export const generateNonPrimarySchema = <T extends Array<string | number>>(
 
     const {
         inline = false,
-        children = ["paragraph", "hr", "br", "div", "span", "strong"],
+        children = [
+            "paragraph",
+            "hr",
+            "br",
+            "div",
+            "span",],
         description = "THis is a Schema without a primary tag"
     } = config
 

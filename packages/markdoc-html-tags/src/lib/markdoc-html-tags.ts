@@ -5,7 +5,6 @@ import {
   generateMarkdocErrorObject,
   generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
   generateNonPrimarySchema,
-  generatePrimarySchema,
   generateSelfClosingTagSchema,
 } from "packages/markdoc-html-tags/src/utils";
 
@@ -29,6 +28,12 @@ export const data = generateSelfClosingTagSchema("data", String,);
 
 // export const sub = generateSelfClosingTagSchema("sub", String,);
 // export const a = generateSelfClosingTagSchema("a", String,);
+
+
+// TODO: Split Schemas with Attributes into separate files
+// TODO: Remember to setup vitest 
+
+// TODO Put the schemas into a separate library. 
 
 export const anchor = generateNonPrimarySchema("a", {
   href: {
