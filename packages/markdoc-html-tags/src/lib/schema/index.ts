@@ -1,23 +1,29 @@
-import { createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue, generateMarkdocErrorObject, generateNonPrimarySchema, generateSelfClosingschemaSchema } from "packages/markdoc-html-schemas/src/utils";
+import { Node } from "@markdoc/markdoc";
+import {
+    createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
+    generateMarkdocErrorObject,
+    generateNonPrimarySchema,
+    generateSelfClosingTagSchema,
+} from "packages/markdoc-html-tags/src/utils";
 
 export { abbr } from "./abbreviation"
 export { a } from "./anchor"
 
-export const sup = generateSelfClosingschemaSchema({ render: "sup", validationType: String, });
-export const sub = generateSelfClosingschemaSchema({ render: "sub", validationType: String, });
-export const span = generateSelfClosingschemaSchema({ render: "span", validationType: String });
-export const cite = generateSelfClosingschemaSchema({ render: "cite", validationType: String, });
-export const code = generateSelfClosingschemaSchema({ render: "code", validationType: String, });
-export const dfn = generateSelfClosingschemaSchema({ render: "dfn", validationType: String, });
-export const samp = generateSelfClosingschemaSchema({ render: "samp", validationType: String, });
-export const time = generateSelfClosingschemaSchema({ render: "time", validationType: String, });
-export const mark = generateSelfClosingschemaSchema({ render: "mark", validationType: String, });
-export const q = generateSelfClosingschemaSchema({ render: "q", validationType: String, });
-export const kbd = generateSelfClosingschemaSchema({ render: "kbd", validationType: String, });
-export const bdo = generateSelfClosingschemaSchema({ render: "bdo", validationType: String, });
-export const data = generateSelfClosingschemaSchema({ render: "data", validationType: String, });
-export const dd = generateSelfClosingschemaSchema({ render: "data", validationType: String, });
-export const dt = generateSelfClosingschemaSchema({ render: "data", validationType: String, });
+export const sup = generateSelfClosingTagSchema({ render: "sup", validationType: String, });
+export const sub = generateSelfClosingTagSchema({ render: "sub", validationType: String, });
+export const span = generateSelfClosingTagSchema({ render: "span", validationType: String });
+export const cite = generateSelfClosingTagSchema({ render: "cite", validationType: String, });
+export const code = generateSelfClosingTagSchema({ render: "code", validationType: String, });
+export const dfn = generateSelfClosingTagSchema({ render: "dfn", validationType: String, });
+export const samp = generateSelfClosingTagSchema({ render: "samp", validationType: String, });
+export const time = generateSelfClosingTagSchema({ render: "time", validationType: String, });
+export const mark = generateSelfClosingTagSchema({ render: "mark", validationType: String, });
+export const q = generateSelfClosingTagSchema({ render: "q", validationType: String, });
+export const kbd = generateSelfClosingTagSchema({ render: "kbd", validationType: String, });
+export const bdo = generateSelfClosingTagSchema({ render: "bdo", validationType: String, });
+export const data = generateSelfClosingTagSchema({ render: "data", validationType: String, });
+export const dd = generateSelfClosingTagSchema({ render: "data", validationType: String, });
+export const dt = generateSelfClosingTagSchema({ render: "data", validationType: String, });
 
 
 
@@ -94,7 +100,7 @@ export const section = generateNonPrimarySchema({
     ]
 
 }, {
-    validate(node) {
+    validate(node: Node) {
 
         const { attributes } = node
 
@@ -102,7 +108,7 @@ export const section = generateNonPrimarySchema({
 
         const ariaLabelledByInAttributes = "ariaLabelledBy" in attributes
         const ariaLabelInAttributes = "ariaLabel" in attributes
-        const theFirstschemaIsAHeading = firstChild.schema !== "heading"
+        const theFirstSchemaIsAHeading = firstChild.tag !== "heading"
 
         return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue(
             [
@@ -118,7 +124,7 @@ export const section = generateNonPrimarySchema({
                     )
                 ],
                 [
-                    ariaLabelledByInAttributes && theFirstschemaIsAHeading,
+                    ariaLabelledByInAttributes && theFirstSchemaIsAHeading,
                     generateMarkdocErrorObject(
                         "wrong-structure",
                         "critical",
@@ -130,7 +136,7 @@ export const section = generateNonPrimarySchema({
                     )
                 ],
                 [
-                    ariaLabelledByInAttributes && theFirstschemaIsAHeading
+                    ariaLabelledByInAttributes && theFirstSchemaIsAHeading
 
                     && "level" in firstChild.attributes && firstChild.attributes["level"] !== 2
 

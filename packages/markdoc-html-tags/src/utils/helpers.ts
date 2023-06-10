@@ -1,25 +1,11 @@
 import type { Schema, SchemaAttribute, ValidationError } from '@markdoc/markdoc';
+import {
+    SchemaAttributesWithAPrimaryKey,
+    SchemaAttributesWithNoPrimaryKey
+} from 'packages/markdoc-html-tags/src/lib/attributes';
 
 
-type TypeAndRequiredObject = Pick<SchemaAttribute, "type" | "required">
 
-type MarkdocAttributeSchema<T extends Array<string | number>,> = SchemaAttribute &
-    (TypeAndRequiredObject & {
-        default?: unknown
-        matches?: SchemaAttribute["matches"]
-    }
-        | TypeAndRequiredObject & {
-            default?: T[number]
-            matches: T
-        })
-
-type PrimaryMarkdocAttributeSchema<T extends Array<string | number>,> =
-    MarkdocAttributeSchema<T> & { render?: true }
-
-type SchemaAttributesWithAPrimaryKey<T extends Array<string | number>> = {
-    primary: PrimaryMarkdocAttributeSchema<T>
-    [key: string]: MarkdocAttributeSchema<T>
-}
 
 type TagsSchema<T extends Array<string | number>> = Schema
     & {
@@ -27,9 +13,6 @@ type TagsSchema<T extends Array<string | number>> = Schema
         attributes: Partial<SchemaAttributesWithAPrimaryKey<T>>
     }
 
-type SchemaAttributesWithNoPrimaryKey<T extends Array<string | number>> =
-    { primary?: never }
-    & Record<string, MarkdocAttributeSchema<T>>
 
 
 
@@ -49,25 +32,25 @@ type NonPrimaryTagsSchema<T extends Array<string | number>> =
 
 
 
-export const generatePrimarySchema = <T extends Array<string | number>>(render: string,
-    type: SchemaAttribute["type"],
-    config?: Omit<NonPrimaryTagsSchema<T>, "render">) => {
+export const generatePrimarySchema =
+    <T extends Array<string | number>>
+        (render: string, type: SchemaAttribute["type"], config?: Omit<NonPrimaryTagsSchema<T>, "render">) => {
 
 
-    return {
-        render,
-        ...config,
-        attributes: {
-            primary: {
-                type,
-                render: true,
-                required: true,
-            },
-            ...config?.attributes,
-        }
-    } satisfies TagsSchema<T>
+        return {
+            render,
+            ...config,
+            attributes: {
+                primary: {
+                    type,
+                    render: true,
+                    required: true,
+                },
+                ...config?.attributes,
+            }
+        } satisfies TagsSchema<T>
 
-}
+    }
 
 
 type GenerateNonPrimarySchemaConfig<T extends Array<string | number>> =
@@ -77,10 +60,8 @@ type GenerateNonPrimarySchemaConfig<T extends Array<string | number>> =
 type GenerateNonSecondarySchemaConfig<T extends Array<string | number>> =
     Pick<NonPrimaryTagsSchema<T>, "slots" | "transform" | "validate" | "description">
 
-export const generateNonPrimarySchema = <T extends Array<string | number>>(
-    primaryConfig: GenerateNonPrimarySchemaConfig<T>,
-    secondaryConfig: GenerateNonSecondarySchemaConfig<T> = {}
-) => {
+export const generateNonPrimarySchema = <T extends Array<string | number>>
+    (primaryConfig: GenerateNonPrimarySchemaConfig<T>, secondaryConfig: GenerateNonSecondarySchemaConfig<T> = {}) => {
 
 
     const {
@@ -96,9 +77,9 @@ export const generateNonPrimarySchema = <T extends Array<string | number>>(
 };
 
 
-export function generateSelfClosingTagSchema<T extends Array<string | number>>(
-    primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & { validationType: SchemaAttribute["type"] },
-    config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "description" | "validate">>) {
+export function generateSelfClosingTagSchema<T extends Array<string | number>>
+    (primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & { validationType: SchemaAttribute["type"] },
+        config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "description" | "validate">>) {
 
 
     return generatePrimarySchema(
@@ -141,9 +122,11 @@ export const createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue = 
 ) => {
 
 
-    return conditionalErrors.reduce(
-        (carry: Array<ValidationError>, [condition, error]) => condition ? carry.concat(error) : carry,
-        [])
+    return conditionalErrors
+        .reduce(
+            (carry: Array<ValidationError>, [condition, error]) => condition ? carry.concat(error) : carry,
+            []
+        )
 
 
 };
