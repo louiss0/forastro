@@ -32,9 +32,7 @@ type SchemaAttributesWithNoPrimaryKey<T extends Array<string | number>> =
     & Record<string, MarkdocAttributeSchema<T>>
 
 
-/* TODO: Refactor the generatePrimarySchema to use two different options.
- * One for children or self closing tag the other for options that will sometimes apply
-*/
+
 type SelfClosing = {
     selfClosing: true
     children?: never
@@ -46,7 +44,6 @@ type NonSelfClosing = {
 }
 
 type NonPrimaryTagsSchema<T extends Array<string | number>> =
-    (NonSelfClosing | SelfClosing)
     & TagsSchema<T>
     & { attributes: Partial<SchemaAttributesWithNoPrimaryKey<T>> }
 
@@ -73,46 +70,46 @@ export const generatePrimarySchema = <T extends Array<string | number>>(render: 
 }
 
 
+type GenerateNonPrimarySchemaConfig<T extends Array<string | number>> =
+    (NonSelfClosing | SelfClosing)
+    & Pick<NonPrimaryTagsSchema<T>, "attributes" | "render">
+
+type GenerateNonSecondarySchemaConfig<T extends Array<string | number>> =
+    Pick<NonPrimaryTagsSchema<T>, "slots" | "transform" | "validate" | "description">
+
 export const generateNonPrimarySchema = <T extends Array<string | number>>(
-    render: string,
-    attributes: SchemaAttributesWithNoPrimaryKey<T>,
-    config: Omit<NonPrimaryTagsSchema<T>, "render" | "attributes"> = {}) => {
+    primaryConfig: GenerateNonPrimarySchemaConfig<T>,
+    secondaryConfig: GenerateNonSecondarySchemaConfig<T> = {}
+) => {
+
 
     const {
-        inline = false,
-        children = [
-            "paragraph",
-            "hr",
-            "br",
-            "div",
-            "span",],
-        description = "THis is a Schema without a primary tag"
-    } = config
+        description = "This is a Schema without a primary tag"
+    } = secondaryConfig
 
     return {
-        render,
-        attributes,
-        inline,
-        children,
+        ...primaryConfig,
         description,
-        ...config,
+        ...secondaryConfig,
     } satisfies TagsSchema<T>
 
 };
 
 
-export function generateSelfClosingTagSchema<T extends Array<string | number>>
-    (render: string, validationType: SchemaAttribute["type"], config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "transform" | "description" | "validate">>) {
+export function generateSelfClosingTagSchema<T extends Array<string | number>>(
+    primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & { validationType: SchemaAttribute["type"] },
+    config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "description" | "validate">>) {
 
 
     return generatePrimarySchema(
-        render,
-        validationType,
+        primaryConfig.render,
+        primaryConfig.validationType,
         config ? {
             ...config,
             attributes: {
                 ...config.attributes
             },
+            transform: primaryConfig?.transform,
             selfClosing: true,
             inline: true
         } : undefined)
@@ -130,15 +127,25 @@ export function generateMarkdocErrorObject(
 
 type AllowedMarkdocTypesAsStrings = "string" | "number" | "array" | "boolean" | "object"
 
-export const generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight = (
-    type: AllowedMarkdocTypesAsStrings, value: unknown) => {
 
-    return typeof value === type ? null
-        : generateMarkdocErrorObject(
+export const generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight =
+    (type: AllowedMarkdocTypesAsStrings, value: unknown) =>
+        generateMarkdocErrorObject(
             "invalid-type",
             "error",
             `The value ${JSON.stringify(value)} passed is not the right type is supposed to be a ${type}`
         )
 
+export const createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue = (
+    conditionalErrors: Array<[condition: boolean, error: ReturnType<typeof generateMarkdocErrorObject>]>
+) => {
+
+
+    return conditionalErrors.reduce(
+        (carry: Array<ValidationError>, [condition, error]) => condition ? carry.concat(error) : carry,
+        [])
+
+
 };
+
 
