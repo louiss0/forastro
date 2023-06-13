@@ -1,4 +1,4 @@
-import { abbrSchema,  } from '@forastro/markdoc-html-tags';
+import {  abbr, a } from '@forastro/markdoc-html-tags';
 
 import { defineMarkdocConfig, nodes } from '@astrojs/markdoc/config';
 
@@ -10,6 +10,7 @@ export default defineMarkdocConfig({
         },
     },
     tags:{
-        abbr: abbrSchema
+        abbr,
+        a,
     }
 })
