@@ -1,20 +1,18 @@
-import type { Schema, SchemaAttribute, ValidationError } from '@markdoc/markdoc';
+import { Tag, type ConfigFunction, type NodeType, type Schema, type SchemaAttribute, type ValidationError } from '@markdoc/markdoc';
 import {
     SchemaAttributesWithAPrimaryKey,
-    SchemaAttributesWithNoPrimaryKey
+    SchemaAttributesWithNoPrimaryKey,
+    TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc
 } from 'packages/markdoc-html-tags/src/lib/attributes';
 
 
 
 
-type TagsSchema<T extends Array<string | number>> = Schema
+type TagsSchema<T> = Omit<Schema, "attributes">
     & {
         render: string
         attributes: Partial<SchemaAttributesWithAPrimaryKey<T>>
     }
-
-
-
 
 type SelfClosing = {
     selfClosing: true
@@ -26,41 +24,43 @@ type NonSelfClosing = {
     children: Exclude<Schema["children"], undefined>
 }
 
-type NonPrimaryTagsSchema<T extends Array<string | number>> =
+type NonPrimaryTagsSchema<T> =
     & TagsSchema<T>
     & { attributes: Partial<SchemaAttributesWithNoPrimaryKey<T>> }
 
 
 
-export const generatePrimarySchema =
-    <T extends Array<string | number>>
-        (render: string, type: SchemaAttribute["type"], config?: Omit<NonPrimaryTagsSchema<T>, "render">) => {
+export const generatePrimarySchema = <T>(
+    render: string,
+    type: TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>,
+    config?: Omit<NonPrimaryTagsSchema<T>, "render">
+) => {
 
 
-        return {
-            render,
-            ...config,
-            attributes: {
-                primary: {
-                    type,
-                    render: true,
-                    required: true,
-                },
-                ...config?.attributes,
-            }
-        } satisfies TagsSchema<T>
+    return {
+        render,
+        ...config,
+        attributes: {
+            primary: {
+                type,
+                render: true,
+                required: true,
+            },
+            ...config?.attributes,
+        }
+    } satisfies TagsSchema<T>
 
-    }
+}
 
 
-type GenerateNonPrimarySchemaConfig<T extends Array<string | number>> =
+type GenerateNonPrimarySchemaConfig<T> =
     (NonSelfClosing | SelfClosing)
     & Pick<NonPrimaryTagsSchema<T>, "attributes" | "render">
 
-type GenerateNonSecondarySchemaConfig<T extends Array<string | number>> =
+type GenerateNonSecondarySchemaConfig<T> =
     Pick<NonPrimaryTagsSchema<T>, "slots" | "transform" | "validate" | "description">
 
-export const generateNonPrimarySchema = <T extends Array<string | number>>
+export const generateNonPrimarySchema = <T>
     (primaryConfig: GenerateNonPrimarySchemaConfig<T>, secondaryConfig: GenerateNonSecondarySchemaConfig<T> = {}) => {
 
 
@@ -76,10 +76,39 @@ export const generateNonPrimarySchema = <T extends Array<string | number>>
 
 };
 
+export const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes = <T>(
+    primaryConfig: GenerateNonPrimarySchemaConfig<T>,
+    secondaryConfig: Omit<GenerateNonSecondarySchemaConfig<T>, "transform">
+) => generateNonPrimarySchema(primaryConfig, {
+    ...secondaryConfig,
+    transform(node, config) {
 
-export function generateSelfClosingTagSchema<T extends Array<string | number>>
-    (primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & { validationType: SchemaAttribute["type"] },
-        config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "description" | "validate">>) {
+        const { tag, attributes, } = node
+
+        let newAttributes = {}
+        if ("data" in attributes) {
+
+            const { data } = attributes
+
+            newAttributes = { ...data }
+
+            delete attributes["data"]
+        }
+
+        Object.assign(newAttributes, attributes)
+
+        return new Tag(tag, newAttributes, node.transformChildren(config))
+
+    },
+
+})
+
+
+export function generateSelfClosingTagSchema<T>(
+    primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & {
+        validationType: TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>
+    },
+    config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "description" | "validate">>) {
 
 
     return generatePrimarySchema(
