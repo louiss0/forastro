@@ -1,7 +1,7 @@
-import type { ValidationError, Config as MarkdocConfig, Scalar } from "@markdoc/markdoc"
+import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface } from "@markdoc/markdoc"
 
 
-export abstract class MarkdocValidatorAttribute {
+export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeInterface {
 
 
     transform(value: unknown, config: MarkdocConfig): Scalar {
