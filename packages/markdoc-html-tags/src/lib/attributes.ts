@@ -1,4 +1,4 @@
-import { Scalar, SchemaAttribute, ValidationError, ValidationType } from "@markdoc/markdoc";
+import type { Scalar, SchemaAttribute, ValidationError, ValidationType } from "packages/markdoc-html-tags/src/utils/markdoc";
 import {
     MarkdocValidatorAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,

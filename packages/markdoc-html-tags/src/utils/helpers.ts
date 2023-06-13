@@ -1,4 +1,6 @@
-import { Tag, type ConfigFunction, type NodeType, type Schema, type SchemaAttribute, type ValidationError } from '@markdoc/markdoc';
+import type { Schema, ValidationError } from './markdoc';
+import { Tag } from './markdoc';
+
 import {
     SchemaAttributesWithAPrimaryKey,
     SchemaAttributesWithNoPrimaryKey,
@@ -78,7 +80,7 @@ export const generateNonPrimarySchema = <T>
 
 export const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes = <T>(
     primaryConfig: GenerateNonPrimarySchemaConfig<T>,
-    secondaryConfig: Omit<GenerateNonSecondarySchemaConfig<T>, "transform">
+    secondaryConfig: Omit<GenerateNonSecondarySchemaConfig<T>, "transform"> = {}
 ) => generateNonPrimarySchema(primaryConfig, {
     ...secondaryConfig,
     transform(node, config) {

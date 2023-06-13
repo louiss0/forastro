@@ -1,8 +1,8 @@
-import type { ValidationError } from "@markdoc/markdoc"
+import type { ValidationError } from "packages/markdoc-html-tags/src/utils/markdoc"
 import {
     MarkdocValidatorAttribute,
     generateMarkdocErrorObject,
-    generateNonPrimarySchema
+    generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes
 } from "packages/markdoc-html-tags/src/utils"
 
 
@@ -56,7 +56,7 @@ export class AnchorAttribute extends MarkdocValidatorAttribute {
 
 }
 
-export const a = generateNonPrimarySchema({
+export const a = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "a",
     attributes: {
         href: {

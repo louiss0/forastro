@@ -1,4 +1,4 @@
-import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface } from "@markdoc/markdoc"
+import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface } from "packages/markdoc-html-tags/src/utils/markdoc"
 
 
 export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeInterface {

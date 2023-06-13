@@ -1,4 +1,4 @@
-import { Node } from "@markdoc/markdoc";
+import type { Node } from "packages/markdoc-html-tags/src/utils/markdoc";
 import {
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
@@ -9,7 +9,7 @@ import {
 export { abbr } from "./abbreviation"
 export { a } from "./anchor"
 
-export const sup = generateSelfClosingTagSchema({ render: "sup", validationType: String, });
+export const sup = generateSelfClosingTagSchema({ render: "sup", validationType: String, }, {});
 export const sub = generateSelfClosingTagSchema({ render: "sub", validationType: String, });
 export const span = generateSelfClosingTagSchema({ render: "span", validationType: String });
 export const cite = generateSelfClosingTagSchema({ render: "cite", validationType: String, });
@@ -194,7 +194,11 @@ export const details = generateNonPrimarySchema({
 export const picture = generateNonPrimarySchema({
     render: "picture",
     attributes: {
-
+        ariaHidden: {
+            type: Boolean,
+            required: false,
+            default: false
+        },
     },
     children: [
 
