@@ -2,20 +2,15 @@ import type { ValidationError } from "@markdoc/markdoc"
 import {
     MarkdocValidatorAttribute,
     generateMarkdocErrorObject,
-    generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateNonPrimarySchema
 } from "packages/markdoc-html-tags/src/utils"
 
 
 export class AnchorAttribute extends MarkdocValidatorAttribute {
 
-    override returnMarkdocErrorObjectOrNull(value: unknown): ValidationError | null {
+    override returnMarkdocErrorObjectOrNull(value: string): ValidationError | null {
 
-        return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight(
-            "string",
-            value
-        )
-            ?? this.checkIfHrefIsValid(value as string)
+        return this.checkIfHrefIsValid(value)
 
     }
 
@@ -32,11 +27,12 @@ export class AnchorAttribute extends MarkdocValidatorAttribute {
 
         const isValidTelString = /^tel:[^?\s]+$/.test(value)
 
-        const isValidWordThatStartsWithAHash = /^tel:[^?\s]+$/.test(value)
+        const isValidWordThatStartsWithAHash = /^#.*\b\w+$/.test(value)
 
         const theValueIsNotValid = ![
             isAValidRelativeOrAbsolutePath,
             isAValidWordPath,
+            isValidWordThatStartsWithAHash,
             isValidHttpsUrl,
             isValidMailtoString,
             isValidTelString
@@ -64,7 +60,7 @@ export const a = generateNonPrimarySchema({
     render: "a",
     attributes: {
         href: {
-            type: AnchorAttribute,
+            type: [String, AnchorAttribute],
             required: true,
         },
     },
