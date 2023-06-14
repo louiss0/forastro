@@ -5,16 +5,16 @@ import {
     generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes,
 } from "packages/markdoc-html-tags/src/utils";
 import {
-    data, contenteditable, draggable, lang, title, translate, spellcheck, dir,
+    contenteditable, draggable, lang, title, translate, spellcheck, dir,
     ariaHidden, ariaLabel, ariaLabelledBy
 } from "packages/markdoc-html-tags/src/lib/attributes";
 import { Node } from "@markdoc/markdoc";
 
-export const header = generateNonPrimarySchema({
+export const header = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "header",
     attributes: {
         ariaHidden,
-        data
+
     },
     children: [
         "paragraph",
@@ -23,11 +23,11 @@ export const header = generateNonPrimarySchema({
     ]
 })
 
-export const footer = generateNonPrimarySchema({
+export const footer = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "footer",
     attributes: {
         ariaHidden,
-        data
+
     },
     children: [
         "paragraph",
@@ -36,11 +36,10 @@ export const footer = generateNonPrimarySchema({
     ]
 })
 
-export const main = generateNonPrimarySchema({
+export const main = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "main",
     attributes: {
         ariaHidden,
-        data
     },
     children: [
         "section",
@@ -51,13 +50,12 @@ export const main = generateNonPrimarySchema({
 })
 
 
-export const section = generateNonPrimarySchema({
+export const section = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "section",
     attributes: {
         ariaHidden,
         ariaLabel,
         ariaLabelledBy,
-        data,
     },
     children: [
         "heading",
@@ -156,10 +154,9 @@ export const details = generateNonPrimarySchema({
 });
 
 // TODO: Add proper attributes to the picture schema.
-export const picture = generateNonPrimarySchema({
+export const picture = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "picture",
     attributes: {
-        data,
         ariaHidden,
     },
     children: [
@@ -296,7 +293,6 @@ export const video = generateNonPrimarySchema({
 
     },
 });
-// TODO: Add proper attributes to the audio schema.
 
 export const audio = generateNonPrimarySchema({
     render: "audio",
