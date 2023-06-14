@@ -20,9 +20,16 @@
     "cSpell.words": [
         "clsx",
         "contenteditable",
+        "crossorigin",
+        "disableremoteplayback",
         "Fontsource",
         "Icones",
         "Iconify",
+        "nodownload",
+        "nofullscreen",
+        "noremoteplayback",
+        "playsinline",
         "Preact"
-    ]
+    ],
+    "todo-tree.tree.scanMode": "workspace"
 }
