@@ -1,7 +1,7 @@
-import { generateSelfClosingTagSchema } from "packages/markdoc-html-tags/src/utils";
+import { generateSelfClosingTagSchema } from "src/utils";
 
-export { abbr } from "./abbreviation"
-export { a } from "./anchor"
+export { abbr } from "src/lib/schema/abbreviation"
+export { a } from "src/lib/schema/anchor"
 
 
 export const sup = generateSelfClosingTagSchema({

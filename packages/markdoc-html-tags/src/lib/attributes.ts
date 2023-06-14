@@ -3,7 +3,7 @@ import {
     MarkdocValidatorAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject
-} from "packages/markdoc-html-tags/src/utils";
+} from "src/utils";
 
 
 
@@ -31,7 +31,7 @@ type ReturnTypeBasedOnConstructor<T> =
     T extends ObjectConstructor | "Object" ? Record<string, Scalar> :
     T extends Array<ValidationType> ? ReturnTypeBasedOnConstructor<T[number]> : never
 
-type MarkdocAttributeSchema<T, U extends ValidationType = ValidationType> = {
+type MarkdocAttributeSchema<T> = {
     type: TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>
     default?: TypeIsAStringOrNumberReturnTheValuesIfRegexReturnStringElseNever<T>
     | ReturnTypeBasedOnConstructor<TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>>

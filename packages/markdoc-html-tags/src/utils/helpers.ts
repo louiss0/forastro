@@ -6,11 +6,11 @@ import type {
     SchemaAttributesWithAPrimaryKey,
     SchemaAttributesWithNoPrimaryKey,
     TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc
-} from 'packages/markdoc-html-tags/src/lib/attributes';
+} from 'src/lib/attributes';
 
 import {
     dataMarkdocAttributeSchema as data
-} from 'packages/markdoc-html-tags/src/lib/attributes';
+} from 'src/lib/attributes';
 
 
 export class EnhancedTag extends markdoc.Tag {

@@ -3,7 +3,7 @@ import {
     MarkdocValidatorAttribute,
     generateMarkdocErrorObject,
     generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes
-} from "packages/markdoc-html-tags/src/utils"
+} from "src/utils"
 
 
 export class AnchorAttribute extends MarkdocValidatorAttribute {

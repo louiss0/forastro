@@ -1,5 +1,5 @@
 
-import { EnhancedTag, MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema } from "packages/markdoc-html-tags/src/utils";
+import { EnhancedTag, MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema } from "src/utils";
 
 class AbbreviationAttribute extends MarkdocValidatorAttribute {
 

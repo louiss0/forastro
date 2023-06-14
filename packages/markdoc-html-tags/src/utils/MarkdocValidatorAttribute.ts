@@ -4,7 +4,7 @@ import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeT
 export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeInterface {
 
 
-    transform(value: unknown, config: MarkdocConfig): Scalar {
+    transform(value: unknown): Scalar {
 
         return value as Scalar
     }

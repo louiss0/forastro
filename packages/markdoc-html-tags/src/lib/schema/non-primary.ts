@@ -3,18 +3,17 @@ import {
     generateMarkdocErrorObject,
     generateNonPrimarySchema,
     generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes,
-} from "packages/markdoc-html-tags/src/utils";
+} from "src/utils";
 import {
     contenteditable, draggable, lang, title, translate, spellcheck, dir,
     ariaHidden, ariaLabel, ariaLabelledBy
-} from "packages/markdoc-html-tags/src/lib/attributes";
-import { Node } from "@markdoc/markdoc";
+} from "src/lib/attributes";
+import type { Node } from "@markdoc/markdoc";
 
 export const header = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "header",
     attributes: {
         ariaHidden,
-
     },
     children: [
         "paragraph",
