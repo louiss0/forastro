@@ -8,16 +8,16 @@ import {
 
 
 export type TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T> =
-    T extends Array<string> | RegExp
+    T extends ReadonlyArray<string> | RegExp
     ? StringConstructor
-    : T extends Array<number>
+    : T extends ReadonlyArray<number>
     ? NumberConstructor
-    : SchemaAttribute["type"]
+    : never
 
 
 
 type TypeIsAStringOrNumberReturnTheValuesIfRegexReturnStringElseNever<T> =
-    T extends Array<string> | Array<number>
+    T extends ReadonlyArray<string> | ReadonlyArray<number>
     ? T[number]
     : T extends RegExp
     ? string
@@ -31,35 +31,45 @@ type ReturnTypeBasedOnConstructor<T> =
     T extends ObjectConstructor | "Object" ? Record<string, Scalar> :
     T extends Array<ValidationType> ? ReturnTypeBasedOnConstructor<T[number]> : never
 
-type MarkdocAttributeSchema<T> = {
-    type: TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>
-    default?: TypeIsAStringOrNumberReturnTheValuesIfRegexReturnStringElseNever<T>
-    | ReturnTypeBasedOnConstructor<TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>>
+type ProperSchemaMatches = Exclude<SchemaAttribute["matches"], Array<string>>
+    | ReadonlyArray<number>
+    | ReadonlyArray<string>
+
+
+type RequiredSchemaAttributeType = Exclude<SchemaAttribute["type"], undefined>
+
+type MarkdocAttributeSchema<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> = {
+    type: T extends ReadonlyArray<unknown> | RegExp
+    ? TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T> : U
+    default?: T extends ReadonlyArray<unknown> | RegExp
+    ? TypeIsAStringOrNumberReturnTheValuesIfRegexReturnStringElseNever<T>
+    : ReturnTypeBasedOnConstructor<U>
     matches?: T
 } & Omit<SchemaAttribute, "matches" | "default" | "type">
 
 
-export type PrimaryMarkdocAttributeSchema<T> =
-    MarkdocAttributeSchema<T>
+export type PrimaryMarkdocAttributeSchema<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> =
+    MarkdocAttributeSchema<T, U>
     & { render?: true }
 
-export type SchemaAttributesWithAPrimaryKey<T> = {
-    primary: PrimaryMarkdocAttributeSchema<T>
-    [key: string]: MarkdocAttributeSchema<T>
+export type SchemaAttributesWithAPrimaryKey<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> = {
+    primary: PrimaryMarkdocAttributeSchema<T, U>
+    [key: string]: MarkdocAttributeSchema<T, U>
 }
 
-export type SchemaAttributesWithNoPrimaryKey<T> =
+export type SchemaAttributesWithNoPrimaryKey<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> =
     { primary?: never }
-    & Record<string, MarkdocAttributeSchema<T>>
-
-
-const generateMarkdocAttributeSchema =
-    <T>(config: MarkdocAttributeSchema<T>) =>
-        Object.freeze(config)
+    & Record<string, MarkdocAttributeSchema<T, U>>
 
 
 
-export const title = generateMarkdocAttributeSchema({
+
+const generateMarkdocAttributeSchema = <T extends RequiredSchemaAttributeType, U extends ProperSchemaMatches = null>
+    () => <V extends MarkdocAttributeSchema<U, T>>
+        (config: V) => Object.freeze(config)
+
+
+export const title = generateMarkdocAttributeSchema()({
     type: String,
     validate(value: string,) {
 
@@ -79,13 +89,16 @@ export const title = generateMarkdocAttributeSchema({
     errorLevel: "error",
 });
 
-export const translate = generateMarkdocAttributeSchema({
+
+export const translate = generateMarkdocAttributeSchema<StringConstructor, ["yes", "no"]>()({
     type: String,
+    default: "yes",
     matches: [
         "yes",
         "no",
     ]
 });
+
 
 const SUITABLE_LANGUAGES_FOR_THE_LANG_ATTRIBUTE = [
     "aa", "ab", "ace", "ach", "ada", "ady", "ae", "aeb", "af", "afh", "agq", "ain", "ak", "akk", "akz", "ale", "aln", "alt", "am", "an", "ang", "anp", "ar", "ar-001", "arc", "arn", "aro", "arp", "arq", "arw", "ary", "arz", "as", "asa", "ase", "ast", "av", "avk", "awa", "ay", "az", "az-Arab",
@@ -97,37 +110,36 @@ const SUITABLE_LANGUAGES_FOR_THE_LANG_ATTRIBUTE = [
     "ga", "gaa", "gag", "gan", "gay", "gba", "gbz", "gd", "gez", "gil", "gl", "glk", "gmh",
 ] as const
 
-export const lang = generateMarkdocAttributeSchema({
+export const lang = generateMarkdocAttributeSchema<StringConstructor, typeof SUITABLE_LANGUAGES_FOR_THE_LANG_ATTRIBUTE>()({
     type: String,
+    default: "en",
     errorLevel: "error",
     matches: SUITABLE_LANGUAGES_FOR_THE_LANG_ATTRIBUTE,
     description: "An attribute for specifying the language of an element"
 });
 
 
-export const ariaHidden = generateMarkdocAttributeSchema({
+export const ariaHidden = generateMarkdocAttributeSchema()({
     type: Boolean,
     required: false,
     description: "Ah attribute that specifies whether or not an element is hidden"
 });
 
-export const ariaLabelledBy = generateMarkdocAttributeSchema({
+export const ariaLabelledBy = generateMarkdocAttributeSchema()({
     type: String,
     required: false,
     description: "A attribute that specifies which element is used to label the element"
 });
 
-export const ariaLabel = generateMarkdocAttributeSchema({
+export const ariaLabel = generateMarkdocAttributeSchema()({
     type: String,
     required: false,
-    default: false,
     description: "A attribute that specifies the label for this element"
-
 });
 
 
 
-export const dir = generateMarkdocAttributeSchema({
+export const dir = generateMarkdocAttributeSchema<StringConstructor, ["auto", "ltr", "rtl"]>()({
     type: String,
     default: "auto",
     matches: [
@@ -139,23 +151,24 @@ export const dir = generateMarkdocAttributeSchema({
     errorLevel: "error"
 });
 
-export const draggable = generateMarkdocAttributeSchema({
+export const draggable = generateMarkdocAttributeSchema<BooleanConstructor>()({
     type: Boolean,
     default: false,
     description: "An attribute that allows an element to be draggable",
     errorLevel: "error",
 });
 
-export const spellcheck = generateMarkdocAttributeSchema({
+export const spellcheck = generateMarkdocAttributeSchema<BooleanConstructor>()({
     type: Boolean,
     default: false,
     description: "An attribute that allows an element to be spell checked",
     errorLevel: "error",
 });
 
-export const contenteditable = generateMarkdocAttributeSchema({
+
+
+export const contenteditable = generateMarkdocAttributeSchema()({
     type: Boolean,
-    default: false,
     description: "An attribute that allows an element's content to be editable",
     errorLevel: "error",
 });
@@ -182,21 +195,21 @@ class DataObjectAttribute extends MarkdocValidatorAttribute {
         const keysWithoutOnlyAlphanumericCharacters = Object.keys(value)
             .filter(string => !this.regexToCheckIfAValueOnlyHasAlphanumericCharacters.test(string))
 
-        return keysWithoutOnlyAlphanumericCharacters.length !== 0,
-            generateMarkdocErrorObject(
+        return keysWithoutOnlyAlphanumericCharacters.length !== 0
+            ? generateMarkdocErrorObject(
                 "invalid-characters",
                 "error",
                 `These  are not good keys ${keysWithoutOnlyAlphanumericCharacters.join(",")}. 
                 They must be words with no spaces.
                 `
-            )
+            ) : null
 
 
     }
 
 }
 
-export const dataMarkdocAttributeSchema = generateMarkdocAttributeSchema({
+export const dataMarkdocAttributeSchema = generateMarkdocAttributeSchema()({
     type: [Object, DataObjectAttribute],
     description: "An attribute that allows an element's content to be editable",
     errorLevel: "critical",
