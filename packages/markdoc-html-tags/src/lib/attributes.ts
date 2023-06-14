@@ -1,4 +1,4 @@
-import type { Scalar, SchemaAttribute, ValidationError, ValidationType } from "packages/markdoc-html-tags/src/utils/markdoc";
+import type { Scalar, SchemaAttribute, ValidationError, ValidationType } from "@markdoc/markdoc";
 import {
     MarkdocValidatorAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
@@ -31,7 +31,7 @@ type ReturnTypeBasedOnConstructor<T> =
     T extends ObjectConstructor | "Object" ? Record<string, Scalar> :
     T extends Array<ValidationType> ? ReturnTypeBasedOnConstructor<T[number]> : never
 
-type MarkdocAttributeSchema<T> = {
+type MarkdocAttributeSchema<T, U extends ValidationType = ValidationType> = {
     type: TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>
     default?: TypeIsAStringOrNumberReturnTheValuesIfRegexReturnStringElseNever<T>
     | ReturnTypeBasedOnConstructor<TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>>
@@ -57,7 +57,6 @@ const generateMarkdocAttributeSchema =
     <T>(config: MarkdocAttributeSchema<T>) =>
         Object.freeze(config)
 
-// TODO: Remember to setup all of the global attributes that are worth using.
 
 
 export const title = generateMarkdocAttributeSchema({
@@ -106,6 +105,25 @@ export const lang = generateMarkdocAttributeSchema({
 });
 
 
+export const ariaHidden = generateMarkdocAttributeSchema({
+    type: Boolean,
+    required: false,
+    description: "Ah attribute that specifies whether or not an element is hidden"
+});
+
+export const ariaLabelledBy = generateMarkdocAttributeSchema({
+    type: String,
+    required: false,
+    description: "A attribute that specifies which element is used to label the element"
+});
+
+export const ariaLabel = generateMarkdocAttributeSchema({
+    type: String,
+    required: false,
+    default: false,
+    description: "A attribute that specifies the label for this element"
+
+});
 
 
 
@@ -182,7 +200,6 @@ export const data = generateMarkdocAttributeSchema({
     type: [Object, DataObjectAttribute],
     description: "An attribute that allows an element's content to be editable",
     errorLevel: "critical",
-
 },);
 
 

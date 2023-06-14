@@ -1,4 +1,4 @@
-import type { ValidationError } from "packages/markdoc-html-tags/src/utils/markdoc"
+import type { ValidationError } from "@markdoc/markdoc"
 import {
     MarkdocValidatorAttribute,
     generateMarkdocErrorObject,

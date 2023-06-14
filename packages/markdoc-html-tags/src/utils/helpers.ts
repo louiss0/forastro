@@ -1,13 +1,31 @@
-import type { Schema, ValidationError } from './markdoc';
-import { Tag } from './markdoc';
+import type { Schema, ValidationError, Scalar, RenderableTreeNode } from '@markdoc/markdoc';
 
-import {
+import * as markdoc from '@markdoc/markdoc';
+
+import type {
     SchemaAttributesWithAPrimaryKey,
     SchemaAttributesWithNoPrimaryKey,
     TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc
 } from 'packages/markdoc-html-tags/src/lib/attributes';
 
+import {
+    data
+} from 'packages/markdoc-html-tags/src/lib/attributes';
 
+
+export class EnhancedTag extends markdoc.Tag {
+
+
+    constructor (
+        override readonly name: string,
+        override readonly attributes: Record<string, Scalar>,
+        override readonly children: Array<RenderableTreeNode>
+
+    ) {
+        super(name, attributes, children);
+
+    }
+};
 
 
 type TagsSchema<T> = Omit<Schema, "attributes">
@@ -79,32 +97,49 @@ export const generateNonPrimarySchema = <T>
 };
 
 export const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes = <T>(
-    primaryConfig: GenerateNonPrimarySchemaConfig<T>,
-    secondaryConfig: Omit<GenerateNonSecondarySchemaConfig<T>, "transform"> = {}
-) => generateNonPrimarySchema(primaryConfig, {
-    ...secondaryConfig,
-    transform(node, config) {
-
-        const { tag, attributes, } = node
-
-        let newAttributes = {}
-        if ("data" in attributes) {
-
-            const { data } = attributes
-
-            newAttributes = { ...data }
-
-            delete attributes["data"]
-        }
-
-        Object.assign(newAttributes, attributes)
-
-        return new Tag(tag, newAttributes, node.transformChildren(config))
-
+    primaryConfig: GenerateNonPrimarySchemaConfig<T> & {
+        attributes: { data?: never } & Partial<SchemaAttributesWithNoPrimaryKey<T>>
     },
+    secondaryConfig: Omit<GenerateNonSecondarySchemaConfig<T>, "transform"> = {}
+) => {
 
-})
+    const { attributes, ...rest } = primaryConfig
 
+    return generateNonPrimarySchema({
+        attributes: {
+            ...attributes,
+            data
+        },
+        ...rest
+    }, {
+        ...secondaryConfig,
+        transform(node, config) {
+
+            const { tag, attributes, } = node
+
+            if (!tag) {
+
+                throw new Error("There is no tag cannot render")
+            }
+
+            let newAttributes = {}
+            if ("data" in attributes) {
+
+                const { data } = attributes
+
+                newAttributes = { ...data }
+
+                delete attributes["data"]
+            }
+
+            Object.assign(newAttributes, attributes)
+
+            return new EnhancedTag(tag, newAttributes, node.transformChildren(config))
+
+        },
+
+    })
+}
 
 export function generateSelfClosingTagSchema<T>(
     primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & {

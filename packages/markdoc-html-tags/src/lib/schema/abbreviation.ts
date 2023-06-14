@@ -1,4 +1,4 @@
-import { Tag } from "packages/markdoc-html-tags/src/utils/markdoc";
+import { Tag } from "@markdoc/markdoc";
 
 import { MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema } from "packages/markdoc-html-tags/src/utils";
 
