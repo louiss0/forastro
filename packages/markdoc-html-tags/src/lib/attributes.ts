@@ -196,7 +196,7 @@ class DataObjectAttribute extends MarkdocValidatorAttribute {
 
 }
 
-export const data = generateMarkdocAttributeSchema({
+export const dataMarkdocAttributeSchema = generateMarkdocAttributeSchema({
     type: [Object, DataObjectAttribute],
     description: "An attribute that allows an element's content to be editable",
     errorLevel: "critical",

@@ -9,7 +9,7 @@ import type {
 } from 'packages/markdoc-html-tags/src/lib/attributes';
 
 import {
-    data
+    dataMarkdocAttributeSchema as data
 } from 'packages/markdoc-html-tags/src/lib/attributes';
 
 
