@@ -75,22 +75,18 @@ export const generatePrimarySchema = <T>(
 
 type GenerateNonPrimarySchemaConfig<T> =
     (NonSelfClosing | SelfClosing)
-    & Pick<NonPrimaryTagsSchema<T>, "attributes" | "render">
+    & Pick<NonPrimaryTagsSchema<T>, "attributes" | "render" | "description">
 
 type GenerateNonSecondarySchemaConfig<T> =
-    Pick<NonPrimaryTagsSchema<T>, "slots" | "transform" | "validate" | "description">
+    Pick<NonPrimaryTagsSchema<T>, "slots" | "transform" | "validate">
 
 export const generateNonPrimarySchema = <T>
     (primaryConfig: GenerateNonPrimarySchemaConfig<T>, secondaryConfig: GenerateNonSecondarySchemaConfig<T> = {}) => {
 
 
-    const {
-        description = "This is a Schema without a primary tag"
-    } = secondaryConfig
 
     return {
         ...primaryConfig,
-        description,
         ...secondaryConfig,
     } satisfies TagsSchema<T>
 
@@ -142,24 +138,28 @@ export const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
 }
 
 export function generateSelfClosingTagSchema<T>(
-    primaryConfig: Pick<NonPrimaryTagsSchema<T>, "render" | "transform"> & {
+    primaryConfig: Required<Pick<NonPrimaryTagsSchema<T>, "description" | "render"> & {
         validationType: TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T>
-    },
-    config?: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "description" | "validate">>) {
+    }>,
+    secondaryConfig: Partial<Pick<NonPrimaryTagsSchema<T>, "attributes" | "transform">> = {}
+) {
 
+    const { render, validationType, description } = primaryConfig
+
+    const { attributes, transform } = secondaryConfig
 
     return generatePrimarySchema(
-        primaryConfig.render,
-        primaryConfig.validationType,
-        config ? {
-            ...config,
+        render,
+        validationType,
+        {
+            description,
             attributes: {
-                ...config.attributes
+                ...attributes
             },
-            transform: primaryConfig?.transform,
+            transform,
             selfClosing: true,
             inline: true
-        } : undefined)
+        })
 }
 
 

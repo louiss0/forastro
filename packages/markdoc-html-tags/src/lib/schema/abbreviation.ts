@@ -1,6 +1,5 @@
-import { Tag } from "@markdoc/markdoc";
 
-import { MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema } from "packages/markdoc-html-tags/src/utils";
+import { EnhancedTag, MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema } from "packages/markdoc-html-tags/src/utils";
 
 class AbbreviationAttribute extends MarkdocValidatorAttribute {
 
@@ -42,10 +41,13 @@ export const abbr = generateSelfClosingTagSchema(
     {
         render: "abbr",
         validationType: AbbreviationAttribute,
+        description: ""
+    },
+    {
         transform(node) {
             const { primary } = node.attributes;
 
-            return new Tag("abbr", {
+            return new EnhancedTag("abbr", {
                 ...node.transformAttributes(node.attributes),
                 title: primary
             }, primary.match(/[A-Z]/g))
