@@ -31,14 +31,14 @@ type ReturnTypeBasedOnConstructor<T> =
     T extends ObjectConstructor | "Object" ? Record<string, Scalar> :
     T extends Array<ValidationType> ? ReturnTypeBasedOnConstructor<T[number]> : never
 
-type ProperSchemaMatches = Exclude<SchemaAttribute["matches"], Array<string>>
+export type ProperSchemaMatches = Exclude<SchemaAttribute["matches"], Array<string> | undefined>
     | ReadonlyArray<number>
     | ReadonlyArray<string>
 
 
-type RequiredSchemaAttributeType = Exclude<SchemaAttribute["type"], undefined>
+export type RequiredSchemaAttributeType = Exclude<SchemaAttribute["type"], undefined>
 
-type MarkdocAttributeSchema<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> = {
+export type MarkdocAttributeSchema<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> = {
     type: T extends ReadonlyArray<unknown> | RegExp
     ? TypeIsAStringOrNumberReturnStringOrNumberConstructorElseReturnMarkdoc<T> : U
     default?: T extends ReadonlyArray<unknown> | RegExp
@@ -64,9 +64,10 @@ export type SchemaAttributesWithNoPrimaryKey<T extends ProperSchemaMatches, U ex
 
 
 
-const generateMarkdocAttributeSchema = <T extends RequiredSchemaAttributeType, U extends ProperSchemaMatches = null>
-    () => <V extends MarkdocAttributeSchema<U, T>>
-        (config: V) => Object.freeze(config)
+const generateMarkdocAttributeSchema =
+    <T extends RequiredSchemaAttributeType, U extends ProperSchemaMatches = null>() =>
+        <V extends MarkdocAttributeSchema<U, T>>(config: V) =>
+            Object.freeze(config)
 
 
 export const title = generateMarkdocAttributeSchema()({
@@ -176,7 +177,6 @@ export const contenteditable = generateMarkdocAttributeSchema()({
 
 class DataObjectAttribute extends MarkdocValidatorAttribute {
 
-    private readonly regexToCheckIfAValueOnlyHasAlphanumericCharacters = /^[A-Za-z]+$/
 
     override transform(value: Record<string, Scalar>,): Scalar {
 
@@ -191,9 +191,10 @@ class DataObjectAttribute extends MarkdocValidatorAttribute {
 
     override returnMarkdocErrorObjectOrNull(value: object,): ValidationError | null {
 
+        const regexToCheckIfAValueOnlyHasAlphanumericCharacters = /^[A-Za-z]+$/
 
         const keysWithoutOnlyAlphanumericCharacters = Object.keys(value)
-            .filter(string => !this.regexToCheckIfAValueOnlyHasAlphanumericCharacters.test(string))
+            .filter(string => !regexToCheckIfAValueOnlyHasAlphanumericCharacters.test(string))
 
         return keysWithoutOnlyAlphanumericCharacters.length !== 0
             ? generateMarkdocErrorObject(
