@@ -8,7 +8,7 @@ export const sup = generateSelfClosingTagSchema({
     render: "sup",
     validationType: String,
     description: "A schema for creating a sup element"
-},);
+});
 
 export const sub = generateSelfClosingTagSchema({
     render: "sub",
@@ -75,13 +75,13 @@ export const data = generateSelfClosingTagSchema({
 });
 
 export const dd = generateSelfClosingTagSchema({
-    render: "data",
+    render: "dd",
     validationType: String,
     description: "A schema for creating a dd element"
 });
 
 export const dt = generateSelfClosingTagSchema({
-    render: "data",
+    render: "dt",
     validationType: String,
     description: "A schema for creating a dt element",
 });

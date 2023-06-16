@@ -1,7 +1,7 @@
 import {
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
-    generateNonPrimarySchema,
+    getGenerateNonPrimarySchema,
     generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes,
 } from "src/utils";
 import {
@@ -12,41 +12,34 @@ import type { Node } from "@markdoc/markdoc";
 
 export const header = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "header",
-    attributes: {
-        ariaHidden,
-    },
+    attributes: { ariaHidden, },
     children: [
         "paragraph",
         "div",
         "inline",
     ]
-})
+})()
 
 export const footer = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "footer",
-    attributes: {
-        ariaHidden,
-
-    },
+    attributes: { ariaHidden, },
     children: [
         "paragraph",
         "div",
         "inline",
     ]
-})
+})()
 
 export const main = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "main",
-    attributes: {
-        ariaHidden,
-    },
+    attributes: { ariaHidden, },
     children: [
         "section",
         "paragraph",
         "div",
         "inline",
     ]
-})
+})()
 
 
 export const section = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
@@ -63,7 +56,7 @@ export const section = generateNonPrimarySchemaWithATransformThatGeneratesDataAt
         "inline",
     ]
 
-}, {
+},)({
     validate(node: Node) {
 
         const { attributes } = node
@@ -123,21 +116,19 @@ export const section = generateNonPrimarySchemaWithATransformThatGeneratesDataAt
 
 
 
-export const br = generateNonPrimarySchema({
+export const br = getGenerateNonPrimarySchema({
     render: "br",
     selfClosing: true,
     attributes: { ariaHidden },
-});
+})();
 
-export const hr = generateNonPrimarySchema({
+export const hr = getGenerateNonPrimarySchema({
     render: "hr",
     selfClosing: true,
-    attributes: {
-        ariaHidden
-    }
-});
+    attributes: { ariaHidden }
+})();
 
-export const details = generateNonPrimarySchema({
+export const details = getGenerateNonPrimarySchema({
     render: "details",
     attributes: {
         ariaHidden,
@@ -150,21 +141,18 @@ export const details = generateNonPrimarySchema({
     children: [
         "summary"
     ]
-});
+})();
 
-// TODO: Add proper attributes to the picture schema.
 export const picture = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "picture",
-    attributes: {
-        ariaHidden,
-    },
+    attributes: { ariaHidden, },
     children: [
         "image",
         "source",
     ]
-})
+})()
 
-export const figure = generateNonPrimarySchema({
+export const figure = getGenerateNonPrimarySchema({
     render: "figure",
     attributes: {
         ariaHidden,
@@ -181,43 +169,36 @@ export const figure = generateNonPrimarySchema({
         "video",
         "link",
     ]
-});
+})();
 
-export const figcaption = generateNonPrimarySchema({
+export const figcaption = getGenerateNonPrimarySchema({
     render: "figcaption",
-    attributes: {
-        ariaHidden
-    },
+    attributes: { ariaHidden },
     children: [
         "text",
         "inline"
     ]
-});
+})();
 
 
-export const colgroup = generateNonPrimarySchema({
+export const colgroup = getGenerateNonPrimarySchema({
     render: "colgroup",
-    attributes: {
-        ariaHidden,
-
-    },
+    attributes: { ariaHidden, },
     children: [
         "col",
         "div",
+        "text",
     ]
-});
+})();
 
-export const col = generateNonPrimarySchema({
+export const col = getGenerateNonPrimarySchema({
     render: "col",
-    attributes: {
-        ariaHidden,
-
-    },
+    attributes: { ariaHidden, },
     children: [
         "inline",
         "text",
     ]
-});
+})();
 // TODO: Add proper attributes to the video schema.
 
 /** 
@@ -228,7 +209,7 @@ export const col = generateNonPrimarySchema({
     }),
 */
 
-export const video = generateNonPrimarySchema({
+export const video = getGenerateNonPrimarySchema({
     render: "video",
     selfClosing: true,
     attributes: {
@@ -291,9 +272,9 @@ export const video = generateNonPrimarySchema({
         }
 
     },
-});
+})();
 
-export const audio = generateNonPrimarySchema({
+export const audio = getGenerateNonPrimarySchema({
     render: "audio",
     selfClosing: true,
     attributes: {
@@ -351,7 +332,7 @@ export const audio = generateNonPrimarySchema({
         }
 
     },
-});
+})();
 
 export const paragraph = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "paragraph",
@@ -369,7 +350,7 @@ export const paragraph = generateNonPrimarySchemaWithATransformThatGeneratesData
         "text",
         "link",
     ]
-});
+})();
 
 
 export const div = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
@@ -390,9 +371,9 @@ export const div = generateNonPrimarySchemaWithATransformThatGeneratesDataAttrib
         "image",
         "link",
     ]
-});
+})();
 
-export const hgroup = generateNonPrimarySchema({
+export const hgroup = getGenerateNonPrimarySchema({
     render: "hgroup",
     attributes: {
         ariaHidden,
@@ -402,23 +383,17 @@ export const hgroup = generateNonPrimarySchema({
         "heading",
         "paragraph"
     ]
-})
+})()
 
 
-export const summary = generateNonPrimarySchema({
+export const summary = getGenerateNonPrimarySchema({
     render: "summary",
-    attributes: {
-        ariaHidden: {
-            type: Boolean,
-            required: false,
-            default: false
-        }
-    },
+    attributes: { ariaHidden },
     children: [
         "inline",
         "div"
     ]
-});
+})();
 
 
 
