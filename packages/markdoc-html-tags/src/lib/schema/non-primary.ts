@@ -1,14 +1,102 @@
+import type { Node } from "@markdoc/markdoc";
+import * as markdoc from "@markdoc/markdoc";
+
 import {
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
     getGenerateNonPrimarySchema,
-    generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes,
 } from "src/utils";
+
+import type {
+    GenerateNonPrimarySchemaConfig,
+    GenerateNonSecondarySchemaConfig,
+} from "src/utils";
+
 import {
     contenteditable, draggable, lang, title, translate, spellcheck, dir,
-    ariaHidden, ariaLabel, ariaLabelledBy
+    ariaHidden, ariaLabel, dataMarkdocAttributeSchema as data, ariaLabelledBy,
 } from "src/lib/attributes";
-import type { Node } from "@markdoc/markdoc";
+
+import type {
+    ProperSchemaMatches,
+    RequiredSchemaAttributeType,
+    SchemaAttributesWithNoPrimaryKey
+} from "src/lib/attributes";
+type GenerateNonPrimarySchemaConfigThatDoesNotAllowDataConfig<
+    T extends ProperSchemaMatches,
+    U extends RequiredSchemaAttributeType,
+    R extends string
+> = GenerateNonPrimarySchemaConfig<T, U, R> & {
+    attributes: { data?: never } & Partial<SchemaAttributesWithNoPrimaryKey<T, U>>
+}
+
+type GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<
+    T extends ProperSchemaMatches,
+    U extends RequiredSchemaAttributeType,
+    R extends string
+> = Omit<GenerateNonSecondarySchemaConfig<T, U, R>, "transform">
+
+const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
+    <
+        T extends ProperSchemaMatches,
+        U extends RequiredSchemaAttributeType,
+        V extends GenerateNonPrimarySchemaConfigThatDoesNotAllowDataConfig<T, U, R>,
+        R extends string
+    >
+        (primaryConfig: V) => {
+
+
+        const { attributes, render } = primaryConfig
+
+        return <W extends GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<T, U, R>>(secondaryConfig?: W) => {
+
+            const primaryConfigWithDataAttributeInserted = Object.assign(
+                primaryConfig,
+                {
+                    render,
+                    attributes: {
+                        ...attributes,
+                        data
+                    }
+                })
+            const generateNonPrimarySchema = getGenerateNonPrimarySchema(primaryConfigWithDataAttributeInserted)
+
+            return generateNonPrimarySchema({
+                transform(node, config) {
+
+                    const { tag, attributes, } = node
+
+                    if (!tag) {
+
+                        throw new Error("There is no tag cannot render")
+                    }
+
+                    let newAttributes = {}
+                    if ("data" in attributes) {
+
+                        const { data } = attributes
+
+                        newAttributes = { ...data }
+
+                        delete attributes["data"]
+                    }
+
+                    Object.assign(newAttributes, attributes)
+
+                    return new markdoc.Tag(tag, newAttributes, node.transformChildren(config))
+
+                },
+                ...secondaryConfig,
+
+            })
+
+        }
+
+
+
+    }
+
+
 
 export const header = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "header",
@@ -116,6 +204,7 @@ export const section = generateNonPrimarySchemaWithATransformThatGeneratesDataAt
 
 
 
+
 export const br = getGenerateNonPrimarySchema({
     render: "br",
     selfClosing: true,
@@ -162,6 +251,7 @@ export const figure = getGenerateNonPrimarySchema({
         "header",
         "div",
         "figcaption",
+        "paragraph",
         "footer",
         "image",
         "audio",
@@ -227,7 +317,7 @@ export const video = getGenerateNonPrimarySchema({
             type: Boolean,
             description: "A Boolean attribute: if specified, the user can control the audio of the "
         },
-        controlsList: {
+        controlslist: {
             type: String,
             matches: [
                 "nodownload",
@@ -333,6 +423,8 @@ export const audio = getGenerateNonPrimarySchema({
 
     },
 })();
+
+
 
 export const paragraph = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "paragraph",
