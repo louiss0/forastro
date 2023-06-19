@@ -1,19 +1,16 @@
 
-import { EnhancedTag, MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema } from "src/utils";
+import * as markdoc from "@markdoc/markdoc";
 
-class AbbreviationAttribute extends MarkdocValidatorAttribute {
+const { Tag } = markdoc
 
-    override returnMarkdocErrorObjectOrNull(value: unknown,) {
+import { MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema, } from "src/utils";
+
+export class AbbreviationAttribute extends MarkdocValidatorAttribute {
+
+    override returnMarkdocErrorObjectOrNothing(value: string,): markdoc.ValidationError | void {
 
 
 
-        if (typeof value !== "string") {
-            return generateMarkdocErrorObject(
-                "invalid-attribute",
-                "critical",
-                `The attribute must be a string`
-            )
-        }
 
         const matchCapitalisedWordCaptureOtherCapitalizedWordsOnOneLineRegex =
             /^[A-Z][a-z]*(\s[A-Z][a-z]*)*$/;
@@ -22,36 +19,42 @@ class AbbreviationAttribute extends MarkdocValidatorAttribute {
             !matchCapitalisedWordCaptureOtherCapitalizedWordsOnOneLineRegex.test(value);
 
 
-        return thePrimaryAttributeIsNotASetOfWordsThatAreCapitalizedAndSpaced
-            ? generateMarkdocErrorObject(
+        if (thePrimaryAttributeIsNotASetOfWordsThatAreCapitalizedAndSpaced)
+            return generateMarkdocErrorObject(
                 "invalid-attribute",
                 "critical",
-                `You are supposed to supply only words that are capitalised with Spaces
-           This word ${value} doesn't meet that condition.
+                `You are supposed to supply only words that are capitalised with Spaces.
+                This word ${value} doesn't meet that condition.
           `
             )
-            : null
 
     }
 }
 
 
 
-export const abbr = generateSelfClosingTagSchema(
+export const abbr = generateSelfClosingTagSchema<RegExp | null, StringConstructor | markdoc.CustomAttributeType, "abbr">(
     {
         render: "abbr",
         validationType: AbbreviationAttribute,
-        description: ""
+        description: "A tag that automatically creates an abbreviation of a capitalised word"
     },
     {
+        attributes: {
+            label: {
+                type: String,
+                required: false,
+                errorLevel: "error",
+                matches: /[A-Z]/
+            }
+        },
         transform(node) {
-            const { primary } = node.attributes;
+            const { primary, label } = node.attributes;
 
-            return new EnhancedTag("abbr", {
+            return new Tag("abbr", {
                 ...node.transformAttributes(node.attributes),
                 title: primary
-            }, primary.match(/[A-Z]/g))
+            }, label ? [label] : primary.match(/[A-Z]/g))
         }
     }
 )
-
