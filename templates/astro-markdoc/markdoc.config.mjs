@@ -12,5 +12,6 @@ export default defineMarkdocConfig({
     tags:{
         abbr,
         a,
+
     }
 })
