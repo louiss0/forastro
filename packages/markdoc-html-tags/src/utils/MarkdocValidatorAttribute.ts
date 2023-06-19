@@ -1,25 +1,25 @@
 import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface } from "@markdoc/markdoc"
 
 
-export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeInterface {
+export abstract class MarkdocValidatorAttribute implements Required<CustomAttributeTypeInterface> {
 
 
-    transform(value: unknown): Scalar {
+    transform(value: Scalar) {
 
-        return value as Scalar
+        return value
     }
 
     validate(value: unknown, config: MarkdocConfig) {
 
-        const res = this.returnMarkdocErrorObjectOrNull(value, config)
+        const res = this.returnMarkdocErrorObjectOrNothing(value, config)
         return res ? [res] : []
 
     }
 
-    abstract returnMarkdocErrorObjectOrNull(
+    abstract returnMarkdocErrorObjectOrNothing(
         value: unknown,
         config: MarkdocConfig
-    ): ValidationError | null
+    ): ValidationError | void
 
 }
 
