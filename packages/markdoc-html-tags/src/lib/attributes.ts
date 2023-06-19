@@ -28,15 +28,14 @@ type ReturnTypeBasedOnConstructor<T> =
     T extends NumberConstructor | "Number" ? number :
     T extends BooleanConstructor | "Boolean" ? boolean :
     T extends ArrayConstructor | "Array" ? Array<string> | Array<number> | Array<Record<string, Scalar>> :
-    T extends ObjectConstructor | "Object" ? Record<string, Scalar> :
-    T extends Array<ValidationType> ? ReturnTypeBasedOnConstructor<T[number]> : never
+    T extends ObjectConstructor | "Object" ? Record<string, Scalar> : never
 
 export type ProperSchemaMatches = Exclude<SchemaAttribute["matches"], Array<string> | undefined>
     | ReadonlyArray<number>
     | ReadonlyArray<string>
 
 
-export type RequiredSchemaAttributeType = Exclude<SchemaAttribute["type"], undefined>
+export type RequiredSchemaAttributeType = Exclude<SchemaAttribute["type"], undefined | Array<ValidationType>>
 
 export type MarkdocAttributeSchema<T extends ProperSchemaMatches, U extends RequiredSchemaAttributeType> = {
     type: T extends ReadonlyArray<unknown> | RegExp
@@ -87,7 +86,7 @@ const generateProperStringAttributeSchema = getGenerateMarkdocAttributeSchema({
 })
 
 const generateBooleanAttributeSchemaThatIsNotRequired = getGenerateMarkdocAttributeSchema({
-    type: String,
+    type: Boolean,
     required: false,
     errorLevel: "error",
 })
@@ -110,7 +109,6 @@ export const title = generateProperStringAttributeSchema({
     },
 
 });
-
 
 
 
@@ -198,21 +196,22 @@ class DataObjectAttribute extends MarkdocValidatorAttribute {
 
     }
 
-    override returnMarkdocErrorObjectOrNull(value: object,): ValidationError | null {
+
+    override returnMarkdocErrorObjectOrNothing(value: object,): ValidationError | void {
 
         const regexToCheckIfAValueOnlyHasAlphanumericCharacters = /^[A-Za-z]+$/
 
         const keysWithoutOnlyAlphanumericCharacters = Object.keys(value)
             .filter(string => !regexToCheckIfAValueOnlyHasAlphanumericCharacters.test(string))
 
-        return keysWithoutOnlyAlphanumericCharacters.length !== 0
-            ? generateMarkdocErrorObject(
+        if (keysWithoutOnlyAlphanumericCharacters.length !== 0)
+            return generateMarkdocErrorObject(
                 "invalid-characters",
                 "error",
                 `These  are not good keys ${keysWithoutOnlyAlphanumericCharacters.join(",")}. 
                 They must be words with no spaces.
                 `
-            ) : null
+            )
 
 
     }
@@ -220,7 +219,7 @@ class DataObjectAttribute extends MarkdocValidatorAttribute {
 }
 
 export const dataMarkdocAttributeSchema = getGenerateMarkdocAttributeSchema({
-    type: [Object, DataObjectAttribute],
+    type: DataObjectAttribute,
     description: "An attribute that allows an element's content to be editable",
     errorLevel: "critical",
     required: false
