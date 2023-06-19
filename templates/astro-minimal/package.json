@@ -18,7 +18,6 @@
   "dependencies": {
     "@forastro/flow": "*",
     "@forastro/utilities": "*",
-    "astro": "*",
     "astro-icon": "*"
   },
   "devDependencies": {
