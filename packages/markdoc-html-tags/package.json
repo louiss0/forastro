@@ -22,11 +22,12 @@
     "@markdoc/markdoc": "^0.3.0"
   },
   "peerDependencies": {
-    "@markdoc/markdoc": ">0.0.0",
+    "@markdoc/markdoc": ">0.2.0",
     "astro": ">2.0.0"
   },
   "scripts": {
     "dev": "tsup --watch",
+    "test": "vitest --ui",
     "publint": "publint",
     "build": "tsup",
     "release": "pnpm build && dotenv release-it"
@@ -34,7 +35,7 @@
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
     "type": "git",
-    "directory": "packages/markdoc-html-tags"
+    "directory": "/packages/markdoc-html-tags"
   },
   "author": {
     "name": "Shelton Louis",
