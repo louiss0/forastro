@@ -20,7 +20,7 @@ export const span = generateSelfClosingTagSchema({
     render: "span",
     validationType: String,
     description: "A schema for creating a span element"
-});
+}, { inline: false });
 
 export const cite = generateSelfClosingTagSchema({
     render: "cite",
@@ -36,7 +36,7 @@ export const dfn = generateSelfClosingTagSchema({
     render: "dfn",
     validationType: String,
     description: "A schema for creating a dfn element"
-});
+}, { inline: false });
 export const samp = generateSelfClosingTagSchema({
     render: "samp",
     validationType: String,
@@ -46,7 +46,7 @@ export const time = generateSelfClosingTagSchema({
     render: "time",
     validationType: String,
     description: "A schema for creating a time element"
-});
+}, { inline: false });
 export const mark = generateSelfClosingTagSchema({
     render: "mark",
     validationType: String,
@@ -78,13 +78,13 @@ export const dd = generateSelfClosingTagSchema({
     render: "dd",
     validationType: String,
     description: "A schema for creating a dd element"
-});
+}, { inline: false });
 
 export const dt = generateSelfClosingTagSchema({
     render: "dt",
     validationType: String,
     description: "A schema for creating a dt element",
-});
+}, { inline: false });
 
 
 
