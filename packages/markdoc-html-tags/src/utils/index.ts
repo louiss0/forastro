@@ -1,3 +1,3 @@
-export { MarkdocValidatorAttribute } from "./MarkdocValidatorAttribute"
 export * from "./helpers"
+export * from "./custom-attributes"
 
