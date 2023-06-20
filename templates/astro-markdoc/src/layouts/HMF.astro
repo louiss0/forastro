@@ -1,7 +1,7 @@
 ---
-import Default from "./Default.astro";
+import Default from './Default.astro';
 
-import Navbar from "~/components/Navbar.astro";
+import Navbar from '~/components/Navbar.astro';
 
 interface Props {
   title: string;
@@ -9,18 +9,18 @@ interface Props {
 }
 const { slots } = Astro;
 
-const header = slots.has("header")
-  ? `${await slots.render("header")} `
+const header = slots.has('header')
+  ? `${await slots.render('header')} `
   : ` <p>You must have a header content for this layout</p>`;
 
-const footer = slots.has("footer")
-  ? await slots.render("footer")
+const footer = slots.has('footer')
+  ? await slots.render('footer')
   : ` <p>You must have a footer content for this layout</p>`;
 
 const { title, description } = Astro.props;
 ---
 
-<Default {...{title, description}}>
+<Default {...{ title, description }}>
   <header>
     <Navbar client:idle />
     <Fragment set:html={header} />

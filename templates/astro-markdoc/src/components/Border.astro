@@ -1,6 +1,6 @@
 ---
-import { BorderOrOutlineSizes } from "~/utilities/types";
-import { allTailwindColors } from "~/utilities/constants";
+import type { BorderOrOutlineSizes } from '~/utilities/types';
+import { allTailwindColors } from '~/utilities/constants';
 
 /**
  ** The border component by default creates a border that surrounds a component
@@ -23,17 +23,17 @@ const borderColors = allTailwindColors.map((value) => `border-${value}`);
 const { borderSizeClass, class: $class } = Astro.props;
 
 const borderClassesAreValid =
-  typeof $class === "undefined"
+  typeof $class === 'undefined'
     ? true
     : $class
-        .split(" ")
+        .split(' ')
         .every((classColor) =>
           borderColors.some((borderColor) => classColor.includes(borderColor))
         );
 
 const errorMessage =
   () => `This class can only use border classes  you can use responsive and media classes but nothing else  
-    remember the valid tailwind classes ${borderColors.join(", ")}
+    remember the valid tailwind classes ${borderColors.join(', ')}
     `;
 ---
 

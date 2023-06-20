@@ -1,11 +1,11 @@
 ---
-import "@fontsource/lato/100.css";
-import "@fontsource/lato/300.css";
-import "@fontsource/lato/400.css";
-import "@fontsource/lato/700.css";
-import "@fontsource/lato/900.css";
-import "@fontsource/raleway";
-import { Head } from "~/components";
+import '@fontsource/lato/100.css';
+import '@fontsource/lato/300.css';
+import '@fontsource/lato/400.css';
+import '@fontsource/lato/700.css';
+import '@fontsource/lato/900.css';
+import '@fontsource/raleway';
+import { Head } from '~/components';
 
 export interface Props {
   title: string;
@@ -18,7 +18,7 @@ const { title, description } = Astro.props;
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <Head {...{title, description}} />
+    <Head {...{ title, description }} />
     <style is:global>
       /** 
         
@@ -42,21 +42,21 @@ const { title, description } = Astro.props;
         --step-3: clamp(1.3rem, calc(1rem + 1.49vw), 1.95rem);
         --step-4: clamp(1.56rem, calc(1.15rem + 2.01vw), 2.44rem);
         --step-5: clamp(1.87rem, calc(1.33rem + 2.69vw), 3.05rem);
-        --heading-font: "Raleway", sans-serif;
-        --body-font: "Lato", sans-serif;
+        --heading-font: 'Raleway', sans-serif;
+        --body-font: 'Lato', sans-serif;
       }
     </style>
   </head>
   <body
     style={{
-      fontSize: "var(--step-0)",
-      fontFamily: "var(--body-font)",
+      fontSize: 'var(--step-0)',
+      fontFamily: 'var(--body-font)',
     }}
     class:list={[
-      "text-gray-900 dark:text-gray-50 selection:text-gray-50 dark:selection:text-gray-900",
-      "bg-gray-50  dark:text-gray-900 selection:bg-gray-900 dark:selection:bg-gray-50",
-      "min-h-screen",
-      "grid grid-rows-[auto_1fr_auto]",
+      'text-gray-900 dark:text-gray-50 selection:text-gray-50 dark:selection:text-gray-900',
+      'bg-gray-50  dark:text-gray-900 selection:bg-gray-900 dark:selection:bg-gray-50',
+      'min-h-screen',
+      'grid grid-rows-[auto_1fr_auto]',
     ]}
   >
     <slot />

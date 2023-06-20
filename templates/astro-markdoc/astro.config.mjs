@@ -1,12 +1,14 @@
-import { defineConfig } from "astro/config";
-// https://astro.build/config
+import  { defineConfig } from "astro/config";
+import markdoc from '@astrojs/markdoc';
+import tailwind from '@astrojs/tailwind';
 
-// https://astro.build/config
-import tailwind from "@astrojs/tailwind";
-import markdoc from "@astrojs/markdoc";
-
-// https://astro.build/config
 
 export default defineConfig({
-  integrations: [tailwind(), markdoc()],
-});
+    experimental:{
+        assets: true,
+    },
+    integrations:[
+        tailwind(),
+        markdoc()
+    ]
+})

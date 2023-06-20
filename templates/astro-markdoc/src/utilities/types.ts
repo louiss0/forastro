@@ -1,4 +1,4 @@
-import { allTailwindColors, allowedTailwindScreenWidths } from "./constants";
+import type { allTailwindColors, allowedTailwindScreenWidths } from "./constants";
 
 type NavLinks = Record<"path" | "text", string>;
 
