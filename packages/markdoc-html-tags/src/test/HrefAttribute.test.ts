@@ -1,11 +1,11 @@
-import { AnchorAttribute } from "src/lib/schema/anchor";
+import { HrefAttribute } from "src/lib/schema/anchor";
 import { describe, expect, it } from "vitest";
 
 
 describe("Make sure the AnchorAttribute's returnMarkdocErrorObjectOrNull ", () => {
 
 
-    const anchorAttribute = new AnchorAttribute()
+    const anchorAttribute = new HrefAttribute()
 
     it("returns an error when a random string is passed ", () => {
 
