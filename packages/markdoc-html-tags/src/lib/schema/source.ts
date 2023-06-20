@@ -1,22 +1,16 @@
-import type { ValidationError } from "@markdoc/markdoc";
-import { MarkdocValidatorAttribute, getGenerateNonPrimarySchema } from "src/utils";
-
-export class SourceSetAttribute extends MarkdocValidatorAttribute {
-
-    returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+import {
+    HttpURLOrPathAttribute,
+    getGenerateNonPrimarySchema
+} from "src/utils";
 
 
 
-    }
-};
-
-
-const source = getGenerateNonPrimarySchema({
+export const source = getGenerateNonPrimarySchema({
     render: "source",
     selfClosing: true,
     attributes: {
         srcset: {
-            type: SourceSetAttribute,
+            type: HttpURLOrPathAttribute,
             required: true,
             description: "A set of urls and image sizes that are required to use upload the picture"
         },

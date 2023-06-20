@@ -1,23 +1,22 @@
 import type { ValidationError } from "@markdoc/markdoc"
 import {
-    MarkdocValidatorAttribute,
+    HttpURLOrPathAttribute,
+    
     generateMarkdocErrorObject,
     getGenerateNonPrimarySchema,
 } from "src/utils"
 
 
-const relativeOrAbsolutePathRegex =
-    /^(\/|\.?\.?\/)\S+(\/[A-Za-z0-9-_\s]+\.[a-z0-9]+|\/[A-Za-z0-9-_\s]+)/
 
-export class AnchorAttribute extends MarkdocValidatorAttribute {
+export class HrefAttribute extends HttpURLOrPathAttribute {
+
+
 
     override returnMarkdocErrorObjectOrNothing(value: string): ValidationError | void {
 
 
-        const isAValidWordPath = /^\/.*\b\w+$/.test(value)
 
-        const isValidHttpUrl =
-            /^(https?:\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/.test(value)
+        const isAValidWordPath = /^\/.*\b\w+$/.test(value)
 
         const isValidMailtoString = /^mailto:([\w.-]+@[\w.-]+)(\?.+)?$/.test(value);
 
@@ -26,9 +25,9 @@ export class AnchorAttribute extends MarkdocValidatorAttribute {
         const isValidWordThatStartsWithAHash = /^#.*\b\w+$/.test(value)
 
         const theValueIsNotValid = ![
-            relativeOrAbsolutePathRegex.test(value),
+            this.relativeOrAbsolutePathRegex.test(value),
+            this.httpUrlRegex.test(value),
             isAValidWordPath,
-            isValidHttpUrl,
             isValidMailtoString,
             isValidTelString,
             isValidWordThatStartsWithAHash,
@@ -37,7 +36,7 @@ export class AnchorAttribute extends MarkdocValidatorAttribute {
         if (theValueIsNotValid) {
 
             return generateMarkdocErrorObject(
-                "invalid-path",
+                "invalid-value",
                 "error",
                 `
           This value ${value} is not a valid href attribute.
@@ -60,32 +59,11 @@ export class AnchorAttribute extends MarkdocValidatorAttribute {
 
 
 
-
-export class DownloadAttribute extends MarkdocValidatorAttribute {
-
-    returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
-
-
-        if (typeof value === "string" && value && !relativeOrAbsolutePathRegex.test(value))
-            return generateMarkdocErrorObject(
-                "invalid-attribute",
-                "error",
-                `If you are going to specify a path in the download attribute.
-                Then please use either a relative or absolute path. 
-                If you want the browser to choose please leave an empty string 
-                `
-            );
-
-
-    }
-};
-
-
 export const a = getGenerateNonPrimarySchema({
     render: "a",
     attributes: {
         href: {
-            type: AnchorAttribute,
+            type: HrefAttribute,
             required: true,
         },
         target: {
@@ -115,7 +93,7 @@ export const a = getGenerateNonPrimarySchema({
 
         },
         download: {
-            type: DownloadAttribute,
+            type: HttpURLOrPathAttribute,
             errorLevel: "error",
             description: "Allows the user to download a file from the computer or the project file system"
         }
