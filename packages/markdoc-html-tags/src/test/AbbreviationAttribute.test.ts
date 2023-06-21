@@ -1,4 +1,3 @@
-import { describe, expect, it } from "vitest";
 import { AbbreviationAttribute, } from 'src/lib/schema/abbreviation';
 // import { generateMarkdocErrorObject } from "src/utils";
 
@@ -13,17 +12,17 @@ describe("Abbreviation Attribute works as intended", () => {
     const res = abbreviationAttribute.returnMarkdocErrorObjectOrNothing("tyle")
 
 
-    expect(res).not.toBe(null)
+    expect(res).not.toBeUndefined()
 
     expect(res).toMatchInlineSnapshot(`
-          {
-            "id": "invalid-attribute",
-            "level": "critical",
-            "message": "You are supposed to supply only words that are capitalised with Spaces
-                     This word tyle doesn't meet that condition.
-                    ",
-          }
-        `)
+      {
+        "id": "invalid-attribute",
+        "level": "critical",
+        "message": "You are supposed to supply only words that are capitalised with Spaces.
+                      This word tyle doesn't meet that condition.
+                ",
+      }
+    `)
 
   })
 
@@ -35,7 +34,7 @@ describe("Abbreviation Attribute works as intended", () => {
     const res = abbreviationAttribute.returnMarkdocErrorObjectOrNothing("Cascading Style")
 
 
-    expect(res).toBe(null)
+    expect(res).toBeUndefined()
 
 
 
