@@ -1,6 +1,6 @@
 
 
-import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface,  } from "@markdoc/markdoc"
+import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface, } from "@markdoc/markdoc"
 import { generateMarkdocErrorObject, generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight } from "src/utils/helpers"
 
 
@@ -78,7 +78,9 @@ export class DataObjectAttribute extends MarkdocValidatorAttribute {
         const arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased =
             Object.entries(value).map(([key, value]) => [`data${key.at(0)}${key.substring(1, -1).toUpperCase()}`, value])
 
-        return Object.fromEntries(arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased)
+        return Object.fromEntries(
+            arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased
+        )
 
 
     }
@@ -103,3 +105,25 @@ export class DataObjectAttribute extends MarkdocValidatorAttribute {
     }
 
 }
+
+export class IntegerAttribute extends MarkdocValidatorAttribute {
+    
+   override returnMarkdocErrorObjectOrNothing(value: unknown, ): void | ValidationError {
+    
+        if (typeof value !== "number")
+            return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("number")
+
+        
+        if (!Number.isInteger(value)) {
+            
+            return generateMarkdocErrorObject(
+                "invalid-value",
+                "error",
+                `The value ${value} is not an integer. 
+                Please provide an integer not a float  
+                `
+            )
+        }
+        
+    }
+};
