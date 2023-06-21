@@ -68,3 +68,38 @@ export  class HttpURLOrPathAttribute extends MarkdocValidatorAttribute {
     }
     
 };
+
+
+export class DataObjectAttribute extends MarkdocValidatorAttribute {
+
+    override transform(value: Record<string, Scalar>,): Scalar {
+
+
+        const arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased =
+            Object.entries(value).map(([key, value]) => [`data${key.at(0)}${key.substring(1, -1).toUpperCase()}`, value])
+
+        return Object.fromEntries(arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased)
+
+
+    }
+
+    override returnMarkdocErrorObjectOrNothing(value: object,): ValidationError | void {
+
+        const regexToCheckIfAValueOnlyHasAlphanumericCharacters = /^[A-Za-z]+$/
+
+        const keysWithoutOnlyAlphanumericCharacters = Object.keys(value)
+            .filter(string => !regexToCheckIfAValueOnlyHasAlphanumericCharacters.test(string))
+
+        if (keysWithoutOnlyAlphanumericCharacters.length !== 0)
+            return generateMarkdocErrorObject(
+                "invalid-characters",
+                "error",
+                `These  are not good keys ${keysWithoutOnlyAlphanumericCharacters.join(",")}. 
+                They must be words with no spaces.
+                `
+            )
+
+
+    }
+
+}

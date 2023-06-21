@@ -14,7 +14,9 @@ import type {
 
 import {
     contenteditable, draggable, lang, title, translate, spellcheck, dir,
-    ariaHidden, ariaLabel, dataMarkdocAttributeSchema as data, ariaLabelledBy,
+    ariaHidden, ariaLabel,
+    ariaLabelledBy,
+    dataMarkdocAttributeSchema
 } from "src/lib/attributes";
 
 import type {
@@ -56,7 +58,7 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
                     render,
                     attributes: {
                         ...attributes,
-                        data
+                        data: dataMarkdocAttributeSchema
                     }
                 })
             const generateNonPrimarySchema = getGenerateNonPrimarySchema(primaryConfigWithDataAttributeInserted)
