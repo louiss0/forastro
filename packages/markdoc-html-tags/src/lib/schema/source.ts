@@ -21,11 +21,13 @@ export const source = getGenerateNonPrimarySchema({
         },
         width: {
             type: IntegerAttribute,
-            description: "The width of the image"
+            description: "The width of the image",
+            errorLevel: "warning",
         },
         height: {
             type: IntegerAttribute,
-            description: "The height of the image"
+            description: "The height of the image",
+            errorLevel: "warning",
         },
     }
 
