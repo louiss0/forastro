@@ -44,7 +44,7 @@ export  class HttpURLOrPathAttribute extends MarkdocValidatorAttribute {
         return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
     }
     
-    const isValidPathOrHTTPUrl= [this.httpUrlRegex.test(value), this.relativeOrAbsolutePathRegex.test(value)].some(Boolean)
+    const isValidPathOrHTTPUrl = [this.httpUrlRegex.test(value), this.relativeOrAbsolutePathRegex.test(value)].some(Boolean)
         
      if (!isValidPathOrHTTPUrl) {
         
@@ -127,3 +127,8 @@ export class IntegerAttribute extends MarkdocValidatorAttribute {
         
     }
 };
+
+
+
+
+
