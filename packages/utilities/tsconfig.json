@@ -11,9 +11,8 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "verbatimModuleSyntax": true,
     "types": [
-      "vitest"
+      "vitest/globals"
     ],
   }
 }

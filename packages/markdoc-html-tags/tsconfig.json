@@ -16,6 +16,9 @@
     "noImplicitReturns": true,
     "skipLibCheck": true,
     "baseUrl": ".",
+    "types": [
+      "vitest/globals",
+    ],
     "paths": {
       "~": [
         "/src"
