@@ -154,12 +154,19 @@ type AllowedMarkdocTypesAsStrings = "string" | "number" | "array" | "boolean" | 
 
 
 export const generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight =
-    (type: AllowedMarkdocTypesAsStrings) =>
-        generateMarkdocErrorObject(
+    (type: AllowedMarkdocTypesAsStrings) => generateMarkdocErrorObject(
             "invalid-type",
             "error",
             `The value passed is not the right type is supposed to be a ${type}`
         )
+
+export const generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight =
+    (message:string) => generateMarkdocErrorObject(
+            "invalid-value",
+            "error",
+            message
+        )
+
 
 export const createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue = (
     conditionalErrors: Array<[condition: boolean, error: ReturnType<typeof generateMarkdocErrorObject>]>
