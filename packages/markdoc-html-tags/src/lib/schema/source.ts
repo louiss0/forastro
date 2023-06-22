@@ -1,63 +1,114 @@
-import type {  ConfigFunction, NodeType, Scalar, Schema, ValidationError } from "@markdoc/markdoc";
+import type { Scalar, ValidationError } from "@markdoc/markdoc";
 import {
     HttpURLOrPathAttribute,
     IntegerAttribute,
     MarkdocValidatorAttribute,
-    generateMarkdocErrorObject,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
     getGenerateNonPrimarySchema
 } from "src/utils";
 
-// TODO: create an attribute for the media, type,
 
-
-class SrcSetAttribute extends HttpURLOrPathAttribute {
+// TODO: TEST SrcSetAttribute
+export class SrcSetAttribute extends HttpURLOrPathAttribute {
         
 
-        protected readonly validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherAWidthSizeOrPixelDensityRegex =
-   /^(?:\.?\.?\/[\w\/]+\/\w+\.[a-z]{3,4}\s?(?:\d+(?:w|vw)|[1-2]x)?)(?:,\s(\.?\.?\/[\w\/]+\/\w+\.[a-z]{3,4}\s(?:\d+(?:w|vw)|[1-2]x)))*$|^$/g
+        protected readonly validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherAOptionalWidthSizeOrPixelDensityRegex =
+            /^(?:\.?\.?\/[\w\/]+\/\w+\.[a-z]{3,4})(?:\s\d+(?:w|vw)|[1-2]x)?$/
+    
+        protected readonly validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherARequiredWidthSizeOrPixelDensityRegex =
+            /^(?:\.?\.?\/[\w\/]+\/\w+\.[a-z]{3,4})(?:\s\d+(?:w|vw)|[1-2]x)$/
+
+    
+        override transform(value: string | Array<string>): Scalar {
         
-        returnMarkdocErrorObjectOrNothing(value: unknown, ): void | ValidationError {
-            
 
-            if (typeof value !== "string") {
-                return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+            return typeof value !== "string" ? value.join(",") : value 
+            
+        }
+    
+        override returnMarkdocErrorObjectOrNothing(value: unknown, ): void | ValidationError {
+            
+            
+            if (typeof value === "string") {
+                
+                const stringIsValid = [
+                    this.validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherAOptionalWidthSizeOrPixelDensityRegex.test(value),
+                    this.httpUrlRegex.test(value)
+                ].some(Boolean)
+                
+                
+                return !stringIsValid
+                    ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
+                        `This value is ${value} not valid.
+                        You must specify a srcset value that has a valid absolute or relative path. 
+                        You can either have a valid width or a valid pixel density.
+                        If you do use a space for each of them. 
+                        Ex: /path/to/image.jpg 
+    
+                        If you specify more then one path you must specify a width or a pixel density.
+                        You must use a comma, space , then specify the next path if you want to specify
+                        more paths.
+                        
+                        Ex: /path/to/image.jpg 30w /path/to/image-2.jpeg 40w
+                        
+                        Ex: /path/to/image.jpg  /path/to/image-2.jpeg 440w
+                        
+                        If you are trying to use a url please use one that is http 
+                        
+                        `
+                    ): undefined
+
+                
             }
 
-            const stringIsValid = [
-                this.validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherAWidthSizeOrPixelDensityRegex.test(value),
-                this.httpUrlRegex.test(value)
-            ].some(Boolean)
-            
-            if (!stringIsValid) {
-                return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
-                    `This value is ${value} not valid.
-                    You must specify a srcset value that has a valid absolute or relative path. 
-                    You can either have a valid width or a valid pixel density.
-                    If you do use a space for each of them. 
-                    Ex: /path/to/image.jpg 
 
-                    If you specify more then one path you must specify a width or a pixel density.
-                    You must use a comma, space , then specify the next path if you want to specify
-                    more paths.
+
+            if (Array.isArray(value)) {
+            
+
+                if (!(value.length >= 2)) {
                     
-                    Ex: /path/to/image.jpg 30w /path/to/image-2.jpeg 40w
-                    
-                    Ex: /path/to/image.jpg  /path/to/image-2.jpeg 440w
-                    
-                    If you are trying to use a url please use one that is http 
-                    
-                    `
-                )
+                    return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
+                        If you want to use an array you should use more than one value.
+                        A string is better in that situation
+                    `)
+
+                }
+
+                const everyValueIsAStringWithARelativeOrAbsolutePathsAndEitherAWidthSizeOrPixelDensity =
+                    value.every(
+                    value => value === "string"
+                        && this.validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherARequiredWidthSizeOrPixelDensityRegex.test(value)
+                    )
+                
+                return !everyValueIsAStringWithARelativeOrAbsolutePathsAndEitherAWidthSizeOrPixelDensity
+                    ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
+                        If you are using an array please use a string that specifies,
+                         a relative or absolute path and a number and the end.
+                         That number must have a vw w or x as at the end. 
+                         Please use a space before writing the number. 
+                          
+                    `): undefined
+            
             }
+
+
+            return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
+                    You must return an array or a string when using this attribute.
+                    Please write the string as a valid URL or a path to a file.
+                    You can also specify a pixel density, a width or a viewport width.
+                    When writing a array you must specify more than one value and specify,
+                    a pixel density, a width or a viewport width.  
+                `)
 
         }
 
     }
 
 
-class SizesAttribute extends MarkdocValidatorAttribute {
+// TODO: TEST SizesAttribute
+export class SizesAttribute extends MarkdocValidatorAttribute {
 
 
     private readonly mediaSizesAttribute =
@@ -106,9 +157,74 @@ class SizesAttribute extends MarkdocValidatorAttribute {
     }
  }
 
-class MediaAttribute extends MarkdocValidatorAttribute {
-    returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+
+// TODO: TEST MediaAttribute
+export class MediaAttribute extends MarkdocValidatorAttribute {
+    private readonly deviceOperatorAndOrientationRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<orientation_query>\(orientation:(?:portrait|landscape)\))?/
+    
+
+    private readonly deviceOperatorAndAspectRatioRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<aspect_ratio_query>(device-)?aspect-ratio:(?:[1-16]{1,2}\/[1-16]{1,2}))/
+    
+    private readonly deviceOperatorAndMediaQueryRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<screen_or_device_size_query>\((?:min-|max-)?(?:device-)?(?:width|height):\d{2,4}(?:em)?\))/
+    
+    
+    private readonly deviceOperatorAndColorOrColorIndexRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<color_or_color_index>\(color(?:-index)?:\d{1,3}\))/
+    
+    private readonly deviceOperatorAndMonoChromeRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<monochrome_query>\(monochrome:\d\))/
+    
+    private readonly deviceOperatorAndResolutionRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<resolution_query>\(resolution:\d{1,3}(?:dpi|dpcm)\))/
+    
+    private readonly deviceOperatorAndGridRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<grid_query>\(grid:\d{1,3}\))/
+    
+    private readonly deviceOperatorAndScanRegex =
+        /(?<device_choice>screen|aural|braille|print|tty|tv|handheld|projection)\s(?<operator>and|not|,)\s(?<scan_query>\(scan:(?:interlace|progressive)\))/
+
+    override returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
         
+
+
+        if (typeof value !== "string") {
+            
+            return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+        }
+
+        const valueIsAValidMediaQuery = [
+            this.deviceOperatorAndColorOrColorIndexRegex.test(value),
+            this.deviceOperatorAndAspectRatioRegex.test(value),
+            this.deviceOperatorAndMediaQueryRegex.test(value),
+            this.deviceOperatorAndScanRegex.test(value),
+            this.deviceOperatorAndResolutionRegex.test(value),
+            this.deviceOperatorAndMonoChromeRegex.test(value),
+            this.deviceOperatorAndGridRegex.test(value),
+            this.deviceOperatorAndOrientationRegex.test(value),
+        ].some(Boolean)
+
+        if (!valueIsAValidMediaQuery) {
+            
+            return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
+                You need to supply the correct media query.
+                Remember not to put any spaces when writing code in the parenthesises of a media query.
+                You must write a media query like this 
+                
+                <device_choice> operator <media_query>
+                
+                device_choices are: screen|aural|braille|print|tty|tv|handheld|projection
+                
+                operators are: and|not|,
+
+                media_query's are: grid|scan|color|color-index|resolution|width|height|aspect-ratio|orientation 
+
+            `)
+        }
+
+
     }
 }
 
@@ -116,8 +232,9 @@ class MediaAttribute extends MarkdocValidatorAttribute {
 export const source = getGenerateNonPrimarySchema({
     render: "source",
     selfClosing: true,
+    description:"This is the schema for the HTML source tag",
     attributes: {
-        srcset: {
+        srcset:  {
             type: SrcSetAttribute,
             required: true,
             description: "A set of urls and image sizes that are required to use upload the picture",
@@ -133,6 +250,21 @@ export const source = getGenerateNonPrimarySchema({
             description: "The height of the image",
             errorLevel: "warning",
         },
+        sizes: {
+            type: SizesAttribute,
+            description: "The size of each image in a media query",
+            errorLevel: "warning",
+        },
+        media: {
+            type: MediaAttribute,  
+            description: "The art resolution or time for an image to appear in a media query",
+            errorLevel: "warning",
+        },
+        type: {
+            type:String,
+            errorLevel: "warning",
+            description: "The type of image that is being used",
+            matches: /^image\/(?<image_type>jpg|jpeg|gif|tiff|webp|png)$/
+        }
     }
-
 })()
