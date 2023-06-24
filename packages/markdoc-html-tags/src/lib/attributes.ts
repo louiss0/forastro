@@ -142,7 +142,7 @@ export const cite = getGenerateMarkdocAttributeSchema({
                         ? generateMarkdocErrorObject(
                             "invalid-attribute",
                             "error",
-                            `The string ${value} must be a valid URL, a Relative or Absolute Path `
+                            `The string ${value} must be a valid HTTP URL`
                             )
                         : undefined
         

@@ -5,6 +5,7 @@ import {
     HttpURLOrPathAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
+    generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     getGenerateNonPrimarySchema,
 } from "src/utils";
 
@@ -217,17 +218,83 @@ export const br = getGenerateNonPrimarySchema({
     attributes: { ariaHidden },
 })();
 
-export const embed = getGenerateNonPrimarySchema({
-    render: "embed",
+export const iframe = getGenerateNonPrimarySchema({
+    render: "iframe",
     selfClosing: true,
     attributes: {
-        type: {
+        title: {
             type: String,
-            description: "The acceptable media types only for embed",
-            matches: /^(<embed_media_types>application|font|example|message|model|text)\/[a-z]+$/
+            required: true,
+            description: "The word used to describe the content of the iframe",
+        },
+        allow: {
+            type: String,
+            matches:/\b\w+(?:\s\w+)*\b/
+        },
+        name: {
+            type: String,
+            description: "The name of the iframe",
+        },
+        loading: {
+            type: String,
+            matches: [
+                "eager",
+                "lazy",
+            ]
+        },
+        allowfullscreen:{
+            type: Boolean,
+            description: "It allows the iframe to go fullscreen"
+        },
+        refferpolicy:{
+            type:String,
+            matches:[
+            "no-referrer",
+            "no-referrer-when-downgrade",
+            "origin",
+            "origin-when-cross-origin",
+            "same-origin",
+            "strict-origin-when-cross-origin",
+            "unsafe-url",
+            ]
+        },
+        sandbox:{
+            type:String,
+            matches:[
+            "allow-forms",
+            "allow-pointer-lock",
+            "allow-popups",
+            "allow-same-origin",
+            "allow-scripts",
+            "allow-top-navigation,"
+            ]
+        },
+        allowpaymentrequest:{
+            type: Boolean,
+            description: "It allows the iframe to invoke the Payment Request API"
         },
         src: {
-            type: HttpURLOrPathAttribute,
+            type: class extends HttpURLOrPathAttribute {
+
+                returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
+     
+                    
+    
+        
+                    return value !== "string"
+                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                        : !this.httpUrlRegex.test(value)
+                            ? generateMarkdocErrorObject(
+                                "invalid-attribute",
+                                "error",
+                                `The string ${value} must be a valid HTTP URL`
+                            )
+                            : undefined
+        
+     
+
+                }
+            },
             required: true,
             description: "This attribute is the path to the place containing media to display"
         },
@@ -272,6 +339,17 @@ export const picture = generateNonPrimarySchemaWithATransformThatGeneratesDataAt
     children: [
         "image",
         "source",
+    ]
+})()
+
+export const dl = getGenerateNonPrimarySchema({
+    render: "dl",
+    attributes: {
+        ariaLabel
+    },
+    children: [
+        "dt",
+        "dd",
     ]
 })()
 
