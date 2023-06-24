@@ -1,7 +1,10 @@
 import { generateSelfClosingTagSchema } from "src/utils";
 
 export { abbr } from "src/lib/schema/abbreviation"
+import { cite as citeAttribute, datetime, type ProperSchemaMatches, type RequiredSchemaAttributeType  } from "src/lib/attributes"
 export { a } from "src/lib/schema/anchor"
+
+
 
 
 export const sup = generateSelfClosingTagSchema({
@@ -9,6 +12,26 @@ export const sup = generateSelfClosingTagSchema({
     validationType: String,
     description: "A schema for creating a sup element"
 });
+
+export const del = generateSelfClosingTagSchema<ProperSchemaMatches, RequiredSchemaAttributeType, "del">({
+    render: "del",
+    validationType: String,
+    description: "A schema for creating a sup element"
+}, {
+    attributes: {
+        cite: citeAttribute,
+        datetime  
+}});
+export const ins = generateSelfClosingTagSchema<ProperSchemaMatches, RequiredSchemaAttributeType, "ins">({
+    render: "ins",
+    validationType: String,
+    description: "A schema for creating a sup element"
+},{
+    attributes: {
+        cite: citeAttribute,
+        datetime  
+}});
+
 
 export const sub = generateSelfClosingTagSchema({
     render: "sub",
@@ -32,21 +55,33 @@ export const code = generateSelfClosingTagSchema({
     validationType: String,
     description: "A schema for creating a code element"
 });
+
 export const dfn = generateSelfClosingTagSchema({
     render: "dfn",
     validationType: String,
     description: "A schema for creating a dfn element"
 }, { inline: false });
+
 export const samp = generateSelfClosingTagSchema({
     render: "samp",
     validationType: String,
     description: "A schema for creating a samp element"
 });
-export const time = generateSelfClosingTagSchema({
+
+export const time = generateSelfClosingTagSchema<ProperSchemaMatches, RequiredSchemaAttributeType, "time">({
     render: "time",
     validationType: String,
     description: "A schema for creating a time element"
-}, { inline: false });
+}, {
+    inline: false,
+    attributes: {
+        datetime: {
+            ...datetime,
+            required: true
+        }
+    }
+});
+
 export const mark = generateSelfClosingTagSchema({
     render: "mark",
     validationType: String,

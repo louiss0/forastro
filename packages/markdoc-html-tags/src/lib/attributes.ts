@@ -1,8 +1,12 @@
-import type { Scalar, SchemaAttribute, ValidationType } from "@markdoc/markdoc";
+import type { ConfigFunction, NodeType, Scalar, Schema, SchemaAttribute, ValidationError, ValidationType } from "@markdoc/markdoc";
 import {
     DataObjectAttribute,
+    HttpURLOrPathAttribute,
+    MarkdocValidatorAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
-    generateMarkdocErrorObject
+    generateMarkdocErrorObject,
+    generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
+    generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight
 } from "src/utils";
 
 
@@ -109,6 +113,55 @@ export const title = generateProperStringAttributeSchema({
     },
 
 });
+
+export const cite = getGenerateMarkdocAttributeSchema({
+            type: class extends HttpURLOrPathAttribute {
+
+                returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+     
+                    
+    
+        
+                    return value !== "string"
+                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                        : !this.httpUrlRegex.test(value)
+                        ? generateMarkdocErrorObject(
+                            "invalid-attribute",
+                            "error",
+                            `The string ${value} must be a valid URL, a Relative or Absolute Path `
+                            )
+                        : undefined
+        
+     
+
+                }
+
+            },
+            description: "A url that leads to a citation",
+            errorLevel: "warning"
+})()
+    
+export const datetime = getGenerateMarkdocAttributeSchema({
+    type: class extends MarkdocValidatorAttribute {
+
+            returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+                
+                return value !== "string"
+                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                        : isNaN(Date.parse(value))
+                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
+                            `This value ${value} is not a parse able date time string
+                             Please use a proper date format 
+                            `
+                        )
+                        : undefined
+
+            }
+    },
+    description: "The time in the form of a date",
+    errorLevel: "warning"
+    
+})();
 
 
 

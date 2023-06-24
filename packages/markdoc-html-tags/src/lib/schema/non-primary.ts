@@ -16,6 +16,7 @@ import {
     contenteditable, draggable, lang, title, translate, spellcheck, dir,
     ariaHidden, ariaLabel,
     ariaLabelledBy,
+    cite,
     dataMarkdocAttributeSchema
 } from "src/lib/attributes";
 
@@ -213,10 +214,26 @@ export const br = getGenerateNonPrimarySchema({
     attributes: { ariaHidden },
 })();
 
+export const embed = getGenerateNonPrimarySchema({
+    render: "embed",
+    selfClosing: true,
+    attributes: {
+        ariaHidden
+    },
+})();
+
 export const hr = getGenerateNonPrimarySchema({
     render: "hr",
     selfClosing: true,
     attributes: { ariaHidden }
+})();
+
+export const blockquote = getGenerateNonPrimarySchema({
+    render: "blockquote",
+    selfClosing: true,
+    attributes: { 
+        cite        
+    }
 })();
 
 export const details = getGenerateNonPrimarySchema({
