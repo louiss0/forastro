@@ -2,6 +2,7 @@ import type { ConfigFunction, NodeType, Scalar, Schema, SchemaAttribute, Validat
 import {
     DataObjectAttribute,
     HttpURLOrPathAttribute,
+    IntegerAttribute,
     MarkdocValidatorAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
@@ -113,6 +114,19 @@ export const title = generateProperStringAttributeSchema({
     },
 
 });
+
+export const width = getGenerateMarkdocAttributeSchema({
+    type: IntegerAttribute,
+    description: "The width of the image",
+    errorLevel: "warning",
+})()
+
+export const height = getGenerateMarkdocAttributeSchema({
+    type: IntegerAttribute,
+    description: "The height of the image",
+    errorLevel: "warning",
+})()
+
 
 export const cite = getGenerateMarkdocAttributeSchema({
             type: class extends HttpURLOrPathAttribute {

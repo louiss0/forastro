@@ -2,6 +2,7 @@ import type { Node } from "@markdoc/markdoc";
 import * as markdoc from "@markdoc/markdoc";
 
 import {
+    HttpURLOrPathAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
     getGenerateNonPrimarySchema,
@@ -17,7 +18,9 @@ import {
     ariaHidden, ariaLabel,
     ariaLabelledBy,
     cite,
-    dataMarkdocAttributeSchema
+    dataMarkdocAttributeSchema,
+    width,
+    height
 } from "src/lib/attributes";
 
 import type {
@@ -218,7 +221,19 @@ export const embed = getGenerateNonPrimarySchema({
     render: "embed",
     selfClosing: true,
     attributes: {
-        ariaHidden
+        type: {
+            type: String,
+            description: "The acceptable media types only for embed",
+            matches: /^(<embed_media_types>application|font|example|message|model|text)\/[a-z]+$/
+        },
+        src: {
+            type: HttpURLOrPathAttribute,
+            required: true,
+            description: "This attribute is the path to the place containing media to display"
+        },
+        ariaHidden,
+        width,
+        height,        
     },
 })();
 
@@ -328,6 +343,11 @@ export const video = getGenerateNonPrimarySchema({
             required: true,
             description: "This is the link to the audio file you want to use"
         },
+        type: {
+            type: String,
+            description: "The acceptable media types only for video",
+            matches: /^video\/[a-z]+$/
+        },
         autoPlay: {
             type: Boolean,
             description: "A Boolean attribute: if specified, the audio will automatically begin playback as soon as it can do so"
@@ -391,6 +411,11 @@ export const audio = getGenerateNonPrimarySchema({
             type: String,
             required: true,
             description: "This is the link to the audio file you want to use"
+        },
+        type: {
+            type: String,
+            description: "The acceptable media types only for audio",
+            matches: /^audio\/[a-z]+$/
         },
         ariaHidden,
         autoPlay: {

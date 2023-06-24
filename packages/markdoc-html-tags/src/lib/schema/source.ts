@@ -1,4 +1,5 @@
 import type { Scalar, ValidationError } from "@markdoc/markdoc";
+import { height, width } from "src/lib/attributes";
 import {
     HttpURLOrPathAttribute,
     IntegerAttribute,
@@ -240,16 +241,7 @@ export const source = getGenerateNonPrimarySchema({
             description: "A set of urls and image sizes that are required to use upload the picture",
              
         },
-        width: {
-            type: IntegerAttribute,
-            description: "The width of the image",
-            errorLevel: "warning",
-        },
-        height: {
-            type: IntegerAttribute,
-            description: "The height of the image",
-            errorLevel: "warning",
-        },
+            
         sizes: {
             type: SizesAttribute,
             description: "The size of each image in a media query",
@@ -265,6 +257,8 @@ export const source = getGenerateNonPrimarySchema({
             errorLevel: "warning",
             description: "The type of image that is being used",
             matches: /^image\/(?<image_type>jpg|jpeg|gif|tiff|webp|png)$/
-        }
+        },
+        width,
+        height,
     }
 })()
