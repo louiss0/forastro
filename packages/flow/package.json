@@ -2,16 +2,8 @@
   "name": "@forastro/flow",
   "version": "2.4.2",
   "type": "module",
-  "exports": {
-    ".": {
-      "types": "./index.d.ts",
-      "import": "./index.ts"
-    }
-  },
   "files": [
-    "src",
-    "index.ts",
-    "index.d.ts"
+    "dist"
   ],
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
@@ -22,12 +14,12 @@
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
   },
-  "types": "./index.d.ts",
   "keywords": [
     "astro-component",
     "ui"
   ],
   "scripts": {
+    "build": "tsup",
     "release": "release-it",
     "publint": "publint "
   },
