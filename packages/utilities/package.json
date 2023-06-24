@@ -9,6 +9,7 @@
     }
   },
   "scripts": {
+    "build":"tsup",
     "release": "dotenv release-it",
     "publint" : "publint "
   },
