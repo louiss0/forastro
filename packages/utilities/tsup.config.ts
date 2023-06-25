@@ -4,7 +4,6 @@ export default defineConfig((ctx) => ({
   entry: [
     'src',
   ],
-  
   format: "esm",
   publicDir: true,
   dts: true,

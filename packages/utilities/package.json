@@ -3,10 +3,14 @@
   "version": "2.5.1",
   "type": "module",
   "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
   "scripts": {
-    "build":"tsup",
+    "build": "tsup",
     "release": "dotenv release-it",
-    "publint" : "publint "
+    "publint": "publint "
   },
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",

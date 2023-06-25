@@ -6,6 +6,10 @@
     "dist"
   ],
   "types": "./dist/index.d.ts",
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
+  },
   "scripts": {
     "coverage": "vitest run --coverage",
     "dev": "tsup --watch",
