@@ -1,6 +1,6 @@
 {
   "name": "@forastro/utilities",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "type": "module",
   "types": "./dist/index.d.ts",
   "exports": {
