@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-### Added
+### Removed
+
+- There is no CJS support only ESM.
+  
+### Changed
+
+- Components are exported in `@forastro/utilities/components` instead of in main.
 
 ## [2.5.1] - 2023-05-24
 
