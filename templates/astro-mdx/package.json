@@ -9,18 +9,22 @@
     "preview": "astro preview",
     "integrate": "astro add"
   },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "/packages/astro-mdx"
+  },
   "keywords": [],
   "author": "Shelton Louis",
   "license": "ISC",
   "devDependencies": {
-    "@fontsource/raleway": "*",
-    "@fontsource/lato": "*",
-    "astro-icon": "*",
     "@astrojs/mdx": "*",
-    "@forastro/remark-html-directives-integration": "workspace:^"
+    "@fontsource/lato": "*",
+    "@fontsource/raleway": "*",
+    "@forastro/remark-html-directives-integration": "workspace:^",
+    "astro-icon": "*"
   },
   "dependencies": {
-    "@forastro/utilities": "workspace:^",
-    "astro": ">1.0.0"
+    "@forastro/utilities": "workspace:^"
   }
 }

@@ -5,6 +5,12 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
@@ -12,12 +18,16 @@
       "es2017",
       "dom"
     ],
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
       "@forastro/flow": [
         "packages/flow"
+      ],
+      "@forastro/markdoc-html-tags": [
+        "packages/markdoc-html-tags"
       ],
       "@forastro/remark-html-directives": [
         "packages/remark-html-directives"

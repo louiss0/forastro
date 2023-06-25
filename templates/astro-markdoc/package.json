@@ -1,0 +1,31 @@
+{
+  "name": "@forastro/template_astro-markdoc",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "/packages/astro-markdoc"
+  },
+  "dependencies": {
+    "@forastro/flow": "*",
+    "@astrojs/markdoc": "^0.3.3",
+    "@forastro/markdoc-html-tags": "workspace:^",
+    "@forastro/utilities": "*",
+    "astro": "*",
+    "astro-icon": "*"
+  },
+  "devDependencies": {
+    "@astrojs/tailwind": "*",
+    "@fontsource/lato": "*",
+    "@fontsource/raleway": "*",
+    "tailwindcss": "*"
+  }
+}

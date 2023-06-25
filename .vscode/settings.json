@@ -19,9 +19,19 @@
     "peacock.remoteColor": "#2f3640",
     "cSpell.words": [
         "clsx",
+        "contenteditable",
+        "controlslist",
+        "crossorigin",
+        "disableremoteplayback",
         "Fontsource",
         "Icones",
         "Iconify",
-        "Preact"
-    ]
+        "nodownload",
+        "nofullscreen",
+        "noremoteplayback",
+        "playsinline",
+        "Preact",
+        "referrerpolicy"
+    ],
+    "todo-tree.tree.scanMode": "workspace"
 }

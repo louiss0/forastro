@@ -25,6 +25,15 @@
     "astro-integration",
     "remark"
   ],
+  "repository": {
+    "url": "https://github.com/louiss0/forastro.git",
+    "type": "git",
+    "directory": "packages/remark-html-directives-integration"
+  },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
+  },
   "peerDependencies": {
     "astro": ">1.0.0"
   },
