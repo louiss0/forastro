@@ -1,9 +1,12 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig((ctx) => ({
-  entry: ['src/index.ts'],
+  entry: [
+    'src',
+  ],
+  
   format: "esm",
-  publicDir: "src/components",
+  publicDir: true,
   dts: true,
   minify: !ctx.watch,
   clean: !ctx.watch,
