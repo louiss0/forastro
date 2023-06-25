@@ -5,24 +5,43 @@
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noImplicitOverride": true,
+    "noUncheckedIndexedAccess": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2017", "dom"],
+    "lib": [
+      "es2017",
+      "dom"
+    ],
+    "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@forastro/flow": ["packages/flow"],
-      "@forastro/markdoc-html-tags": [
-        "packages/markdoc-html-tags/src/index.ts"
+      "@forastro/flow": [
+        "packages/flow"
       ],
-      "@forastro/remark-html-directives": ["packages/remark-html-directives"],
+      "@forastro/markdoc-html-tags": [
+        "packages/markdoc-html-tags"
+      ],
+      "@forastro/remark-html-directives": [
+        "packages/remark-html-directives"
+      ],
       "@forastro/remark-html-directives-integration": [
         "packages/remark-html-directives-integration"
       ],
-      "@forastro/utilities": ["packages/utilities"]
+      "@forastro/utilities": [
+        "packages/utilities"
+      ]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": [
+    "node_modules",
+    "tmp"
+  ]
 }

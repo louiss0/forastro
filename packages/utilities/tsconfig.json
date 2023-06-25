@@ -7,13 +7,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
+    "jsx": "preserve",
+    "jsxImportSource": "astro-jsx",
     "forceConsistentCasingInFileNames": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
-    "verbatimModuleSyntax": true,
     "types": [
-      "vitest"
+      "vitest/globals"
     ],
   }
 }

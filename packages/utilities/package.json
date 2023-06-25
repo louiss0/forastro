@@ -2,15 +2,15 @@
   "name": "@forastro/utilities",
   "version": "2.5.1",
   "type": "module",
+  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./index.ts",
-      "default": "./index.ts"
-    }
+    "types": "./dist/index.d.ts",
+    "import": "./dist/index.js"
   },
   "scripts": {
+    "build": "tsup",
     "release": "dotenv release-it",
-    "publint" : "publint "
+    "publint": "publint "
   },
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
@@ -18,15 +18,14 @@
     "directory": "packages/utilities"
   },
   "peerDependencies": {
-    "astro": ">1.0.0"
+    "astro": ">2.0.0"
   },
   "author": {
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
   },
   "files": [
-    "src",
-    "index.ts"
+    "dist"
   ],
   "keywords": [
     "astro-component",

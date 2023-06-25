@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "@forastro/utilities": "*",
-    "astro": "*",
     "clsx": "*",
     "preact": "*",
     "tailwindcss": "*"

@@ -1,1 +1,1 @@
-export * from './lib/markdoc-html-tags';
+export * from './lib';

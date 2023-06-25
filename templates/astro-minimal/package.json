@@ -1,5 +1,5 @@
 {
-  "name": "@forastro/template_minimal",
+  "name": "@forastro/template_astro-minimal",
   "type": "module",
   "version": "0.0.1",
   "private": true,
@@ -18,7 +18,6 @@
   "dependencies": {
     "@forastro/flow": "*",
     "@forastro/utilities": "*",
-    "astro": "*",
     "astro-icon": "*"
   },
   "devDependencies": {
