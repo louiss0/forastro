@@ -10,9 +10,6 @@
         "tagName": "${name}v${version}",
         "commitMessage": "chore: release v${version}"
     },
-    "npm": {
-        "publish": false
-    },
     "github": {
         "release": true
     },
