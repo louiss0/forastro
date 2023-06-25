@@ -1,7 +1,7 @@
 import { defineConfig } from 'tsup'
 
 export default defineConfig((ctx) => ({
-  entry:["src"],
+  entry: ["src/helpers.ts"],
   publicDir: true,
   format: "esm",
   minify: !ctx.watch,

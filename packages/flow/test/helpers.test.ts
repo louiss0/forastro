@@ -1,7 +1,7 @@
 import { describe, expect, it, } from "vitest";
 import {
     Case, getCaseFromSwitchState, setCaseInSwitchState, unsetCaseInSwitchState
-} from "packages/flow/src/lib/helpers";
+} from "packages/flow/src/helpers";
 
 
 const switchStateSymbol = Symbol.for("switch-state")

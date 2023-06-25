@@ -1,7 +1,7 @@
 ---
-import { setCaseInSwitchState, unsetCaseInSwitchState } from "../lib/helpers";
+import { setCaseInSwitchState, unsetCaseInSwitchState } from '../helpers';
 
-import type Case from "./Case.astro";
+import type Case from './Case.astro';
 
 type Props = {
   of: unknown;
@@ -11,12 +11,12 @@ type Props = {
 
 const { of, cloak } = Astro.props;
 
-let html = "";
+let html = '';
 setCaseInSwitchState(of, !!cloak);
 
-html = Astro.slots.has("default")
-  ? await Astro.slots.render("default")
-  : "Please render a case here";
+html = Astro.slots.has('default')
+  ? await Astro.slots.render('default')
+  : 'Please render a case here';
 
 unsetCaseInSwitchState();
 ---
@@ -24,5 +24,5 @@ unsetCaseInSwitchState();
 <Fragment
   set:html={html
     ? html
-    : "Please render a proper case and make sure the default one is at the bottom"}
+    : 'Please render a proper case and make sure the default one is at the bottom'}
 />
