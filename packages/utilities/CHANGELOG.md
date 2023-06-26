@@ -1,6 +1,10 @@
 # @forastro/utilities
 
-## [Unreleased]
+## [2.6.0] - 2023-06-25
+
+### Added
+
+## [2.6.0]
 
 ### Removed
 
