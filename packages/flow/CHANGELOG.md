@@ -1,6 +1,10 @@
 # @forastro/flow
 
-## [Unreleased]
+## [2.5.0] - 2023-06-25
+
+### Added
+
+## [2.5.0]
 
 ### Removed
 

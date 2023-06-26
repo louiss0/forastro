@@ -7,14 +7,16 @@
         "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
-        "tagName": "${name}v${version}",
+        "requireCleanWorkingDir": false,
+        "tagName": "${npm.name}v${version}",
         "commitMessage": "chore: release v${version}"
     },
     "github": {
         "release": true
     },
     "npm": {
-        "publish": false
+        "publish": false,
+        "allowSameVersion": true
     },
     "plugins": {
         "@release-it/keep-a-changelog": true
