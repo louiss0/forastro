@@ -11,7 +11,8 @@
         "commitMessage": "chore: release v${version}"
     },
     "github": {
-        "release": true
+        "release": true,
+        "releaseName": "Release ${name} ${version}"
     },
     "plugins": {
         "@release-it/keep-a-changelog": true
