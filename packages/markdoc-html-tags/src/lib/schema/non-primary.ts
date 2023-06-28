@@ -1,11 +1,10 @@
-import type { Node } from "@markdoc/markdoc";
 import * as markdoc from "@markdoc/markdoc";
-
 import {
     HttpURLOrPathAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
+    generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
     getGenerateNonPrimarySchema,
 } from "src/utils";
 
@@ -14,21 +13,32 @@ import type {
     GenerateNonSecondarySchemaConfig,
 } from "src/utils";
 
-import {
-    contenteditable, draggable, lang, title, translate, spellcheck, dir,
-    ariaHidden, ariaLabel,
-    ariaLabelledBy,
+import { MarkdocAttributeSchemas } from "src/lib/attributes";
+
+
+const {
+    contenteditable,
+    draggable,
+    lang,
+    title,
+    translate,
+    spellcheck,
+    dir,
+    ariaHidden,
+    ariaLabel,
     cite,
-    dataMarkdocAttributeSchema,
+    data,
     width,
-    height
-} from "src/lib/attributes";
+    height } = MarkdocAttributeSchemas
 
 import type {
     ProperSchemaMatches,
     RequiredSchemaAttributeType,
     SchemaAttributesWithNoPrimaryKey
 } from "src/lib/attributes";
+
+
+
 type GenerateNonPrimarySchemaConfigThatDoesNotAllowDataConfig<
     T extends ProperSchemaMatches,
     U extends RequiredSchemaAttributeType,
@@ -41,7 +51,16 @@ type GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<
     T extends ProperSchemaMatches,
     U extends RequiredSchemaAttributeType,
     R extends string
-> = Omit<GenerateNonSecondarySchemaConfig<T, U, R>, "transform">
+> = Omit<GenerateNonSecondarySchemaConfig<T, U, R>, "transform" | "validate">
+
+
+function toLowercaseWithDashes(str: string) {
+    return str.replace(/(?<uppercased_letter>[A-Z])/g, function (_, p1: Record<"uppercased_letter", string>) {
+        return '-' + p1.uppercased_letter.toLowerCase();
+    }).toLowerCase();
+}
+
+
 
 const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
     <
@@ -63,34 +82,76 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
                     render,
                     attributes: {
                         ...attributes,
-                        data: dataMarkdocAttributeSchema
+                        data
                     }
                 })
             const generateNonPrimarySchema = getGenerateNonPrimarySchema(primaryConfigWithDataAttributeInserted)
 
             return generateNonPrimarySchema({
+
+                validate(node) {
+
+                    const attrs = node.attributes as Record<"data", Record<string, unknown>>
+
+
+
+                    const keysWithNoNumberBooleanOrStringValues =
+                        Object.entries(attrs).reduce(
+                            (carry: Array<string>, [key, value]) =>
+                                typeof value !== "string"
+                                    || typeof value !== "number"
+                                    || typeof value !== "boolean"
+                                    ?
+                                    carry.concat(key)
+                                    : carry,
+                            []
+                        )
+
+                    return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue(
+                        [
+                            keysWithNoNumberBooleanOrStringValues.length !== 0,
+                            generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
+                                Data attribute values are only supposed to have strings numbers and booleans.
+                                HTML can't parse those anything else.
+                                Please fix the following keys ${keysWithNoNumberBooleanOrStringValues.join(",")}.  
+                            `)
+                        ]
+                    )
+
+
+                },
                 transform(node, config) {
 
                     const { tag, attributes, } = node
 
-                    if (!tag) {
 
-                        throw new Error("There is no tag cannot render")
-                    }
 
                     let newAttributes = {}
                     if ("data" in attributes) {
 
                         const { data } = attributes
 
-                        newAttributes = { ...data }
+                        const arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased =
+                            Object.entries(data).map(
+                                ([key, value]) => [`data-${toLowercaseWithDashes(key)}`, value]
+                            )
+
+
+
+
+                        newAttributes = {
+                            ...Object.fromEntries(
+                                arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased
+                            )
+                        }
+
 
                         delete attributes["data"]
                     }
 
-                    Object.assign(newAttributes, attributes)
 
-                    return new markdoc.Tag(tag, newAttributes, node.transformChildren(config))
+
+                    return new markdoc.Tag(tag, { ...attributes, ...newAttributes }, node.transformChildren(config))
 
                 },
                 ...secondaryConfig,
@@ -104,15 +165,27 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
     }
 
 
+class IframeSrcAttribute extends HttpURLOrPathAttribute {
+
+    returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
 
 
 
 
-export const br = getGenerateNonPrimarySchema({
-    render: "br",
-    selfClosing: true,
-    attributes: { ariaHidden },
-})();
+        return value !== "string"
+            ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+            : !this.httpUrlRegex.test(value)
+                ? generateMarkdocErrorObject(
+                    "invalid-attribute",
+                    "error",
+                    `The string ${value} must be a valid HTTP URL`
+                )
+                : undefined
+
+
+
+    }
+}
 
 export const iframe = getGenerateNonPrimarySchema({
     render: "iframe",
@@ -170,27 +243,7 @@ export const iframe = getGenerateNonPrimarySchema({
             description: "It allows the iframe to invoke the Payment Request API"
         },
         src: {
-            type: class extends HttpURLOrPathAttribute {
-
-                returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
-
-
-
-
-                    return value !== "string"
-                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-                        : !this.httpUrlRegex.test(value)
-                            ? generateMarkdocErrorObject(
-                                "invalid-attribute",
-                                "error",
-                                `The string ${value} must be a valid HTTP URL`
-                            )
-                            : undefined
-
-
-
-                }
-            },
+            type: IframeSrcAttribute,
             required: true,
             description: "This attribute is the path to the place containing media to display"
         },
@@ -206,6 +259,13 @@ export const hr = getGenerateNonPrimarySchema({
     attributes: { ariaHidden }
 })();
 
+export const br = getGenerateNonPrimarySchema({
+    render: "br",
+    selfClosing: true,
+    attributes: { ariaHidden },
+})();
+
+
 export const blockquote = getGenerateNonPrimarySchema({
     render: "blockquote",
     selfClosing: true,
@@ -214,7 +274,7 @@ export const blockquote = getGenerateNonPrimarySchema({
     }
 })();
 
-export const details = getGenerateNonPrimarySchema({
+export const details = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "details",
     attributes: {
         ariaHidden,
@@ -249,7 +309,7 @@ export const dl = getGenerateNonPrimarySchema({
     ]
 })()
 
-export const figure = getGenerateNonPrimarySchema({
+export const figure = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
     render: "figure",
     attributes: {
         ariaHidden,
@@ -257,7 +317,7 @@ export const figure = getGenerateNonPrimarySchema({
     },
     children: [
         "header",
-        "div",
+
         "figcaption",
         "paragraph",
         "footer",
@@ -284,7 +344,7 @@ export const colgroup = getGenerateNonPrimarySchema({
     attributes: { ariaHidden, },
     children: [
         "col",
-        "div",
+
         "text",
     ]
 })();
@@ -473,6 +533,4 @@ export const summary = getGenerateNonPrimarySchema({
         "div"
     ]
 })();
-
-
 

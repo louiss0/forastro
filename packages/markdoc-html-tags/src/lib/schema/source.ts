@@ -1,8 +1,10 @@
 import type { Scalar, ValidationError } from "@markdoc/markdoc";
-import { height, width } from "src/lib/attributes";
+import { MarkdocAttributeSchemas } from "src/lib/attributes";
+
+const { height, width } = MarkdocAttributeSchemas
+
 import {
     HttpURLOrPathAttribute,
-    IntegerAttribute,
     MarkdocValidatorAttribute,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
