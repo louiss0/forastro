@@ -105,110 +105,6 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
 
 
 
-export const header = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
-    render: "header",
-    attributes: { ariaHidden, },
-    children: [
-        "paragraph",
-        "div",
-        "inline",
-    ]
-})()
-
-export const footer = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
-    render: "footer",
-    attributes: { ariaHidden, },
-    children: [
-        "paragraph",
-        "div",
-        "inline",
-    ]
-})()
-
-export const main = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
-    render: "main",
-    attributes: { ariaHidden, },
-    children: [
-        "section",
-        "paragraph",
-        "div",
-        "inline",
-    ]
-})()
-
-
-export const section = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
-    render: "section",
-    attributes: {
-        ariaHidden,
-        ariaLabel,
-        ariaLabelledBy,
-    },
-    children: [
-        "heading",
-        "paragraph",
-        "div",
-        "inline",
-    ]
-
-},)({
-    validate(node: Node) {
-
-        const { attributes } = node
-
-        const firstChild = node.children[0]
-
-        const ariaLabelledByInAttributes = "ariaLabelledBy" in attributes
-        const ariaLabelInAttributes = "ariaLabel" in attributes
-        const theFirstSchemaIsAHeading = firstChild.tag !== "heading"
-
-        return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue(
-            [
-                [
-                    ariaLabelledByInAttributes && ariaLabelInAttributes,
-                    generateMarkdocErrorObject(
-                        "invalid-attributes",
-                        "error",
-                        `You can't have both an id and an aria label and id in a section.
-                    A section with an ariaLabel is one without a heading 
-                    A section with an id is one that has a h2 as one of it's id's 
-                    `
-                    )
-                ],
-                [
-                    ariaLabelledByInAttributes && theFirstSchemaIsAHeading,
-                    generateMarkdocErrorObject(
-                        "wrong-structure",
-                        "critical",
-                        `When you have a section with a ariaLabelledBy attribute, 
-                     you are also supposed to have the firstChild be a heading 2
-                     with and id that has the same value as the ariaLabelledBy
-                     attribute.  
-                    `
-                    )
-                ],
-                [
-                    ariaLabelledByInAttributes && theFirstSchemaIsAHeading
-
-                    && "level" in firstChild.attributes && firstChild.attributes["level"] !== 2
-
-                    && "id" in firstChild.attributes && attributes["ariaLabelledBy"] !== firstChild.attributes["id"],
-
-                    generateMarkdocErrorObject(
-                        "invalid-children",
-                        "critical",
-                        `The first child of a section with an ariaLabelledBy attribute
-                        is supposed to a heading with a level of 2 not ${firstChild.attributes["level"]}
-                    
-                    `
-                    )
-                ]
-            ]
-        )
-
-    },
-})
-
 
 
 
@@ -229,7 +125,7 @@ export const iframe = getGenerateNonPrimarySchema({
         },
         allow: {
             type: String,
-            matches:/\b\w+(?:\s\w+)*\b/
+            matches: /\b\w+(?:\s\w+)*\b/
         },
         name: {
             type: String,
@@ -242,34 +138,34 @@ export const iframe = getGenerateNonPrimarySchema({
                 "lazy",
             ]
         },
-        allowfullscreen:{
+        allowfullscreen: {
             type: Boolean,
             description: "It allows the iframe to go fullscreen"
         },
-        refferpolicy:{
-            type:String,
-            matches:[
-            "no-referrer",
-            "no-referrer-when-downgrade",
-            "origin",
-            "origin-when-cross-origin",
-            "same-origin",
-            "strict-origin-when-cross-origin",
-            "unsafe-url",
+        refferpolicy: {
+            type: String,
+            matches: [
+                "no-referrer",
+                "no-referrer-when-downgrade",
+                "origin",
+                "origin-when-cross-origin",
+                "same-origin",
+                "strict-origin-when-cross-origin",
+                "unsafe-url",
             ]
         },
-        sandbox:{
-            type:String,
-            matches:[
-            "allow-forms",
-            "allow-pointer-lock",
-            "allow-popups",
-            "allow-same-origin",
-            "allow-scripts",
-            "allow-top-navigation,"
+        sandbox: {
+            type: String,
+            matches: [
+                "allow-forms",
+                "allow-pointer-lock",
+                "allow-popups",
+                "allow-same-origin",
+                "allow-scripts",
+                "allow-top-navigation,"
             ]
         },
-        allowpaymentrequest:{
+        allowpaymentrequest: {
             type: Boolean,
             description: "It allows the iframe to invoke the Payment Request API"
         },
@@ -277,10 +173,10 @@ export const iframe = getGenerateNonPrimarySchema({
             type: class extends HttpURLOrPathAttribute {
 
                 returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
-     
-                    
-    
-        
+
+
+
+
                     return value !== "string"
                         ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
                         : !this.httpUrlRegex.test(value)
@@ -290,8 +186,8 @@ export const iframe = getGenerateNonPrimarySchema({
                                 `The string ${value} must be a valid HTTP URL`
                             )
                             : undefined
-        
-     
+
+
 
                 }
             },
@@ -300,7 +196,7 @@ export const iframe = getGenerateNonPrimarySchema({
         },
         ariaHidden,
         width,
-        height,        
+        height,
     },
 })();
 
@@ -313,8 +209,8 @@ export const hr = getGenerateNonPrimarySchema({
 export const blockquote = getGenerateNonPrimarySchema({
     render: "blockquote",
     selfClosing: true,
-    attributes: { 
-        cite        
+    attributes: {
+        cite
     }
 })();
 
@@ -567,37 +463,6 @@ export const paragraph = generateNonPrimarySchemaWithATransformThatGeneratesData
 })();
 
 
-export const div = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
-    render: "div",
-    attributes: {
-        contenteditable,
-        draggable,
-        title,
-        lang,
-        spellcheck,
-        dir,
-        translate,
-    },
-    children: [
-        "inline",
-        "paragraph",
-        "text",
-        "image",
-        "link",
-    ]
-})();
-
-export const hgroup = getGenerateNonPrimarySchema({
-    render: "hgroup",
-    attributes: {
-        ariaHidden,
-        draggable,
-    },
-    children: [
-        "heading",
-        "paragraph"
-    ]
-})()
 
 
 export const summary = getGenerateNonPrimarySchema({

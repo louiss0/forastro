@@ -146,8 +146,9 @@ export function generateSelfClosingTagSchema
 export const generateMarkdocErrorObject = (
     id: markdoc.ValidationError["id"],
     level: markdoc.ValidationError["level"],
-    message: markdoc.ValidationError["message"]
-) => Object.freeze({ id, level, message }) satisfies markdoc.ValidationError
+    message: markdoc.ValidationError["message"],
+    location?: markdoc.ValidationError["location"]
+) => Object.freeze({ id, level, message, location }) satisfies markdoc.ValidationError
 
 
 type AllowedMarkdocTypesAsStrings = "string" | "number" | "array" | "boolean" | "object"
@@ -155,29 +156,25 @@ type AllowedMarkdocTypesAsStrings = "string" | "number" | "array" | "boolean" | 
 
 export const generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight =
     (type: AllowedMarkdocTypesAsStrings) => generateMarkdocErrorObject(
-            "invalid-type",
-            "error",
-            `The value passed is not the right type is supposed to be a ${type}`
-        )
+        "invalid-type",
+        "error",
+        `The value passed is not the right type is supposed to be a ${type}`
+    )
 
 export const generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight =
-    (message:string) => generateMarkdocErrorObject(
-            "invalid-value",
-            "error",
-            message
-        )
+    (message: string) => generateMarkdocErrorObject(
+        "invalid-value",
+        "error",
+        message
+    )
 
 
 export const createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue = (
-    conditionalErrors: Array<[condition: boolean, error: ReturnType<typeof generateMarkdocErrorObject>]>
-) => {
+    ...conditionalErrors: Array<[condition: boolean, error: ReturnType<typeof generateMarkdocErrorObject>]>
+) => conditionalErrors.reduce(
+    (carry: Array<markdoc.ValidationError>, [condition, error]) => condition ? carry.concat(error) : carry,
+    []
+)
 
-
-    return conditionalErrors
-        .reduce(
-            (carry: Array<markdoc.ValidationError>, [condition, error]) => condition ? carry.concat(error) : carry,
-            []
-        )
-};
 
 

@@ -1,4 +1,4 @@
-import type { ConfigFunction, NodeType, Scalar, Schema, SchemaAttribute, ValidationError, ValidationType } from "@markdoc/markdoc";
+import type { Scalar, SchemaAttribute, ValidationError, ValidationType } from "@markdoc/markdoc";
 import {
     DataObjectAttribute,
     HttpURLOrPathAttribute,
@@ -100,7 +100,7 @@ export const title = generateProperStringAttributeSchema({
     description: "This expression is used to match string that are written using proper punctuation",
     validate(value: string,) {
 
-        return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue([
+        return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue(
             [
                 /\b\w+ (?: [\w.,!?':;-]+)*\b/.test(value),
                 generateMarkdocErrorObject(
@@ -109,7 +109,7 @@ export const title = generateProperStringAttributeSchema({
                     "THe title must contain A sentence with proper punctuation"
                 )
             ]
-        ])
+        )
 
     },
 
@@ -129,52 +129,52 @@ export const height = getGenerateMarkdocAttributeSchema({
 
 
 export const cite = getGenerateMarkdocAttributeSchema({
-            type: class extends HttpURLOrPathAttribute {
+    type: class extends HttpURLOrPathAttribute {
 
-                returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
-     
-                    
-    
-        
-                    return value !== "string"
-                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-                        : !this.httpUrlRegex.test(value)
-                        ? generateMarkdocErrorObject(
-                            "invalid-attribute",
-                            "error",
-                            `The string ${value} must be a valid HTTP URL`
-                            )
-                        : undefined
-        
-     
+        returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
 
-                }
 
-            },
-            description: "A url that leads to a citation",
-            errorLevel: "warning"
+
+
+            return value !== "string"
+                ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                : !this.httpUrlRegex.test(value)
+                    ? generateMarkdocErrorObject(
+                        "invalid-attribute",
+                        "error",
+                        `The string ${value} must be a valid HTTP URL`
+                    )
+                    : undefined
+
+
+
+        }
+
+    },
+    description: "A url that leads to a citation",
+    errorLevel: "warning"
 })()
-    
+
 export const datetime = getGenerateMarkdocAttributeSchema({
     type: class extends MarkdocValidatorAttribute {
 
-            returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
-                
-                return value !== "string"
-                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-                        : isNaN(Date.parse(value))
-                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
-                            `This value ${value} is not a parse able date time string
+        returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+
+            return value !== "string"
+                ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                : isNaN(Date.parse(value))
+                    ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
+                        `This value ${value} is not a parse able date time string
                              Please use a proper date format 
                             `
-                        )
-                        : undefined
+                    )
+                    : undefined
 
-            }
+        }
     },
     description: "The time in the form of a date",
     errorLevel: "warning"
-    
+
 })();
 
 
