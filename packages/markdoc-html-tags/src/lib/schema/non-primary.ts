@@ -329,14 +329,6 @@ export const figure = generateNonPrimarySchemaWithATransformThatGeneratesDataAtt
     ]
 })();
 
-export const figcaption = getGenerateNonPrimarySchema({
-    render: "figcaption",
-    attributes: { ariaHidden },
-    children: [
-        "text",
-        "inline"
-    ]
-})();
 
 
 export const colgroup = getGenerateNonPrimarySchema({

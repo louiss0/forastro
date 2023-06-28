@@ -1,7 +1,7 @@
 import { generateSelfClosingTagSchema } from "src/utils";
 
 export { abbr } from "src/lib/schema/abbreviation"
-import { cite as citeAttribute, datetime, type ProperSchemaMatches, type RequiredSchemaAttributeType  } from "src/lib/attributes"
+import { MarkdocAttributeSchemas, type ProperSchemaMatches, type RequiredSchemaAttributeType } from "src/lib/attributes"
 export { a } from "src/lib/schema/anchor"
 
 
@@ -13,24 +13,34 @@ export const sup = generateSelfClosingTagSchema({
     description: "A schema for creating a sup element"
 });
 
+export const figcaption = generateSelfClosingTagSchema({
+    render: "figcaption",
+    validationType: String,
+    description: "This is the description of a figure"
+}, { inline: false, });
+
+
 export const del = generateSelfClosingTagSchema<ProperSchemaMatches, RequiredSchemaAttributeType, "del">({
     render: "del",
     validationType: String,
     description: "A schema for creating a sup element"
 }, {
     attributes: {
-        cite: citeAttribute,
-        datetime  
-}});
+        cite: MarkdocAttributeSchemas.cite,
+        datetime: MarkdocAttributeSchemas.datetime
+    }
+});
 export const ins = generateSelfClosingTagSchema<ProperSchemaMatches, RequiredSchemaAttributeType, "ins">({
     render: "ins",
     validationType: String,
     description: "A schema for creating a sup element"
-},{
+}, {
     attributes: {
-        cite: citeAttribute,
-        datetime  
-}});
+        cite: MarkdocAttributeSchemas.cite,
+        datetime: MarkdocAttributeSchemas.datetime
+
+    }
+});
 
 
 export const sub = generateSelfClosingTagSchema({
@@ -76,7 +86,7 @@ export const time = generateSelfClosingTagSchema<ProperSchemaMatches, RequiredSc
     inline: false,
     attributes: {
         datetime: {
-            ...datetime,
+            ...MarkdocAttributeSchemas.datetime,
             required: true
         }
     }
