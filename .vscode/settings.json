@@ -18,6 +18,7 @@
     "git.ignoreLimitWarning": true,
     "peacock.remoteColor": "#2f3640",
     "cSpell.words": [
+        "allowpaymentrequest",
         "clsx",
         "contenteditable",
         "controlslist",
@@ -31,7 +32,8 @@
         "noremoteplayback",
         "playsinline",
         "Preact",
-        "referrerpolicy"
+        "referrerpolicy",
+        "refferpolicy"
     ],
     "todo-tree.tree.scanMode": "workspace"
 }
