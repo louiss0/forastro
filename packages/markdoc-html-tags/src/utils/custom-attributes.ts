@@ -4,13 +4,10 @@ import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeT
 import { generateMarkdocErrorObject, generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight } from "src/utils/helpers"
 
 
-export abstract class MarkdocValidatorAttribute implements Required<CustomAttributeTypeInterface> {
+export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeInterface {
 
 
-    transform(value: Scalar) {
 
-        return value
-    }
 
     validate(value: unknown, config: MarkdocConfig) {
 
@@ -26,64 +23,52 @@ export abstract class MarkdocValidatorAttribute implements Required<CustomAttrib
 
 }
 
-export  class HttpURLOrPathAttribute extends MarkdocValidatorAttribute {
+export class HttpURLOrPathAttribute extends MarkdocValidatorAttribute {
 
-    protected readonly relativeOrAbsolutePathRegex =
-        
+    readonly relativeOrAbsolutePathRegex =
+
         /^(\/|\.?\.?\/)\S+(\/[A-Za-z0-9-_\s]+\.[a-z0-9]+|\/[A-Za-z0-9-_\s]+)/
 
 
-    protected readonly httpUrlRegex =
-            /^(https?:\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
+    readonly httpUrlRegex =
+        /^(https?:\/\/.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)$/
 
-    
+
     returnMarkdocErrorObjectOrNothing(value: unknown,): void | ValidationError {
-    
 
-    if (value !== "string") {
-        return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-    }
-    
-    const isValidPathOrHTTPUrl = [this.httpUrlRegex.test(value), this.relativeOrAbsolutePathRegex.test(value)].some(Boolean)
-        
-     if (!isValidPathOrHTTPUrl) {
-        
-         return generateMarkdocErrorObject(
-             "invalid-attribute",
-             "error",
-             `The string ${value} must be a valid URL, a Relative or Absolute Path `
-        )
-         
-     }
 
-   
+        if (value !== "string") {
+            return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+        }
+
+        const isValidPathOrHTTPUrl = [this.httpUrlRegex.test(value), this.relativeOrAbsolutePathRegex.test(value)].some(Boolean)
+
+        if (!isValidPathOrHTTPUrl) {
+
+            return generateMarkdocErrorObject(
+                "invalid-attribute",
+                "error",
+                `The string ${value} must be a valid URL, a Relative or Absolute Path `
+            )
+
+        }
+
+
     }
 
-    
-   override transform(value: string): Scalar {
-       
-       
-       return value.trim()
-       
+
+    transform(value: string): Scalar {
+
+        return value?.trim()
+
     }
-    
+
 };
 
 
 export class DataObjectAttribute extends MarkdocValidatorAttribute {
 
-    override transform(value: Record<string, Scalar>,): Scalar {
 
-
-        const arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased =
-            Object.entries(value).map(([key, value]) => [`data${key.at(0)}${key.substring(1, -1).toUpperCase()}`, value])
-
-        return Object.fromEntries(
-            arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased
-        )
-
-
-    }
 
     override returnMarkdocErrorObjectOrNothing(value: object,): ValidationError | void {
 
@@ -107,15 +92,15 @@ export class DataObjectAttribute extends MarkdocValidatorAttribute {
 }
 
 export class IntegerAttribute extends MarkdocValidatorAttribute {
-    
-   override returnMarkdocErrorObjectOrNothing(value: unknown, ): void | ValidationError {
-    
+
+    override returnMarkdocErrorObjectOrNothing(value: unknown,): void | ValidationError {
+
         if (typeof value !== "number")
             return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("number")
 
-        
+
         if (!Number.isInteger(value)) {
-            
+
             return generateMarkdocErrorObject(
                 "invalid-value",
                 "error",
@@ -124,7 +109,7 @@ export class IntegerAttribute extends MarkdocValidatorAttribute {
                 `
             )
         }
-        
+
     }
 };
 
