@@ -1,7 +1,7 @@
 import type { ValidationError } from "@markdoc/markdoc"
 import {
     HttpURLOrPathAttribute,
-    
+
     generateMarkdocErrorObject,
     getGenerateNonPrimarySchema,
 } from "src/utils"
@@ -22,7 +22,8 @@ export class HrefAttribute extends HttpURLOrPathAttribute {
 
         const isValidTelString = /^tel:[\d-]+$/.test(value)
 
-        const isValidWordThatStartsWithAHash = /^#.*\b\w+$/.test(value)
+        const isValidWordThatStartsWithAHash = /^#(?<word>\b\w+)?$/.test(value)
+
 
         const theValueIsNotValid = ![
             this.relativeOrAbsolutePathRegex.test(value),
@@ -100,7 +101,7 @@ export const a = getGenerateNonPrimarySchema({
 
     },
     children: [
-        "div",
+
         "span",
         "em",
         "strong",
