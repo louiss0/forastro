@@ -100,6 +100,19 @@ const generateBooleanAttributeSchemaThatIsNotRequired = getGenerateMarkdocAttrib
 
 export namespace MarkdocAttributeSchemas {
 
+    export const refferpolicy = {
+        type: String,
+        matches: [
+            "no-referrer",
+            "no-referrer-when-downgrade",
+            "origin",
+            "origin-when-cross-origin",
+            "same-origin",
+            "strict-origin-when-cross-origin",
+            "unsafe-url",
+        ]
+    }
+
     export const title = generateProperStringAttributeSchema({
         description: "This expression is used to match string that are written using proper punctuation",
         validate(value: string,) {
@@ -131,31 +144,31 @@ export namespace MarkdocAttributeSchemas {
         errorLevel: "warning",
     })()
 
-    class CiteAttribute extends HttpURLOrPathAttribute {
 
-        returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
-
-
-
-
-            return value !== "string"
-                ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-                : !this.httpUrlRegex.test(value)
-                    ? generateMarkdocErrorObject(
-                        "invalid-attribute",
-                        "error",
-                        `The string ${value} must be a valid HTTP URL`
-                    )
-                    : undefined
-
-
-
-        }
-
-    }
 
     export const cite = getGenerateMarkdocAttributeSchema({
-        type: CiteAttribute,
+        type: class extends HttpURLOrPathAttribute {
+
+            returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+
+
+
+
+                return value !== "string"
+                    ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                    : !this.httpUrlRegex.test(value)
+                        ? generateMarkdocErrorObject(
+                            "invalid-attribute",
+                            "error",
+                            `The string ${value} must be a valid HTTP URL`
+                        )
+                        : undefined
+
+
+
+            }
+
+        },
         description: "A url that leads to a citation",
         errorLevel: "warning"
     })()
@@ -238,8 +251,8 @@ export namespace MarkdocAttributeSchemas {
     });
 
     export const draggable = generateBooleanAttributeSchemaThatIsNotRequired({
-        default: false,
         description: "An attribute that allows an element to be draggable",
+        default: false,
     });
 
     export const spellcheck = generateBooleanAttributeSchemaThatIsNotRequired({
