@@ -127,30 +127,31 @@ export const height = getGenerateMarkdocAttributeSchema({
     errorLevel: "warning",
 })()
 
+class CiteAttribute extends HttpURLOrPathAttribute {
 
-export const cite = getGenerateMarkdocAttributeSchema({
-    type: class extends HttpURLOrPathAttribute {
-
-        returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+    returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
 
 
 
 
-            return value !== "string"
-                ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-                : !this.httpUrlRegex.test(value)
-                    ? generateMarkdocErrorObject(
-                        "invalid-attribute",
-                        "error",
-                        `The string ${value} must be a valid HTTP URL`
-                    )
-                    : undefined
+        return value !== "string"
+            ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+            : !this.httpUrlRegex.test(value)
+                ? generateMarkdocErrorObject(
+                    "invalid-attribute",
+                    "error",
+                    `The string ${value} must be a valid HTTP URL`
+                )
+                : undefined
 
 
 
-        }
+    }
 
-    },
+}
+
+export const citeAttributeSchema = getGenerateMarkdocAttributeSchema({
+    type: CiteAttribute,
     description: "A url that leads to a citation",
     errorLevel: "warning"
 })()
