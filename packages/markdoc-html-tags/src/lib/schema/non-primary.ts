@@ -29,13 +29,16 @@ const {
     cite,
     data,
     width,
-    height } = MarkdocAttributeSchemas
+    height,
+    refferpolicy
+} = MarkdocAttributeSchemas
 
 import type {
     ProperSchemaMatches,
     RequiredSchemaAttributeType,
     SchemaAttributesWithNoPrimaryKey
 } from "src/lib/attributes";
+import { SizesAttribute, SrcSetAttribute } from "src/lib/schema/source";
 
 
 
@@ -55,8 +58,8 @@ type GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<
 
 
 function toLowercaseWithDashes(str: string) {
-    return str.replace(/(?<uppercased_letter>[A-Z])/g, function (_, p1: Record<"uppercased_letter", string>) {
-        return '-' + p1.uppercased_letter.toLowerCase();
+    return str.replace(/(?<uppercasedLetter>[A-Z])/g, function (_, p1: Record<"uppercasedLetter", string>) {
+        return `-${p1.uppercasedLetter.toLowerCase()}`;
     }).toLowerCase();
 }
 
@@ -215,18 +218,7 @@ export const iframe = getGenerateNonPrimarySchema({
             type: Boolean,
             description: "It allows the iframe to go fullscreen"
         },
-        refferpolicy: {
-            type: String,
-            matches: [
-                "no-referrer",
-                "no-referrer-when-downgrade",
-                "origin",
-                "origin-when-cross-origin",
-                "same-origin",
-                "strict-origin-when-cross-origin",
-                "unsafe-url",
-            ]
-        },
+
         sandbox: {
             type: String,
             matches: [
@@ -293,7 +285,7 @@ export const picture = generateNonPrimarySchemaWithATransformThatGeneratesDataAt
     render: "picture",
     attributes: { ariaHidden, },
     children: [
-        "image",
+        "img",
         "source",
     ]
 })()
@@ -321,7 +313,7 @@ export const figure = generateNonPrimarySchemaWithATransformThatGeneratesDataAtt
         "figcaption",
         "paragraph",
         "footer",
-        "image",
+        "img",
         "audio",
         "picture",
         "video",
@@ -336,7 +328,6 @@ export const colgroup = getGenerateNonPrimarySchema({
     attributes: { ariaHidden, },
     children: [
         "col",
-
         "text",
     ]
 })();
@@ -365,7 +356,7 @@ export const video = getGenerateNonPrimarySchema({
     attributes: {
         ariaHidden,
         src: {
-            type: String,
+            type: HttpURLOrPathAttribute,
             required: true,
             description: "This is the link to the audio file you want to use"
         },
@@ -398,7 +389,7 @@ export const video = getGenerateNonPrimarySchema({
                 "use-credentials",
             ],
         },
-
+        refferpolicy,
         loop: {
             type: Boolean,
             description: "A Boolean attribute: if specified, the audio player will automatically seek back to the start upon reaching the end of the audio."
@@ -434,8 +425,9 @@ export const audio = getGenerateNonPrimarySchema({
     selfClosing: true,
     attributes: {
         src: {
-            type: String,
+            type: HttpURLOrPathAttribute,
             required: true,
+            errorLevel: "warning",
             description: "This is the link to the audio file you want to use"
         },
         type: {
@@ -494,6 +486,79 @@ export const audio = getGenerateNonPrimarySchema({
     },
 })();
 
+
+export const img = getGenerateNonPrimarySchema(
+    {
+        render: "img",
+        selfClosing: true,
+        attributes: {
+            src: {
+                type: HttpURLOrPathAttribute,
+                required: true,
+                errorLevel: "critical",
+                description: "The src of the image you want to see"
+
+            },
+            alt: {
+                type: String,
+                required: true,
+                errorLevel: "critical",
+                description: "The description of the image"
+
+            },
+            srcset: {
+                type: SrcSetAttribute,
+                description: "A set of urls and image sizes that are required to use upload the picture",
+                errorLevel: "warning",
+            },
+
+            sizes: {
+                type: SizesAttribute,
+                description: "The size of each image in a media query",
+                errorLevel: "warning",
+            },
+
+            crossorigin: {
+                type: String,
+                errorLevel: "critical",
+                matches: [
+                    "anonymous",
+                    "use-credentials",
+                ],
+            },
+            decoding: {
+                type: String,
+                matches: [
+                    "sync",
+                    "async",
+                    "auto",
+                ]
+            },
+            width,
+            height,
+            refferpolicy,
+            fetchprority: {
+                type: String,
+                matches: [
+                    "high",
+                    "low",
+                    "auto",
+                ]
+            },
+            ismap: {
+                type: Boolean
+            },
+
+            loading: {
+                type: String,
+                matches: [
+                    "eager",
+                    "lazy",
+                ]
+            },
+        }
+    }
+)();
 
 
 export const paragraph = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
