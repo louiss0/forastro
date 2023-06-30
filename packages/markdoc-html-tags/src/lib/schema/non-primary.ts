@@ -92,23 +92,26 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
 
             return generateNonPrimarySchema({
 
-                validate(node) {
+                validate(node, config) {
 
-                    const attrs = node.attributes as Record<"data", Record<string, unknown>>
+                    const attrs = node.transformAttributes(config)
 
 
+
+                    if (!("data" in attrs)) return []
 
                     const keysWithNoNumberBooleanOrStringValues =
-                        Object.entries(attrs).reduce(
+                        Object.entries(attrs.data).reduce(
                             (carry: Array<string>, [key, value]) =>
                                 typeof value !== "string"
-                                    || typeof value !== "number"
-                                    || typeof value !== "boolean"
+                                    && typeof value !== "number"
+                                    && typeof value !== "boolean"
                                     ?
                                     carry.concat(key)
                                     : carry,
                             []
                         )
+
 
                     return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue(
                         [
@@ -309,9 +312,8 @@ export const figure = generateNonPrimarySchemaWithATransformThatGeneratesDataAtt
     },
     children: [
         "header",
-
         "figcaption",
-        "paragraph",
+        "p",
         "footer",
         "img",
         "audio",
@@ -340,7 +342,6 @@ export const col = getGenerateNonPrimarySchema({
         "text",
     ]
 })();
-// TODO: Add proper attributes to the video schema.
 
 /** 
  * This is an attribute that is experimental 
@@ -561,8 +562,8 @@ export const img = getGenerateNonPrimarySchema(
 )();
 
 
-export const paragraph = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
-    render: "paragraph",
+export const p = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
+    render: "p",
     attributes: {
         contenteditable,
         draggable,
