@@ -16,37 +16,59 @@ import {
 export class SrcSetAttribute extends HttpURLOrPathAttribute {
 
 
-    protected readonly validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherAOptionalWidthSizeOrPixelDensityRegex =
-        /^(?:\.?\.?\/[\w\/]+\/\w+\.[a-z]{3,4})(?:\s\d+(?:w|vw)|[1-2]x)?$/
+    protected readonly relativePathAndEitherViewportWidthOrWidthSizeRegex =
+        /^(?<init_path>\.\.\/)+(?<folder_path>[a-z0-9\-_]+\/)*(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})\s(?<width_or_viewport_width>\d{1,4}v?w)$/
 
-    protected readonly validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherARequiredWidthSizeOrPixelDensityRegex =
-        /^(?:\.?\.?\/[\w\/]+\/\w+\.[a-z]{3,4})(?:\s\d+(?:w|vw)|[1-2]x)$/
+    protected readonly relativePathAndOneToTwoPixelDensityRegex =
+        /^(?<init_path>\.\.\/)+(?<folder_path>[a-z0-9\-_]+\/)*(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})\s(?<one_to_two_pixel_density>[1-2]x)$/
+
+    protected readonly absolutePathAndEitherViewportWidthOrWidthSizeRegex =
+        /^(?<folder_path>[a-z0-9\-_]+\/)+(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})\s(?<width_or_viewport_width>\d{1,4}v?w)$/
+
+    protected readonly absolutePathAndOneToTwoPixelDensityRegex =
+        /^(?<folder_path>[a-z0-9\-_]+\/)+(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})\s(?<one_to_two_pixel_density>[1-2]x)$/
 
 
     transform(value: string | Array<string>): Scalar {
 
-
         return typeof value !== "string" ? value.join(",") : value
+
+    }
+
+
+    private checkIfStringIsValid(value: string) {
+
+
+        return [
+            this.relativePathAndEitherViewportWidthOrWidthSizeRegex.test(value),
+            this.relativePathAndOneToTwoPixelDensityRegex.test(value),
+            this.absolutePathAndEitherViewportWidthOrWidthSizeRegex.test(value),
+            this.absolutePathAndOneToTwoPixelDensityRegex.test(value),
+            this.httpUrlRegex.test(value)
+        ].some(Boolean)
+
+
 
     }
 
     override returnMarkdocErrorObjectOrNothing(value: unknown,): void | ValidationError {
 
 
+
+
         if (typeof value === "string") {
 
-            const stringIsValid = [
-                this.validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherAOptionalWidthSizeOrPixelDensityRegex.test(value),
-                this.httpUrlRegex.test(value)
-            ].some(Boolean)
 
 
-            return !stringIsValid
+            return !this.checkIfStringIsValid(value)
                 ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
                     `This value is ${value} not valid.
                         You must specify a srcset value that has a valid absolute or relative path. 
+                        
                         You can either have a valid width or a valid pixel density.
+                        
                         If you do use a space for each of them. 
+                        
                         Ex: /path/to/image.jpg 
     
                         If you specify more then one path you must specify a width or a pixel density.
@@ -81,15 +103,14 @@ export class SrcSetAttribute extends HttpURLOrPathAttribute {
 
             const everyValueIsAStringWithARelativeOrAbsolutePathsAndEitherAWidthSizeOrPixelDensity =
                 value.every(
-                    value => value === "string"
-                        && this.validStringThatHoldsOnlyRelativeOrAbsolutePathsAndEitherARequiredWidthSizeOrPixelDensityRegex.test(value)
+                    value => value === "string" && this.checkIfStringIsValid(value)
                 )
 
             return !everyValueIsAStringWithARelativeOrAbsolutePathsAndEitherAWidthSizeOrPixelDensity
                 ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
                         If you are using an array please use a string that specifies,
-                         a relative or absolute path and a number and the end.
-                         That number must have a vw w or x as at the end. 
+                         a relative or absolute path and either a width viewport width or 1-2 pixel density at the end.
+
                          Please use a space before writing the number. 
                           
                     `) : undefined
