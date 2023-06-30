@@ -12,27 +12,30 @@ export class HrefAttribute extends HttpURLOrPathAttribute {
 
 
 
+    readonly routePathRegex = /(?<init_path>\/)(?<folder_path>[a-z0-9\-_]+\/)*(?<destination>[a-z0-9\-_])?/
+
+    readonly mailtoRegex = /^mailto:([\w.-]+@[\w.-]+)(\?.+)?$/;
+
+    readonly telRegex = /^tel:[\d-]+$/
+
+    readonly wordThatStartsWithAHashRegex = /^#(?<word>\b\w+)?$/
+
     override returnMarkdocErrorObjectOrNothing(value: string): ValidationError | void {
 
 
 
-        const isAValidWordPath = /^\/.*\b\w+$/.test(value)
-
-        const isValidMailtoString = /^mailto:([\w.-]+@[\w.-]+)(\?.+)?$/.test(value);
-
-        const isValidTelString = /^tel:[\d-]+$/.test(value)
-
-        const isValidWordThatStartsWithAHash = /^#(?<word>\b\w+)?$/.test(value)
-
 
         const theValueIsNotValid = ![
-            this.relativeOrAbsolutePathRegex.test(value),
             this.httpUrlRegex.test(value),
-            isAValidWordPath,
-            isValidMailtoString,
-            isValidTelString,
-            isValidWordThatStartsWithAHash,
+            this.absolutePathRegex.test(value),
+            this.relativePathRegex.test(value),
+            this.mailtoRegex.test(value),
+            this.routePathRegex.test(value),
+            this.telRegex.test(value),
+            this.wordThatStartsWithAHashRegex.test(value)
         ].some(Boolean)
+
+
 
         if (theValueIsNotValid) {
 
