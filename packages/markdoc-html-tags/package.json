@@ -19,7 +19,8 @@
     "access": "public"
   },
   "dependencies": {
-    "@markdoc/markdoc": "^0.3.0"
+    "@markdoc/markdoc": "^0.3.0",
+    "@vitest/ui": "0.30.0"
   },
   "peerDependencies": {
     "@markdoc/markdoc": ">0.2.0",
