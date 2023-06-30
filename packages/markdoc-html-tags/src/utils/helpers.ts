@@ -148,7 +148,7 @@ export const generateMarkdocErrorObject = (
     level: markdoc.ValidationError["level"],
     message: markdoc.ValidationError["message"],
     location?: markdoc.ValidationError["location"]
-) => Object.freeze({ id, level, message, location }) satisfies markdoc.ValidationError
+) => Object.freeze(location ? { id, level, message, location } : { id, level, message, }) satisfies markdoc.ValidationError
 
 
 type AllowedMarkdocTypesAsStrings = "string" | "number" | "array" | "boolean" | "object"
