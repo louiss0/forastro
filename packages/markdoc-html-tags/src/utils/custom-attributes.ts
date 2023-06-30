@@ -25,9 +25,11 @@ export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeIn
 
 export class HttpURLOrPathAttribute extends MarkdocValidatorAttribute {
 
-    readonly relativeOrAbsolutePathRegex =
 
-        /^(\/|\.?\.?\/)\S+(\/[A-Za-z0-9-_\s]+\.[a-z0-9]+|\/[A-Za-z0-9-_\s]+)/
+    readonly relativePathRegex =
+        /^(?<init_path>\.\.\/)+(?<folder_path>[a-z0-9\-_]+\/)*(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})?$/
+
+    readonly absolutePathRegex = /^(?<folder_path>[a-z0-9\-_]+\/)+(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})?$/
 
 
     readonly httpUrlRegex =
@@ -41,14 +43,36 @@ export class HttpURLOrPathAttribute extends MarkdocValidatorAttribute {
             return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
         }
 
-        const isValidPathOrHTTPUrl = [this.httpUrlRegex.test(value), this.relativeOrAbsolutePathRegex.test(value)].some(Boolean)
+        const isValidPathOrHTTPUrl = [
+            this.httpUrlRegex.test(value),
+            this.relativePathRegex.test(value),
+            this.absolutePathRegex.test(value)
+        ].some(Boolean)
 
         if (!isValidPathOrHTTPUrl) {
 
             return generateMarkdocErrorObject(
                 "invalid-attribute",
                 "error",
-                `The string ${value} must be a valid URL, a Relative or Absolute Path `
+                `The string ${value} must be a valid URL, a Relative or Absolute Path.
+
+                A relative path must have:
+                
+                1 or more ( ../ ) which is a relative path
+
+                0 or more ( word/ )  which is a file path. 
+
+                A file name and an extension which is a dot (.) followed by a word with 2-6 letters.  
+                
+                A absolute path must have:
+
+                1 or more ( ../ ) which is a relative path
+
+                0 or more ( word/ )  which is a file path. 
+
+                A file name and an extension which is a dot (.) followed by a word with 2-6 letters.
+                
+                `
             )
 
         }
