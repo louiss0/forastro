@@ -7,6 +7,7 @@ import type {
 declare module "vitest" {
 
     interface CustomMatchers<T extends unknown> {
+        toEqualMarkdocErrorObject(): T
         toEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRight(
             type: Parameters<ToEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRightFunctionType>[1]
         ): T
