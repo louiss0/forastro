@@ -22,7 +22,6 @@
     "@typescript-eslint/eslint-plugin": "^5.60.0",
     "@typescript-eslint/parser": "^5.60.0",
     "@vitest/coverage-c8": "0.32.2",
-    "@vitest/ui": "^0.32.2",
     "@vue/theme": "^2.2.3",
     "astro": "^2.7.0",
     "dotenv-cli": "^7.2.1",
