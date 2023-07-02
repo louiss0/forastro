@@ -18,6 +18,7 @@
     "baseUrl": ".",
     "types": [
       "vitest/globals",
+      "./src/test/setup/vitest"
     ],
     "paths": {
       "~": [
