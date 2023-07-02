@@ -23,7 +23,9 @@
         "contenteditable",
         "controlslist",
         "crossorigin",
+        "datetime",
         "disableremoteplayback",
+        "fetchprority",
         "Fontsource",
         "Icones",
         "Iconify",
@@ -35,5 +37,6 @@
         "referrerpolicy",
         "refferpolicy"
     ],
-    "todo-tree.tree.scanMode": "workspace"
+    "todo-tree.tree.scanMode": "workspace only",
+    "testing.automaticallyOpenPeekView": "never"
 }
