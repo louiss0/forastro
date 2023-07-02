@@ -53,7 +53,7 @@ describe("setCaseInSwitchState", () => {
     it('sets the case in  global state', () => {
 
 
-        expect(setCaseInSwitchState(null)).toBe(1)
+        expect(setCaseInSwitchState(null, false)).toBe(1)
 
 
         expect(switchStateSymbol in globalThis).toBe(true)
