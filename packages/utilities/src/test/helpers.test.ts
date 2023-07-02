@@ -1,4 +1,4 @@
-import { describe, expect, it, test } from "vitest";
+// import { describe, expect, it, test } from "vitest";
 import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, iterate, iterateRange, range, syncIterate } from "packages/utilities/src/lib/helpers";
 import { IterationInfo } from "packages/utilities/src/lib/types";
 
@@ -12,7 +12,6 @@ async function generateArrayFromGenerator<T extends AsyncGenerator>(generator: A
 
 
   for await (const iterator of generator) {
-    console.log(iterator)
 
     array.push(iterator)
 

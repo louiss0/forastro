@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup'
 
 export default defineConfig((ctx) => ({
   entry: [
-    'src',
+    'src/lib/index.ts',
   ],
   format: "esm",
   publicDir: true,
