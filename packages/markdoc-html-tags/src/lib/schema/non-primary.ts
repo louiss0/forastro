@@ -6,15 +6,16 @@ import {
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
     getGenerateNonPrimarySchema,
-} from "src/utils";
+} from "packages/markdoc-html-tags/src/utils";
 
 import type {
     GenerateNonPrimarySchemaConfig,
     GenerateNonSecondarySchemaConfig,
-} from "src/utils";
+} from "packages/markdoc-html-tags/src/utils";
 
-import { MarkdocAttributeSchemas } from "src/lib/attributes";
+import { MarkdocAttributeSchemas } from "packages/markdoc-html-tags/src/lib/attributes";
 
+export { source } from "packages/markdoc-html-tags/src/lib/schema/source"
 
 const {
     contenteditable,
@@ -37,8 +38,8 @@ import type {
     ProperSchemaMatches,
     RequiredSchemaAttributeType,
     SchemaAttributesWithNoPrimaryKey
-} from "src/lib/attributes";
-import { SizesAttribute, SrcSetAttribute } from "src/lib/schema/source";
+} from "packages/markdoc-html-tags/src/lib/attributes";
+import { SizesAttribute, SrcSetAttribute } from "packages/markdoc-html-tags/src/lib/schema/source";
 
 
 
@@ -101,7 +102,7 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
                     if (!("data" in attrs)) return []
 
                     const keysWithNoNumberBooleanOrStringValues =
-                        Object.entries(attrs.data).reduce(
+                        Object.entries(attrs["data"]).reduce(
                             (carry: Array<string>, [key, value]) =>
                                 typeof value !== "string"
                                     && typeof value !== "number"
@@ -173,7 +174,7 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
 
 class IframeSrcAttribute extends HttpURLOrPathAttribute {
 
-    returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
+    override returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
 
 
 

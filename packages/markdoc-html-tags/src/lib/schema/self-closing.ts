@@ -1,8 +1,8 @@
-import { generateSelfClosingTagSchema } from "src/utils";
+import { generateSelfClosingTagSchema } from "packages/markdoc-html-tags/src/utils";
 
-export { abbr } from "src/lib/schema/abbreviation"
-import { MarkdocAttributeSchemas, type ProperSchemaMatches, type RequiredSchemaAttributeType } from "src/lib/attributes"
-export { a } from "src/lib/schema/anchor"
+export { abbr } from "packages/markdoc-html-tags/src/lib/schema/abbreviation"
+import { MarkdocAttributeSchemas, type ProperSchemaMatches, type RequiredSchemaAttributeType } from "packages/markdoc-html-tags/src/lib/attributes"
+export { a } from "packages/markdoc-html-tags/src/lib/schema/anchor"
 
 
 

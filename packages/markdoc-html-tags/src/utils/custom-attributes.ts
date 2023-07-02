@@ -1,7 +1,7 @@
 
 
 import type { ValidationError, Config as MarkdocConfig, Scalar, CustomAttributeTypeInterface, } from "@markdoc/markdoc"
-import { generateMarkdocErrorObject, generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight } from "src/utils/helpers"
+import { generateMarkdocErrorObject, generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight } from "packages/markdoc-html-tags/src/utils/helpers"
 
 
 export abstract class MarkdocValidatorAttribute implements CustomAttributeTypeInterface {

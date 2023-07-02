@@ -3,11 +3,11 @@ import * as markdoc from "@markdoc/markdoc";
 
 const { Tag } = markdoc
 
-import { MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema, } from "src/utils";
+import { MarkdocValidatorAttribute, generateMarkdocErrorObject, generateSelfClosingTagSchema, } from "packages/markdoc-html-tags/src/utils";
 
 export class AbbreviationAttribute extends MarkdocValidatorAttribute {
 
-    override returnMarkdocErrorObjectOrNothing(value: string,): markdoc.ValidationError | void {
+    returnMarkdocErrorObjectOrNothing(value: string,): markdoc.ValidationError | void {
 
 
 

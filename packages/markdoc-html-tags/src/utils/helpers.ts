@@ -9,7 +9,7 @@ import type {
     ProperSchemaMatches,
     MarkdocAttributeSchema,
     RequiredSchemaAttributeType,
-} from 'src/lib/attributes';
+} from 'packages/markdoc-html-tags/src/lib/attributes';
 
 
 

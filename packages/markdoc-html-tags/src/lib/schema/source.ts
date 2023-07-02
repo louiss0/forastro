@@ -1,5 +1,5 @@
 import type { Scalar, ValidationError } from "@markdoc/markdoc";
-import { MarkdocAttributeSchemas } from "src/lib/attributes";
+import { MarkdocAttributeSchemas } from "packages/markdoc-html-tags/src/lib/attributes";
 
 const { height, width } = MarkdocAttributeSchemas
 
@@ -9,7 +9,7 @@ import {
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
     getGenerateNonPrimarySchema
-} from "src/utils";
+} from "packages/markdoc-html-tags/src/utils";
 
 
 // TODO: TEST SrcSetAttribute
@@ -29,7 +29,7 @@ export class SrcSetAttribute extends HttpURLOrPathAttribute {
         /^(?<folder_path>[a-z0-9\-_]+\/)+(?<filename>(?:\w+(?:\s?\w+)+)|[a-zA-Z0-9\-_]+)(?<extension>\.[a-z]{2,6})\s(?<one_to_two_pixel_density>[1-2]x)$/
 
 
-    transform(value: string | Array<string>): Scalar {
+    override transform(value: string | Array<string>): Scalar {
 
         return typeof value !== "string" ? value.join(",") : value
 
@@ -46,6 +46,7 @@ export class SrcSetAttribute extends HttpURLOrPathAttribute {
             this.absolutePathAndOneToTwoPixelDensityRegex.test(value),
             this.httpUrlRegex.test(value)
         ].some(Boolean)
+
 
 
 

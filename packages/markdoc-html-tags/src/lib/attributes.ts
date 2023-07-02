@@ -8,7 +8,7 @@ import {
     generateMarkdocErrorObject,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight
-} from "src/utils";
+} from "packages/markdoc-html-tags/src/utils";
 
 
 
@@ -149,7 +149,7 @@ export namespace MarkdocAttributeSchemas {
     export const cite = getGenerateMarkdocAttributeSchema({
         type: class extends HttpURLOrPathAttribute {
 
-            returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+            override returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
 
 
 
