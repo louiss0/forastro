@@ -14,7 +14,7 @@ export default defineConfig({
         cache: {
             dir: '../../node_modules/.vitest'
         },
-        setupFiles: "src/test/setup/index.ts",
+        setupFiles: "src/setup",
         environment: 'node',
         include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     }

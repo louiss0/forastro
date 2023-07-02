@@ -4,15 +4,6 @@
     "sourceRoot": "packages/markdoc-html-tags",
     "projectType": "library",
     "targets": {
-        "build": {
-            "executor": "nx:run-commands",
-            "outputs": [
-                "{options.outputPath}"
-            ],
-            "options": {
-                "command": "tsup packages/markdoc-html-tags"
-            }
-        },
         "test": {
             "executor": "@nx/vite:test",
             "outputs": [
