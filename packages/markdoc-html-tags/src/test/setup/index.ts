@@ -1,14 +1,5 @@
-import { generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight, generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight } from 'src/utils';
-import { expect, } from 'vitest';
-
-
-type AllowedMarkdocTypesAsStrings = "string" | "number" | "array" | "boolean" | "object"
-
-export type ToEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRightFunctionType =
-    typeof matchersObject["toEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRight"]
-
-export type ToEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRightFunctionType =
-    typeof matchersObject["toEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRight"]
+import { expect, } from "vitest";
+import { z } from 'astro/zod';
 
 const markdocErrorObjectStructure = {
     id: "invalid-",
@@ -27,63 +18,46 @@ const markdocErrorObjectStructure = {
     }
 }
 
+const lineAndCharacterSchema = z.object({
+    line: z.number(),
+    character: z.number()
+})
+const markdocErrorObjectSchema = z.object({
+    id: z.string().includes("invalid"),
+    level: z.enum(["error", "critical"]),
+    message: z.string(),
+    location: z.object({
+        file: z.string(),
+        start: lineAndCharacterSchema,
+        end: lineAndCharacterSchema
 
+    }).optional()
+})
 
-const matchersObject = {
+const allowedMarkdocTypesAsStringsList = ["string", "array", "number", "boolean", "object",]
 
+const markdocErrorObjectSchemaForInvalidType = markdocErrorObjectSchema.extend({
+    id: z.literal("invalid-type"),
+    level: z.literal("error"),
+    message: z.string().refine(
+        (arg) => allowedMarkdocTypesAsStringsList.some((value) => arg.includes(value)),
+        `A markdoc Errors object that checks for a type must have one of these ${allowedMarkdocTypesAsStringsList.join(", ")} words in the message`
+    )
+})
+
+const markdocErrorObjectSchemaForInvalidValue = markdocErrorObjectSchema.extend({
+    id: z.literal("invalid-value"),
+    level: z.literal("error")
+})
+
+expect.extend({
 
     toEqualMarkdocErrorObject(received: unknown,) {
 
 
-        const receivedIsAViableErrorObject =
-            Object.keys(markdocErrorObjectStructure).reduce((errorMessage, key) => {
+        const res = markdocErrorObjectSchema.safeParse(received)
 
-                if (typeof received !== "object" || typeof received === "object" && received == null) {
-
-                    return `This is not an object please provide an object`
-
-                }
-
-                if (key === "location") {
-
-                    const locationObject = received[key as keyof typeof received]
-
-                    return Object.entries(locationObject)
-                        .reduce((locationErrorMessage, [key, value]) => {
-
-                            if (!Object.hasOwn(locationObject, key))
-                                return `${errorMessage}${locationErrorMessage} This ${key} is missing`
-
-                            if (key === "file" && typeof value !== "string")
-                                return `${errorMessage} This ${key} must be a string`
-
-                            // TODO: fINSH condition for location.
-                            // const locationK
-                            // if (.includes(key) && typeof value !== "object") {
-
-                            //     return `${errorMessage}${locationErrorMessage} ${key} must have an object with line and character as keys`
-                            // }
-
-
-
-                        }, "")
-
-                }
-
-
-
-                return !Object.hasOwn(received, key)
-                    ? `${errorMessage} The ${key} is missing,`
-                    : typeof received[key as keyof typeof received] !== "string"
-                        ? `${errorMessage}${key} is not a string`
-                        : errorMessage
-
-
-
-            }, "")
-
-
-        return Object.is(received, markdocErrorObjectStructure)
+        return res.success
             ? {
                 pass: true,
                 expected: received,
@@ -96,77 +70,58 @@ const matchersObject = {
                 pass: false,
                 actual: received,
                 expected: markdocErrorObjectStructure,
-                message: () =>
-                    `Expected ${this.utils.printExpected(received)} to equal ${this.utils.printReceived(markdocErrorObjectStructure)}`,
+                message: () => res.error.format()._errors.join(",")
+
             }
 
     },
 
-    toEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRight(received: unknown, expected: AllowedMarkdocTypesAsStrings) {
+    toEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRight(received: unknown,) {
 
-        const markdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight =
-            generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight(
-                expected
-            )
-        const receivedValueHasSameStructureAsMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight = this.equals(
-            received,
-            markdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight
-        )
+        const res = markdocErrorObjectSchemaForInvalidType.safeParse(received)
 
-        return receivedValueHasSameStructureAsMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight
+        return res.success
             ? {
                 pass: true,
-                message: () => this.utils.printExpected(markdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight),
+                message: () => this.utils.printExpected(markdocErrorObjectSchemaForInvalidType.shape),
                 actual: received,
-                expected: markdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
+                expected: received,
 
             }
             : {
                 pass: false,
                 message: () => this.utils.printReceived(received),
                 actual: received,
-                expected: received,
+                expected: markdocErrorObjectSchemaForInvalidType.shape,
             }
 
     },
 
 
-    toEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRight(
-        received: unknown,
-        expected: string) {
+    toEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRight(received: unknown) {
 
-        const markdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight =
-            generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
-                expected
-            )
+        const res = markdocErrorObjectSchemaForInvalidValue.safeParse(received)
 
-        const receivedValueHasSameStructureMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight =
-            this.equals(
-                received,
-                markdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight
-            )
 
-        return receivedValueHasSameStructureMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight
+        return res.success
             ? {
                 pass: true,
-                message: () => this.utils.printExpected(markdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight),
+                message: () => this.utils.printExpected(markdocErrorObjectSchemaForInvalidValue.shape),
                 actual: received,
-                expected: markdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
+                expected: received,
 
             }
             : {
                 pass: false,
                 message: () => this.utils.printReceived(received),
                 actual: received,
-                expected: received,
+                expected: markdocErrorObjectSchemaForInvalidValue.shape,
             }
     },
 
 
 
-} satisfies Parameters<typeof expect.extend>[0]
-
-
-expect.extend(matchersObject)
+}
+)
 
 

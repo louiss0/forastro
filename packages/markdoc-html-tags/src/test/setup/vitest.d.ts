@@ -1,20 +1,11 @@
-import type {
-    ToEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRightFunctionType,
-    ToEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRightFunctionType
-} from "src/test/setup";
-
+import type { Assertion, } from 'vitest'
 
 declare module "vitest" {
 
     interface CustomMatchers<T extends unknown> {
         toEqualMarkdocErrorObject(): T
-        toEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRight(
-            type: Parameters<ToEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRightFunctionType>[1]
-        ): T
-
-        toEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRight(
-            message: Parameters<ToEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRightFunctionType>[1]
-        ): T
+        toEqualMarkdocErrorObjectThatTellsTheUserThatATypeIsNotRight(): T
+        toEqualMarkdocErrorObjectThatTellsTheUserValueIsNotRight(): T
 
     }
 
