@@ -1,22 +1,22 @@
 import { expect, } from "vitest";
 import { z } from 'astro/zod';
 
-const markdocErrorObjectStructure = {
-    id: "invalid-",
-    level: "",
-    message: "",
-    location: {
-        file: "",
-        start: {
-            line: 0,
-            character: 0
-        },
-        end: {
-            line: 0,
-            character: 0
-        }
-    }
-}
+// const markdocErrorObjectStructure = {
+//     id: "invalid-",
+//     level: "",
+//     message: "",
+//     location: {
+//         file: "",
+//         start: {
+//             line: 0,
+//             character: 0
+//         },
+//         end: {
+//             line: 0,
+//             character: 0
+//         }
+//     }
+// }
 
 const lineAndCharacterSchema = z.object({
     line: z.number(),
@@ -63,13 +63,13 @@ expect.extend({
                 expected: received,
                 actual: received,
                 message: () => `Received ${this.utils.printReceived(
-                    markdocErrorObjectStructure
-                )} is equal to ${this.utils.printExpected(markdocErrorObjectStructure)}`,
+                    markdocErrorObjectSchema.shape
+                )} is equal to ${this.utils.printExpected(markdocErrorObjectSchema.shape)}`,
             }
             : {
                 pass: false,
                 actual: received,
-                expected: markdocErrorObjectStructure,
+                expected: markdocErrorObjectSchema.shape,
                 message: () => res.error.format()._errors.join(",")
 
             }

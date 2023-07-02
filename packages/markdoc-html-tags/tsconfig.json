@@ -1,32 +1,22 @@
 {
+  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "target": "ESNext",
-    "useDefineForClassFields": true,
-    "module": "ES2015",
-    "moduleResolution": "Node",
-    "strict": true,
-    "sourceMap": true,
+    "module": "ESNext",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "esModuleInterop": true,
-    "verbatimModuleSyntax": true,
     "noEmit": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
+    "strict": true,
     "types": [
       "vitest/globals",
-      "./src/test/setup/vitest"
-    ],
-    "paths": {
-      "~": [
-        "src/"
-      ]
-    }
+      "vitest/importMeta",
+      "vite/client",
+      "node",
+      "./src/setup/vitest.d.ts"
+    ]
   },
-  "include": [
-    "src"
-  ]
 }
