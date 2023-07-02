@@ -27,7 +27,7 @@
   },
   "scripts": {
     "dev": "tsup --watch",
-    "test": "vitest --ui",
+    "test": "vitest ",
     "publint": "publint",
     "build": "tsup",
     "release": "pnpm build && dotenv release-it"
