@@ -3,17 +3,12 @@ import {
     HttpURLOrPathAttribute,
     SizesAttribute,
     SrcSetAttribute,
-    createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
-    generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight,
+    generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes,
     getGenerateNonPrimarySchema,
 } from "packages/markdoc-html-tags/src/utils";
 
-import type {
-    GenerateNonPrimarySchemaConfig,
-    GenerateNonSecondarySchemaConfig,
-} from "packages/markdoc-html-tags/src/utils";
 
 import { MarkdocAttributeSchemas } from "packages/markdoc-html-tags/src/lib/attributes";
 
@@ -34,134 +29,6 @@ const {
     height,
     refferpolicy
 } = MarkdocAttributeSchemas
-
-import type {
-    ProperSchemaMatches,
-    RequiredSchemaAttributeType,
-    SchemaAttributesWithNoPrimaryKey
-} from "packages/markdoc-html-tags/src/lib/attributes";
-import { isViableMarkdocValue, toLowercaseWithDashes } from "packages/markdoc-html-tags/src/utils/internal";
-
-
-
-type GenerateNonPrimarySchemaConfigThatDoesNotAllowDataConfig<
-    T extends ProperSchemaMatches,
-    U extends RequiredSchemaAttributeType,
-    R extends string
-> = GenerateNonPrimarySchemaConfig<T, U, R> & {
-    attributes: { data?: never } & Partial<SchemaAttributesWithNoPrimaryKey<T, U>>
-}
-
-type GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<
-    T extends ProperSchemaMatches,
-    U extends RequiredSchemaAttributeType,
-    R extends string
-> = Omit<GenerateNonSecondarySchemaConfig<T, U, R>, "transform" | "validate">
-
-
-
-
-
-const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
-    <
-        T extends ProperSchemaMatches,
-        U extends RequiredSchemaAttributeType,
-        V extends GenerateNonPrimarySchemaConfigThatDoesNotAllowDataConfig<T, U, R>,
-        R extends string
-    >
-        (primaryConfig: V) => {
-
-
-        const { attributes, render } = primaryConfig
-
-        return <W extends GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<T, U, R>>(secondaryConfig?: W) => {
-
-            const primaryConfigWithDataAttributeInserted = Object.assign(
-                primaryConfig,
-                {
-                    render,
-                    attributes: {
-                        ...attributes,
-                    }
-                })
-            const generateNonPrimarySchema = getGenerateNonPrimarySchema(primaryConfigWithDataAttributeInserted)
-
-            return generateNonPrimarySchema({
-
-                validate(node, config) {
-
-                    const attrs = node.transformAttributes(config)
-
-
-
-                    if (!("data" in attrs)) return []
-
-                    const keysWithNoNumberBooleanOrStringValues =
-                        Object.entries(attrs["data"]).reduce(
-                            (carry: Array<string>, [key, value]) =>
-                                isViableMarkdocValue(value)
-                                    ? carry.concat(key)
-                                    : carry,
-                            []
-                        )
-
-
-                    return createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue(
-                        [
-                            keysWithNoNumberBooleanOrStringValues.length !== 0,
-                            generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(`
-                                Data attribute values are only supposed to have strings numbers and booleans.
-                                HTML can't parse those anything else.
-                                Please fix the following keys ${keysWithNoNumberBooleanOrStringValues.join(",")}.  
-                            `)
-                        ]
-                    )
-
-
-                },
-                transform(node, config) {
-
-                    const { tag, attributes, } = node
-
-
-
-                    let newAttributes = {}
-                    if ("data" in attributes) {
-
-                        const { data } = attributes
-
-                        const arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased =
-                            Object.entries(data).map(
-                                ([key, value]) => [`data-${toLowercaseWithDashes(key)}`, value]
-                            )
-
-
-
-
-                        newAttributes = {
-                            ...Object.fromEntries(
-                                arrayTuplesWithKeysThatHaveDataAsThePrefixForEachWordAndIsCamelCased
-                            )
-                        }
-
-
-                        delete attributes["data"]
-                    }
-
-
-
-                    return new markdoc.Tag(tag, { ...attributes, ...newAttributes }, node.transformChildren(config))
-
-                },
-                ...secondaryConfig,
-
-            })
-
-        }
-
-
-
-    }
 
 
 

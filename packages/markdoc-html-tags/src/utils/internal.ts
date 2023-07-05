@@ -7,9 +7,7 @@ export interface ReturnMarkdocErrorObjectOrNothingContract extends CustomAttribu
     returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError
 }
 
-export interface CustomAttributeTypeInterfaceContract extends CustomAttributeTypeInterface {
-    returnMarkdocErrorObjectOrNothingContract?: never
-}
+
 
 
 
