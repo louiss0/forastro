@@ -28,7 +28,6 @@ const {
     ariaHidden,
     ariaLabel,
     cite,
-    data,
     width,
     height,
     refferpolicy
@@ -40,6 +39,7 @@ import type {
     SchemaAttributesWithNoPrimaryKey
 } from "packages/markdoc-html-tags/src/lib/attributes";
 import { SizesAttribute, SrcSetAttribute } from "packages/markdoc-html-tags/src/lib/schema/source";
+import { isViableMarkdocValue, toLowercaseWithDashes } from "packages/markdoc-html-tags/src/utils/internal";
 
 
 
@@ -58,11 +58,6 @@ type GenerateNonSecondarySchemaConfigThatDoesNotAllowTransformConfig<
 > = Omit<GenerateNonSecondarySchemaConfig<T, U, R>, "transform" | "validate">
 
 
-function toLowercaseWithDashes(str: string) {
-    return str.replace(/(?<uppercasedLetter>[A-Z])/g, function (_, p1: Record<"uppercasedLetter", string>) {
-        return `-${p1.uppercasedLetter.toLowerCase()}`;
-    }).toLowerCase();
-}
 
 
 
@@ -86,7 +81,6 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
                     render,
                     attributes: {
                         ...attributes,
-                        data
                     }
                 })
             const generateNonPrimarySchema = getGenerateNonPrimarySchema(primaryConfigWithDataAttributeInserted)
@@ -104,11 +98,8 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
                     const keysWithNoNumberBooleanOrStringValues =
                         Object.entries(attrs["data"]).reduce(
                             (carry: Array<string>, [key, value]) =>
-                                typeof value !== "string"
-                                    && typeof value !== "number"
-                                    && typeof value !== "boolean"
-                                    ?
-                                    carry.concat(key)
+                                isViableMarkdocValue(value)
+                                    ? carry.concat(key)
                                     : carry,
                             []
                         )
@@ -172,32 +163,42 @@ const generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes =
     }
 
 
-class IframeSrcAttribute extends HttpURLOrPathAttribute {
 
-    override returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
-
-
-
-
-        return value !== "string"
-            ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
-            : !this.httpUrlRegex.test(value)
-                ? generateMarkdocErrorObject(
-                    "invalid-attribute",
-                    "error",
-                    `The string ${value} must be a valid HTTP URL`
-                )
-                : undefined
+/* 
+  TODO: Create the map and the area schema's    
+  TODO: Create the track schema. 
+  TODO: Create the track schema. 
+*/
 
 
 
-    }
-}
+
+
 
 export const iframe = getGenerateNonPrimarySchema({
     render: "iframe",
     selfClosing: true,
     attributes: {
+        src: {
+            type: class extends HttpURLOrPathAttribute {
+
+                override returnMarkdocErrorObjectOrNothing(value: unknown): void | markdoc.ValidationError {
+
+                    return value !== "string"
+                        ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
+                        : !this.httpUrlRegex.test(value)
+                            ? generateMarkdocErrorObject(
+                                "invalid-attribute",
+                                "error",
+                                `The string ${value} must be a valid HTTP URL`
+                            )
+                            : undefined
+
+                }
+            },
+            required: true,
+            description: "This attribute is the path to the place containing media to display"
+        },
         title: {
             type: String,
             required: true,
@@ -238,15 +239,28 @@ export const iframe = getGenerateNonPrimarySchema({
             type: Boolean,
             description: "It allows the iframe to invoke the Payment Request API"
         },
-        src: {
-            type: IframeSrcAttribute,
-            required: true,
-            description: "This attribute is the path to the place containing media to display"
-        },
+
         ariaHidden,
         width,
         height,
     },
+})();
+
+export const ul = generateNonPrimarySchemaWithATransformThatGeneratesDataAttributes({
+    render: "ul",
+    children: [
+        "li"
+    ],
+    attributes: {
+        ariaHidden,
+        title,
+        spellcheck,
+        lang,
+        contenteditable,
+        translate,
+        dir,
+        draggable
+    }
 })();
 
 export const hr = getGenerateNonPrimarySchema({
