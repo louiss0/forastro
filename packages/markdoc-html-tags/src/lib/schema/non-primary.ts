@@ -1,6 +1,8 @@
 import * as markdoc from "@markdoc/markdoc";
 import {
     HttpURLOrPathAttribute,
+    SizesAttribute,
+    SrcSetAttribute,
     createAnArrayOfMarkdocErrorObjectsBasedOnEachConditionThatIsTrue,
     generateMarkdocErrorObject,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
@@ -38,7 +40,6 @@ import type {
     RequiredSchemaAttributeType,
     SchemaAttributesWithNoPrimaryKey
 } from "packages/markdoc-html-tags/src/lib/attributes";
-import { SizesAttribute, SrcSetAttribute } from "packages/markdoc-html-tags/src/lib/schema/source";
 import { isViableMarkdocValue, toLowercaseWithDashes } from "packages/markdoc-html-tags/src/utils/internal";
 
 
@@ -199,11 +200,7 @@ export const iframe = getGenerateNonPrimarySchema({
             required: true,
             description: "This attribute is the path to the place containing media to display"
         },
-        title: {
-            type: String,
-            required: true,
-            description: "The word used to describe the content of the iframe",
-        },
+        title,
         allow: {
             type: String,
             matches: /\b\w+(?:\s\w+)*\b/
