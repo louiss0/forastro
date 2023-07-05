@@ -13,6 +13,24 @@ export const sup = generateSelfClosingTagSchema({
     description: "A schema for creating a sup element"
 });
 
+export const li = generateSelfClosingTagSchema({
+    render: "li",
+    validationType: String,
+    description: "A schema for creating a sup element"
+}, { inline: false });
+
+export const small = generateSelfClosingTagSchema({
+    render: "small",
+    validationType: String,
+    description: "A schema for creating a sup element"
+});
+
+export const wbr = generateSelfClosingTagSchema({
+    render: "wbr",
+    validationType: String,
+    description: "A schema for creating a sup element"
+},);
+
 export const figcaption = generateSelfClosingTagSchema({
     render: "figcaption",
     validationType: String,
