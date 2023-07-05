@@ -1,6 +1,6 @@
 import type { Scalar, SchemaAttribute, ValidationError, ValidationType } from "@markdoc/markdoc";
 import {
-    DataObjectAttribute,
+
     HttpURLOrPathAttribute,
     IntegerAttribute,
     MarkdocValidatorAttribute,
@@ -9,6 +9,7 @@ import {
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight,
     generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight
 } from "packages/markdoc-html-tags/src/utils";
+import { isAnObjectWithStringKeysAndValuesThatAreStringsOrNumbers, transformObjectIntoStyleString, type ReturnMarkdocErrorObjectOrNothingContract } from "packages/markdoc-html-tags/src/utils/internal";
 
 
 
@@ -77,7 +78,7 @@ const getGenerateMarkdocAttributeSchema =
     >
         (primaryConfig: V) =>
         <W extends Omit<MarkdocAttributeSchema<U, T>, GetFilledKeys<V>>>
-            (secondaryConfig?: W) => Object.freeze(Object.assign({ ...primaryConfig }, secondaryConfig))
+            (secondaryConfig?: W) => Object.freeze(Object.assign(structuredClone(primaryConfig), secondaryConfig))
 
 type GetFilledKeys<T extends Record<string, unknown>> = {
     [K in keyof T]: T[K] extends undefined | null ? never : K
@@ -100,7 +101,48 @@ const generateBooleanAttributeSchemaThatIsNotRequired = getGenerateMarkdocAttrib
 
 export namespace MarkdocAttributeSchemas {
 
-    export const refferpolicy = {
+
+    export const style = getGenerateMarkdocAttributeSchema({
+        type: class extends MarkdocValidatorAttribute implements ReturnMarkdocErrorObjectOrNothingContract {
+
+
+            transform(value: Record<string, string | number>): Scalar {
+
+
+                return transformObjectIntoStyleString(value)
+
+
+            }
+
+
+            override returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
+
+                if (isAnObjectWithStringKeysAndValuesThatAreStringsOrNumbers(value))
+                    return generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserAValueIsNotRight(
+                        `You have not put in the right values. 
+                            You have to write an object that has keys that are strings 
+                            and values that are either string or number that's how css works. 
+                        `
+                    )
+
+            }
+
+        },
+        description: "A attribute that forces the user to specify the keys and values that are needed for schema to work"
+    });
+
+
+    export const tabindex = getGenerateMarkdocAttributeSchema({
+        type: IntegerAttribute,
+        description: "Specifies the allowed tabbing order",
+        errorLevel: "error",
+    });
+
+
+    export const hidden = generateBooleanAttributeSchemaThatIsNotRequired();
+
+
+    export const refferpolicy = getGenerateMarkdocAttributeSchema({
         type: String,
         matches: [
             "no-referrer",
@@ -111,7 +153,7 @@ export namespace MarkdocAttributeSchemas {
             "strict-origin-when-cross-origin",
             "unsafe-url",
         ]
-    }
+    })()
 
     export const title = generateProperStringAttributeSchema({
         description: "This expression is used to match string that are written using proper punctuation",
@@ -151,9 +193,6 @@ export namespace MarkdocAttributeSchemas {
 
             override returnMarkdocErrorObjectOrNothing(value: unknown): void | ValidationError {
 
-
-
-
                 return value !== "string"
                     ? generateMarkdocErrorObjectThatHasAMessageThatTellsTheUserATypeIsNotRight("string")
                     : !this.httpUrlRegex.test(value)
@@ -164,14 +203,13 @@ export namespace MarkdocAttributeSchemas {
                         )
                         : undefined
 
-
-
             }
 
         },
         description: "A url that leads to a citation",
         errorLevel: "warning"
     })()
+
 
     export const datetime = getGenerateMarkdocAttributeSchema({
         type: class extends MarkdocValidatorAttribute {
@@ -267,13 +305,6 @@ export namespace MarkdocAttributeSchemas {
     });
 
 
-
-    export const data = getGenerateMarkdocAttributeSchema({
-        type: DataObjectAttribute,
-        description: "An attribute that allows an element's content to be editable",
-        errorLevel: "critical",
-        required: false,
-    })();
 
 
 }
