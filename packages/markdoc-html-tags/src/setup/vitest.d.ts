@@ -1,4 +1,4 @@
-import type { Assertion, } from 'vitest'
+import type { Assertion, TestAPI } from 'vitest'
 
 declare module "vitest" {
 
