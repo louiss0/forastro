@@ -68,6 +68,7 @@ export const iframe = getGenerateNonPrimarySchema({
             description: "This attribute is the path to the place containing media to display"
         },
         title,
+        // TODO: test res of allow atb Schema
         allow: {
             type: String,
             matches: /\b\w+(?:\s\w+)*\b/
@@ -83,11 +84,6 @@ export const iframe = getGenerateNonPrimarySchema({
                 "lazy",
             ]
         },
-        allowfullscreen: {
-            type: Boolean,
-            description: "It allows the iframe to go fullscreen"
-        },
-
         sandbox: {
             type: String,
             matches: [
@@ -99,10 +95,7 @@ export const iframe = getGenerateNonPrimarySchema({
                 "allow-top-navigation,"
             ]
         },
-        allowpaymentrequest: {
-            type: Boolean,
-            description: "It allows the iframe to invoke the Payment Request API"
-        },
+
 
         ariaHidden,
         width,
@@ -190,7 +183,6 @@ export const figure = generateNonPrimarySchemaWithATransformThatGeneratesDataAtt
         ariaLabel
     },
     children: [
-        "header",
         "figcaption",
         "p",
         "footer",
