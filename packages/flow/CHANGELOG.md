@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+## [2.5.1]
+
+### Fixed
+
+The wrong version of `@forastro/utilities` was published to npm it was based on `npm publish` .
+
 ### Added
 
 ## [2.5.0] - 2023-06-25
@@ -16,7 +22,8 @@ This release is a readme fix release. I messed up release it.
 
 ## [2.4.1]
 
-This release is a readme fix release. From nom on this read Me will contain all important info about this library.
+This release is a readme fix release.
+ From nom on this read Me will contain all important info about this library.
 
 ## [2.4.0]
 
