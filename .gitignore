@@ -3,4 +3,5 @@ node_modules
 dist
 mock-app
 **/.env
-***/cache
+**/cache
+pnpm-workspace.yaml

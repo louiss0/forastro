@@ -1,17 +1,18 @@
 {
     "hooks": {
         "before:init": [
-            "nx run-many --target=check --all=true",
             "nx run utilities:publint"
         ],
         "after:git:release": "echo After git push, before github release",
         "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
+        "tagName": "${npm.name}v${version}",
         "commitMessage": "chore: release v${version}"
     },
     "github": {
-        "release": true
+        "release": true,
+        "releaseName": "Release ${name} ${version}"
     },
     "plugins": {
         "@release-it/keep-a-changelog": true

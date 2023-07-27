@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "strict": true,
     "types": [
-      "vitest/globals"
-    ],
-  }
+      "vitest/globals",
+      "vitest/importMeta",
+      "vite/client",
+      "node"
+    ]
+  },
 }

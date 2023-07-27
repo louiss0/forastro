@@ -4,6 +4,16 @@
 
 ### Added
 
+## [2.6.0] - 2023-06-25
+
+### Removed
+
+- There is no CJS support only ESM.
+  
+### Changed
+
+- Components are exported in `@forastro/utilities/components` instead of in main.
+
 ## [2.5.1] - 2023-05-24
 
 This release is a readme fix release. From nom on this read Me will contain all important info about this library.

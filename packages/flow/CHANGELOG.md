@@ -2,7 +2,13 @@
 
 ## [Unreleased]
 
-### Changed
+### Added
+
+## [2.5.0] - 2023-06-25
+
+### Removed
+
+- There is no CJS support only ESM.
 
 ## [2.4.2] - 2023-05-24
 
