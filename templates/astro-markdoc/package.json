@@ -16,16 +16,17 @@
   },
   "dependencies": {
     "@forastro/flow": "*",
-    "@astrojs/markdoc": "^0.3.3",
-    "@forastro/markdoc-html-tags": "workspace:^",
     "@forastro/utilities": "*",
-    "astro": "*",
     "astro-icon": "*"
   },
   "devDependencies": {
+    "@astrojs/markdoc": "*",
     "@astrojs/tailwind": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "tailwindcss": "*"
+    "astro": "*",
+    "markdoc-html-tag-schemas": "*",
+    "tailwindcss": "*",
+    "@tailwindcss/typography": "*"
   }
 }

@@ -1,16 +1,11 @@
-import { abbr, a } from '@forastro/markdoc-html-tags';
+import {
+  markdocHTMLTagSchemas
+} from 'markdoc-html-tag-schemas';
 
-import { defineMarkdocConfig, nodes } from '@astrojs/markdoc/config';
+import { defineMarkdocConfig,  } from '@astrojs/markdoc/config';
 
 export default defineMarkdocConfig({
-  nodes: {
-    document: {
-      ...nodes.document,
-      render: null,
-    },
-  },
-  tags: {
-    abbr,
-    a,
-  },
+  extends: [
+    markdocHTMLTagSchemas()
+  ]
 });
