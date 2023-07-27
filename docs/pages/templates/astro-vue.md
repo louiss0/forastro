@@ -16,7 +16,7 @@ It's useful for solving common challenges with astro. Remember that the componen
 | Font Library        | Fontsource |
 | Vue Utility Library | Vue Use    |
 
-:::info To use this template type.
+::::info To use this template type.
 
 :::code-group
 
@@ -34,6 +34,14 @@ It's useful for solving common challenges with astro. Remember that the componen
 
 :::
 
+::::
+
+:::warning Install then upgrade the dependencies
+  
+  ```shell
+  cd my-project && npm i && npm update
+  ```
+  
 :::
 
 ## Start Command

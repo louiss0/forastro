@@ -12,25 +12,25 @@ The `@forastro/utilities` package is featured here so that you can use it for pa
 It's useful for solving common challenges with [astro][Astro Site].
 Remember that the components used are in-fact astro components.
 
-:::info To use this template type.
+::::info To use this template type.
 
-:::code-group
+   :::code-group
 
- ```[pnpm] shell
-    pnpm dlx create-astro --template=louiss0/forastro/templates/astro-markdoc
- ```
+   ```[pnpm] shell
+      pnpm dlx create-astro --template=louiss0/forastro/templates/astro-markdoc
+   ```
 
- ```[yarn] shell
-    yarn dlx create-astro --template=louiss0/forastro/templates/astro-markdoc
- ```
+   ```[yarn] shell
+      yarn dlx create-astro --template=louiss0/forastro/templates/astro-markdoc
+   ```
 
- ```[npm] shell
-    npx create-astro --template=louiss0/forastro/templates/astro-markdoc
- ```
+   ```[npm] shell
+      npx create-astro --template=louiss0/forastro/templates/astro-markdoc
+   ```
 
-:::
+   :::
 
-:::
+::::
 
 :::warning Install then upgrade the dependencies
   

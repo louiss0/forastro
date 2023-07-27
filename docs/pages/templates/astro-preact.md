@@ -9,7 +9,7 @@ It uses a class library called `clsx`. The table below should tell you more.
 | Icon Library  | Iconify    |
 | Font Library  | Fontsource |
 
-:::info To use this template type.
+::::info To use this template type.
 
 :::code-group
 
@@ -27,7 +27,7 @@ It uses a class library called `clsx`. The table below should tell you more.
 
 :::
 
-:::
+::::
 
 :::warning Install then upgrade the dependencies
   

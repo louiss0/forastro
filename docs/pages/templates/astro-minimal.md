@@ -16,7 +16,7 @@ For icons `astro-icon` is useful for icons.
 | Font Library  | Fontsource |
 | Icon Library  | Astro Icon |
 
-:::info To use this template type.
+::::info To use this template type.
 
 :::code-group
 
@@ -34,7 +34,7 @@ For icons `astro-icon` is useful for icons.
 
 :::
 
-:::
+::::
 
 :::warning Install then upgrade the dependencies
   
