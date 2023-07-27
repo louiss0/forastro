@@ -16,6 +16,26 @@ It's useful for solving common challenges with astro. Remember that the componen
 | Font Library        | Fontsource |
 | Vue Utility Library | Vue Use    |
 
+:::info To use this template type.
+
+:::code-group
+
+ ```[pnpm] shell
+    pnpm dlx create-astro --template=louiss0/forastro/templates/astro-vue
+ ```
+
+ ```[yarn] shell
+    yarn dlx create-astro --template=louiss0/forastro/templates/astro-vue
+ ```
+
+ ```[npm] shell
+    npx create-astro --template=louiss0/forastro/templates/astro-vue
+ ```
+
+:::
+
+:::
+
 ## Start Command
 
 **To start the app use:**

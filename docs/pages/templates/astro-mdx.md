@@ -6,9 +6,39 @@ This template is a template that is created with purpose of creating simple site
 You can create simple sites with this template by making good use of `@forastro/utilities`.
 They will help with making Non to minimally interactive pages quickly.
 
+This template revloves around `@astrojs/mdx` and `@forastro/remark-html-directives-integration`.
+
 The `@forastro/utilities` package is featured here so that you can use it for pages.
 It's useful for solving common challenges with [astro][Astro Site].
 Remember that the components used are in-fact astro components.
+
+:::info To use this template type.
+
+:::code-group
+
+ ```[pnpm] shell
+    pnpm dlx create-astro --template=louiss0/forastro/templates/astro-mdx
+ ```
+
+ ```[yarn] shell
+    yarn dlx create-astro --template=louiss0/forastro/templates/astro-mdx
+ ```
+
+ ```[npm] shell
+    npx create-astro --template=louiss0/forastro/templates/astro-mdx
+ ```
+
+:::
+
+:::
+
+:::warning Install then upgrade the dependencies
+  
+  ```shell
+  cd my-project && npm i && npm update
+  ```
+  
+:::
 
 For icons `astro-icon` is useful for icons.
 

@@ -16,6 +16,34 @@ For icons `astro-icon` is useful for icons.
 | Font Library  | Fontsource |
 | Icon Library  | Astro Icon |
 
+:::info To use this template type.
+
+:::code-group
+
+ ```[pnpm] shell
+    pnpm dlx create-astro --template=louiss0/forastro/templates/astro-minimal
+ ```
+
+ ```[yarn] shell
+    yarn dlx create-astro --template=louiss0/forastro/templates/astro-minimal
+ ```
+
+ ```[npm] shell
+    npx create-astro --template=louiss0/forastro/templates/astro-minimal
+ ```
+
+:::
+
+:::
+
+:::warning Install then upgrade the dependencies
+  
+  ```shell
+  cd my-project && npm i && npm update
+  ```
+  
+:::
+
 ## Start Command
 
 **To start the app use:**

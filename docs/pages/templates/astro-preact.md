@@ -9,6 +9,34 @@ It uses a class library called `clsx`. The table below should tell you more.
 | Icon Library  | Iconify    |
 | Font Library  | Fontsource |
 
+:::info To use this template type.
+
+:::code-group
+
+ ```[pnpm] shell
+    pnpm dlx create-astro --template=louiss0/forastro/templates/astro-preact
+ ```
+
+ ```[yarn] shell
+    yarn dlx create-astro --template=louiss0/forastro/templates/astro-preact
+ ```
+
+ ```[npm] shell
+    npx create-astro --template=louiss0/forastro/templates/astro-preact
+ ```
+
+:::
+
+:::
+
+:::warning Install then upgrade the dependencies
+  
+  ```shell
+  cd my-project && npm i && npm update
+  ```
+  
+:::
+
 ## Start Command
 
 **To start the app use:**

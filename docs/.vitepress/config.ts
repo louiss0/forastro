@@ -2,11 +2,12 @@ import { defineConfig } from 'vitepress'
 import vueNestedSFC from 'vite-plugin-vue-nested-sfc';
 // https://vitepress.dev/reference/site-config
 
-const TEMPLATES =  [
+const TEMPLATES = [
   { link: "/templates/astro-preact", text: "Preact" },
   { link: "/templates/astro-vue", text: "Vue" },
   { link: "/templates/astro-minimal", text: "Minimal" },
-  { link: "/templates/astro-mdx", text: "MDX" }
+  { link: "/templates/astro-mdx", text: "MDX" },
+  { link: "/templates/astro-markdoc", text: "Markdoc" },
 ]
 
 export default defineConfig({
@@ -75,7 +76,7 @@ export default defineConfig({
                 text: "Tags",
                 link: "/libraries/remark-html-directives/tags",
               },
-              
+
             ]
           },
         ]
