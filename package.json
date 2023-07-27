@@ -28,7 +28,6 @@
     "eslint": "~8.45.0",
     "eslint-config-prettier": "8.8.0",
     "jsdom": "~22.1.0",
-    "markdoc-html-tag-schemas": "^1.0.1",
     "nx": "16.5.5",
     "nx-cloud": "16.1.1",
     "prettier": "^3.0.0",
