@@ -15,6 +15,7 @@ export default defineConfig({
       vueNestedSFC()
     ]
   },
+  srcDir: "./pages",
   title: "Home",
   titleTemplate: "For Astro",
   description: "A VitePress Site",
