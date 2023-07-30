@@ -41,6 +41,7 @@ const HTML_DIRECTIVE_MODES = Object.freeze({
 })
 
 
+
 const supportedBlockTableTags = [
     'table',
     'tfoot',

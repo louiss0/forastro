@@ -1,4 +1,4 @@
----
+--- 
 import { getCollection } from 'astro:content';
 import type { InferGetStaticPropsType } from 'astro';
 import { Center, Typography } from '~/components';
@@ -11,23 +11,23 @@ export async function getStaticPaths() {
     }));
 }
 type Props = InferGetStaticPropsType<typeof getStaticPaths>;
+
 const { entry } = Astro.props;
-
 const { Content } = await entry.render();
----
-<Default title={entry.data.title} description={entry.data.description} >
+const { description, title } = entry.data
 
+---
+
+<Default {title} {description} >
     <div class="py-8 px-20 h-screen">
+             
+        <Center gapClass="gap-12">
+            <Typography tag="h1" >{title}</Typography>
+            
+            <article class="prose prose-lg">
+                <Content frontmatter={entry.data} />
+            </article>
+        </Center>
         
-        
-    <Center gapClass="gap-12">
-        <Typography tag="h1" >{entry.data.title}</Typography>
-        
-        <article class="prose prose-lg">
-            <Content frontmatter={entry.data} />
-        </article>
-    </Center>
-    
-    
-</div>
+    </div>
 </Default>
