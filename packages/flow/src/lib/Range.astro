@@ -1,12 +1,7 @@
 ---
-import { iterateRange,  } from "@forastro/utilities";
+import { iterateRange} from "@forastro/utilities";
 
-type Props = {
-  start:number
-  stop:number
-  step?:number
-  inclusive?:true
-}
+type Props = Parameters<typeof iterateRange>[1]
 
 const { start, step = 1, stop, inclusive } = Astro.props;
 ---
