@@ -1,6 +1,6 @@
 # @forastro/utilities
 
-## [Unreleased]
+## [2.7.1] - 2023-08-17
 
 ### Fixed
 
