@@ -22,6 +22,7 @@ type IterateRangeOptions = {
     start: number
     stop: number
     step?: number
+    inclusive?: true
 }
 
 class IterationInfo {
