@@ -131,3 +131,7 @@ The function `syncIterate()` was added.
   - Created range, iterateRange, iterate, helpers
   - Created the Gap Component and Projector Component
   - Created all necessary types for authors to consume
+
+## [0.0.0]
+
+Unreleased version release.

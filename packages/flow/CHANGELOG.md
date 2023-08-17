@@ -45,7 +45,8 @@ This release is a readme fix release.
 
 ### Patch Changes
 
-- Changed arguments for the iterate function and its internal logic. The `<For/>` component has changed as well.
+- Changed arguments for the iterate function and its internal logic.
+- The `<For/>` component has changed as well.
 - Updated dependencies
   - @forastro/utilities@2.2.2
 
@@ -54,7 +55,8 @@ This release is a readme fix release.
 ### Minor Changes
 
 - Added a component called `<Hide />` it will hide something when a value is `true`.
-  You can also choose to cloak by passing in a cloak boolean to the component if you do it will display none instead
+  You can also choose to cloak by passing in a cloak boolean to the component
+  if you do it will display none instead
 
 ### Patch Changes
 
@@ -108,3 +110,7 @@ This release is a readme fix release.
 
 - Updated dependencies
   - @forastro/utilities@0.1
+
+## [0.0.0]
+
+First release.
