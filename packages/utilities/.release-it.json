@@ -3,7 +3,10 @@
         "before:init": [
             "nx run utilities:publint"
         ],
-        "after:git:release": "echo After git push, before github release",
+        "after:git:release": [
+            "echo After git push, before github release",
+            "pnpm publish"
+        ],
         "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
