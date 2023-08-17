@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.5.2] - 2023-08-17
+
 ### Fixed
 
 - The architecture is changed the files are no longer bundled.
