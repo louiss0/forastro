@@ -1,6 +1,9 @@
 ---
 import { Center, Container, List, SpacedBox, Typography } from '~/components';
 import Default from '~/layouts/Default.astro';
+
+import { PageLink } from '@forastro/utilities/dist/components';
+
 const DOCUMENTATION_NAMES_AND_LINKS = [
   { name: 'Astro', link: 'https://docs.astro.build/' },
   {
@@ -17,6 +20,8 @@ const CORE_LIBRARY_SENTENCES = [
 ---
 
 <Default title="Welcome to Astro." description="this is good">
+  
+  <PageLink href="/"  >TO nothing </PageLink>
   <header class="px-4 py-12">
     <Center>
       <Typography tag={'h1'}>Welcome to the Astro template.</Typography>
