@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- The architecture is changed the files are no longer bundled.
+  - Code base is easier to manage
+
 ## [2.5.1]
 
 ### Fixed
