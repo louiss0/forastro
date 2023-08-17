@@ -40,87 +40,79 @@ export function hasForEachMethod(value: unknown): value is HasForEachMethod {
 }
 
 
+type RangeOptions = { step?: number, inclusive?: true }
+
+function* range(start: number, stop: number, options: RangeOptions = {}) {
 
 
-function* range(start: number, stop: number, step = 1) {
+    const { step = 1, inclusive } = options
+
+    if (start === stop) { throw new Error("Start can't be the same as stop") }
 
 
-    if (start === stop) {
-
-
-        throw new Error("Start can't be the same as stop")
-    }
-
-
-    if (step === 0) {
-
-
-
-        throw new Error("Step can't be zero pick a negative or positive number")
-
-
-    }
-
-    const numIsNegative = Math.sign(step) === -1
-    const numIsPositive = Math.sign(step) === 1
-
-    const startIsGreaterThanStopAndStepIsPositive = start > stop && numIsPositive
-
-    if (startIsGreaterThanStopAndStepIsPositive) {
-
-
-        throw new Error("If you want start to be greater than stop please make step negative")
-
-    }
-
-
-    const stopIsGreaterThanStartAndStepIsNegative = start < stop && numIsNegative
-
-    if (stopIsGreaterThanStartAndStepIsNegative) {
-
-
-        throw new Error("If you want start to be less than stop please make step positive")
-
-    }
+    if (step <= 0) { throw new Error("Step can't be zero or a negative number") }
 
 
 
+    if (start > stop) {
 
-    let count = start
+        let i = start
 
+        if (inclusive) {
 
-    if (numIsPositive) {
-
-
-
-        while (count < stop) {
+            while (i >= stop) {
 
 
+                yield i
 
-            yield count
+                i -= step
 
-            count += step
+            }
+
+            return
+
+        }
+
+        while (i > stop) {
+
+
+            yield i
+
+            i -= step
         }
 
         return
+
     }
 
+    if (start < stop) {
+
+        let i = start
+
+        if (inclusive) {
+
+            while (i <= stop) {
 
 
-    if (numIsNegative) {
+                yield i
 
+                i += step
 
-        while (count > stop) {
+            }
 
+            return
 
+        }
 
-            yield count
+        while (i < stop) {
 
-            count += step
+            yield i
+
+            i += step
+
         }
 
     }
-
 
 
 }
@@ -322,12 +314,12 @@ function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
 
 async function* iterateRange<U>(callback: IterateRangeCallback<U>, options: IterateRangeOptions) {
 
-    const { start, stop, step = 1 } = options
+    const { start, stop, step = 1, inclusive } = options
 
 
     yield* iterate(
-        range(start, stop, step),
-        (val: number | void) =>
+        range(start, stop, { step, inclusive }),
+        (val) =>
             callback(
                 val as number,
                 new IterationInfo(start, val as number, stop
