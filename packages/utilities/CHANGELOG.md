@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed types in the pkg.json file **Astro will not recognise the types if you do**
+
+## [2.7.0]
+
+### Fixed
+
+- Removed tsup from repo and files are no longer bundled.
+
+### Changed
+
+- Range is now a function that uses an option param as third param.
+  - It's a object that allows you to pass in a step or inclusive.
+  - Negative numbers are not allowed to be used.
+
 ### Added
 
 ## [2.6.0] - 2023-06-25
