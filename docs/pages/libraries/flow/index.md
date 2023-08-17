@@ -8,7 +8,8 @@
 # Flow <Badge type="info" text="2.4.2" />
 
 The `@forastro/flow` library is a library of control flow components.
-It has all of the ones that you would typically use in an app. They are written in typescript Which means that you will get good type inference you need.
+It has all of the ones that you would typically use in an app.
+They are written in typescript Which means that you will get good type inference you need.
 
 :::info You can do the following things with this library
 
