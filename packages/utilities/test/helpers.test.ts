@@ -144,7 +144,7 @@ describe("Range works", () => {
 
 
 
-    expect(Array.from(range(1, 5, 1)))
+    expect(Array.from(range(1, 5,)))
       .toStrictEqual([1, 2, 3, 4])
 
 
@@ -155,61 +155,22 @@ describe("Range works", () => {
 
 
 
-    expect(Array.from(range(1, 5, 1))).toHaveLength(4)
+    expect(Array.from(range(1, 5,))).toHaveLength(4)
 
 
   })
 
-  test("Numbers are counted down from start to the stop number by one when start is greater than stop and step is negative", () => {
 
-
-    expect(Array.from(range(6, 1, -1)))
-      .toStrictEqual([6, 5, 4, 3, 2])
-
-    expect(Array.from(range(6, 1, -1))).toHaveLength(5)
-
-
-
-
-
-
-
-  })
 
   test("Numbers are counted up from start to the stop when step is positive", () => {
 
 
 
-    expect(Array.from(range(1, 3, 1))).toStrictEqual([1, 2])
+    expect(Array.from(range(1, 3, { step: 1 }))).toStrictEqual([1, 2])
 
 
   })
 
-
-  it("throws when  startIsGreaterThanStopAndStepIsPositive", () => {
-
-    expect((() => {
-
-      for (const _ of range(8, 1, 2)) { }
-
-    }))
-      .toThrowErrorMatchingInlineSnapshot('"If you want start to be greater than stop please make step negative"')
-
-
-  })
-
-
-  it("throws when stopIsGreaterThanStartAndStepIsNegative", () => {
-
-
-    expect(() => {
-
-      for (const _ of range(1, 9, -2)) { }
-
-
-    }).toThrowErrorMatchingInlineSnapshot('"If you want start to be less than stop please make step positive"')
-
-  })
 
 
   it("throws when start is equal to stop", () => {
@@ -217,7 +178,7 @@ describe("Range works", () => {
 
     expect(() => {
 
-      for (const _ of range(1, 1, 1)) { }
+      for (const _ of range(1, 1, { step: 1 })) { }
 
 
     }).toThrowErrorMatchingInlineSnapshot('"Start can\'t be the same as stop"')
@@ -229,12 +190,34 @@ describe("Range works", () => {
 
     expect(() => {
 
-      for (const _ of range(6, 4, 0)) { }
+      for (const _ of range(6, 4, { step: 0 })) { }
 
-    }).toThrowErrorMatchingInlineSnapshot('"Step can\'t be zero pick a negative or positive number"')
+    }).toThrowErrorMatchingInlineSnapshot('"Step can\'t be zero or a negative number"')
 
   })
 
+
+  test("The inclusive option works when start is less then stop", () => {
+
+
+    const res = Array.from(range(1, 3, { inclusive: true }))
+
+
+    expect(res).toStrictEqual([1, 2, 3])
+
+
+  })
+
+  test("The inclusive option works when stop is less then start", () => {
+
+
+    const res = Array.from(range(3, 1, { inclusive: true }))
+
+
+    expect(res).toStrictEqual([3, 2, 1,])
+
+
+  })
 
 
 })
@@ -467,9 +450,9 @@ describe("Sync Iterate works", () => {
 
 
 
-    expect(Array.from(syncIterate(range(2, 6, 1), (val) => val))).toBeInstanceOf(Array)
+    expect(Array.from(syncIterate(range(2, 6, { step: 1 }), (val) => val))).toBeInstanceOf(Array)
 
-    expect(Array.from(syncIterate(range(2, 6, 1), (val) => val))).toHaveLength(4)
+    expect(Array.from(syncIterate(range(2, 6, { step: 1 }), (val) => val))).toHaveLength(4)
 
   })
 
