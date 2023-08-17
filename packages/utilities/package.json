@@ -2,10 +2,9 @@
   "name": "@forastro/utilities",
   "version": "2.6.0",
   "type": "module",
-  "types": "./dist/index.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/index.js"
+    "types": "./src/index.d.ts",
+    "import": "./src/index.js"
   },
   "scripts": {
     "dev": "tsup --watch",
@@ -26,7 +25,7 @@
     "url": "https://github.com/louiss0"
   },
   "files": [
-    "dist"
+    "src"
   ],
   "keywords": [
     "astro-component",
