@@ -1,6 +1,7 @@
 ---
 import { List, Container, Center, SpacedBox, Typography } from "~/components";
 import Default from "~/layouts/Default.astro";
+
 const DOCUMENTATION_NAMES_AND_LINKS = [
   { name: "Astro", link: "https://docs.astro.build/" },
   {
@@ -49,7 +50,7 @@ const CORE_LIBRARY_SENTENCES = [
   <footer class="px-20 py-6">
     <Center gapClass="gap-2">
       <strong class="text-lg"> Docs</strong>
-      <SpacedBox gapClass="gap-4">
+      <SpacedBox gapClass="gap-4"  >
         {
           DOCUMENTATION_NAMES_AND_LINKS.map(({ name, link }) => (
             <a class="px-3 py-1" href={link}>
