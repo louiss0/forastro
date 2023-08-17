@@ -3,8 +3,7 @@
   "version": "2.6.0",
   "type": "module",
   "exports": {
-    "types": "./src/index.d.ts",
-    "import": "./src/index.js"
+    "import": "./src/index.ts"
   },
   "scripts": {
     "dev": "tsup --watch",
