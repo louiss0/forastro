@@ -2,9 +2,9 @@
   "name": "@forastro/flow",
   "version": "2.5.1",
   "type": "module",
-  "main": "./dist/index.ts",
+  "main": "./src/index.ts",
   "files": [
-    "dist"
+    "src"
   ],
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
