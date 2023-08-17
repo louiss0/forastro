@@ -13,6 +13,7 @@
         "tagName": "${npm.name}v${version}",
         "commitMessage": "chore: release v${version}"
     },
+    "npm": false,
     "github": {
         "release": true,
         "releaseName": "Release ${name} ${version}"
