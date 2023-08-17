@@ -37,6 +37,5 @@
         "referrerpolicy",
         "refferpolicy"
     ],
-    "todo-tree.tree.scanMode": "workspace only",
-    "testing.automaticallyOpenPeekView": "never"
+    "todo-tree.tree.scanMode": "workspace only"
 }
