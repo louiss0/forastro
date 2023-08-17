@@ -16,7 +16,8 @@
 
 ## [2.5.1] - 2023-05-24
 
-This release is a readme fix release. From nom on this read Me will contain all important info about this library.
+This release is a readme fix release.
+From nom on this read Me will contain all important info about this library.
 
 ## [2.5.0]
 
@@ -41,7 +42,9 @@ The function `syncIterate()` was added.
 
 ### Minor Changes
 
-- Added Define template. Changed projector templateId is no longer the only argument that you can pass Added context to the template It's a set of arguments that are passed
+- Added Define template.
+- Changed projector templateId is no longer the only argument that you can pass.
+- Added context to the template It's a set of arguments that are passed
 
 ## 2.2.4
 
@@ -53,13 +56,15 @@ The function `syncIterate()` was added.
 
 ### Patch Changes
 
-- Fixed iterate function makes sure that the key that is passed is a number when an array is passed. and Fixed the hide component
+- iterate function makes sure that the key that is passed is a number when an array is passed.
+- The hide component works as intended
 
 ## 2.2.2
 
 ### Patch Changes
 
-- Changed arguments for the iterate function and its internal logic. The <For/> component has changed as well.
+- Changed arguments for the iterate function and its internal logic.
+- The `<For/>` component has changed as well.
 
 ## 2.2.1
 
@@ -80,9 +85,7 @@ The function `syncIterate()` was added.
 
 ### Minor Changes
 
-- I have a new component called IslandsMirror. It's a component that takes every component with a data-attribute of data-islands-key
-
-  then takes it if it has a parent component that has a tag of <astro-island> then it will it will.
+- I have a new component called IslandsMirror  data-attribute of data-islands-key
 
   - First have it's attributes grabbed
   - The attributes will be set on the parent
