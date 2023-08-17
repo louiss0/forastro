@@ -1,7 +1,14 @@
 ---
-import { iterateRange } from "@forastro/utilities";
+import { iterateRange,  } from "@forastro/utilities";
 
-const { start, step = 1, stop } = Astro.props;
+type Props = {
+  start:number
+  stop:number
+  step?:number
+  inclusive?:true
+}
+
+const { start, step = 1, stop, inclusive } = Astro.props;
 ---
 
 <Fragment
@@ -9,5 +16,6 @@ const { start, step = 1, stop } = Astro.props;
     start,
     stop,
     step,
+    inclusive
   })}
 />
