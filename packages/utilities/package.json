@@ -1,6 +1,6 @@
 {
   "name": "@forastro/utilities",
-  "version": "2.7.1",
+  "version": "2.7.0",
   "type": "module",
   "main": "./src/index.ts",
   "exports": {
