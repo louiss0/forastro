@@ -11,7 +11,10 @@
     },
     "git": {
         "tagName": "${npm.name}v${version}",
-        "commitMessage": "chore: release v${version}"
+        "commitMessage": "chore: release v${version}",
+        "assets": [
+            "./src/**/*.{js,astro}"
+        ]
     },
     "github": {
         "release": true,
@@ -19,6 +22,8 @@
     },
     "npm": false,
     "plugins": {
-        "@release-it/keep-a-changelog": true
+        "@release-it/keep-a-changelog": {
+            "addUnreleased": true
+        }
     }
 }
