@@ -1,0 +1,81 @@
+---
+import {   } from 'astro/types';
+type Props = 
+
+---
+
+
+
+<button data-element="circle" aria-label="Astro Icon Circle" >
+
+    <div data-element="inner" class="top" >
+        <slot name="top" />
+    </div>
+    <div data-element="inner" class="top-left" >
+        <slot name="top-left" />
+    </div>
+    <div data-element="inner" class="top-right">
+        <slot name="top-right" />
+    </div>
+    <div data-element="inner" class="bottom-left">
+        <slot name="bottom-left" />
+    </div>
+    <div data-element="inner" class="bottom-right">
+        <slot name="bottom-right" />
+    </div>
+
+    <div data-element="background">
+
+    </div>
+
+</button>
+
+
+<style>
+
+button[data-element="circle"] {
+    position: relative;
+    border-radius: 9999px;
+    width: 4rem;
+    height: 4rem;
+
+& [data-element="inner"] {
+
+    position: absolute;
+    border-radius: 9999px;
+    z-index: 20;
+
+}
+
+& [data-element="inner"].top {
+}
+
+& [data-element="inner"].top-left {
+    rotate: -45deg;
+
+}
+& [data-element="inner"].top-right {
+    rotate: 45deg;
+
+}
+& [data-element="inner"].bottom-left {
+    rotate: -135deg;
+
+}
+& [data-element="inner"].bottom-right {
+    rotate: 135deg;
+
+}
+
+
+& [data-element="background"] {
+    border-radius: 9999px;
+    position: absolute;
+    z-index: 10;
+
+
+}
+
+
+}
+</style>
