@@ -1,31 +1,118 @@
 ---
+import AstroCircle from '../components/AstroCircle.astro';
 import Layout from '../layouts/Layout.astro';
+
+import { Icon }  from 'astro-icon';
+
 ---
+
 
 <Layout 
 	title="Astro Circle" 
 	description='This is the site where you can download Astro icons with Frameworks as icons'	 
 >
 
-	<header class="px-12 py-6 ">
-		<div class="flex justify-center items-center gap-12">
+	<header class="py-12 px-16">
+		<div class="flex flex-col justify-center items-center gap-12">
 
-		<h1>Welcome to the astro framework circle</h1>
+		<h1 class="text-5xl capitalize">Welcome to the astro framework circle</h1>
 		
 		<p class="text-xl leading-relaxed max-w-[65ch]">
 			This page is a site where you can download a component called the Astro Circle.
-			It's a component that is the Astro Icon surrounded by a purple circle.
-			To use it you must install `astro-icon` then click on the link to download the icon.  
+			It's a component that is the Astro Icon surrounded by a purple circle. <br/>
+			To use it you must install `astro-icon` then click on the link to download the icon.
+			This component is a circle with the Astro Icon in the middle. 
+			It allows you to render an icon in different sides depending on which slot you use.<br/>
+			<strong>The direction names are the names of each slot</strong>
 		</p>
 
 		</div>
 	</header>
 	<main class="px-12 py-6 ">
-	 <div class="flex justify-center items-center">
-		<Astr
-
-	</div>
+		<div data-content class="mx-auto w-4/5 max-w-5xl">
+			
+		<div class="flex flex-col justify-center items-center gap-6 ">
+			
+		<a
+		href={`/AstroCircle.astro`}
+		download
+		class:list={[
+		 "rounded-md px-12 py-4",
+		 "bg-purple-500 text-orange-600",
+		 "[&:is(:hover,:focus)]:text-purple-500 [&:is(:hover,:focus)]:bg-orange-600",
+		 "active:scale-90 active:opacity-90",
+		 "transition-transform duration-500 ease-in",
+		 "transition-opacity duration-250 ease-out",
+		]
+		}
+		>
+		Download Astro Circle
+		</a>
+		<strong class="text-xl leading-relaxed max-w-[65ch]">
+		 Below are examples of each icon being rendered in the following directions.
+			
+		</strong>
+		<ul
+		role="list"
+		title="valid directions"
+		class="list-inside list-disc text-xl md:w-3/5"
+		>
+			{
+			["top", "top-left", "top-right", "bottom-left", "bottom-right"]
+			.map((value)=> <li>{value}</li>)
+			}
+		</ul>
+			
+				<div class="grid gap-8 grid-cols-2">
+			<AstroCircle>
+				<Fragment  slot='top-left'  >
+					<Icon width="1.5rem" name="logos:angular-icon"  />
+				</Fragment>
+			</AstroCircle >
+			
+			<AstroCircle>
+			<Fragment slot='top'>
+				<Icon width="1.5rem" name="logos:solidjs-icon"  />
+			</Fragment>
+			</AstroCircle>
+			<AstroCircle>
+				<Fragment  slot='top-right'  >
+					<Icon width="1.5rem" name="logos:vue"  />
+				</Fragment>
+			</AstroCircle >
+			
+			<AstroCircle>
+				<Fragment  slot='bottom-right'  >
+					<Icon width="1.5rem" name="logos:react"  />
+				</Fragment>
+			</AstroCircle>
+			
+			<AstroCircle>
+				<Fragment  slot='bottom-left'  >
+					<Icon width="1.5rem" name="logos:svelte-icon"  />
+				</Fragment>
+			</AstroCircle>
+		</div>
+			</div>	
+			</div>	
 	</main>
+	<footer class="px-6 py-3">
+		<div data-content class="flex flex-col justify-center items-center gap-3">
+
+			<strong class="text-xl">This is the list of Recommended Icons</strong>
+
+			<ul role="list" title="Recommended Icons" class="list-inside text-lg list-disc">
+				{
+				["logos:svelte-icon","logos:vue", "logos:angular-icon","logos:solidjs-icon", "logos:react"  ]
+				.map(value=> <li>{value}</li>)
+				}
+			</ul>
+
+		</div>
+
+	</footer>
+
+
 </Layout>
 
 	
