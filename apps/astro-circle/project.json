@@ -9,11 +9,15 @@
         "{workspaceRoot}/dist/{projectRoot}"
       ],
       "executor": "@nxtensions/astro:build",
-      "options": {}
+      "options": {
+        "config": "astro.config.prod.mjs"
+      }
     },
     "dev": {
       "executor": "@nxtensions/astro:dev",
-      "options": {}
+      "options": {
+        "config": "astro.config.mjs"
+      }
     },
     "preview": {
       "dependsOn": [
@@ -33,6 +37,6 @@
     }
   },
   "tags": [
-    "scope:shared"
+    "scope:ui"
   ]
 }
