@@ -8,7 +8,7 @@ import { DefineTemplate, Projector, iterate } from '@forastro/utilities';
 
 const DIRECTIONS = Object.freeze(["top", "top-left", "top-right", "bottom-left", "bottom-right"])
 
-const COMPONENT_RENDERER_ICONS = Object.freeze([
+const COMPONENT_RENDERER_ICON_NAMES = Object.freeze([
 	"logos:svelte-icon",
 	"logos:vue", 
 	"logos:angular-icon",
@@ -16,16 +16,50 @@ const COMPONENT_RENDERER_ICONS = Object.freeze([
 	 "logos:react"  
 ])
 
-const DirectionsWithIconsMap = new Map(DIRECTIONS.map((value, index) => [value, COMPONENT_RENDERER_ICONS.at(index)]))
+const LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT = Object.freeze([
+	"/SvelteOnTopLeftAstroCircle.astro",
+	"/VueOnTopLeftAstroCircle.astro", 
+	"/ReactOnTopLeftAstroCircle.astro",
+	"/SolidOnTopLeftAstroCircle.astro",
+	"/AngularOnTopLeftAstroCircle.astro"
+])
+
+const DirectionsWithIconsMap = new Map(DIRECTIONS.map((value, index) => [value, COMPONENT_RENDERER_ICON_NAMES.at(index)]))
+
+const ComponentIconNamesAndLinksToCodeMap = new Map(
+	COMPONENT_RENDERER_ICON_NAMES.map((value, index) => [value, LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT.at(index)]
+	)
+	)
+
 
 ---
 
 <DefineTemplate templateName='container' >
-	{(slot:string)=> (
+	{(_, slot)=> (
 	<div data-content class="mx-auto w-4/5 max-w-5xl">
-		<Fragment set:html={slot}/>
+		<Fragment set:html={slot?.().then(string => string)}/>
 	</div>		
 	)}
+</DefineTemplate>
+
+<DefineTemplate templateName='download-astro-circle-button' >
+	{(ctx, slot)=>
+	<a
+	href={ctx ?  typeof ctx["iconLink"] === "string" ? ctx["iconLink"] : null  : null}
+	download
+	class:list={[
+		"rounded-md px-12 py-4",
+		"bg-purple-600 text-orange-400",
+		"[&:is(:hover,:focus)]:text-purple-600 [&:is(:hover,:focus)]:bg-orange-400",
+		"active:scale-90 active:opacity-90",
+		"transition-transform duration-500 ease-in",
+		"transition-opacity duration-250 ease-out",
+	]
+	}
+	>
+		<Fragment set:html={slot?.().then(string => string)}/>
+	</a>
+	}
 </DefineTemplate>
 
 <Layout 
@@ -36,78 +70,106 @@ const DirectionsWithIconsMap = new Map(DIRECTIONS.map((value, index) => [value, 
 	<header class="py-12 px-16">
 		<div class="flex flex-col justify-center items-center gap-12">
 
-		<h1 class="text-5xl capitalize">Welcome to the astro framework circle</h1>
+		<h1 class="text-5xl capitalize">Welcome to the astro circle</h1>
 		
 		<p class="text-xl leading-relaxed max-w-[65ch]">
 			This page is a site where you can download a component called the Astro Circle.
 			It's a component that is the Astro Icon surrounded by a purple circle. <br/>
-			To use it you must install `astro-icon` then click on the link to download the icon.
+			To use it you must install <code>astro-icon</code> then click on the link to download the icon.
 			This component is a circle with the Astro Icon in the middle. 
-			It allows you to render an icon in different sides depending on which slot you use.
+		</p>
+
+		<p class="text-xl leading-relaxed max-w-[65ch]">
+			When using this component the name of the slot will render the icon in the following places. <br/> 
+		<Fragment set:html={
+			iterate(
+				DIRECTIONS, 
+				(value)=> `The ${value} slot will render the component in the ${value} side. <br/>`
+			)} />
 		</p>
 
 		</div>
 	</header>
 	<main class="px-12 py-6 ">
-	<Projector templateName='container' >
-	 <div class="flex flex-col justify-center items-center gap-6 ">
-			
-		<a
-		href={`/AstroCircle.astro`}
-		download
-		class:list={[
-		 "rounded-md px-12 py-4",
-		 "bg-purple-500 text-orange-600",
-		 "[&:is(:hover,:focus)]:text-purple-500 [&:is(:hover,:focus)]:bg-orange-600",
-		 "active:scale-90 active:opacity-90",
-		 "transition-transform duration-500 ease-in",
-		 "transition-opacity duration-250 ease-out",
-		]
-		}
-		>
-		Download Astro Circle
-		</a>
-		<strong class="text-xl leading-relaxed max-w-[65ch]">
-		 Below are examples of each icon being rendered in the following directions.
-		</strong>
-		<ul
-		role="list"
-		title="valid directions"
-		class="list-inside list-disc text-xl md:w-3/5"
-		>
-			{DIRECTIONS.map((value)=> <li>{value}</li>)}
-		</ul>
-			
-		   <div class="grid gap-8 grid-cols-2">
-			
-			{iterate(DirectionsWithIconsMap, (value,_,key)=> (
-				<AstroCircle>
-					<Fragment slot={key} >
-						<Icon width="1.5rem" name={value}  />
-					</Fragment>
-				</AstroCircle >
-			
-			))}
 
-		</div>
-	 </div>		
-	</Projector>
+	
+	<section aria-label="Examples">
+		<Projector templateName='container' >
+		 <div class="flex flex-col justify-center items-center gap-6 ">
+		
+			<Projector templateName='download-astro-circle-button'>
+				Download Astro Circle
+			</Projector>
+			</a>
+			<strong class="text-xl leading-relaxed max-w-[65ch]">
+			 Below are examples of each icon being rendered in every possible direction.
+			</strong>
+			<div class="grid gap-8 grid-cols-2 lg:grid-cols-3 ">
+				{iterate(DirectionsWithIconsMap, (value,_,key)=> (
+					<AstroCircle>
+						<Fragment slot={key} >
+							<Icon width="1.5rem" name={value}  />
+						</Fragment>
+					</AstroCircle >
+		
+				))}
+			</div>
+		 </div>
+		</Projector>
+	</section>
+	<section class="px-12 py-8" aria-label="Downloadable Astro Circles">
+		<Projector templateName='container' >
+			{()=> <div class="flex flex-col gap-6 items-center">
+				
+				<p class="text-xl leading-5">
+				 You can download one of these components <span class="text-red-500">
+					but you must also download
+					the circle as well
+				 </span>! <br/>
+				 The code assumes they are located in the same folder.
+				</p>
+				
+				<div class="flex gap-8 flex-wrap justify-center items-center">
+					{iterate(
+						ComponentIconNamesAndLinksToCodeMap,
+						(iconLink,_,iconName)=>
+						<div class="grid place-items-center gap-4">
+							<AstroCircle>
+								<Fragment slot="top-left" >
+									<Icon name={iconName} width="1.5rem" />
+									</Fragment>
+							  </AstroCircle>
+							  <Projector 
+							  templateName='download-astro-circle-button' 
+							  context={{iconLink}} 
+							  >
+								Download 
+							  </Projector>
+						</div>
+						)
+					}
+				</div>
+
+			</div>
+		 }
+		</Projector>
+	</section>
+
 
 	</main>
 	<footer class="px-6 py-3">
-		<div data-content class="flex flex-col justify-center items-center gap-3">
+		<Projector templateName='container'>
+			<div class="flex justify-center items-center gap-6">
+				<div class="flex gap-4">
+					<span class="text-xl">Click on this button </span>
+				</div>
 
-			<strong class="text-xl">This is the list of Recommended Icons</strong>
-
-			<ul role="list" title="Recommended Icons" class="list-inside text-lg list-disc">
-				{iterate(COMPONENT_RENDERER_ICONS,(value => <li>{value}</li>))}
-			</ul>
-
-		</div>
-
+				<span class="text-lg">
+					Created by <a href="https://github.com/louiss0"  target="_blank">Shelton Louis &nearr;</a>
+				</span>
+			</div>
+		</Projector>
 	</footer>
-
-
 </Layout>
 
 	
