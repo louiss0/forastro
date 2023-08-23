@@ -1,12 +1,12 @@
 ---
 import { defineGlobalTemplateMap, setToGlobalTemplateMap } from "./helpers";
 
-type Props = {
+
+type Props<T extends Record<string, unknown>> = {
   templateName: Lowercase<string>;
-  children: (
-    ...args: Array<any>
-  ) => unknown | Array<astroHTML.JSX.HTMLAttributes>;
-};
+  children: ((context:T | undefined ,defaultSlot:()=> string | null) => any)
+  | Array<astroHTML.JSX.HTMLAttributes> | string;
+};  
 
 const { templateName } = Astro.props;
 

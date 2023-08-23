@@ -1,11 +1,11 @@
 ---
 import { getFromGlobalTemplateMap } from "../lib/helpers";
 
-interface Props {
+interface Props<T extends Record<string, unknown>> {
   templateName: Parameters<typeof getFromGlobalTemplateMap>[0];
-  context?: Array<any>;
+  context?: T;
+  children:((context?: T)=> unknown) | Array<astroHTML.JSX.HTMLAttributes> | string
 }
-
 const { templateName, context } = Astro.props;
 
 const render = getFromGlobalTemplateMap(templateName);
@@ -18,7 +18,12 @@ if (!render) {
   );
 }
 
-const html = context ? await render(...context) : await render();
+const {slots} = Astro;
+
+const defaultSlotRes = slots.has("default")  ?  await slots.render("default", [context]) : null
+
+
+const html = await render(context, () => defaultSlotRes) 
 ---
 
 <Fragment set:html={html} />
