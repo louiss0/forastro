@@ -4,33 +4,37 @@ import type { HTMLAttributes  } from 'astro/types';
 
 type Props =  HTMLAttributes<"button">
 
-const {class:$class="", ...attrs} = Astro.props
+const { class:$class="", ...attrs} = Astro.props
 
 ---
 
 
 
-<button  class={$class} {...attrs} data-element="circle"  aria-label="Astro Icon Circle" >
+<button class={$class} {...attrs} data-element="circle"  aria-label="Astro Icon Circle" >
     <div data-element="inner" class="top" >
         <div data-content>
             <slot name="top" />
         </div>
     </div>
+    
     <div data-element="inner" class="top-left" >
         <div data-content>
             <slot name="top-left" />
         </div>
     </div>
+    
     <div data-element="inner" class="top-right">
         <div data-content>
             <slot name="top-right" />
         </div>
     </div>
+    
     <div data-element="inner" class="bottom-left">
         <div data-content>
         <slot name="bottom-left" />
         </div>
     </div>
+    
     <div data-element="inner" class="bottom-right">
         <div data-content>
             <slot name="bottom-right" />
@@ -38,14 +42,13 @@ const {class:$class="", ...attrs} = Astro.props
     </div>
 
     <div data-element="background">
-        <Icon name="simple-icons:astro" width="4rem" class="astro-icon "  />
-
+        <Icon name="simple-icons:astro"  class="astro-icon"  />
     </div>
 
 </button>
 
 
-<style >
+<style>
 
 button[data-element="circle"] {
     position: relative;
@@ -107,10 +110,14 @@ button[data-element="circle"] {
     align-items:center;
     
 
-    & .astro-icon{ color: rgb(234 88 12 / var(--tw-bg-opacity, .8));}
+    & .astro-icon { 
+        width: 4rem;
+        color: rgb(234 88 12 / .8);
+    }
 
 }
 
 
 }
+
 </style>
