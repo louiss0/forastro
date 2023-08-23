@@ -4,43 +4,33 @@ import type { HTMLAttributes  } from 'astro/types';
 
 type Props =  HTMLAttributes<"button">
 
-const { class:$class="", ...attrs} = Astro.props
+const { slots, props } = Astro
+
+const { class:$class="", ...attrs} = props
+
+
+const DIRECTIONS = ["top", "top-left", "top-right", "bottom-left", "bottom-right" ]
 
 ---
 
 
 
 <button class={$class} {...attrs} data-element="circle"  aria-label="Astro Icon Circle" >
-    <div data-element="inner" class="top" >
-        <div data-content>
-            <slot name="top" />
-        </div>
-    </div>
     
-    <div data-element="inner" class="top-left" >
-        <div data-content>
-            <slot name="top-left" />
+    {DIRECTIONS.map(value=> (
+        <div data-element="inner" class={value} >
+            <div data-content>
+               <Fragment  set:html={
+                (async() =>
+                slots.has(value) 
+                ? await slots.render(value)
+                : "")()
+            } />
+            </div>
         </div>
-    </div>
-    
-    <div data-element="inner" class="top-right">
-        <div data-content>
-            <slot name="top-right" />
-        </div>
-    </div>
-    
-    <div data-element="inner" class="bottom-left">
-        <div data-content>
-        <slot name="bottom-left" />
-        </div>
-    </div>
-    
-    <div data-element="inner" class="bottom-right">
-        <div data-content>
-            <slot name="bottom-right" />
-        </div>
-    </div>
 
+    ))}
+    
     <div data-element="background">
         <Icon name="simple-icons:astro"  class="astro-icon"  />
     </div>
