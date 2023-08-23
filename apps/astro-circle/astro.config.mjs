@@ -2,6 +2,10 @@ import { defineConfig } from "astro/config";
 import tailwind from '@astrojs/tailwind';
 
 export default defineConfig({
-  outDir: '../../dist/packages/astro-framework-circle',
+  vite: {
+    ssr: {
+      noExternal: ["svgo",]
+    }
+  },
   integrations: [tailwind()],
 });
