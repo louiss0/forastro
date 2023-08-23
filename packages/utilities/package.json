@@ -10,8 +10,6 @@
     }
   },
   "scripts": {
-    "dev": "tsup --watch",
-    "build": "tsup",
     "release": "dotenv release-it",
     "publint": "publint "
   },

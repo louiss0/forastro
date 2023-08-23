@@ -23,7 +23,6 @@
     "astro": ">2.0.0"
   },
   "scripts": {
-    "build": "tsup",
     "release": "release-it",
     "publint": "publint"
   },
