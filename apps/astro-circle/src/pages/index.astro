@@ -37,15 +37,15 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 <DefineTemplate templateName='container' >
 	{(_, slot)=> (
 	<div data-content class="mx-auto w-4/5 max-w-5xl">
-		<Fragment set:html={slot?.().then(string => string)}/>
+		<Fragment set:html={slot()}/>
 	</div>		
 	)}
 </DefineTemplate>
 
 <DefineTemplate templateName='download-astro-circle-button' >
-	{(ctx, slot)=>
+	{(ctx, slot)=> 
 	<a
-	href={ctx ?  typeof ctx["iconLink"] === "string" ? ctx["iconLink"] : null  : null}
+	href={typeof ctx?.["iconLink"] === "string" ? ctx["iconLink"] : null }
 	download
 	class:list={[
 		"rounded-md px-12 py-4",
@@ -57,7 +57,7 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 	]
 	}
 	>
-		<Fragment set:html={slot?.().then(string => string)}/>
+		<Fragment set:html={slot()}/>
 	</a>
 	}
 </DefineTemplate>
