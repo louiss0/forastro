@@ -1,0 +1,116 @@
+---
+import { Icon } from 'astro-icon';
+import type { HTMLAttributes  } from 'astro/types';
+
+type Props =  HTMLAttributes<"button">
+
+const {class:$class="", ...attrs} = Astro.props
+
+---
+
+
+
+<button  class={$class} {...attrs} data-element="circle"  aria-label="Astro Icon Circle" >
+    <div data-element="inner" class="top" >
+        <div data-content>
+            <slot name="top" />
+        </div>
+    </div>
+    <div data-element="inner" class="top-left" >
+        <div data-content>
+            <slot name="top-left" />
+        </div>
+    </div>
+    <div data-element="inner" class="top-right">
+        <div data-content>
+            <slot name="top-right" />
+        </div>
+    </div>
+    <div data-element="inner" class="bottom-left">
+        <div data-content>
+        <slot name="bottom-left" />
+        </div>
+    </div>
+    <div data-element="inner" class="bottom-right">
+        <div data-content>
+            <slot name="bottom-right" />
+        </div>
+    </div>
+
+    <div data-element="background">
+        <Icon name="simple-icons:astro" width="4rem" class="astro-icon "  />
+
+    </div>
+
+</button>
+
+
+<style >
+
+button[data-element="circle"] {
+    position: relative;
+    border-radius: 9999px;
+    width: 8rem;
+    height: 8rem;
+
+& [data-element="inner"] {
+
+    position: absolute;
+    inset: -0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    z-index: 20;
+
+
+}
+
+
+
+& [data-element="inner"].top-left {
+    rotate: -45deg;
+    
+  & [data-content] { rotate: 45deg;}
+
+}
+& [data-element="inner"].top-right {
+    rotate: 45deg;
+
+    & [data-content] { rotate: -45deg;}
+
+
+}
+& [data-element="inner"].bottom-left {
+    rotate: -135deg;
+
+  & [data-content] { rotate: 135deg; }
+
+}
+
+& [data-element="inner"].bottom-right {
+    rotate: 135deg;
+
+  & [data-content] { rotate: -135deg;}
+
+}
+
+
+& [data-element="background"] {
+    border-radius: 9999px;
+    position: absolute;
+    z-index: 10;
+    background-color: rgb(147 51 234 / 0.8);
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content:center;
+    align-items:center;
+    
+
+    & .astro-icon{ color: rgb(234 88 12 / var(--tw-bg-opacity, .8));}
+
+}
+
+
+}
+</style>
