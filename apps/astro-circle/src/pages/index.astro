@@ -43,9 +43,9 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 </DefineTemplate>
 
 <DefineTemplate templateName='download-astro-circle-button' >
-	{(ctx, slot)=> 
+	{(ctx, slot)=> typeof ctx?.["iconLink"] === "string" ? 
 	<a
-	href={typeof ctx?.["iconLink"] === "string" ? ctx["iconLink"] : null }
+	href={ctx["iconLink"]}
 	download
 	class:list={[
 		"rounded-md px-12 py-4",
@@ -57,8 +57,8 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 	]
 	}
 	>
-		<Fragment set:html={slot()}/>
-	</a>
+	 <Fragment set:html={slot() ?? "Please pass in a child this component needs it"}/>
+	</a> : "Please pass in the icon link as a prop this component needs it"
 	}
 </DefineTemplate>
 
@@ -97,7 +97,9 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 		<Projector templateName='container' >
 		 <div class="flex flex-col justify-center items-center gap-6 ">
 		
-			<Projector templateName='download-astro-circle-button'>
+			<Projector 
+			templateName='download-astro-circle-button' 
+			context={{iconLink:"/AstroCircle.astro"}} >
 				Download Astro Circle
 			</Projector>
 			</a>
