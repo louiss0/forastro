@@ -4,8 +4,29 @@ import Layout from '../layouts/Layout.astro';
 
 import { Icon }  from 'astro-icon';
 
+import { DefineTemplate, Projector, iterate } from '@forastro/utilities';
+
+const DIRECTIONS = Object.freeze(["top", "top-left", "top-right", "bottom-left", "bottom-right"])
+
+const COMPONENT_RENDERER_ICONS = Object.freeze([
+	"logos:svelte-icon",
+	"logos:vue", 
+	"logos:angular-icon",
+	"logos:solidjs-icon",
+	 "logos:react"  
+])
+
+const DirectionsWithIconsMap = new Map(DIRECTIONS.map((value, index) => [value, COMPONENT_RENDERER_ICONS.at(index)]))
+
 ---
 
+<DefineTemplate templateName='container' >
+	{(slot:string)=> (
+	<div data-content class="mx-auto w-4/5 max-w-5xl">
+		<Fragment set:html={slot}/>
+	</div>		
+	)}
+</DefineTemplate>
 
 <Layout 
 	title="Astro Circle" 
@@ -22,16 +43,14 @@ import { Icon }  from 'astro-icon';
 			It's a component that is the Astro Icon surrounded by a purple circle. <br/>
 			To use it you must install `astro-icon` then click on the link to download the icon.
 			This component is a circle with the Astro Icon in the middle. 
-			It allows you to render an icon in different sides depending on which slot you use.<br/>
-			<strong>The direction names are the names of each slot</strong>
+			It allows you to render an icon in different sides depending on which slot you use.
 		</p>
 
 		</div>
 	</header>
 	<main class="px-12 py-6 ">
-		<div data-content class="mx-auto w-4/5 max-w-5xl">
-			
-		<div class="flex flex-col justify-center items-center gap-6 ">
+	<Projector templateName='container' >
+	 <div class="flex flex-col justify-center items-center gap-6 ">
 			
 		<a
 		href={`/AstroCircle.astro`}
@@ -50,51 +69,30 @@ import { Icon }  from 'astro-icon';
 		</a>
 		<strong class="text-xl leading-relaxed max-w-[65ch]">
 		 Below are examples of each icon being rendered in the following directions.
-			
 		</strong>
 		<ul
 		role="list"
 		title="valid directions"
 		class="list-inside list-disc text-xl md:w-3/5"
 		>
-			{
-			["top", "top-left", "top-right", "bottom-left", "bottom-right"]
-			.map((value)=> <li>{value}</li>)
-			}
+			{DIRECTIONS.map((value)=> <li>{value}</li>)}
 		</ul>
 			
-				<div class="grid gap-8 grid-cols-2">
-			<AstroCircle>
-				<Fragment  slot='top-left'  >
-					<Icon width="1.5rem" name="logos:angular-icon"  />
-				</Fragment>
-			</AstroCircle >
+		   <div class="grid gap-8 grid-cols-2">
 			
-			<AstroCircle>
-			<Fragment slot='top'>
-				<Icon width="1.5rem" name="logos:solidjs-icon"  />
-			</Fragment>
-			</AstroCircle>
-			<AstroCircle>
-				<Fragment  slot='top-right'  >
-					<Icon width="1.5rem" name="logos:vue"  />
-				</Fragment>
-			</AstroCircle >
+			{iterate(DirectionsWithIconsMap, (value,_,key)=> (
+				<AstroCircle>
+					<Fragment slot={key} >
+						<Icon width="1.5rem" name={value}  />
+					</Fragment>
+				</AstroCircle >
 			
-			<AstroCircle>
-				<Fragment  slot='bottom-right'  >
-					<Icon width="1.5rem" name="logos:react"  />
-				</Fragment>
-			</AstroCircle>
-			
-			<AstroCircle>
-				<Fragment  slot='bottom-left'  >
-					<Icon width="1.5rem" name="logos:svelte-icon"  />
-				</Fragment>
-			</AstroCircle>
+			))}
+
 		</div>
-			</div>	
-			</div>	
+	 </div>		
+	</Projector>
+
 	</main>
 	<footer class="px-6 py-3">
 		<div data-content class="flex flex-col justify-center items-center gap-3">
@@ -102,10 +100,7 @@ import { Icon }  from 'astro-icon';
 			<strong class="text-xl">This is the list of Recommended Icons</strong>
 
 			<ul role="list" title="Recommended Icons" class="list-inside text-lg list-disc">
-				{
-				["logos:svelte-icon","logos:vue", "logos:angular-icon","logos:solidjs-icon", "logos:react"  ]
-				.map(value=> <li>{value}</li>)
-				}
+				{iterate(COMPONENT_RENDERER_ICONS,(value => <li>{value}</li>))}
 			</ul>
 
 		</div>
