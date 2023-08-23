@@ -24,6 +24,7 @@
     "@vitest/coverage-c8": "0.32.2",
     "@vitest/ui": "^0.32.2",
     "astro": "^2.6.5",
+    "astro-icon": "^0.8.1",
     "dotenv-cli": "^7.2.1",
     "eslint": "~8.45.0",
     "eslint-config-prettier": "8.8.0",
