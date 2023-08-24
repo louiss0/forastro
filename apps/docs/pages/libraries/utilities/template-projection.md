@@ -1,5 +1,7 @@
 # Template Projection
 
+// TODO: Change this page to reflect changes in upcoming 2.8.0
+
 In Astro you are normally not allowed to split chunks of HTML into
 reuable pieces of HTML in a page. But with this pair of components.
 It's possible. They are called `<DefineTemplate/>` and `<Projector/>`.

@@ -1,5 +1,7 @@
 # Range Generators
 
+// TODO: Change this page to reflect changes in 2.7.0
+
 A set of Generators that allow you to generate a set of numbers based on three numbers a **start stop and step**.
 If the start is greater than stop the number step must be negative.
 If the stop is greater than the start the step must be positive.

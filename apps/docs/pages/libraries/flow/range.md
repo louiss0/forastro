@@ -1,5 +1,7 @@
 # Range
 
+// TODO: Change this page to reflect changes in 2.7.0
+
 ```tsx
 <Range start={iterable} stop={number} step={number} >
     {(value:number, info: IterationInfo,) => unknown}
