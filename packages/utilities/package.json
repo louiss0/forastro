@@ -10,8 +10,9 @@
     }
   },
   "scripts": {
+    "coverage": "vitest run --coverage",
     "release": "dotenv release-it",
-    "publint": "publint "
+    "publint": "publint"
   },
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
