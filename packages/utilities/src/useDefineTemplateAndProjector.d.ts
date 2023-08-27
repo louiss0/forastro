@@ -1,5 +1,3 @@
-import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
-
 
 type RenderTemplateResult = {
     htmlParts: Array<string>
