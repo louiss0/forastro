@@ -1,3 +1,4 @@
+import type { Props, SSRResult, } from "astro"
 import type {
     GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
     HasForEachMethod,
@@ -5,6 +6,7 @@ import type {
     IterateRangeOptions,
 } from "./types"
 import { IterationInfo } from "./types"
+import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
 
 
 const isIterable = (value: unknown): value is Iterable<unknown> =>
@@ -378,7 +380,28 @@ function getFromGlobalTemplateMap(templateName: Lowercase<string>) {
     return getGlobalTemplateMap().get(templateName)
 
 }
+type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>
 
+type AstroRenderFunction =
+    (props: Props, slots: Record<string, () => RenderTemplateResult>) =>
+        MaybePromise<string | number | RenderTemplateResult>
+
+
+export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
+    Object.assign((result: SSRResult, props: Props, slots: Record<string, () => RenderTemplateResult>) => {
+
+        return {
+            result,
+            [Symbol.toStringTag]: 'AstroComponent',
+            async *[Symbol.asyncIterator]() {
+
+                yield* wrapFunctionInAsyncGenerator(fn)(props, slots)
+
+            }
+        }
+    },
+        { isAstroComponentFactory: true }
+    )
 
 
 
