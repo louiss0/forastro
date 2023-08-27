@@ -20,6 +20,7 @@
     "skipLibCheck": true,
     // Enable strict mode
     "strict": true,
+    "exactOptionalPropertyTypes": true,
     // Error when a value import is only used as a type
     "verbatimModuleSyntax": true,
     "jsx": "preserve",
