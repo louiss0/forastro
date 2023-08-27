@@ -331,55 +331,11 @@ async function* iterateRange<U>(callback: IterateRangeCallback<U>, options: Iter
 
 }
 
-const templateMapSymbol = Symbol("template-map");
-
-
-type AstroRenderSlotFunction<U extends Array<any>> = <T extends Lowercase<string>>(slotName: T, args: U) => Promise<string>
-
-
-type ContextCurryRenderSlotFunction = <U extends Array<any>>(...args: U) => ReturnType<AstroRenderSlotFunction<U>>
-
-
-type TemplateMapObject = {
-    [templateMapSymbol]: Map<Lowercase<string>, ContextCurryRenderSlotFunction>
-}
 
 
 
 
-function defineGlobalTemplateMap() {
 
-
-
-    if (templateMapSymbol in globalThis) { return };
-
-
-    Object.assign(globalThis, {
-        [templateMapSymbol]: new Map<Lowercase<string>, ContextCurryRenderSlotFunction>(),
-    })
-}
-
-
-
-function getGlobalTemplateMap() {
-
-    return (globalThis as unknown as TemplateMapObject)[templateMapSymbol]
-
-}
-
-function setToGlobalTemplateMap(templateName: Lowercase<string>, astroRenderFunction: ContextCurryRenderSlotFunction) {
-
-
-    return getGlobalTemplateMap().set(templateName, astroRenderFunction)
-
-
-}
-
-function getFromGlobalTemplateMap(templateName: Lowercase<string>) {
-
-    return getGlobalTemplateMap().get(templateName)
-
-}
 type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>
 
 type AstroRenderFunction =
@@ -415,7 +371,4 @@ export {
     executeIf,
     syncIterate,
     executeUnless,
-    defineGlobalTemplateMap,
-    setToGlobalTemplateMap,
-    getFromGlobalTemplateMap
 }
