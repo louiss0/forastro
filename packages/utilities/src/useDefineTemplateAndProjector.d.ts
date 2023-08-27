@@ -16,7 +16,7 @@ type DefineTemplateProps<
 > =
     ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        context?: DefineTemplateContext extends null ? never : DefineTemplateContext
+        context?: DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues ? DefineTemplateContext : never
         children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
     }
     : ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<DefineTemplateContext> extends StringKeyedObjectLiteralWithUnknownValues
@@ -36,7 +36,7 @@ type ProjectorProps<
     DefineTemplateContext,
 > = DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        context?: ProjectorContext extends null ? never : ProjectorContext
+        context?: ProjectorContextContext extends StringKeyedObjectLiteralWithUnknownValues ? ProjectorContextContext : never
         children(context: DefineTemplateContext): unknown
     }
     : ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
