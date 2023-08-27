@@ -43,10 +43,12 @@ type DefineTemplateProps<
 type ProjectorProps<
     ProjectorContext,
     DefineTemplateContext,
-> =
-    ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
-    ?
-    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+> = DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    ? {
+        context?: ProjectorContextContext extends StringKeyedObjectLiteralWithUnknownValues ? ProjectorContextContext : never
+        children(context: DefineTemplateContext): unknown
+    }
+    : ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
     ? {
         context: ProjectorContext
         children: (context: DefineTemplateContext) => unknown
@@ -55,8 +57,8 @@ type ProjectorProps<
         children?: Array<astroHTML.JSX.HTMLAttributes> | string;
     }
     : {
-        children?: Array<astroHTML.JSX.HTMLAttributes> | string;
-    }
+    children ?: Array<astroHTML.JSX.HTMLAttributes> | string;
+}
 
 
 declare function DefineTemplate<T, U>(props: DefineTemplateProps<T, U>): any
