@@ -1,5 +1,17 @@
 # @forastro/utilities
 
+## [Unreleased]
+
+### Added
+
+- A new function was created called `useDefineTemplateAndProjector`.
+  - It generates two components in a tuple on the left `DefineTemplate` right `Projector`
+  - It also accepts types for send information from define template projector and back.
+
+### Removed
+
+- DefineTemplate and Projector components are now removed.
+
 ## [2.7.1] - 2023-08-17
 
 ### Fixed
