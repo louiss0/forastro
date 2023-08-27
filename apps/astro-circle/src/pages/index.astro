@@ -1,10 +1,9 @@
 ---
+import { useDefineTemplateAndProjector, iterate, } from '@forastro/utilities';
 import AstroCircle from '../components/AstroCircle.astro';
 import Layout from '../layouts/Layout.astro';
-
 import { Icon }  from 'astro-icon';
 
-import { DefineTemplate, Projector, iterate } from '@forastro/utilities';
 
 const DIRECTIONS = Object.freeze(["top", "top-left", "top-right", "bottom-left", "bottom-right"])
 
@@ -22,30 +21,34 @@ const LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT = Object.freeze(
 	"/ReactOnTopLeftAstroCircle.astro",
 	"/SolidOnTopLeftAstroCircle.astro",
 	"/AngularOnTopLeftAstroCircle.astro"
-])
+] as const)
 
 const DirectionsWithIconsMap = new Map(DIRECTIONS.map((value, index) => [value, COMPONENT_RENDERER_ICON_NAMES.at(index)]))
 
 const ComponentIconNamesAndLinksToCodeMap = new Map(
-	COMPONENT_RENDERER_ICON_NAMES.map((value, index) => [value, LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT.at(index)]
-	)
+	COMPONENT_RENDERER_ICON_NAMES
+	.map((value, index) => [value, LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT.at(index)!])
 	)
 
+const [ DefineContainerTemplate, ContainerProjector ] = useDefineTemplateAndProjector()
+
+const [ DefineDownloadButtonTemplate, DownloadButtonProjector ] = useDefineTemplateAndProjector<{iconLink:`/${string}`}>()
 
 ---
 
-<DefineTemplate templateName='container' >
-	{(_, slot)=> (
+
+<DefineContainerTemplate >
+	{(slot)=> (
 	<div data-content class="mx-auto w-4/5 max-w-5xl">
 		<Fragment set:html={slot()}/>
 	</div>		
 	)}
-</DefineTemplate>
+</DefineContainerTemplate>
 
-<DefineTemplate templateName='download-astro-circle-button' >
-	{(ctx, slot)=> typeof ctx?.["iconLink"] === "string" ? 
-	<a
-	href={ctx["iconLink"]}
+<DefineDownloadButtonTemplate >
+	{({iconLink}, slot)=> 
+	 <a
+	href={iconLink}
 	download
 	class:list={[
 		"rounded-md px-12 py-4",
@@ -57,18 +60,22 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 	]
 	}
 	>
-	 <Fragment set:html={slot() ?? "Please pass in a child this component needs it"}/>
-	</a> : "Please pass in the icon link as a prop this component needs it"
+	 <Fragment set:html={slot}/>
+	</a> 
 	}
-</DefineTemplate>
+</DefineDownloadButtonTemplate>
 
 <Layout 
 	title="Astro Circle" 
 	description='This is the site where you can download Astro icons with Frameworks as icons'	 
 >
 
+
+	
+
 	<header class="py-12 px-16">
 		<div class="flex flex-col justify-center items-center gap-12">
+
 
 		<h1 class="text-5xl capitalize">Welcome to the astro circle</h1>
 		
@@ -94,18 +101,19 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 
 	
 	<section aria-label="Examples">
-		<Projector templateName='container' >
+		<ContainerProjector  >
 		 <div class="flex flex-col justify-center items-center gap-6 ">
 		
-			<Projector 
-			templateName='download-astro-circle-button' 
-			context={{iconLink:"/AstroCircle.astro"}} >
-				Download Astro Circle
-			</Projector>
-			</a>
+			<DownloadButtonProjector 
+				context={{iconLink:"/AstroCircle.astro"}} 
+			>
+			 Download Astro Circle
+			</DownloadButtonProjector>
+		
 			<strong class="text-xl leading-relaxed max-w-[65ch]">
 			 Below are examples of each icon being rendered in every possible direction.
 			</strong>
+		
 			<div class="grid gap-8 grid-cols-2 lg:grid-cols-3 ">
 				{iterate(DirectionsWithIconsMap, (value,_,key)=> (
 					<AstroCircle>
@@ -117,11 +125,13 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 				))}
 			</div>
 		 </div>
-		</Projector>
+		</ContainerProjector>
 	</section>
+
+
 	<section class="px-12 py-8" aria-label="Downloadable Astro Circles">
-		<Projector templateName='container' >
-			{()=> <div class="flex flex-col gap-6 items-center">
+		<ContainerProjector >
+			<div class="flex flex-col gap-6 items-center">
 				
 				<p class="text-xl leading-5">
 				 You can download one of these components <span class="text-red-500">
@@ -141,26 +151,24 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 									<Icon name={iconName} width="1.5rem" />
 									</Fragment>
 							  </AstroCircle>
-							  <Projector 
-							  templateName='download-astro-circle-button' 
+							  <DownloadButtonProjector 						  
 							  context={{iconLink}} 
 							  >
 								Download 
-							  </Projector>
+							  </DownloadButtonProjector>
 						</div>
-						)
-					}
+						)}
 				</div>
 
 			</div>
-		 }
-		</Projector>
+
+		</ContainerProjector>
 	</section>
 
 
 	</main>
 	<footer class="px-6 py-3">
-		<Projector templateName='container'>
+		<ContainerProjector >
 			<div class="flex justify-center items-center gap-6">
 				<div class="flex gap-4">
 					<span class="text-xl">Click on this button </span>
@@ -170,7 +178,7 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 					Created by <a href="https://github.com/louiss0"  target="_blank">Shelton Louis &nearr;</a>
 				</span>
 			</div>
-		</Projector>
+		</ContainerProjector>
 	</footer>
 </Layout>
 
