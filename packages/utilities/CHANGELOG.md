@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.0] - 2023-08-27
+
 ### Added
 
 - A new function was created called `useDefineTemplateAndProjector`.
