@@ -42,7 +42,7 @@ export const useDefineTemplateAndProjector = () => {
         const getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult = () =>
             typeof projectorSlotFirstExpression === "function"
                 ? projectorSlotFirstExpression(defineTemplateContext)
-                : () => projectorSlotResult
+                : projectorSlotResult
 
 
 
