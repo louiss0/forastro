@@ -21,6 +21,7 @@
     // Enable strict mode
     "strict": true,
     // Error when a value import is only used as a type
-    "importsNotUsedAsValues": "error"
+    "verbatimModuleSyntax": true,
+    "jsx": "preserve",
   }
 }
