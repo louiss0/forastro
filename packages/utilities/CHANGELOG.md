@@ -2,6 +2,21 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Made sure that the types account for all allowed scenarios for `DefineTemplate` and `Projector`.
+
+### Added
+
+- Error messages will now be thrown when using not sending the right data
+to `DefineTemplate` and `Projector`.
+
+- The `useDefineTemplateAndProjector()`
+  - now allows the user to pass in a debug name.
+  - It will also keep track of every time it's called.
+  - Each call number will be associated with the name of ``DefineTemplate` and `Projector`
+  for an error message.
+
 ## [3.0.0] - 2023-08-27
 
 ### Added
