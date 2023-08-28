@@ -143,8 +143,8 @@ These ideas are enforced on the type level.
     }
 
  ```
-:::
 
+:::
 
 The only argument that can be passed to this function is called a debug name.
 The debug name is a name that is used during errors. It's used to identify
