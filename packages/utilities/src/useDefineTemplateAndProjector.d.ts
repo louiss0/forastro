@@ -26,11 +26,19 @@ type DefineTemplateProps<
         context: DefineTemplateContext
         children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
     } : {
-        context?: never
         children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
     }
+    : DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    ? {
+        context: DefineTemplateContext
+        children: ((defaultSlot: ProjectorSlot) => unknown)
+        | Array<astroHTML.JSX.HTMLAttributes>
+        | string;
+    }
     : {
-        children: ((defaultSlot: ProjectorSlot) => unknown) | Array<astroHTML.JSX.HTMLAttributes> | string;
+        children: ((defaultSlot: ProjectorSlot) => unknown)
+        | Array<astroHTML.JSX.HTMLAttributes>
+        | string;
     }
 
 
@@ -42,7 +50,9 @@ type ProjectorProps<
     DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null,
     ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
 > =
-    ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
+    ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<
+        ProjectorContext
+    > extends StringKeyedObjectLiteralWithUnknownValues
     ?
     DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
@@ -53,9 +63,11 @@ type ProjectorProps<
         context: ProjectorContext
         children?: Array<astroHTML.JSX.HTMLAttributes> | string;
     }
-    : {
-        children?: Array<astroHTML.JSX.HTMLAttributes> | string;
+    : DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    ? {
+        children(context: DefineTemplateContext): unknown
     }
+    : { children?: Array<astroHTML.JSX.HTMLAttributes> | string; }
 
 
 declare function DefineTemplate<T, U>(props: DefineTemplateProps<T, U>): any
