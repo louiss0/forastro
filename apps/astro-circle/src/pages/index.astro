@@ -40,7 +40,7 @@ const [ DefineDownloadButtonTemplate, DownloadButtonProjector ] = useDefineTempl
 <DefineContainerTemplate >
 	{(slot)=> (
 	<div data-content class="mx-auto w-4/5 max-w-5xl">
-		{slot} 
+		{slot()} 
 	</div>		
 	)}
 </DefineContainerTemplate>
@@ -60,7 +60,7 @@ const [ DefineDownloadButtonTemplate, DownloadButtonProjector ] = useDefineTempl
 	]
 	}
 	>
- 	{slot}
+ 	{slot()}
 	</a> 
 	}
 </DefineDownloadButtonTemplate>
