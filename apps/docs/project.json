@@ -2,6 +2,7 @@
   "name": "docs",
   "$schema": "../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
+  "sourceRoot": "apps/docs",
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -9,19 +10,19 @@
         "{options.outputPath}"
       ],
       "options": {
-        "command": "vitepress build packages/..//docs"
+        "command": "vitepress build apps/docs"
       }
     },
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitepress dev packages/..//docs"
+        "command": "vitepress dev apps/docs"
       }
     },
     "serve": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "vitepress serve packages/..//docs"
+        "command": "vitepress serve apps/docs"
       }
     }
   },
