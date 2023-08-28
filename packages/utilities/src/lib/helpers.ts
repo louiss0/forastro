@@ -17,14 +17,14 @@ const isIterable = (value: unknown): value is Iterable<unknown> =>
 
 type Callback = (...args: Array<unknown>) => any
 
-function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
+export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 
 
     return condition ? cb() : null
 
 }
 
-function executeUnless<T extends Callback>(condition: boolean, cb: T) {
+export function executeUnless<T extends Callback>(condition: boolean, cb: T) {
 
 
     return executeIf(!condition, cb)
@@ -32,7 +32,7 @@ function executeUnless<T extends Callback>(condition: boolean, cb: T) {
 }
 
 
-function isObject(value: unknown): value is Record<PropertyKey, unknown> {
+export function isObject(value: unknown): value is Record<PropertyKey, unknown> {
 
     return typeof value === "object" && value != null
 }
@@ -44,7 +44,7 @@ export function hasForEachMethod(value: unknown): value is HasForEachMethod {
 
 type RangeOptions = { step?: number, inclusive?: true }
 
-function* range(start: number, stop: number, options: RangeOptions = {}) {
+export function* range(start: number, stop: number, options: RangeOptions = {}) {
 
 
     const { step = 1, inclusive } = options
@@ -136,7 +136,7 @@ function isGenerator(value: unknown): value is Generator {
 
 
 
-function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
+export function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
 
 
     return async function* (...args: Parameters<T>) {
@@ -159,7 +159,7 @@ function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnT
 
 }
 
-async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
+export async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
     cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
 
 
@@ -260,7 +260,7 @@ export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends
 
 
 
-function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
+export function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
     cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
 
 
@@ -314,7 +314,7 @@ function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
 
 }
 
-async function* iterateRange<U>(callback: IterateRangeCallback<U>, options: IterateRangeOptions) {
+export async function* iterateRange<U>(callback: IterateRangeCallback<U>, options: IterateRangeOptions) {
 
     const { start, stop, step = 1, inclusive } = options
 
@@ -363,12 +363,3 @@ export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
 
 
 
-export {
-    range,
-    iterate,
-    iterateRange,
-    isIterable,
-    executeIf,
-    syncIterate,
-    executeUnless,
-}
