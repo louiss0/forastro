@@ -1,36 +1,43 @@
 # Range
 
-// TODO: Change this page to reflect changes in 2.7.0
-
 ```tsx
-<Range start={iterable} stop={number} step={number} >
+<Range start={iterable} stop={number} step={number} inclusive={true | undefined} >
     {(value:number, info: IterationInfo,) => unknown}
 </Range>
 ```
 
-A component allows you to generate a set of numbers based on three numbers a **start stop and step**. If the start is greater than stop the number step must be negative. If the stop is greater than the start the step must be positive. If the former condition is fulfilled the numbers generated will be less than the previous one until the stop is reached. If the latter condition is fulfilled the numbers generated will be greater than the previous one until the stop is reached.
+A component that requires two number props `start` and `stop` and a function as child.
+When activated it will use a third number will be used called the step.
+The function that is passed will receive two arguments.
+The value and the [Iteration Info](../utilities/iteration-generators.md#iteration-info).
+When the start is less than stop, the number will be the result of the step plus the previous
+number starting from start. When in reverse, the number passed through will be subtracted.
+Either way new values will be passed until the stop is reached.
+To include the stop as the final number use inclusive prop.
 
-This component will pass values it's child function which is the current value and the [Iteration Info](/libraries/utilities/iteration-generators#iteration-info)
+The iteration info is recreated with sent new values based on the value.
+When created the remaining
 
 ## Props
 
-These are the acceptable props.
+### Required
 
-### Start
+| name  | description               |
+| ----- | ------------------------- |
+| start | The number to start from. |
+| stop  | The number to stop on.    |
 
- The number to start from. When all number props are positive.  
+### Optional
 
-### Stop
-
- The number to stop on. When all number props are negative.
-
-### Step
-
- The numbers to skip when generating numbers.
+| name      | description                                | default   |
+| --------- | ------------------------------------------ | --------- |
+| step      | numbers to skip when generating numbers.   | 1         |
+| inclusive | when defined makes the final number appear | undefined |
 
 ### Children
 
-The children is a function that has will be passed the value as the first parameter and the Iteration info as the second parameter. Through out each iteration of the loop. Whatever is returned by the callback will be the value that is rendered by this component.
+The children is a function that has will be passed two arguments.
+The first is the value the second is the Iteration Info.
 
 ## Usage
 

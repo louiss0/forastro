@@ -43,7 +43,11 @@ iterate<T HasForEachMethod | Generator, U>(
 ):AsyncGenerator
 ```
 
-A function that takes in either a generator or a iterable with a `forEach()`  as the first parameter and a callback as the second. It iterates through the first parameter and passes through it's **value** , the [Iteration Info](#iteration-info). If the first parameter is a iterable with a `forEach()` the key as the last parameter.  
+A function that takes in either a generator or a iterable with a `forEach()`  
+as the first parameter and a callback as the second.
+It iterates through the first parameter and passes through it's **value**,
+the [Iteration Info](#iteration-info).
+If the first parameter is a iterable with a `forEach()` the key as the last parameter.  
 
 :::warning
  This function works for Astro components
@@ -67,7 +71,11 @@ syncIterate<T HasForEachMethod | Generator, U>(
 ):Generator
 ```
 
-A function that takes in either a generator or a iterable with a `forEach()`  as the first parameter and a callback as the second. It iterates through the first parameter and passes through it's **value** , the [Iteration Info](#iteration-info). If the first parameter is a iterable with a `forEach()` the key as the last parameter.  
+A function that takes in either a generator or a iterable with a `forEach()`  
+as the first parameter and a callback as the second.
+It iterates through the first parameter and passes through it's **value**,
+the [Iteration Info](#iteration-info).
+If the first parameter is a iterable with a `forEach()` the key as the last parameter.  
 
 :::warning
  This function works for Non components. When using React you'll get and error.
