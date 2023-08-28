@@ -17,8 +17,8 @@ type ProjectorSlot = () => RenderTemplateResult | undefined
 
 
 type DefineTemplateProps<
-    ProjectorContext,
-    DefineTemplateContext,
+    ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
+    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null,
 > =
     ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
     ? DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
@@ -39,8 +39,8 @@ type DefineTemplateProps<
 
 
 type ProjectorProps<
-    ProjectorContext,
-    DefineTemplateContext,
+    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null,
+    ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
 > =
     ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
     ?
@@ -63,5 +63,8 @@ declare function DefineTemplate<T, U>(props: DefineTemplateProps<T, U>): any
 declare function Projector<T, U>(props: ProjectorProps<T, U>): any
 
 
-export function useDefineTemplateAndProjector<ProjectorContext, DefineTemplateContext = null>():
-    [typeof DefineTemplate<ProjectorContext, DefineTemplateContext>, typeof Projector<ProjectorContext, DefineTemplateContext>] 
+export function useDefineTemplateAndProjector<
+    ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
+    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null = null
+>(debugName?: string):
+    [typeof DefineTemplate<ProjectorContext, DefineTemplateContext>, typeof Projector<DefineTemplateContext, ProjectorContext>] 
