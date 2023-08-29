@@ -3,6 +3,7 @@ import { useDefineTemplateAndProjector, iterate, } from '@forastro/utilities';
 import AstroCircle from '../components/AstroCircle.astro';
 import Layout from '../layouts/Layout.astro';
 import { Icon }  from 'astro-icon';
+import TopFiveFrameworksAstroCircle from 'apps/astro-circle/src/components/TopFiveFrameworksAstroCircle.astro';
 
 
 const DIRECTIONS = Object.freeze(["top", "top-left", "top-right", "bottom-left", "bottom-right"])
@@ -71,7 +72,6 @@ const [ DefineDownloadButtonTemplate, DownloadButtonProjector ] = useDefineTempl
 >
 
 
-	
 
 	<header class="py-12 px-16">
 		<div class="flex flex-col justify-center items-center gap-12">
@@ -163,6 +163,26 @@ const [ DefineDownloadButtonTemplate, DownloadButtonProjector ] = useDefineTempl
 			</div>
 
 		</ContainerProjector>
+	</section>
+
+	<section aria-label="Dowload Circle With Top Five Frontend Frameworks">
+ 
+		<ContainerProjector>
+
+			<div class="flex flex-col gap-8 items-center">
+				
+				<TopFiveFrameworksAstroCircle 
+				revealedFrameworks={["react", "angular", "vue", "svelte", "solid",]}  
+				/>
+				
+				<DownloadButtonProjector context={{iconLink:"/TopFiveFrameworksAstroCircle.astro"}} >
+					Download Icon With Top Five Frameworks
+				</DownloadButtonProjector>	
+
+			</div>
+			
+		</ContainerProjector>
+
 	</section>
 
 	</main>

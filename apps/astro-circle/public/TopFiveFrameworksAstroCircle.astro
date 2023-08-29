@@ -1,0 +1,59 @@
+---
+import { Icon } from 'astro-icon';
+import AstroCircle from './AstroCircle.astro';
+
+const topFiveFrameworks = [
+  'react',
+  'vue',
+  'angular',
+  'svelte',
+  'solid',
+] as const;
+
+export interface Props {
+  revealedFrameworks: Array<(typeof topFiveFrameworks)[number]>;
+}
+
+const { revealedFrameworks } = Astro.props;
+
+
+---
+
+<AstroCircle>
+    {
+      revealedFrameworks.includes('react') && (
+        <div slot="top" class="transform transition-transform duration-200 ease-in hover:scale-125">
+          <Icon name="logos:react" class="w-6"   />
+        </div>
+      )
+    }
+    {
+      revealedFrameworks.includes('angular') && (
+        <div slot="top-left" class="transform transition-transform duration-200 ease-in hover:scale-125">
+          <Icon name="logos:angular-icon" class="w-6" />
+        </div>
+        )
+    }
+    {
+      revealedFrameworks.includes('vue') && (
+        <div slot="top-right" class="transform transition-transform duration-200 ease-in hover:scale-125">
+           <Icon name="logos:vue" class="w-6" />
+        </div>
+      )
+    }
+    {
+      revealedFrameworks.includes('svelte') && (
+        <div slot="bottom-left" class="transform transition-transform duration-200 ease-in hover:scale-125">
+          <Icon name="logos:svelte-icon" class="w-6" />
+        </div>
+      )
+    }
+    {
+      revealedFrameworks.includes('solid') && (
+        <div slot="bottom-right" class="transform transition-transform duration-200 ease-in hover:scale-125">
+          <Icon name="logos:solidjs-icon" class="w-6" />
+        </div>
+      )
+    }
+</AstroCircle>
+
