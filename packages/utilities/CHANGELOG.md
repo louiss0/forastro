@@ -4,6 +4,17 @@
 
 ### Fixed
 
+The default slot will not error if it's not passed without the expectation
+of it and the define template context.
+
+### Added
+
+Created a new type called slot function to represent a slot in astro.
+
+## [3.0.1] 2023-08-29
+
+### Fixed
+
 - Made sure that the types account for all allowed scenarios for `DefineTemplate` and `Projector`.
 
 ### Added
