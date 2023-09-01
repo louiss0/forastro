@@ -333,18 +333,19 @@ export async function* iterateRange<U>(callback: IterateRangeCallback<U>, option
 
 
 
-
+type SlotFunction = ((...args: Array<NonNullable<unknown>>) => RenderTemplateResult) | undefined
 
 
 type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>
 
-type AstroRenderFunction =
-    (props: Props, slots: Record<string, () => RenderTemplateResult>) =>
-        MaybePromise<string | number | RenderTemplateResult>
+type AstroRenderFunction = (
+    props: Props,
+    slots: Record<string, SlotFunction>
+) => MaybePromise<string | number | RenderTemplateResult>
 
 
 export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
-    Object.assign((result: SSRResult, props: Props, slots: Record<string, () => RenderTemplateResult>) => {
+    Object.assign((result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
 
         return {
             result,

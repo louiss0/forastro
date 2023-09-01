@@ -48,16 +48,17 @@ export const useDefineTemplateAndProjector = (debugName) => {
 
 
 
+        const projectorSlotResult = slots?.default?.()
 
-        const projectorSlotResult = slots.default()
-
-        const projectorSlotFirstExpression = projectorSlotResult.expressions.at(0)
+        const projectorSlotFirstExpression = projectorSlotResult?.expressions.at(0)
 
 
         const theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject =
             typeof projectorSlotFirstExpression !== "function" && isObject(defineTemplateContext);
 
-        executeIf(theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject, () => {
+        executeIf(
+            theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject, 
+            () => {
 
             throw new Error(
                 "You must pass in a function as the child if the defineTemplateContext is used",
@@ -74,7 +75,10 @@ export const useDefineTemplateAndProjector = (debugName) => {
 
         const getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult = () =>
             typeof projectorSlotFirstExpression === "function"
-                ? executeIf(isObject(defineTemplateContext), () => projectorSlotFirstExpression(defineTemplateContext))
+                ? executeIf(
+                    isObject(defineTemplateContext), 
+                    () => projectorSlotFirstExpression(defineTemplateContext)
+                )
                 : projectorSlotResult
 
 
