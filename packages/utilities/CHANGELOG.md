@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.0.2] - 2023-08-31
+
 ### Fixed
 
 The default slot will not error if it's not passed without the expectation
