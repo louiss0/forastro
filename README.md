@@ -60,3 +60,4 @@ The templates that exist in this Mono repo are.
 - [Astro Vue](/docs/templates/astro-vue.md)
 - [Astro Preact](/docs/templates/astro-preact.md)
 - [Astro Mdx](/docs/templates/astro-mdx.md)
+- [Astro Mdx](/docs/templates/astro-markdoc.md)
