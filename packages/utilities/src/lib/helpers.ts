@@ -93,13 +93,13 @@ export function throwUnless(condition: boolean, message = "Something went wrong"
 
 
 
-export async function returnErrorAndResultFromPromise<T extends Promise<any>>(cb: T) {
+export async function returnErrorAndResultFromPromise<T extends Promise<any>>(promise: T) {
 
 
 
     try {
 
-        return [await cb, null] as const
+        return [await promise, null] as const
 
 
     } catch (error) {
