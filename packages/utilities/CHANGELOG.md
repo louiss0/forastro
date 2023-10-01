@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.0] - 2023-10-01
+
 ### Added
 
 - Utility functions for throwing errors
