@@ -39,3 +39,13 @@ that are used for development with [Astro.js](https://astro.build).
  ```
 
 :::
+
+## Recommendations
+
+I think it a good idea to pair this library with
+
+- [ts-pattern](https://www.npmjs.com/package/ts-pattern).
+  - You can try [pattycake](https://www.npmjs.com/package/pattycake) with it.
+- [tiny-invariant](https://www.npmjs.com/package/tiny-invariant)
+- [ts-reset](https://www.npmjs.com/package/@total-typescript/ts-reset)
+- [remeda](https://www.npmjs.com/package/remeda)
