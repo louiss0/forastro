@@ -17,7 +17,7 @@
         "releaseName": "Release ${name} ${version}"
     },
     "npm": {
-        "allowSameVersion": true
+        "publish": false
     },
     "plugins": {
         "@release-it/keep-a-changelog": {
