@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Added
+
+- Utility functions for throwing errors
+- A new function for if and else conditions
+- A new function that returns the result of a promise and an error.
+
 ## [3.0.2] - 2023-08-31
 
 ### Fixed
