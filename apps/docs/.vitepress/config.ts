@@ -60,6 +60,7 @@ export default defineConfig({
               { text: "Iteration Generators", link: "/libraries/utilities/iteration-generators" },
               { text: "Range Generators", link: "/libraries/utilities/range-generators" },
               { text: "Conditional Functions", link: "/libraries/utilities/conditional-functions" },
+              { text: "Error Functions", link: "/libraries/utilities/error-functions" },
               { text: "Template Projection", link: "/libraries/utilities/template-projection" },
               { text: "Page Link", link: "/libraries/utilities/page-link" },
             ]
