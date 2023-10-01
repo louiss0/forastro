@@ -1,5 +1,6 @@
 import type { Props, SSRResult, } from "astro"
 import type {
+    Callback,
     GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
     HasForEachMethod,
     IterateRangeCallback,
@@ -8,15 +9,10 @@ import type {
 import { IterationInfo } from "./types"
 
 import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
+import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, isObject, wrapFunctionInAsyncGenerator } from "packages/utilities/src/lib/internal"
 
 
-const isIterable = (value: unknown): value is Iterable<unknown> =>
-    isObject(value) && (
-        typeof value[Symbol.iterator] === 'function'
-        || typeof value[Symbol.asyncIterator] === 'function'
-    )
 
-type Callback = (...args: Array<unknown>) => any
 
 export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 
@@ -90,6 +86,32 @@ export function throwUnless(condition: boolean, message = "Something went wrong"
 
 
 
+export const createMarkdocFilter = (cb: <T, U>(value: T) => U) => {
+
+
+    return {
+        transform(parameters: Record<number, unknown>) {
+
+            return cb(parameters[0])
+
+        }
+    }
+
+
+};
+
+
+export const createMultiParamMarkdocFilter = (cb: <T, U>(...args: Array<T>) => U) => {
+
+    return {
+        transform(parameters: Record<number, unknown>) {
+
+            return cb(...Object.values(parameters))
+
+        }
+    }
+
+};
 
 
 
@@ -140,14 +162,7 @@ export async function returnErrorAndResultFromPromise<T extends Promise<any>>(pr
 };
 
 
-export function isObject(value: unknown): value is Record<PropertyKey, unknown> {
 
-    return typeof value === "object" && value != null
-}
-
-export function hasForEachMethod(value: unknown): value is HasForEachMethod {
-    return isObject(value) && 'forEach' in value
-}
 
 
 type RangeOptions = { step?: number, inclusive?: true }
@@ -235,37 +250,7 @@ export function* range(start: number, stop: number, options: RangeOptions = {}) 
 
 
 
-function isGenerator(value: unknown): value is Generator {
 
-
-    return isIterable(value) && value.toString() === "[object Generator]"
-
-}
-
-
-
-export function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
-
-
-    return async function* (...args: Parameters<T>) {
-
-        const res = fn(...args)
-
-
-        if (res instanceof Promise) {
-
-            yield await res
-
-
-            return
-        }
-
-        yield res
-
-
-    }
-
-}
 
 export async function* iterate<T extends Iterable<unknown> | Generator, U>(iterable: T,
     cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
@@ -323,46 +308,7 @@ export async function* iterate<T extends Iterable<unknown> | Generator, U>(itera
 }
 
 
-export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends Iterable<any> & HasForEachMethod>(iterable: T) {
 
-
-    const firstIterationNumber = 0
-
-    type ParametersOfIterable = Parameters<Parameters<typeof iterable["forEach"]>[0]>
-
-    const iterableEntriesMap: Map<ParametersOfIterable[1], ParametersOfIterable[0]> = new Map()
-
-    let iteration = firstIterationNumber
-
-
-    iterable.forEach((value, key) => iterableEntriesMap.set(key, value))
-
-
-    const iterableEntriesMapLength = iterableEntriesMap.size
-
-    for (const [key, value] of iterableEntriesMap) {
-
-
-
-
-        yield {
-            value,
-            info: new IterationInfo(
-                firstIterationNumber,
-                iteration,
-                iterableEntriesMapLength
-            ),
-            key
-        }
-
-        iteration++
-
-
-    }
-
-
-
-}
 
 
 
@@ -371,11 +317,8 @@ export function* syncIterate<T extends Iterable<unknown> | Generator, U>(iterabl
     cb: GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U>) {
 
 
-    if (!isIterable(iterable)) {
 
-
-        throw new Error("You did not pass in an iterable")
-    }
+    throwUnless(isIterable(iterable), "You did not pass in an iterable")
 
 
 
