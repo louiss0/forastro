@@ -16,6 +16,7 @@
         "release": true,
         "releaseName": "Release ${name} ${version}"
     },
+    "npm": false,
     "plugins": {
         "@release-it/keep-a-changelog": {
             "addUnreleased": true
