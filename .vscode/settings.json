@@ -39,7 +39,4 @@
     ],
     "todo-tree.tree.scanMode": "workspace only",
     "testing.automaticallyOpenPeekView": "never",
-    "markdownlint.ignore": [
-        "M036"
-    ]
 }
