@@ -4,7 +4,6 @@ This page is for components and utilities and components that don't need a page.
 
 ## Components
 
-
 ### Page Link
 
 ```jsx
@@ -24,12 +23,11 @@ It renders an anchor with the child passed in what is supposed to be between the
 
 #### Props
 
-
-| name            | type        | description                                              |
-| --------------- | ----------- | -------------------------------------------------------- |
-| href            | string      | It's supposed to be the route to the pages on your site  |
-| children        | Astro Child | A normal child                                           |
-| children (func) | function    | A function that passes the active state of the page link |
+| name            | type        | description                                                                 |
+| --------------- | ----------- | --------------------------------------------------------------------------- |
+| href            | string      | It's supposed to be the route to the pages on your site                     |
+| children        | Astro Child | A normal child                                                              |
+| children (func) | function    | A function that passes the active state of the page link as the first param |
 
 Usage
 
