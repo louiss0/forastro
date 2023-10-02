@@ -13,7 +13,6 @@ import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod
 
 
 
-
 export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 
 
@@ -86,22 +85,7 @@ export function throwUnless(condition: boolean, message = "Something went wrong"
 
 
 
-export const createMarkdocFilter = (cb: <T, U>(value: T) => U) => {
-
-
-    return {
-        transform(parameters: Record<number, unknown>) {
-
-            return cb(parameters[0])
-
-        }
-    }
-
-
-};
-
-
-export const createMultiParamMarkdocFilter = (cb: <T, U>(...args: Array<T>) => U) => {
+export const createMarkdocFunction = (cb: Callback) => {
 
     return {
         transform(parameters: Record<number, unknown>) {
@@ -112,7 +96,6 @@ export const createMultiParamMarkdocFilter = (cb: <T, U>(...args: Array<T>) => U
     }
 
 };
-
 
 
 export async function returnErrorAndResultFromPromise<T extends Promise<any>>(promise: T) {
