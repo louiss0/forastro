@@ -2,7 +2,7 @@ export type HasForEachMethod = {
     forEach<T>(callbackfn: (...args: Array<any>) => T, thisArg?: typeof globalThis): void;
 }
 
-export type Callback = (...args: Array<unknown>) => any
+export type Callback = (...args: Array<any>) => any
 
 
 type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> = Parameters<Parameters<T["forEach"]>[0]>
