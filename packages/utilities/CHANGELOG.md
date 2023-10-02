@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.1.1] - 2023-10-02
+
 ### Added
 
 - Function for markdoc that instantly creates markdoc transform objects.
