@@ -22,8 +22,7 @@ The projector function child can only accept the context.
 ## Use DefineTemplate and Projector
 
 ```ts
-
-useDefineTemplateAndProjector<
+function useDefineTemplateAndProjector<
  ProjectorContext extends Record<string, unknown> | null,
  DefineTemplateContext extends Record<string, unknown> | null = null
 >(debugName?: string): [
