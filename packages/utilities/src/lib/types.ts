@@ -1,11 +1,13 @@
-type HasForEachMethod = {
+export type HasForEachMethod = {
     forEach<T>(callbackfn: (...args: Array<any>) => T, thisArg?: typeof globalThis): void;
 }
+
+export type Callback = (...args: Array<any>) => any
 
 
 type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> = Parameters<Parameters<T["forEach"]>[0]>
 
-type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U> =
+export type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U> =
     T extends HasForEachMethod
     ? (
         value: GetParametersFromIterableWithAForEachMethod<T>[0],
@@ -16,16 +18,17 @@ type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEa
     ? (value: ReturnType<T["next"]>["value"]) => U
     : never
 
-type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U
+export type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U
 
-type IterateRangeOptions = {
+export type IterateRangeOptions = {
     start: number
     stop: number
     step?: number
     inclusive?: true
 }
 
-class IterationInfo {
+
+export class IterationInfo {
 
     constructor (
         private readonly firstIterationNum: number,
@@ -74,11 +77,3 @@ class IterationInfo {
 }
 
 
-export type {
-    HasForEachMethod,
-    GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
-    IterateRangeOptions,
-    IterateRangeCallback
-}
-
-export { IterationInfo }

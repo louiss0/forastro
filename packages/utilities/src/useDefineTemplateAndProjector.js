@@ -1,10 +1,9 @@
 
-import { createAstroFunctionalComponent, executeIf, executeUnless, isObject, } from './lib/helpers';
+import { createAstroFunctionalComponent, executeIf, executeIfElse, isObject, throwIf, throwUnless } from './lib/helpers';
 
 
 
 let callCount = 0
-
 
 
 export const useDefineTemplateAndProjector = (debugName) => {
@@ -19,22 +18,23 @@ export const useDefineTemplateAndProjector = (debugName) => {
     const DefineTemplate = createAstroFunctionalComponent(({ context }, slots) => {
 
 
-        executeUnless(typeof slots.default === "function", () => {
 
-            throw new Error("Please pass a Child into this component", {
-                cause: `DefineTemplate${debugName?.toUppercase() ?? callCount} Invalid Child`
-            })
-        })
+        throwUnless(
+            typeof slots.default === "function",
+            "Please pass a Child into this component",
+            `DefineTemplate${debugName?.toUppercase() ?? callCount} Invalid Child`
+        )
+
 
         const contextIsDefinedButItIsNotAnObjectLiteral = context && !isObject(context);
 
-        executeIf(contextIsDefinedButItIsNotAnObjectLiteral, () => {
+        throwIf(
+            contextIsDefinedButItIsNotAnObjectLiteral,
+            "The context must be an object literal",
+            `DefineTemplate${debugName?.toUppercase() ?? callCount} Invalid Type`
 
-            throw new Error("The context must be an object literal", {
-                cause: `DefineTemplate${debugName?.toUppercase() ?? callCount} Invalid Type`
-            })
+        )
 
-        })
 
         storedSlot = slots.default
 
@@ -56,17 +56,14 @@ export const useDefineTemplateAndProjector = (debugName) => {
         const theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject =
             typeof projectorSlotFirstExpression !== "function" && isObject(defineTemplateContext);
 
-        executeIf(
-            theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject, 
-            () => {
 
-            throw new Error(
-                "You must pass in a function as the child if the defineTemplateContext is used",
-                {
-                    cause: `Projector${debugName?.toUppercase() ?? callCount} Invalid Child`
-                }
-            )
-        })
+        throwIf(
+            theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject,
+            "You must pass in a function as the child if the defineTemplateContext is used",
+            `Projector${debugName?.toUppercase() ?? callCount} Invalid Child`
+        )
+
+
 
         const storedSlotResult = storedSlot()
 
@@ -74,25 +71,34 @@ export const useDefineTemplateAndProjector = (debugName) => {
 
 
         const getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult = () =>
-            typeof projectorSlotFirstExpression === "function"
-                ? executeIf(
-                    isObject(defineTemplateContext), 
+            executeIfElse(
+                typeof projectorSlotFirstExpression === "function",
+                () => executeIf(
+                    isObject(defineTemplateContext),
                     () => projectorSlotFirstExpression(defineTemplateContext)
-                )
-                : projectorSlotResult
+                ),
+                () => projectorSlotResult
+
+            )
 
 
 
-        return typeof storedSlotFirstExpression === "function"
-            ? isObject(context)
-                ? storedSlotFirstExpression(
+        return executeIfElse(
+            typeof storedSlotFirstExpression === "function",
+            () => executeIfElse(
+                isObject(context),
+                () => storedSlotFirstExpression(
                     context,
                     getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult
-                )
-                : storedSlotFirstExpression(
+                ),
+                () => storedSlotFirstExpression(
                     getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult
                 )
-            : storedSlot
+            ),
+            () => storedSlot
+        )
+
+
 
 
 

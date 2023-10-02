@@ -1,5 +1,15 @@
 # @forastro/utilities
 
+## [Unreleased]
+
+### Added
+
+- Function for markdoc that instantly creates markdoc transform objects.
+
+### Fixed
+
+- Throw functions were created but not available now they are.
+
 ## [3.1.0]
 
 ### Added

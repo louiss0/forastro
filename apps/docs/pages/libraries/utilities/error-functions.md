@@ -8,7 +8,11 @@ with errors. They allow the user to do something about errors.
 A function that will throw an error when something is true.
 
 ```ts
-function throwIf(condition: boolean, message = "Something went wrong", cause?: unknown): asserts condition is false
+function throwIf(
+condition: boolean, 
+message = "Something went wrong", 
+cause?: unknown
+): asserts condition is false
 ```
 
 Usage
@@ -24,7 +28,11 @@ Usage
 ## Throw Unless
 
 ```ts
-throwUnless(condition: boolean, message = "Something went wrong", cause?: unknown): asserts condition
+function throwUnless(
+    condition: boolean, 
+    message = "Something went wrong", 
+    cause?: unknown
+): asserts condition
 ```
 
 Usage

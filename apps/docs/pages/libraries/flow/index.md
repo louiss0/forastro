@@ -40,3 +40,9 @@ You can't use them inside of Client Components.
  ```
 
 :::
+
+## Recommdations
+
+- [tiny-invariant](https://www.npmjs.com/package/tiny-invariant)
+- [ts-reset](https://www.npmjs.com/package/@total-typescript/ts-reset)
+- [remeda](https://www.npmjs.com/package/remeda)

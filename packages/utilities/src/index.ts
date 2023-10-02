@@ -3,11 +3,4 @@ export { default as PageLink } from "./lib/PageLink.astro"
 
 export { useDefineTemplateAndProjector } from "./useDefineTemplateAndProjector.js"
 
-export {
-    executeIf,
-    executeUnless,
-    syncIterate,
-    iterate,
-    iterateRange,
-    range,
-} from "./lib/helpers"
+export * from "./lib/helpers"
