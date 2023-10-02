@@ -4,6 +4,61 @@ This page is for components and utilities and components that don't need a page.
 
 ## Components
 
+
+### Page Link
+
+```jsx
+<PageLink href={`/${string}`} >
+ {
+    | ((isActive: boolean) => string | Array<HTMLAttributes<"div">>)
+    | Array<astroHTML.JSX.HTMLAttributes>
+    | string;
+ }
+</PageLink>
+```
+
+This is a component that accepts all of the props of an Anchor Element and the forces you to pass in a href by default.
+What is does is automatically determine if the page is the current active page if it is then it will
+add a border to the bottom of that element by default.
+It renders an anchor with the child passed in what is supposed to be between the tags.
+
+#### Props
+
+
+| name            | type        | description                                              |
+| --------------- | ----------- | -------------------------------------------------------- |
+| href            | string      | It's supposed to be the route to the pages on your site  |
+| children        | Astro Child | A normal child                                           |
+| children (func) | function    | A function that passes the active state of the page link |
+
+Usage
+
+:::info Normally
+
+```tsx
+<PageLnk href="/home">Link</PageLnk>
+```
+
+:::
+
+:::info Using Active Link
+
+```tsx
+<PageLnk href="/home">
+{(isActive)=> (
+    <span style={{backgroundColor: isActive ?'gray': null}}>
+        Home
+    </span>
+)}
+</PageLnk>
+```
+
+:::
+
+:::tip
+To change the active class of the you can use the `a[aria-current="page"]` selector to change it's styling.
+:::
+
 ### Astro Gap
 
 ```tsx
