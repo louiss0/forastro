@@ -7,7 +7,7 @@
         "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
-        "tagName": "${npm.name}v${version}",
+        "tagName": "${name}v${version}",
         "commitMessage": "chore: release v${version}",
         "assets": [
             "./src/**/*.{js,astro}"
