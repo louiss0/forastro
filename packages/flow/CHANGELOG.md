@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [2.5.3] - 2023-10-02
+
 ### Fixed
 
 - Add a homepage to the package.json file that links to the homepage for this project.
