@@ -7,7 +7,7 @@
         "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
-        "tagName": "${name}v${version}",
+        "tagName": "${npm.name}v${version}",
         "commitMessage": "chore: release v${version}",
         "assets": [
             "./src/**/*.{js,astro}"
@@ -17,7 +17,9 @@
         "release": true,
         "releaseName": "Release ${name} ${version}"
     },
-    "npm": false,
+    "npm": {
+        "publish": false
+    },
     "plugins": {
         "@release-it/keep-a-changelog": {
             "addUnreleased": true
