@@ -5,13 +5,13 @@ import type {
     HasForEachMethod,
     IterateRangeCallback,
     IterateRangeOptions,
-} from "./types"
-import { IterationInfo } from "./types"
+} from "../types"
+import { IterationInfo } from "../types"
 
 import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
 import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, isObject, wrapFunctionInAsyncGenerator } from "packages/utilities/src/lib/internal"
 
-
+export * from "./get-collection"
 
 export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 
