@@ -14,6 +14,7 @@
     "release": "dotenv release-it",
     "publint": "publint"
   },
+  "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
     "type": "git",

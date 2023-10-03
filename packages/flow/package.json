@@ -6,6 +6,7 @@
   "files": [
     "src"
   ],
+  "homepage": "https://forastro-docs.onrender.com/libraries/flow",
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
     "type": "git",
