@@ -4,10 +4,7 @@
             "nx run flow:publint"
         ],
         "after:git:release": "echo After git push, before github release",
-        "after:release": [
-            "pnpm publish",
-            "echo Successfully released ${name} v${version} to ${repo.repository}."
-        ]
+        "after:release": "echo Successfully released ${name} v${version} to ${repo.repository}."
     },
     "git": {
         "tagName": "${npm.name}v${version}",
