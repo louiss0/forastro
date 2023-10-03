@@ -24,7 +24,7 @@
     "astro": ">2.0.0"
   },
   "scripts": {
-    "release": "release-it",
+    "release": "dotenv release-it",
     "publint": "publint"
   },
   "dependencies": {
