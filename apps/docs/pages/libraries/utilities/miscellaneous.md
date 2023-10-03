@@ -57,23 +57,11 @@ Usage
 To change the active class of the you can use the `a[aria-current="page"]` selector to change it's styling.
 :::
 
-### Astro Gap
+### Gap
 
 ```tsx
 
-type AllowedColors =
-  | "red"
-  | "green"
-  | "blue"
-  | "purple"
-  | "black"
-  | "indigo"
-  | "orange"
-  | "yellow"
-  | "brown"
-  | "white";
-
-<Gap spaces={number} color={AllowedColors} />
+<Gap spaces={2} color={"red"} />
 ```
 
 A component that is useful for creating space between elements.
@@ -85,6 +73,25 @@ If vertically it's width changes.
 
 It tries to make sure that it's between two elements.
 If not an error will be thrown.
+
+#### Props
+
+| name   | type   | description                                                                                  |
+| ------ | ------ | -------------------------------------------------------------------------------------------- |
+| spaces | number | a multiplier that determines how much space will be taken multiplied by the parent font-size |
+| color  | choice | the background color of the gap it's style is used to change it's color                      |
+
+- Color Choices
+  - red
+  - green
+  - blue
+  - purple
+  - black
+  - indigo
+  - orange
+  - yellow
+  - brown
+  - white
 
 ## Utilities
 

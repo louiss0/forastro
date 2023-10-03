@@ -1,11 +1,12 @@
 {
   "name": "@forastro/flow",
-  "version": "2.5.2",
+  "version": "2.5.3",
   "type": "module",
   "main": "./src/index.ts",
   "files": [
     "src"
   ],
+  "homepage": "https://forastro-docs.onrender.com/libraries/flow",
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
     "type": "git",
@@ -23,7 +24,7 @@
     "astro": ">2.0.0"
   },
   "scripts": {
-    "release": "release-it",
+    "release": "dotenv release-it",
     "publint": "publint"
   },
   "dependencies": {

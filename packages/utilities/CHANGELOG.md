@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [3.1.2] - 2023-10-02
+
+### Fixed
+
+- Add a homepage to the package.json file that links to the homepage for this project.
+
+### Fixed
+
+- Add a homepage to the package.json file that links to the homepage for this project.
+
+## [3.1.1] - 2023-10-02
+
 ### Added
 
 - Function for markdoc that instantly creates markdoc transform objects.

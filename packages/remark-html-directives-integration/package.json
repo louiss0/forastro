@@ -25,6 +25,7 @@
     "astro-integration",
     "remark"
   ],
+  "homepage": "https://forastro-docs.onrender.com/libraries/remark-html-directives",
   "repository": {
     "url": "https://github.com/louiss0/forastro.git",
     "type": "git",

@@ -10,7 +10,10 @@
     },
     "git": {
         "tagName": "${npm.name}v${version}",
-        "commitMessage": "chore: release v${version}"
+        "commitMessage": "chore: release v${version}",
+        "assets": [
+            "./src/**/*.{js,astro}"
+        ]
     },
     "github": {
         "release": true,
