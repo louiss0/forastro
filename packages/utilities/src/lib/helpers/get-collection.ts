@@ -71,13 +71,14 @@ export const getDataListFromEntries = async (entries: Parameters<GetEntriesFunc>
 type TypeOrArrayOfType<T> = T | Array<T>;
 
 
+
+type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>>
+    = { [K in keyof T]: T[K] extends string | number ? T[K] : never }
+
 type MergeCollectionDataWithSlugAndId<T extends string> =
     Pick<CollectionEntry<T>, "id" | "slug">
     & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
     >
-
-type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>>
-    = { [K in keyof T]: T[K] extends string | number ? T[K] : never }
 
 
 type ReturnTypeOnlyIfIItsNotAnArray<U> = U extends Array<any> ? U[number] : U;
@@ -157,10 +158,12 @@ export const getCollectionPaths =
 
 
 export const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async (collection, filter) =>
+(
     await getCollectionDataList(
         collection,
         getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
-    );
+    )
+);
 
 
 function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter: Parameters<CustomGetCollectionFunc>[1]) {
