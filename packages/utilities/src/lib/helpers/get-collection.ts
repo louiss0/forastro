@@ -96,7 +96,7 @@ export const getCollectionPaths =
     ) => {
 
 
-        const paramMap = new Map<ReturnTypeOnlyIfIItsNotAnArray<T>, string>()
+        const paramMap = new Map<PropertyKey, string>()
 
         const entries = await getCollection(
             collection,
@@ -123,7 +123,7 @@ export const getCollectionPaths =
                     throw new Error("You can only use strings and numbers as params")
                 }
 
-                paramMap.set(by as any, String(result))
+                paramMap.set(by, String(result))
 
             }
 
@@ -140,7 +140,7 @@ export const getCollectionPaths =
                         throw new Error("You can only use strings and numbers as params")
                     }
 
-                    paramMap.set(key as any, String(result))
+                    paramMap.set(key, String(result))
                 })
 
             }
@@ -148,7 +148,7 @@ export const getCollectionPaths =
             return {
                 params: (
                     Object.fromEntries(paramMap) as
-                    Record<ReturnTypeOnlyIfIItsNotAnArray<typeof by>, string>
+                    Record<ReturnTypeOnlyIfIItsNotAnArray<T>, string>
                 ),
                 props: { ...entry, render: entry.render }
             }
