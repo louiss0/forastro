@@ -98,64 +98,72 @@ export const getCollectionPaths =
 
         const paramMap = new Map<ReturnTypeOnlyIfIItsNotAnArray<T>, string>()
 
-        return (await getCollection(collection, filterForEntriesThatAreNotDraftsWithTheResultFromTheFilter(filter)))
-            .map((entry, index) => {
+        const entries = await getCollection(
+            collection,
+            getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
+        );
 
 
-                if (index !== 0) {
+        return entries.map((entry, index) => {
 
-                    paramMap.clear()
+
+            if (index !== 0) {
+
+                paramMap.clear()
+            }
+
+            if (typeof by === "string") {
+
+
+                const result = entry[by as keyof typeof entry] ?? entry["data"][by]
+
+
+                if (typeof result !== "string" || typeof result !== "number") {
+
+                    throw new Error("You can only use strings and numbers as params")
                 }
 
-                if (typeof by === "string") {
+                paramMap.set(by as any, String(result))
+
+            }
 
 
-                    const result = entry[by as keyof typeof entry] ?? entry["data"][by]
+            if (Array.isArray(by)) {
 
+                by.forEach(key => {
+
+
+                    const result = entry[key as keyof typeof entry] ?? entry["data"][key];
 
                     if (typeof result !== "string" || typeof result !== "number") {
 
                         throw new Error("You can only use strings and numbers as params")
                     }
 
-                    paramMap.set(by as any, String(result))
+                    paramMap.set(key as any, String(result))
+                })
 
-                }
+            }
 
-
-                if (Array.isArray(by)) {
-
-                    by.forEach(key => {
-
-
-                        const result = entry[key as keyof typeof entry] ?? entry["data"][key];
-
-                        if (typeof result !== "string" || typeof result !== "number") {
-
-                            throw new Error("You can only use strings and numbers as params")
-                        }
-
-                        paramMap.set(key as any, String(result))
-                    })
-
-                }
-
-                return {
-                    params: (
-                        Object.fromEntries(paramMap) as
-                        Record<ReturnTypeOnlyIfIItsNotAnArray<typeof by>, string>
-                    ),
-                    props: { ...entry, render: entry.render }
-                }
-            });
+            return {
+                params: (
+                    Object.fromEntries(paramMap) as
+                    Record<ReturnTypeOnlyIfIItsNotAnArray<typeof by>, string>
+                ),
+                props: { ...entry, render: entry.render }
+            }
+        });
     }
 
 
 export const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async (collection, filter) =>
-    await getCollectionDataList(collection, filterForEntriesThatAreNotDraftsWithTheResultFromTheFilter(filter));
+    await getCollectionDataList(
+        collection,
+        getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
+    );
 
 
-function filterForEntriesThatAreNotDraftsWithTheResultFromTheFilter(filter: Parameters<CustomGetCollectionFunc>[1]) {
+function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter: Parameters<CustomGetCollectionFunc>[1]) {
     return (entry: Parameters<Exclude<typeof filter, undefined>>[0]) => {
 
 
