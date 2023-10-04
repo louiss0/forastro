@@ -1,4 +1,4 @@
-import { getCollection, getEntryBySlug, getEntry, getDataEntryById, getEntries } from 'astro:content';
+import { getCollection, getEntryBySlug, getEntry, getDataEntryById, getEntries, type CollectionEntry } from 'astro:content';
 
 
 type GetCollectionFunc = typeof getCollection;
@@ -7,8 +7,7 @@ type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
 type GetDataEntryByIdFunc = typeof getDataEntryById;
 
-export const getCollectionData = async (collection: Parameters<GetCollectionFunc>[0], filter?: Parameters<GetCollectionFunc>[1]) =>
-
+export const getCollectionDataList = async (collection: Parameters<GetCollectionFunc>[0], filter?: Parameters<GetCollectionFunc>[1]) =>
     (await getCollection(collection, filter)).map(entry => ({ slug: entry.slug, ...entry.data }))
 
 
@@ -49,5 +48,89 @@ export const getDataEntryDataById = async (collection: Parameters<GetDataEntryBy
 
 }
 
-export const getDataFromEntries = async (entries: Parameters<GetEntriesFunc>[0]) =>
+export const getDataListFromEntries = async (entries: Parameters<GetEntriesFunc>[0]) =>
     (await getEntries(entries)).map((entry) => ({ slug: entry.slug, ...entry.data }));
+
+type TypeOrArrayOfType<T> = T | Array<T>;
+
+
+type MergeCollectionDataWithSlugAndId<T extends string> =
+    Pick<CollectionEntry<T>, "id" | "slug">
+    & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
+    >
+
+type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>>
+    = { [K in keyof T]: T[K] extends string | number ? T[K] : never }
+
+
+type ReturnTypeOnlyIfIItsNotAnArray<U> = U extends Array<any> ? U[number] : U;
+
+
+
+
+export const getCollectionPaths =
+    async <
+        T extends TypeOrArrayOfType<keyof MergeCollectionDataWithSlugAndId<U>>,
+        U extends Parameters<GetCollectionFunc>[0]
+    >(
+        collection: U,
+        by: T,
+        filter?: Parameters<GetCollectionFunc>[1]
+    ) => {
+
+
+        const paramMap = new Map<ReturnTypeOnlyIfIItsNotAnArray<T>, string>()
+
+        return (await getCollection(collection, filter))
+            .map((entry, index) => {
+
+
+                if (index !== 0) {
+
+                    paramMap.clear()
+                }
+
+                if (typeof by === "string") {
+
+
+                    const result = entry[by as keyof typeof entry] ?? entry["data"][by]
+
+
+                    if (typeof result !== "string" || typeof result !== "number") {
+
+                        throw new Error("You can only use strings and numbers as params")
+                    }
+
+                    paramMap.set(by as any, String(result))
+
+                }
+
+
+                if (Array.isArray(by)) {
+
+                    by.forEach(key => {
+
+
+                        const result = entry[key as keyof typeof entry] ?? entry["data"][key];
+
+                        if (typeof result !== "string" || typeof result !== "number") {
+
+                            throw new Error("You can only use strings and numbers as params")
+                        }
+
+                        paramMap.set(key as any, String(result))
+                    })
+
+                }
+
+                return {
+                    params: (
+                        Object.fromEntries(paramMap) as
+                        Record<ReturnTypeOnlyIfIItsNotAnArray<typeof by>, string>
+                    ),
+                    props: { ...entry, render: entry.render }
+                }
+            });
+    }
+
+
