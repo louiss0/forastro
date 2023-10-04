@@ -7,7 +7,24 @@ type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
 type GetDataEntryByIdFunc = typeof getDataEntryById;
 
-export const getCollectionDataList = async (collection: Parameters<GetCollectionFunc>[0], filter?: Parameters<GetCollectionFunc>[1]) =>
+type CustomGetCollectionFunc = <
+    T extends Parameters<GetCollectionFunc>[0],
+    U extends Parameters<GetCollectionFunc>[1]
+>
+    (collection: T, filter?: U) =>
+    Promise<
+        Array<
+            Pick<
+                CollectionEntry<T>,
+                "slug"
+            >
+            & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
+            >
+        >
+    >
+
+
+export const getCollectionDataList: CustomGetCollectionFunc = async (collection, filter) =>
     (await getCollection(collection, filter)).map(entry => ({ slug: entry.slug, ...entry.data }))
 
 
@@ -81,7 +98,7 @@ export const getCollectionPaths =
 
         const paramMap = new Map<ReturnTypeOnlyIfIItsNotAnArray<T>, string>()
 
-        return (await getCollection(collection, filter))
+        return (await getCollection(collection, filterForEntriesThatAreNotDraftsWithTheResultFromTheFilter(filter)))
             .map((entry, index) => {
 
 
@@ -133,4 +150,20 @@ export const getCollectionPaths =
             });
     }
 
+
+export const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async (collection, filter) =>
+    await getCollectionDataList(collection, filterForEntriesThatAreNotDraftsWithTheResultFromTheFilter(filter));
+
+
+function filterForEntriesThatAreNotDraftsWithTheResultFromTheFilter(filter: Parameters<CustomGetCollectionFunc>[1]) {
+    return (entry: Parameters<Exclude<typeof filter, undefined>>[0]) => {
+
+
+        const draftIsNotInEntryDataOrDraftIsFalse = !("draft" in entry.data) || "draft" in entry.data && !entry.data["draft"];
+
+        return draftIsNotInEntryDataOrDraftIsFalse && filter?.(entry);
+
+
+    };
+}
 
