@@ -88,11 +88,11 @@ type ReturnTypeOnlyIfIItsNotAnArray<U> = U extends Array<any> ? U[number] : U;
 
 export const getCollectionPaths =
     async <
-        T extends TypeOrArrayOfType<keyof MergeCollectionDataWithSlugAndId<U>>,
-        U extends Parameters<GetCollectionFunc>[0]
+        T extends Parameters<GetCollectionFunc>[0],
+        U extends TypeOrArrayOfType<keyof MergeCollectionDataWithSlugAndId<T>>,
     >(
-        collection: U,
-        by: T,
+        collection: T,
+        by: U,
         filter?: Parameters<GetCollectionFunc>[1]
     ) => {
 
@@ -149,7 +149,7 @@ export const getCollectionPaths =
             return {
                 params: (
                     Object.fromEntries(paramMap) as
-                    Record<ReturnTypeOnlyIfIItsNotAnArray<T>, string>
+                    Record<ReturnTypeOnlyIfIItsNotAnArray<U>, string>
                 ),
                 props: { ...entry, render: entry.render }
             }
