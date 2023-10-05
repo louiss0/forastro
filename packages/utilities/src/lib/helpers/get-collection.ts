@@ -1,4 +1,5 @@
 import { getCollection, getEntryBySlug, getEntry, getDataEntryById, getEntries, type CollectionEntry } from 'astro:content';
+import { throwUnless } from 'packages/utilities/src/lib/helpers';
 
 
 type GetCollectionFunc = typeof getCollection;
@@ -97,7 +98,7 @@ export const getCollectionPaths =
     ) => {
 
 
-        const paramMap = new Map<PropertyKey, NonNullable<unknown>>()
+        const paramMap = new Map<PropertyKey, string | number>()
 
         const entries = await getCollection(
             collection,
@@ -124,10 +125,12 @@ export const getCollectionPaths =
                             : null
 
 
-                if (typeof valueFromEntryOrEntryData !== "string" || typeof valueFromEntryOrEntryData !== "number") {
+                throwUnless(
+                    typeof valueFromEntryOrEntryData === "string" || typeof valueFromEntryOrEntryData === "number",
+                    "You can only use strings and numbers as params",
+                    "Invalid entry"
+                )
 
-                    throw new Error("You can only use strings and numbers as params")
-                }
 
                 paramMap.set(by, valueFromEntryOrEntryData)
 
@@ -147,10 +150,11 @@ export const getCollectionPaths =
                                 : null
 
 
-                    if (typeof valueFromEntryOrEntryData !== "string" || typeof valueFromEntryOrEntryData !== "number") {
-
-                        throw new Error("You can only use strings and numbers as params")
-                    }
+                    throwUnless(
+                        typeof valueFromEntryOrEntryData === "string" || typeof valueFromEntryOrEntryData === "number",
+                        "You can only use strings and numbers as params",
+                        "Invalid entry"
+                    )
 
                     paramMap.set(key, valueFromEntryOrEntryData)
                 })
