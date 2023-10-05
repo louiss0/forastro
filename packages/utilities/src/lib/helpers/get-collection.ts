@@ -31,11 +31,11 @@ export const getCollectionDataList: CustomGetCollectionFunc = async (collection,
 export const getEntryData = Object.assign(
     async (entry: Parameters<GetEntryFunc>[0]) => {
 
-        const result = await getEntry(entry)
+        const valueFromEntryOrEntryData = await getEntry(entry)
 
         return {
-            slug: result.slug,
-            ...result.data
+            slug: valueFromEntryOrEntryData.slug,
+            ...valueFromEntryOrEntryData.data
         }
 
     },
@@ -72,11 +72,11 @@ type TypeOrArrayOfType<T> = T | Array<T>;
 
 
 
-type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>>
-    = { [K in keyof T]: T[K] extends string | number ? T[K] : never }
+type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>> =
+    { [K in keyof T]: T[K] extends string | number ? T[K] : never }
 
 type MergeCollectionDataWithSlugAndId<T extends string> =
-    Pick<CollectionEntry<T>, "id" | "slug">
+    Pick<CollectionEntry<T>, "slug">
     & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
     >
 
@@ -84,7 +84,7 @@ type MergeCollectionDataWithSlugAndId<T extends string> =
 type ReturnTypeOnlyIfIItsNotAnArray<U> = U extends Array<any> ? U[number] : U;
 
 
-
+type Prettify<T> = { [k in keyof T]: T[k] } & {}
 
 export const getCollectionPaths =
     async <
@@ -97,7 +97,7 @@ export const getCollectionPaths =
     ) => {
 
 
-        const paramMap = new Map<PropertyKey, string>()
+        const paramMap = new Map<PropertyKey, NonNullable<unknown>>()
 
         const entries = await getCollection(
             collection,
@@ -116,15 +116,20 @@ export const getCollectionPaths =
             if (typeof by === "string") {
 
 
-                const result = entry[by as keyof typeof entry] ?? entry["data"][by]
+                const valueFromEntryOrEntryData =
+                    by in entry
+                        ? entry[by as keyof typeof entry]
+                        : by in entry["data"]
+                            ? entry["data"][by]
+                            : null
 
 
-                if (typeof result !== "string" || typeof result !== "number") {
+                if (typeof valueFromEntryOrEntryData !== "string" || typeof valueFromEntryOrEntryData !== "number") {
 
                     throw new Error("You can only use strings and numbers as params")
                 }
 
-                paramMap.set(by, String(result))
+                paramMap.set(by, valueFromEntryOrEntryData)
 
             }
 
@@ -134,14 +139,20 @@ export const getCollectionPaths =
                 by.forEach(key => {
 
 
-                    const result = entry[key as keyof typeof entry] ?? entry["data"][key];
+                    const valueFromEntryOrEntryData =
+                        key in entry
+                            ? entry[key as keyof typeof entry]
+                            : key in entry["data"]
+                                ? entry["data"][key]
+                                : null
 
-                    if (typeof result !== "string" || typeof result !== "number") {
+
+                    if (typeof valueFromEntryOrEntryData !== "string" || typeof valueFromEntryOrEntryData !== "number") {
 
                         throw new Error("You can only use strings and numbers as params")
                     }
 
-                    paramMap.set(key, String(result))
+                    paramMap.set(key, valueFromEntryOrEntryData)
                 })
 
             }
@@ -149,7 +160,7 @@ export const getCollectionPaths =
             return {
                 params: (
                     Object.fromEntries(paramMap) as
-                    Record<ReturnTypeOnlyIfIItsNotAnArray<U>, string>
+                    Prettify<Pick<MergeCollectionDataWithSlugAndId<T>, ReturnTypeOnlyIfIItsNotAnArray<U>>>
                 ),
                 props: { ...entry, render: entry.render }
             }
