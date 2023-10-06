@@ -62,6 +62,10 @@ export default defineConfig({
               { text: "Conditional Functions", link: "/libraries/utilities/conditional-functions" },
               { text: "Error Functions", link: "/libraries/utilities/error-functions" },
               { text: "Template Projection", link: "/libraries/utilities/template-projection" },
+              {
+                text: "Get Collection Helpers", 
+                  link: "/libraries/utilities/get-collection-helpers" 
+            },
               { text: "Miscellaneous", link: "/libraries/utilities/miscellaneous" },
             ]
           },
