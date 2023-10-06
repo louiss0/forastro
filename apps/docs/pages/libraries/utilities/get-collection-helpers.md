@@ -10,7 +10,8 @@ You have to write lots of boilerplate code to take care of common problems.
 ```ts
 import { getCollection, } from 'astro:content';
 
-const dataAndSlugList = (await getCollection("posts")).map(entry => ({ slug: entry.slug, ...entry.data }))
+const dataAndSlugList = (await getCollection("posts"))
+    .map(entry => ({ slug: entry.slug, ...entry.data }))
 ```
 
 ```ts
@@ -35,14 +36,26 @@ type EntryDataAndSlugs<T extends string> = Array<EntryDataAndSlug<T>>
 
 ```ts
   
-    const getCollectionDataList = <C extends string, E extends CollectionEntry<C>>(
-            collection: C, 
-            filter?: ((entry: E) => entry is E) | undefined
-        ): Promise<EntryDataAndSlugs<C>> & {
-        filterNonDrafts: <T extends string, U extends ((entry: CollectionEntry<T>) => entry is CollectionEntry<T>) | undefined>
-            (collection: T, filter: U | undefined) => Promise<Array<CollectionEntry<T>>>;
-        filterDrafts: <T extends string, U extends ((entry: CollectionEntry<T>) => entry is CollectionEntry<T>) | undefined>
-        (collection: T, filter: U | undefined) => Promise<Array<CollectionEntry<T>>>;
+    const getCollectionDataList = 
+    <C extends string, E extends CollectionEntry<C>>
+    ( collection: C, 
+      filter?: ((entry: E) => entry is E) | undefined
+     ): Promise<EntryDataAndSlugs<C>> & {
+        filterNonDrafts: 
+        <
+        T extends string, 
+        U extends ((entry: CollectionEntry<T>) => 
+        entry is CollectionEntry<T>) | undefined
+        >
+            (collection: T, filter: U | undefined) =>   
+            Promise<Array<CollectionEntry<T>>>;
+        filterDrafts: <
+        T extends string, 
+        U extends ((entry: CollectionEntry<T>) => 
+        entry is CollectionEntry<T>) | undefined
+        >
+        (collection: T, filter: U | undefined) =>       
+        Promise<Array<CollectionEntry<T>>>;
 }
 
 ```
@@ -70,10 +83,15 @@ const draftedPosts = getCollectionDataList.filterDrafts("posts")
 
 ```ts
     const getEntryData: (
-        <C extends string, E extends string>(collection:C, slugOrID:E) => Promise<EntryDataAndSlug<C>>)
+        <C extends string, E extends string>(
+            collection:C, 
+            slugOrID:E
+        ) => Promise<EntryDataAndSlug<C>>)
         & {
-            bySlug: <C extends string, E extends string>
-                (collection: C, slug: E) => Promise<EntryDataAndSlug<C>>;
+            bySlug: <C extends string, E extends string>(
+                    collection: C,
+                     slug: E
+            ) => Promise<EntryDataAndSlug<C>>;
         }  
 ```
 
@@ -86,7 +104,9 @@ It has a `bySlug()` modifier that allows you to just get the entry by the slug.
 
 ```ts
     const getDataListFromEntries: <C extends string, E extends string>
-        (entries: Array<{collection:C, slug:E } | {collection:C, id:E } >) => Promise<EntryDataAndSlug<C>>
+        (
+            entries:Array<{collection:C, slug:E } | {collection:C, id:E }>
+        ) => Promise<EntryDataAndSlug<C>>
 ```
 
 `getEntries()` is a function that returns multiple collection entries
@@ -144,9 +164,9 @@ Each entry will be mapped to props. It uses a filter that searches for the posts
 You can pass in a filter for even better filtering.
 
 :::info
-    The entry is the props in the props object.
+ The entry is the props in the props object.
 :::
 
 :::warning
-  `getCollectionPaths()` will always get the posts that are not drafts.
+`getCollectionPaths()` will always get the posts that are not drafts.
 :::
