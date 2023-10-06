@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+## Added
+
+- A set of functions that help get rid of the hassle of `getCollections()`
+  - `getCollectionDataList`
+  - `getEntryData`
+  - `getDataListFromEntries`
+  - `getCollectionPaths`
+
 ## [3.1.2] - 2023-10-02
 
 ### Fixed
