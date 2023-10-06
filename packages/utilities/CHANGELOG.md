@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [3.2.0] - 2023-10-06
+
 ## Added
 
 - A set of functions that help get rid of the hassle of `getCollections()`
