@@ -2,7 +2,9 @@
 declare module 'astro:content' {
 
     export { z } from 'astro/zod';
-    export type CollectionEntry<C extends keyof AnyEntryMap> = AnyEntryMap[C][keyof AnyEntryMap[C]];
+
+    export type CollectionEntry<C extends keyof AnyEntryMap> =
+        AnyEntryMap[C][keyof AnyEntryMap[C]];
 
     type BaseSchemaWithoutEffects =
         | import('astro/zod').AnyZodObject
@@ -56,47 +58,20 @@ declare module 'astro:content' {
         collection: C,
         filter?: (entry: CollectionEntry<C>) => entry is E
     ): Promise<E[]>;
-    export function getCollection<C extends keyof AnyEntryMap>(
-        collection: C,
-        filter?: (entry: CollectionEntry<C>) => unknown
-    ): Promise<CollectionEntry<C>[]>;
+
 
     export function getEntry<
         C extends keyof ContentEntryMap,
-        E extends ValidContentEntrySlug<C> | (string & {})
-    >(entry: {
-        collection: C;
-        slug: E;
-    }): E extends ValidContentEntrySlug<C>
-        ? Promise<CollectionEntry<C>>
-        : Promise<CollectionEntry<C> | undefined>;
-    export function getEntry<
-        C extends keyof DataEntryMap,
-        E extends keyof DataEntryMap[C] | (string & {})
-    >(entry: {
-        collection: C;
-        id: E;
-    }): E extends keyof DataEntryMap[C]
-        ? Promise<DataEntryMap[C][E]>
-        : Promise<CollectionEntry<C> | undefined>;
-    export function getEntry<
-        C extends keyof ContentEntryMap,
-        E extends ValidContentEntrySlug<C> | (string & {})
+        E extends ValidContentEntrySlug<C> | keyof DataEntryMap[C]
     >(
         collection: C,
-        slug: E
-    ): E extends ValidContentEntrySlug<C>
-        ? Promise<CollectionEntry<C>>
-        : Promise<CollectionEntry<C> | undefined>;
-    export function getEntry<
-        C extends keyof DataEntryMap,
-        E extends keyof DataEntryMap[C] | (string & {})
-    >(
-        collection: C,
-        id: E
+        slugOrId: E
     ): E extends keyof DataEntryMap[C]
         ? Promise<DataEntryMap[C][E]>
+        : E extends ValidContentEntrySlug<C>
+        ? Promise<CollectionEntry<C>>
         : Promise<CollectionEntry<C> | undefined>;
+
 
     /** Resolve an array of entry references from the same collection */
     export function getEntries<C extends keyof ContentEntryMap>(
@@ -105,6 +80,8 @@ declare module 'astro:content' {
             slug: ValidContentEntrySlug<C>;
         }[]
     ): Promise<CollectionEntry<C>[]>;
+
+
     export function getEntries<C extends keyof DataEntryMap>(
         entries: {
             collection: C;
