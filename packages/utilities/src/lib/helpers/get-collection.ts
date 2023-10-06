@@ -164,7 +164,9 @@ export const getCollectionPaths =
             return {
                 params: (
                     Object.fromEntries(paramMap) as
-                    Prettify<Pick<MergeCollectionDataWithSlugAndId<T>, ReturnTypeOnlyIfIItsNotAnArray<U>>>
+                    Prettify<
+                        Pick<MergeCollectionDataWithSlugAndId<T>, ReturnTypeOnlyIfIItsNotAnArray<U>>
+                    >
                 ),
                 props: { ...entry, render: entry.render }
             }
