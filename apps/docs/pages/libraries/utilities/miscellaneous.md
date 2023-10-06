@@ -7,8 +7,12 @@ This page is for components and utilities and components that don't need a page.
 ### Page Link
 
 ```jsx
-<PageLink href={`/`} >
-    Home Page
+<PageLink href={`/${string}`} >
+ {
+    | ((isActive: boolean) => string | Array<HTMLAttributes<"div">>)
+    | Array<astroHTML.JSX.HTMLAttributes>
+    | string;
+ }
 </PageLink>
 ```
 
@@ -19,17 +23,18 @@ It renders an anchor with the child passed in what is supposed to be between the
 
 #### Props
 
-| name     | type                  | description                                                                                         |
-| -------- | --------------------- | --------------------------------------------------------------------------------------------------- |
-| href     | string                | It's supposed to be the route to the pages on your site                                             |
-| children | string,array,function | It can be any child element but if it's a function the is active state is passed as the first param |
+| name            | type        | description                                                                 |
+| --------------- | ----------- | --------------------------------------------------------------------------- |
+| href            | string      | It's supposed to be the route to the pages on your site                     |
+| children        | Astro Child | A normal child                                                              |
+| children (func) | function    | A function that passes the active state of the page link as the first param |
 
 Usage
 
 :::info Normally
 
 ```tsx
-<PageLink href="/">Home</PageLink>
+<PageLnk href="/home">Link</PageLnk>
 ```
 
 :::
@@ -37,13 +42,13 @@ Usage
 :::info Using Active Link
 
 ```tsx
-<PageLink href="/home">
+<PageLnk href="/home">
 {(isActive)=> (
     <span style={{backgroundColor: isActive ?'gray': null}}>
         Home
     </span>
 )}
-</PageLink>
+</PageLnk>
 ```
 
 :::

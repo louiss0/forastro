@@ -3,6 +3,7 @@ import { getCollection } from 'astro:content';
 import type { InferGetStaticPropsType } from 'astro';
 import { Center, Typography } from '~/components';
 import Default from '~/layouts/Default.astro';
+
 export async function getStaticPaths() {
     const posts = await getCollection('posts');
     return posts.map((entry) => ({
