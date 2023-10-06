@@ -24,8 +24,39 @@ type CustomGetCollectionFunc = <
     >
 
 
-export const getCollectionDataList: CustomGetCollectionFunc = async (collection, filter) =>
+const _getCollectionDataList: CustomGetCollectionFunc = async (collection, filter) =>
     (await getCollection(collection, filter)).map(entry => ({ slug: entry.slug, ...entry.data }))
+
+
+
+
+export const getCollectionDataList = Object.assign(
+    _getCollectionDataList,
+    {
+        filterNonDrafts: async (collection, filter) =>
+        (
+            await _getCollectionDataList(
+                collection,
+                getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
+            )
+        ),
+        filterDrafts: async (collection, filter) => (
+            await _getCollectionDataList(
+                collection,
+                (entry): entry is Parameters<Exclude<typeof filter, undefined>>[0] => {
+
+                    const draftIsNotInEntryDataOrDraftIsFalse = "draft" in entry.data
+                        || "draft" in entry.data && entry.data["draft"] === true;
+
+                    return draftIsNotInEntryDataOrDraftIsFalse && !!filter?.(entry);
+
+
+                }
+            )
+        ),
+
+    } satisfies Record<string, CustomGetCollectionFunc>
+)
 
 
 export const getEntryData = Object.assign(
@@ -159,19 +190,12 @@ export const getCollectionPaths =
                         >
                     >
                 ),
-                props: { ...entry, render: entry.render }
+                props: entry
             }
         });
     }
 
 
-export const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async (collection, filter) =>
-(
-    await getCollectionDataList(
-        collection,
-        getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
-    )
-);
 
 
 function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(
