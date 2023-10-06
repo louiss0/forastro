@@ -30,34 +30,33 @@ const _getCollectionDataList: CustomGetCollectionFunc = async (collection, filte
 
 
 
+const getCollectionDataListFilterNonDrafts: CustomGetCollectionFunc = async (collection, filter) => (
+    await _getCollectionDataList(
+        collection,
+        getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
+    )
+);
+const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async (collection, filter) => (
+    await _getCollectionDataList(
+        collection,
+        (entry): entry is Parameters<Exclude<typeof filter, undefined>>[0] => {
+
+            const draftIsNotInEntryDataOrDraftIsFalse = "draft" in entry.data
+                || "draft" in entry.data && entry.data["draft"] === true;
+
+            return draftIsNotInEntryDataOrDraftIsFalse && !!filter?.(entry);
+
+
+        }
+    )
+);
 export const getCollectionDataList = Object.assign(
     _getCollectionDataList,
     {
-        filterNonDrafts: async (collection, filter) =>
-        (
-            await _getCollectionDataList(
-                collection,
-                getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
-            )
-        ),
-        filterDrafts: async (collection, filter) => (
-            await _getCollectionDataList(
-                collection,
-                (entry): entry is Parameters<Exclude<typeof filter, undefined>>[0] => {
-
-                    const draftIsNotInEntryDataOrDraftIsFalse = "draft" in entry.data
-                        || "draft" in entry.data && entry.data["draft"] === true;
-
-                    return draftIsNotInEntryDataOrDraftIsFalse && !!filter?.(entry);
-
-
-                }
-            )
-        ),
-
-    } satisfies Record<string, CustomGetCollectionFunc>
+        filterNonDrafts: getCollectionDataListFilterNonDrafts,
+        filterDrafts: getCollectionDataListFilterDrafts,
+    }
 )
-
 
 export const getEntryData = Object.assign(
     async (collection: Parameters<GetEntryFunc>[0], slugOrId: Parameters<GetEntryFunc>[1]) => {
