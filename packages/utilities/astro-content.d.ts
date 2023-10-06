@@ -49,6 +49,10 @@ declare module 'astro:content' {
         ? Promise<CollectionEntry<C>>
         : Promise<CollectionEntry<C> | undefined>;
 
+    export function getDataEntryById<C extends keyof DataEntryMap, E extends keyof DataEntryMap[C]>(
+        collection: C,
+        entryId: E
+    ): Promise<CollectionEntry<C>>;
 
     export function getCollection<C extends keyof AnyEntryMap, E extends CollectionEntry<C>>(
         collection: C,
@@ -71,11 +75,17 @@ declare module 'astro:content' {
 
     /** Resolve an array of entry references from the same collection */
     export function getEntries<C extends keyof ContentEntryMap>(
-        entries: {
+        entries: Array<{
             collection: C;
             slug: ValidContentEntrySlug<C>;
-        }[]
+        } | {
+            collection: C;
+            id: keyof DataEntryMap[C];
+        }>
     ): Promise<CollectionEntry<C>[]>;
+
+
+    Promise<CollectionEntry<C>[]>;
 
     // Allow generic `string` to avoid excessive type errors in the config
     // if `dev` is not running to update as you edit.
