@@ -5,7 +5,7 @@ They are created to format the data that comes from Astro in a way where you
 get the data you need and nothing more. When using content collections.
 You have to write lots of boilerplate code to take care of common problems.
 
-`getCollection` vs `getCollectionData`.
+`getCollection` vs `getCollectionDataList`.
 
 ```ts
 import { getCollection, } from 'astro:content';
