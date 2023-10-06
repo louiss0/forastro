@@ -30,9 +30,9 @@ export const getCollectionDataList: CustomGetCollectionFunc = async (collection,
 
 
 export const getEntryData = Object.assign(
-    async (entry: Parameters<GetEntryFunc>[0]) => {
+    async (collection: Parameters<GetEntryFunc>[0], slugOrId: Parameters<GetEntryFunc>[1]) => {
 
-        const valueFromEntryOrEntryData = await getEntry(entry)
+        const valueFromEntryOrEntryData = await getEntry(collection, slugOrId)
 
         return {
             slug: valueFromEntryOrEntryData.slug,
@@ -165,7 +165,10 @@ export const getCollectionPaths =
                 params: (
                     Object.fromEntries(paramMap) as
                     Prettify<
-                        Pick<MergeCollectionDataWithSlugAndId<T>, ReturnTypeOnlyIfIItsNotAnArray<U>>
+                        Pick<
+                            MergeCollectionDataWithSlugAndId<T>,
+                            ReturnTypeOnlyIfIItsNotAnArray<U>
+                        >
                     >
                 ),
                 props: { ...entry, render: entry.render }
@@ -183,13 +186,18 @@ export const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async 
 );
 
 
-function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter: Parameters<CustomGetCollectionFunc>[1]) {
-    return (entry: Parameters<Exclude<typeof filter, undefined>>[0]) => {
+function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(
+    filter: Parameters<CustomGetCollectionFunc>[1]
+) {
+    return function (
+        entry: Parameters<Exclude<typeof filter, undefined>>[0]
+    ): entry is Parameters<Exclude<typeof filter, undefined>>[0] {
 
 
         const draftIsNotInEntryDataOrDraftIsFalse = !("draft" in entry.data) || "draft" in entry.data && !entry.data["draft"];
 
-        return draftIsNotInEntryDataOrDraftIsFalse && filter?.(entry);
+        return draftIsNotInEntryDataOrDraftIsFalse && !!filter?.(entry);
+
 
 
     };
