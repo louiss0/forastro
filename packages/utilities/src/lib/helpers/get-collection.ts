@@ -55,17 +55,6 @@ export const getEntryData = Object.assign(
     })
 
 
-export const getDataEntryDataById = async (collection: Parameters<GetDataEntryByIdFunc>[0], id: Parameters<GetDataEntryByIdFunc>[1]) => {
-
-    const dataEntryById = await getDataEntryById(collection, id);
-
-    return {
-        slug: dataEntryById.slug,
-        ...dataEntryById.data
-    }
-
-}
-
 export const getDataListFromEntries = async (entries: Parameters<GetEntriesFunc>[0]) =>
     (await getEntries(entries)).map((entry) => ({ slug: entry.slug, ...entry.data }));
 
