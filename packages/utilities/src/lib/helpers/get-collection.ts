@@ -1,4 +1,4 @@
-import { getCollection, getEntryBySlug, getEntry, getDataEntryById, getEntries, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntryBySlug, getEntry, getEntries, type CollectionEntry } from 'astro:content';
 import { throwUnless } from 'packages/utilities/src/lib/helpers';
 
 
@@ -6,7 +6,6 @@ type GetCollectionFunc = typeof getCollection;
 type GetEntryBySlugFunc = typeof getEntryBySlug;
 type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
-type GetDataEntryByIdFunc = typeof getDataEntryById;
 
 type CustomGetCollectionFunc = <
     T extends Parameters<GetCollectionFunc>[0],
