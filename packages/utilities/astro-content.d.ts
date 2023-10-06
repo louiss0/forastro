@@ -49,10 +49,6 @@ declare module 'astro:content' {
         ? Promise<CollectionEntry<C>>
         : Promise<CollectionEntry<C> | undefined>;
 
-    export function getDataEntryById<C extends keyof DataEntryMap, E extends keyof DataEntryMap[C]>(
-        collection: C,
-        entryId: E
-    ): Promise<CollectionEntry<C>>;
 
     export function getCollection<C extends keyof AnyEntryMap, E extends CollectionEntry<C>>(
         collection: C,
@@ -78,14 +74,6 @@ declare module 'astro:content' {
         entries: {
             collection: C;
             slug: ValidContentEntrySlug<C>;
-        }[]
-    ): Promise<CollectionEntry<C>[]>;
-
-
-    export function getEntries<C extends keyof DataEntryMap>(
-        entries: {
-            collection: C;
-            id: keyof DataEntryMap[C];
         }[]
     ): Promise<CollectionEntry<C>[]>;
 
