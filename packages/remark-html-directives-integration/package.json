@@ -19,6 +19,7 @@
     "access": "public"
   },
   "scripts": {
+    "dev": "tsup --watch",
     "release": "tsup && dotenv release-it"
   },
   "keywords": [
@@ -39,7 +40,6 @@
     "astro": ">1.0.0"
   },
   "dependencies": {
-    "@forastro/remark-html-directives": "workspace:^",
     "remark-directive": "^2.0.1"
   }
 }

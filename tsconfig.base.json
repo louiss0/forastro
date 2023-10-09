@@ -29,9 +29,6 @@
       "@forastro/markdoc-html-tags": [
         "packages/markdoc-html-tags"
       ],
-      "@forastro/remark-html-directives": [
-        "packages/remark-html-directives"
-      ],
       "@forastro/remark-html-directives-integration": [
         "packages/remark-html-directives-integration"
       ],
