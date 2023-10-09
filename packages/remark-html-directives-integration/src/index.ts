@@ -24,9 +24,7 @@ export default (config: Parameters<typeof remarkHTMLDirectives>[0]): AstroIntegr
             },
             "astro:config:done"({ logger }) {
 
-                logger.info(`The integration is now finished. 
-                    You can now use remark html directives in astro now.
-                    `)
+                logger.info("The integration is now finished. You can now use remark html directives in astro now.")
 
             },
 
