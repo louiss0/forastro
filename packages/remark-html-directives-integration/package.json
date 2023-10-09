@@ -40,6 +40,6 @@
     "astro": ">3.0.0"
   },
   "dependencies": {
-    "remark-directive": "^2.0.1"
+    "remark-directive": "^3.0.0"
   }
 }
