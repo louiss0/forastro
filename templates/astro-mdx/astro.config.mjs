@@ -5,8 +5,5 @@ import forRemarkHtmlDirectivesIntegration from "@forastro/remark-html-directives
 
 // https://astro.build/config
 export default defineConfig({
-  experimental: {
-    assets: true,
-  },
-  integrations: [tailwind(), mdx(), forRemarkHtmlDirectivesIntegration()],
+  integrations: [tailwind(), mdx({ extendMarkdownConfig: true }), forRemarkHtmlDirectivesIntegration()],
 });
