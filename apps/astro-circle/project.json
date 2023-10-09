@@ -5,9 +5,7 @@
   "sourceRoot": "apps/astro-circle/src",
   "targets": {
     "build": {
-      "outputs": [
-        "{workspaceRoot}/dist/{projectRoot}"
-      ],
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "executor": "@nxtensions/astro:build",
       "options": {
         "config": "astro.config.prod.mjs"
@@ -36,7 +34,5 @@
       "executor": "@nxtensions/astro:sync"
     }
   },
-  "tags": [
-    "scope:ui"
-  ]
+  "tags": ["scope:ui"]
 }

@@ -14,31 +14,19 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2017",
-      "dom"
-    ],
+    "lib": ["es2017", "dom"],
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@forastro/flow": [
-        "packages/flow/src/index.ts"
-      ],
-      "@forastro/markdoc-html-tags": [
-        "packages/markdoc-html-tags"
-      ],
+      "@forastro/flow": ["packages/flow/src/index.ts"],
+      "@forastro/markdoc-html-tags": ["packages/markdoc-html-tags"],
       "@forastro/remark-html-directives-integration": [
         "packages/remark-html-directives-integration"
       ],
-      "@forastro/utilities": [
-        "packages/utilities/src/index.ts"
-      ]
+      "@forastro/utilities": ["packages/utilities/src/index.ts"]
     }
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
