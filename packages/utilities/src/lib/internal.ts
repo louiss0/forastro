@@ -1,4 +1,4 @@
-import { IterationInfo, type HasForEachMethod } from "packages/utilities/src/lib/types"
+import { IterationInfo, type HasForEachMethod } from "./types"
 
 export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends Iterable<any> & HasForEachMethod>(iterable: T) {
 

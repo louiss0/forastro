@@ -1,0 +1,65 @@
+---
+documentation_names_and_links:
+  - name: 'Astro'
+    link: 'https://docs.astro.build/'
+
+  - name: 'For Astro Utilities'
+    link: 'https://forastro-docs.onrender.com/libraries/utilities'
+
+  - name: 'Tailwind'
+    link: 'https://tailwindcss.com'
+
+core_library_sentences:
+  - Astro Components and Utility Functions  @forastro/utilities
+  - Styling tailwindcss
+  - MDX
+---
+
+import List from '~/components/List.astro';
+import Default from '../layouts/Default.astro';
+import { Center, Container, SpacedBox, Typography } from '~/components';
+
+<Default title="Welcome to Astro." description="this is good">
+  <header class="px-4 py-12">
+    <Center>
+      <Typography tag={"h1"}>Welcome to the Astro MDX template.</Typography>
+    </Center>
+  </header>
+  <main class="px-2 py-6">
+    <Container>
+      <Center gapClass="gap-16">
+        <Typography tag={"p"}>
+      This template is created by <a class="p-1" href="https://github.com/louiss0">Shelton Louis</a>.
+      It uses <code>@fontsource</code> for fonts. Tailwind for styles.
+       Preact of course for UI interactivty. You also get a nice set of Components for
+          you to work faster. Look into the README for more information about this
+          template.
+        </Typography>
+
+        <Center gapClass="gap-6">
+          <List
+            title="List of core depedencies"
+            listClass="grid gap-4 list-disc"
+            itemClass="py-2 px-4"
+            items={frontmatter.core_library_sentences}
+          />
+        </Center>
+      </Center>
+    </Container>
+
+  </main>
+  <footer class="px-20 py-6">
+    <Center gapClass="gap-2">
+      <strong class="text-lg"> Docs</strong>
+      <SpacedBox gapClass="gap-4">
+        {
+          frontmatter.documentation_names_and_links.map(({ name, link }) => (
+            <a class="px-3 py-1" href={link}>
+              {name}
+            </a>
+          ))
+        }
+      </SpacedBox>
+    </Center>
+  </footer>
+</Default>
