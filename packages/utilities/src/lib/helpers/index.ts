@@ -2,80 +2,14 @@ import type { Props, SSRResult, } from "astro"
 
 import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
 import { IterationInfo, type Callback, type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, type HasForEachMethod, type IterateRangeCallback, type IterateRangeOptions } from "../types"
-import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, isObject, wrapFunctionInAsyncGenerator } from "../internal"
+import {
+    generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, wrapFunctionInAsyncGenerator
+} from "../internal"
 
 export * from "./get-collection"
+export * from "./conditional"
 
-
-export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
-
-
-    return condition ? cb() : null
-
-}
-
-
-type IfElseOptions = {
-    condition: boolean
-    ifCb: (...args: Array<unknown>) => NonNullable<unknown>
-    elseCb: (...args: Array<unknown>) => NonNullable<unknown>
-}
-
-export function executeIfElse(options: IfElseOptions):
-    ReturnType<typeof options.ifCb> | ReturnType<typeof options.elseCb>
-
-export function executeIfElse(condition: boolean, ifCb: IfElseOptions["ifCb"], elseCb: IfElseOptions["elseCb"]):
-    ReturnType<typeof ifCb> | ReturnType<typeof elseCb>
-
-export function executeIfElse(
-    firstParam: boolean | IfElseOptions,
-    secondParam?: Callback,
-    thirdParam?: Callback
-) {
-
-    if (isObject(firstParam)) {
-
-        const { condition, ifCb, elseCb } = firstParam
-
-        return condition ? ifCb() : elseCb()
-
-    }
-
-
-    return firstParam ? secondParam?.() : thirdParam?.()
-
-
-
-
-
-}
-
-
-
-export function executeUnless<T extends Callback>(condition: boolean, cb: T) {
-
-
-    return executeIf(!condition, cb)
-
-}
-
-
-export function throwIf(condition: boolean, message = "Something went wrong", cause?: unknown): asserts condition is false {
-
-
-    executeIf(condition, () => {
-        throw new Error(message, { cause })
-    })
-
-
-}
-
-
-export function throwUnless(condition: boolean, message = "Something went wrong", cause?: unknown): asserts condition {
-
-    throwIf(!condition, message, cause)
-
-}
+import { throwUnless, throwIf, returnErrorAndResultFromPromise } from "./throw"
 
 
 
@@ -92,51 +26,6 @@ export const createMarkdocFunction = (cb: Callback) => {
 };
 
 
-export async function returnErrorAndResultFromPromise<T extends Promise<any>>(promise: T) {
-
-
-
-    try {
-
-        return [await promise, null] as const
-
-
-    } catch (error) {
-
-
-        if (error instanceof Error) {
-
-            return [null, error] as const
-
-        }
-
-        if (typeof error === "string") {
-
-            return [null, new Error(error, { cause: "Failed Promise" })] as const
-
-        }
-
-        if (typeof error === "object") {
-
-
-            return [null, new Error(JSON.stringify(error, null, 2))] as const
-
-        }
-
-
-
-
-        return [null, new Error("Something went wrong", { cause: "Failed Promise" })] as const
-
-
-
-
-
-    }
-
-
-
-};
 
 
 
@@ -390,4 +279,5 @@ export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
 
 
 
+export { throwIf, throwUnless, returnErrorAndResultFromPromise }
 
