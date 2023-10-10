@@ -43,9 +43,9 @@ export default defineConfig({
           { link: "/libraries/flow/index", text: LIBRARIES.Flow },
           {
             link: "/libraries/remark-html-directives/index",
-            text: LIBRARIES.Utilities
+            text: LIBRARIES['Remark HTML Directives Integration']
           },
-          { link: "/libraries/utilities/index", text: LIBRARIES['Remark HTML Directives Integration'] }
+          { link: "/libraries/utilities/index", text: LIBRARIES.Utilities }
         ]
       },
     ],
