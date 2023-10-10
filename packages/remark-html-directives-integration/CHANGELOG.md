@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-10-10
+
 ### Added
 
 - Moved `@forastro/remark-html-directives` into this repo
