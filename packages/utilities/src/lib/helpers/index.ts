@@ -1,5 +1,6 @@
 import type { Props, SSRResult, } from "astro"
 
+
 import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
 import { IterationInfo, type Callback, type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, type HasForEachMethod, type IterateRangeCallback, type IterateRangeOptions } from "../types"
 import {
@@ -24,8 +25,6 @@ export const createMarkdocFunction = (cb: Callback) => {
     }
 
 };
-
-
 
 
 
@@ -277,7 +276,4 @@ export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
     )
 
 
-
-
 export { throwIf, throwUnless, returnErrorAndResultFromPromise }
-
