@@ -9,6 +9,9 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs",
       "default": "./dist/index.js"
+    },
+    "./components": {
+      "import": "./dist/components/index.ts"
     }
   },
   "scripts": {
