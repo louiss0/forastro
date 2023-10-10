@@ -2,6 +2,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- Bundling with `"tsup"`
+
+### Fixed
+
+- Removed circular imports from helpers files.
+
 ## [3.2.0] - 2023-10-06
 
 ## Added

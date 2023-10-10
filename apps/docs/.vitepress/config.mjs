@@ -1,6 +1,13 @@
 import { defineConfig } from 'vitepress'
 import vueNestedSFC from 'vite-plugin-vue-nested-sfc';
+import { Enum } from 'better-enums';
 // https://vitepress.dev/reference/site-config
+const LIBRARIES = Enum([
+  "Flow",
+  "Utilities",
+  "Remark HTML Directives Integration",
+]).accessor
+
 
 const TEMPLATES = [
   { link: "/templates/astro-preact", text: "Preact" },
@@ -10,11 +17,6 @@ const TEMPLATES = [
   { link: "/templates/astro-markdoc", text: "Markdoc" },
 ]
 
-const LIBRARIES = Object.freeze([
-  "Flow",
-  "Utilities",
-  "Remark HTML Directives Integration",
-])
 
 export default defineConfig({
   vite: {
@@ -38,12 +40,12 @@ export default defineConfig({
       {
         text: 'Libraries',
         items: [
-          { link: "/libraries/flow/index", text: LIBRARIES[0] },
+          { link: "/libraries/flow/index", text: LIBRARIES.Flow },
           {
             link: "/libraries/remark-html-directives/index",
-            text: LIBRARIES[3]
+            text: LIBRARIES['Remark HTML Directives Integration']
           },
-          { link: "/libraries/utilities/index", text: LIBRARIES[1] }
+          { link: "/libraries/utilities/index", text: LIBRARIES.Utilities }
         ]
       },
     ],
@@ -54,7 +56,7 @@ export default defineConfig({
         items: [
           {
             collapsed: false,
-            text: LIBRARIES[0],
+            text: LIBRARIES.Flow,
             items: [
               { text: "For", link: "/libraries/flow/for" },
               { text: "Switch And Case", link: "/libraries/flow/switch-and-case" },
@@ -63,7 +65,7 @@ export default defineConfig({
             ]
           },
           {
-            text: LIBRARIES[1],
+            text: LIBRARIES.Utilities,
             collapsed: false,
             items: [
               { text: "Iteration Generators", link: "/libraries/utilities/iteration-generators" },
@@ -79,7 +81,7 @@ export default defineConfig({
             ]
           },
           {
-            text: LIBRARIES[3],
+            text: LIBRARIES['Remark HTML Directives Integration'],
             collapsed: false,
             items: [
               {
