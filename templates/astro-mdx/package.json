@@ -21,7 +21,6 @@
     "@astrojs/mdx": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "@forastro/remark-html-directives-integration": "workspace:^",
     "astro-icon": "*"
   },
   "dependencies": {

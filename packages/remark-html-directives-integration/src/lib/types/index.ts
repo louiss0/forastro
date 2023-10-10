@@ -8,11 +8,11 @@ import {
   headings,
   supportedComponentTags,
   supportedRegionTags
-} from "src/constants";
+} from "packages/remark-html-directives-integration/src/lib/constants";
 
-import { Node } from "unist-util-visit";
+import type { Node } from "unist-util-visit/lib";
 
-import { HTMLAttributes } from "astro/types"
+import type { HTMLAttributes } from "astro/types"
 
 export type {
   RemarkHTMLDirectivesConfig,
@@ -23,24 +23,8 @@ export type {
   NodeDirectiveObject
 };
 
-type HTMLAttributesWithoutAstroDirectives<Tag extends keyof astroHTML.JSX.DefinedIntrinsicElements> = 
-Omit<HTMLAttributes<Tag> ,`set:${string}` | "is:raw"|"class:list" |`on${string}`>
-
-  
-type ViableArticleTags = ComponentElementNames | TextTags | InlineElementNames | InlineTableTagNames | BlockTableTagNames | Headings;
-
-type ViablePageTags =  RegionElementNames | ViableArticleTags;
-
-type RemarkHTMLDirectivesConfig = {
-  mode: typeof HTML_DIRECTIVE_MODES.PAGE
-  elements?: Record<string, HTMLAttributes<"div">> & {[K in ViablePageTags]?: HTMLAttributesWithoutAstroDirectives<K> }
-} | {
-  mode: typeof HTML_DIRECTIVE_MODES.ARTICLE
-  elements?: Partial<{
-    [K in ViableArticleTags]:HTMLAttributesWithoutAstroDirectives<K>
-  }>
-}
-
+type HTMLAttributesWithoutAstroDirectives<Tag extends keyof astroHTML.JSX.DefinedIntrinsicElements> =
+  Omit<HTMLAttributes<Tag>, `set:${string}` | "is:raw" | "class:list" | `on${string}`>
 
 type NodeDirectiveTypes = typeof nodeDirectiveTypes[number];
 
@@ -60,13 +44,29 @@ type BlockTableTagNames = typeof supportedBlockTableTags[number];
 
 type TextTags = typeof supportedTextBasedTags[number]
 
+type ViableArticleTags = ComponentElementNames | TextTags | InlineElementNames | InlineTableTagNames | BlockTableTagNames | Headings;
+
+type ViablePageTags = RegionElementNames | ViableArticleTags;
+
+type RemarkHTMLDirectivesConfig = {
+  mode: typeof HTML_DIRECTIVE_MODES.PAGE
+  elements?: Record<string, HTMLAttributes<"div">> & { [K in ViablePageTags]?: HTMLAttributesWithoutAstroDirectives<K> }
+} | {
+  mode: typeof HTML_DIRECTIVE_MODES.ARTICLE
+  elements?: Partial<{
+    [K in ViableArticleTags]: HTMLAttributesWithoutAstroDirectives<K>
+  }>
+}
+
+
+
 type RareNodeTypes = "root" | "paragraph" | "listItem" | "thematicBreak" | "text"
 
 
-  type NodeDirectiveObject = Node & {
+type NodeDirectiveObject = Node & {
   type: NodeDirectiveTypes | RareNodeTypes
   children: Array<Node>
-  name: string 
+  name: string
   attributes: Record<string, string>
 }
 

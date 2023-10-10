@@ -1,4 +1,4 @@
-import { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'src/types';
+import type { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'packages/remark-html-directives-integration/src/lib/types';
 import {
   headings,
   supportedComponentTags,
@@ -7,7 +7,7 @@ import {
   supportedBlockTableTags,
   supportedInlineTableTags,
   supportedTextBasedTags
-} from 'src/constants';
+} from 'packages/remark-html-directives-integration/src/lib/constants';
 
 
 
@@ -36,7 +36,7 @@ const checkIfNodeTypeIsAViableTextDirective = (node: NodeDirectiveObject) =>
 
 
 
-function failFileIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject, file:{fail(message:string, node:NodeDirectiveObject):void}) {
+function failFileIfANodeIsNotAViableNodeForPages(node: NodeDirectiveObject, file: { fail(message: string, node: NodeDirectiveObject): void }) {
 
 
   const directiveIsViable = [
@@ -84,25 +84,7 @@ const allSupportedTags = Object.freeze([
 ])
 
 
-const isASupportedTag = (string:string)=>  allSupportedTags.includes(string as any)
-
-// function throwIfAnyElementKeyIsOneOfTheSupportedOnes(elements: Exclude<RemarkHTMLDirectivesConfig["elements"], undefined>) {
-  
-  
-//   const elementKeys = Object.keys(elements)
-  
-//   if (allSupportedTags.join().includes(elementKeys.join())) {
-    
-
-//     throw new Error(`Don't use one of these tags in your element keys 
-//       ${allSupportedTags.map((value, i) => i % 6 === 0 ? `${value}\n` : value).join(",")}
-      
-//       These are the keys used ${elementKeys.join(" , ")}
-//     `)
-
-//   }
-
-// }
+const isASupportedTag = (string: string) => allSupportedTags.includes(string as any)
 
 
 function failFileIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject, file: { fail(message: string, node: NodeDirectiveObject): void }) {
@@ -144,46 +126,46 @@ function failFileIfANodeIsNotAViableNodeForArticles(node: NodeDirectiveObject, f
 
 }
 
-  function overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(
-        nodeDirectiveObject: NodeDirectiveObject,
-        elementAttrs: Exclude<RemarkHTMLDirectivesConfig["elements"], undefined>
-        ) {
-          
-        const nodeDirectiveObjectEntries = Object.entries(nodeDirectiveObject.attributes)
-  
-        const elementWithAttrs = elementAttrs[nodeDirectiveObject.name as keyof typeof elementAttrs]
-        
-      Object.assign(
-        nodeDirectiveObject.attributes,
-        nodeDirectiveObjectEntries.reduce(
-          generateObjectWithAppendedClassAndOverriddenAttrs(),
-          elementWithAttrs
-        )
-      ) 
-          
+function overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(
+  nodeDirectiveObject: NodeDirectiveObject,
+  elementAttrs: Exclude<RemarkHTMLDirectivesConfig["elements"], undefined>
+) {
 
-      function generateObjectWithAppendedClassAndOverriddenAttrs() {
-        
-        return (carry: typeof elementWithAttrs, item: [string, string]) => {
-    
-          if (!carry)
-            return {};
-    
-          const [key, value] = item;
-    
-          return key === "class" ? { [key]: `${value} ${carry[key]}` } : Object.assign(carry, { [key]: value });
-    
-    
-    
-        };
-      }
+  const nodeDirectiveObjectEntries = Object.entries(nodeDirectiveObject.attributes)
+
+  const elementWithAttrs = elementAttrs[nodeDirectiveObject.name as keyof typeof elementAttrs]
+
+  Object.assign(
+    nodeDirectiveObject.attributes,
+    nodeDirectiveObjectEntries.reduce(
+      generateObjectWithAppendedClassAndOverriddenAttrs(),
+      elementWithAttrs
+    )
+  )
 
 
+  function generateObjectWithAppendedClassAndOverriddenAttrs() {
+
+    return (carry: typeof elementWithAttrs, item: [string, string]) => {
+
+      if (!carry)
+        return {};
+
+      const [key, value] = item;
+
+      return key === "class" ? { [key]: `${value} ${carry[key]}` } : Object.assign(carry, { [key]: value });
+
+
+
+    };
   }
 
 
+}
+
+
 export {
-  failFileIfANodeIsNotAViableNodeForArticles, 
+  failFileIfANodeIsNotAViableNodeForArticles,
   failFileIfANodeIsNotAViableNodeForPages,
   isASupportedTag,
   overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten

@@ -9,7 +9,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["coverage/packages/utilities"],
+      "outputs": ["{workspaceRoot}/coverage/packages/utilities"],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/utilities"

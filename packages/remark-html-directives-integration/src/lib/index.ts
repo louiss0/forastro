@@ -1,25 +1,21 @@
 
-import { visit,Node,  } from 'unist-util-visit'
+import { visit } from 'unist-util-visit'
+import { type Node } from 'unist-util-visit/lib'
 import { h } from 'hastscript'
-import { HTML_DIRECTIVE_MODES, nodeDirectiveTypes } from 'src/constants'
-import { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'src/types'
-import {
-  failFileIfANodeIsNotAViableNodeForArticles,
-  failFileIfANodeIsNotAViableNodeForPages,
-  isASupportedTag,
-  overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten,
-} from 'src/utils'
+import { HTML_DIRECTIVE_MODES, nodeDirectiveTypes } from 'packages/remark-html-directives-integration/src/lib/constants'
+import type { NodeDirectiveObject, RemarkHTMLDirectivesConfig } from 'packages/remark-html-directives-integration/src/lib/types'
+import { overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten, isASupportedTag, failFileIfANodeIsNotAViableNodeForPages, failFileIfANodeIsNotAViableNodeForArticles } from 'packages/remark-html-directives-integration/src/lib/utils'
 
 
 
 
 
-export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig> = { mode:HTML_DIRECTIVE_MODES.ARTICLE, } ) {
+export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfig> = { mode: HTML_DIRECTIVE_MODES.ARTICLE, }) {
 
 
-  const { mode, elements} = config
+  const { mode, elements } = config
 
-  return () => (tree: Node, file: {fail(message: string, node: Node):void}) => {
+  return () => (tree: Node, file: { fail(message: string, node: Node): void }) => {
 
 
 
@@ -28,7 +24,7 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
       const nodeDirectiveObject = node as NodeDirectiveObject
 
       const nodeTypeIsAnyOfTheseDirectives = nodeDirectiveTypes.includes(node.type as any)
-    
+
 
 
       if (!nodeTypeIsAnyOfTheseDirectives) return;
@@ -36,32 +32,32 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
 
 
       if (mode === "page") {
-  
 
-        
+
+
         if (elements && nodeDirectiveObject.name in elements) {
-          
-          
+
+
 
           if (isASupportedTag(nodeDirectiveObject.name)) {
-          
+
             overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
-            
-             
+
+
             Object.assign(
               nodeDirectiveObject.attributes,
               { dataForAstroRemarkHtmlDirective: true }
             )
 
-          } 
-          
-          if (!isASupportedTag(nodeDirectiveObject.name) && nodeDirectiveObject.type === "containerDirective") {
-            
+          }
 
-            
+          if (!isASupportedTag(nodeDirectiveObject.name) && nodeDirectiveObject.type === "containerDirective") {
+
+
+
             overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
-            
-             
+
+
             Object.assign(
               nodeDirectiveObject.attributes,
               { dataElement: nodeDirectiveObject.name, dataForAstroRemarkHtmlDirective: true }
@@ -71,8 +67,8 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
           }
 
 
-          
-          
+
+
         }
 
 
@@ -80,29 +76,29 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
 
       }
 
-      
-      
-      if (mode === "article") {
-        
-        failFileIfANodeIsNotAViableNodeForArticles(nodeDirectiveObject, file)
-        
 
-        
+
+      if (mode === "article") {
+
+        failFileIfANodeIsNotAViableNodeForArticles(nodeDirectiveObject, file)
+
+
+
         if (elements && nodeDirectiveObject.name in elements) {
-  
+
           overrideNodeDirectiveAttributesWithClassesAppendedToEachOtherAndTheRestOverWritten(nodeDirectiveObject, elements)
 
-          
+
           Object.assign(
             nodeDirectiveObject.attributes,
             { dataForAstroRemarkHtmlDirective: true }
           )
 
-  
-  
+
+
         }
-        
-      
+
+
       }
 
 
@@ -113,17 +109,17 @@ export default function HTMLDirectives(config: Partial<RemarkHTMLDirectivesConfi
 
       const hast = h(nodeDirectiveObject.name, nodeDirectiveObject.attributes,)
 
-      
-      data.hName = hast.tagName
-      
-      data.hProperties = hast.properties
-      
+
+      data["hName"] = hast.tagName
+
+      data["hProperties"] = hast.properties
+
       // The changes are experimental.
 
       // data.hType = hast.type
-      
+
       // data.hPosition = hast.position
-      
+
 
 
     })
