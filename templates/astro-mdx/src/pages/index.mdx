@@ -1,28 +1,26 @@
----
-import List from "~/components/List.astro";
-import Default from "../layouts/Default.astro";
-import { Center, Container, SpacedBox, Typography } from "~/components";
+import List from '~/components/List.astro';
+import Default from '../layouts/Default.astro';
+import { Center, Container, SpacedBox, Typography } from '~/components';
 
-const DOCUMENTATION_NAMES_AND_LINKS = Object.freeze([
-  { name: "Astro", link: "https://docs.astro.build/" },
+export const DOCUMENTATION_NAMES_AND_LINKS = Object.freeze([
+  { name: 'Astro', link: 'https://docs.astro.build/' },
   {
-    name: "For Astro Utilities",
-    link: "https://forastro-docs.onrender.com/libraries/utilities",
+    name: 'For Astro Utilities',
+    link: 'https://forastro-docs.onrender.com/libraries/utilities',
   },
   {
-    name: "For Astro Remark Directives Integration",
-    link: "https://forastro-docs.onrender.com/libraries/remark-html-directives",
+    name: 'For Astro Remark Directives Integration',
+    link: 'https://forastro-docs.onrender.com/libraries/remark-html-directives',
   },
-  { name: "Tailwind", link: "https://tailwindcss.com" },
+  { name: 'Tailwind', link: 'https://tailwindcss.com' },
 ]);
 
-const CORE_LIBRARY_SENTENCES = Object.freeze([
-  "Astro Components and Utility Functions  @forastro/utilities",
-  "Styling tailwindcss",
-  "MDX",
-  "For Astro Remark HTML Directives integration @forastro/remark-html-directives-integration",
+export const CORE_LIBRARY_SENTENCES = Object.freeze([
+  'Astro Components and Utility Functions  @forastro/utilities',
+  'Styling tailwindcss',
+  'MDX',
+  'For Astro Remark HTML Directives integration @forastro/remark-html-directives-integration',
 ]);
----
 
 <Default title="Welcome to Astro." description="this is good">
   <header class="px-4 py-12">
@@ -53,6 +51,7 @@ const CORE_LIBRARY_SENTENCES = Object.freeze([
         </Center>
       </Center>
     </Container>
+
   </main>
   <footer class="px-20 py-6">
     <Center gapClass="gap-2">
