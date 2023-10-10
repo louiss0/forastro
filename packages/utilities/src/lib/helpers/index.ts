@@ -1,17 +1,11 @@
 import type { Props, SSRResult, } from "astro"
-import type {
-    Callback,
-    GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed,
-    HasForEachMethod,
-    IterateRangeCallback,
-    IterateRangeOptions,
-} from "../types"
-import { IterationInfo } from "../types"
 
 import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
-import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, isObject, wrapFunctionInAsyncGenerator } from "packages/utilities/src/lib/internal"
+import { IterationInfo, type Callback, type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, type HasForEachMethod, type IterateRangeCallback, type IterateRangeOptions } from "../types"
+import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, isObject, wrapFunctionInAsyncGenerator } from "../internal"
 
 export * from "./get-collection"
+
 
 export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
 
