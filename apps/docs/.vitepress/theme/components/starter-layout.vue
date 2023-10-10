@@ -67,10 +67,18 @@ const { Layout } = DefaultTheme;
     --primary-bg-color: hsl(0, 0%, 100%);
 
     --vp-c-brand-1: var(--accent-text-color);
-    --vp-c-brand-light: var(--accent-text-color-light);
-    --vp-c-brand-lighter: var(--accent-text-color-lighter);
-    --vp-c-brand-dark: var(--accent-text-color-dark);
-    --vp-c-brand-darker: var(--accent-text-color-darker);
+    --vp-c-brand-2: var(--accent-text-color-dark);
+    --vp-c-brand-3: var(--accent-text-color-darker);
+
+
+}
+
+.dark {
+
+    --vp-c-brand-1: var(--accent-text-color);
+    --vp-c-brand-2: var(--accent-text-color-light);
+    --vp-c-brand-3: var(--accent-text-color-lighter);
+
 
 }
 
