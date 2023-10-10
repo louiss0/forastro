@@ -1,26 +1,23 @@
+---
+documentation_names_and_links:
+  - name: 'Astro'
+    link: 'https://docs.astro.build/'
+
+  - name: 'For Astro Utilities'
+    link: 'https://forastro-docs.onrender.com/libraries/utilities'
+
+  - name: 'Tailwind'
+    link: 'https://tailwindcss.com'
+
+core_library_sentences:
+  - Astro Components and Utility Functions  @forastro/utilities
+  - Styling tailwindcss
+  - MDX
+---
+
 import List from '~/components/List.astro';
 import Default from '../layouts/Default.astro';
 import { Center, Container, SpacedBox, Typography } from '~/components';
-
-export const DOCUMENTATION_NAMES_AND_LINKS = Object.freeze([
-  { name: 'Astro', link: 'https://docs.astro.build/' },
-  {
-    name: 'For Astro Utilities',
-    link: 'https://forastro-docs.onrender.com/libraries/utilities',
-  },
-  {
-    name: 'For Astro Remark Directives Integration',
-    link: 'https://forastro-docs.onrender.com/libraries/remark-html-directives',
-  },
-  { name: 'Tailwind', link: 'https://tailwindcss.com' },
-]);
-
-export const CORE_LIBRARY_SENTENCES = Object.freeze([
-  'Astro Components and Utility Functions  @forastro/utilities',
-  'Styling tailwindcss',
-  'MDX',
-  'For Astro Remark HTML Directives integration @forastro/remark-html-directives-integration',
-]);
 
 <Default title="Welcome to Astro." description="this is good">
   <header class="px-4 py-12">
@@ -32,11 +29,9 @@ export const CORE_LIBRARY_SENTENCES = Object.freeze([
     <Container>
       <Center gapClass="gap-16">
         <Typography tag={"p"}>
-          This template is created by <a
-            class="p-1"
-            href="https://github.com/louiss0">Shelton Louis</a
-          >. It uses <code>@fontsource</code> for fonts. Tailwind for styles. Preact
-          of course for UI interactivty. You also get a nice set of Components for
+      This template is created by <a class="p-1" href="https://github.com/louiss0">Shelton Louis</a>.
+      It uses <code>@fontsource</code> for fonts. Tailwind for styles.
+       Preact of course for UI interactivty. You also get a nice set of Components for
           you to work faster. Look into the README for more information about this
           template.
         </Typography>
@@ -46,7 +41,7 @@ export const CORE_LIBRARY_SENTENCES = Object.freeze([
             title="List of core depedencies"
             listClass="grid gap-4 list-disc"
             itemClass="py-2 px-4"
-            items={CORE_LIBRARY_SENTENCES}
+            items={frontmatter.core_library_sentences}
           />
         </Center>
       </Center>
@@ -58,7 +53,7 @@ export const CORE_LIBRARY_SENTENCES = Object.freeze([
       <strong class="text-lg"> Docs</strong>
       <SpacedBox gapClass="gap-4">
         {
-          DOCUMENTATION_NAMES_AND_LINKS.map(({ name, link }) => (
+          frontmatter.documentation_names_and_links.map(({ name, link }) => (
             <a class="px-3 py-1" href={link}>
               {name}
             </a>
