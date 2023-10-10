@@ -1,15 +1,22 @@
 import type { Props, SSRResult, } from "astro"
 
-import type { RenderTemplateResult } from "astro/dist/runtime/server/render/astro/render-template"
 import { IterationInfo, type Callback, type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, type HasForEachMethod, type IterateRangeCallback, type IterateRangeOptions } from "../types"
 import {
     generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, wrapFunctionInAsyncGenerator
 } from "../internal"
 
 
-import { throwUnless, throwIf } from "./throw"
+import { throwUnless, throwIf } from "./conditional"
 
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: readonly string[];
+}
 
+type RenderTemplateResult = Readonly<{
+    htmlParts: TemplateStringsArray
+    expressions: Array<unknown>
+    error: Error
+}>
 
 export const createMarkdocFunction = (cb: Callback) => {
 
@@ -273,6 +280,53 @@ export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
     },
         { isAstroComponentFactory: true }
     )
+
+
+export async function returnErrorAndResultFromPromise<T extends Promise<any>>(promise: T) {
+
+
+
+    try {
+
+        return [await promise, null] as const
+
+
+    } catch (error) {
+
+
+        if (error instanceof Error) {
+
+            return [null, error] as const
+
+        }
+
+        if (typeof error === "string") {
+
+            return [null, new Error(error, { cause: "Failed Promise" })] as const
+
+        }
+
+        if (typeof error === "object") {
+
+
+            return [null, new Error(JSON.stringify(error, null, 2))] as const
+
+        }
+
+
+
+
+        return [null, new Error("Something went wrong", { cause: "Failed Promise" })] as const
+
+
+
+
+
+    }
+
+
+
+};
 
 
 
