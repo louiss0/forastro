@@ -2,16 +2,17 @@
   "name": "@forastro/utilities",
   "version": "3.1.2",
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./dist/index.ts",
   "exports": {
     ".": {
-      "import": "./src/index.ts",
-      "default": "./src/index.ts"
+      "import": "./dist/index.ts",
+      "default": "./dist/index.ts"
     }
   },
   "scripts": {
+    "dev": "tsup --watch",
     "coverage": "vitest run --coverage",
-    "release": "dotenv release-it",
+    "release": "tsup && dotenv release-it",
     "publint": "publint"
   },
   "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
@@ -28,7 +29,7 @@
     "url": "https://github.com/louiss0"
   },
   "files": [
-    "src"
+    "dist"
   ],
   "keywords": [
     "astro-component",
