@@ -33,7 +33,10 @@ export default defineConfig({
         text: 'Libraries',
         items: [
           { link: "/libraries/flow/index", text: "Flow" },
-          { link: "/libraries/remark-html-directives/index", text: "Remark HTML Directives" },
+          {
+            link: "/libraries/remark-html-directives/index",
+            text: "Remark HTML Directives Integration"
+          },
           { link: "/libraries/utilities/index", text: "Utilities" }
         ]
       },
@@ -63,14 +66,14 @@ export default defineConfig({
               { text: "Error Functions", link: "/libraries/utilities/error-functions" },
               { text: "Template Projection", link: "/libraries/utilities/template-projection" },
               {
-                text: "Get Collection Helpers", 
-                  link: "/libraries/utilities/get-collection-helpers" 
-            },
+                text: "Get Collection Helpers",
+                link: "/libraries/utilities/get-collection-helpers"
+              },
               { text: "Miscellaneous", link: "/libraries/utilities/miscellaneous" },
             ]
           },
           {
-            text: "Remark HTML Directives",
+            text: "Remark HTML Directives Integration",
             collapsed: false,
             items: [
               {
