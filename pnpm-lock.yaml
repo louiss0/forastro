@@ -190,9 +190,6 @@ importers:
       '@fontsource/raleway':
         specifier: '*'
         version: 5.0.5
-      '@forastro/remark-html-directives-integration':
-        specifier: workspace:^
-        version: link:../../packages/remark-html-directives-integration
       astro-icon:
         specifier: '*'
         version: 0.1.0
