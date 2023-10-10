@@ -2,6 +2,13 @@
 
 ## [Unreleased]
 
+## [1.1.0] - 2023-10-10
+
+### Added
+
+- Moved `@forastro/remark-html-directives` into this repo
+- Implemented logging for when this library is integrated.
+
 ### Fixed
 
 - Add a homepage to the package.json file that links to the homepage for this project.

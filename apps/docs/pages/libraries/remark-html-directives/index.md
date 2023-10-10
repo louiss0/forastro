@@ -15,35 +15,35 @@
 
 [Astro Site]:https://astro.build
 
-# Remark HTML Directives <Badge type="info" text="1.0.1" />
+# Remark HTML Directives Integration <Badge type="info" text="1.1.0" />
 
-The `@forastro/remark-html-directives` package is a package that makes it possible to use.
-[Markdown Directives](#markdown-directives) in [Astro][Astro Site]
-with a set of defaults and constraints. It relies on `remark-directive` for it to work.
-This package sends information for that one to use to transform them into HTML.
+The `@forastro/remark-html-directives-integration` integrates `remark-directive` into your [Astro][Astro Site] project.
 
-:::code-group
+It uses an internal library to allow you to use HTML tag names as directives.
+It also makes sure you write them in markdown the way you would write them in HTML.
+For this we use something called a tag system. It's there to make sure
+only HTML that is needed to write articles,docs and blog posts is allowed.
 
- ```[pnpm] shell
-    pnpm add remark-directive @forastro/remark-html-directives
- ```
-
- ```[yarn] shell
-    yarn add remark-directive @forastro/remark-html-directives
- ```
-
- ```[npm] shell
-    npm i remark-directive @forastro/remark-html-directives
- ```
-
-:::
-
-:::info To integrate both in Astro use
-
- ```md
+ ```shell
     astro add @forastro/remark-html-directives-integration
  ```
 
+For an understanding of Markdown Directives go [here](#markdown-directives)
+If you want to understand the tag system go [here](#tags)
+
+:::warning
+ I created a separate package called `@forastro/remark-html-directives`.
+ But that one will never be updated it's still useful and can be used in
+ non-astro projects but I have decided that it's too much work to release it
+ along with the integration for Astro. If you decided to use them separately
+ Please use the integration from now on.
+
+ **I will not remove the package at all just leave it there**
+:::
+
+:::warning
+ Don't use with MDX at all you can't use the `{}` syntax at all.
+ Doing `img{}`to mdx is always an expression evaluation no matter what.
 :::
 
 ## Markdown Directives
@@ -108,7 +108,6 @@ A directive that must wrap around markdown content.
 ```
 
 :::
-
 
 #### Nesting Containers
 
@@ -177,7 +176,7 @@ These directives are used to surround words within text so that they can be chan
 The names of markdown directives are used to render HTML.
 This package restricts the names of the directives that you can use by abiding by the HTML spec.
 The term *tags* is used specify what kinds of names are allowed in reference to HTML tags.
-When an directive is used `remark-html-directives` will check to see What kind of directive it is and it's name.
+When an directive is used the internal library will check to see What kind of directive it is and it's name.
 If the wrong name is used as a directive. An error will be thrown. Only certain names can be used as certain directives.
 
 The tags are put into specific categories so that they can be used properly.

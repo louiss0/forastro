@@ -1,5 +1,5 @@
 import { getCollection, getEntryBySlug, getEntry, getEntries, type CollectionEntry } from 'astro:content';
-import { throwUnless } from './conditional';
+import { throwUnless } from './throw';
 
 
 type GetCollectionFunc = typeof getCollection;

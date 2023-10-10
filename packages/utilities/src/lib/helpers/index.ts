@@ -29,6 +29,7 @@ export const createMarkdocFunction = (cb: Callback) => {
     }
 
 };
+};
 
 
 
@@ -328,6 +329,4 @@ export async function returnErrorAndResultFromPromise<T extends Promise<any>>(pr
 
 };
 
-
-
-
+export { throwIf, throwUnless, returnErrorAndResultFromPromise }

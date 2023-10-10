@@ -10,6 +10,12 @@ const TEMPLATES = [
   { link: "/templates/astro-markdoc", text: "Markdoc" },
 ]
 
+const LIBRARIES = Object.freeze([
+  "Flow",
+  "Utilities",
+  "Remark HTML Directives Integration",
+])
+
 export default defineConfig({
   vite: {
     plugins: [
@@ -32,9 +38,12 @@ export default defineConfig({
       {
         text: 'Libraries',
         items: [
-          { link: "/libraries/flow/index", text: "Flow" },
-          { link: "/libraries/remark-html-directives/index", text: "Remark HTML Directives" },
-          { link: "/libraries/utilities/index", text: "Utilities" }
+          { link: "/libraries/flow/index", text: LIBRARIES[0] },
+          {
+            link: "/libraries/remark-html-directives/index",
+            text: LIBRARIES[3]
+          },
+          { link: "/libraries/utilities/index", text: LIBRARIES[1] }
         ]
       },
     ],
@@ -45,7 +54,7 @@ export default defineConfig({
         items: [
           {
             collapsed: false,
-            text: "Flow",
+            text: LIBRARIES[0],
             items: [
               { text: "For", link: "/libraries/flow/for" },
               { text: "Switch And Case", link: "/libraries/flow/switch-and-case" },
@@ -54,7 +63,7 @@ export default defineConfig({
             ]
           },
           {
-            text: "Utilities",
+            text: LIBRARIES[1],
             collapsed: false,
             items: [
               { text: "Iteration Generators", link: "/libraries/utilities/iteration-generators" },
@@ -63,14 +72,14 @@ export default defineConfig({
               { text: "Error Functions", link: "/libraries/utilities/error-functions" },
               { text: "Template Projection", link: "/libraries/utilities/template-projection" },
               {
-                text: "Get Collection Helpers", 
-                  link: "/libraries/utilities/get-collection-helpers" 
-            },
+                text: "Get Collection Helpers",
+                link: "/libraries/utilities/get-collection-helpers"
+              },
               { text: "Miscellaneous", link: "/libraries/utilities/miscellaneous" },
             ]
           },
           {
-            text: "Remark HTML Directives",
+            text: LIBRARIES[3],
             collapsed: false,
             items: [
               {
