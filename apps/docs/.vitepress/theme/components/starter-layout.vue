@@ -66,7 +66,7 @@ const { Layout } = DefaultTheme;
 
     --primary-bg-color: hsl(0, 0%, 100%);
 
-    --vp-c-brand: var(--accent-text-color);
+    --vp-c-brand-1: var(--accent-text-color);
     --vp-c-brand-light: var(--accent-text-color-light);
     --vp-c-brand-lighter: var(--accent-text-color-lighter);
     --vp-c-brand-dark: var(--accent-text-color-dark);
