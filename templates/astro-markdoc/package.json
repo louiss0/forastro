@@ -24,9 +24,9 @@
     "@astrojs/tailwind": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
+    "@tailwindcss/typography": "*",
     "astro": "*",
     "markdoc-html-tag-schemas": "*",
-    "tailwindcss": "*",
-    "@tailwindcss/typography": "*"
+    "tailwindcss": "*"
   }
 }
