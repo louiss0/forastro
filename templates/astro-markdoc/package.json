@@ -15,18 +15,18 @@
     "directory": "/packages/astro-markdoc"
   },
   "dependencies": {
-    "@forastro/flow": "^2.5.3",
-    "@forastro/utilities": "^4.0.0",
-    "astro-icon": "^0.8.1"
+    "@forastro/flow": "*",
+    "@forastro/utilities": "*",
+    "astro-icon": "*"
   },
   "devDependencies": {
-    "@astrojs/markdoc": "^0.5.2",
-    "@astrojs/tailwind": "^5.0.2",
-    "@fontsource/lato": "^5.0.15",
-    "@fontsource/raleway": "^5.0.13",
-    "@tailwindcss/typography": "^0.5.10",
-    "astro": "^3.2.4",
-    "markdoc-html-tag-schemas": "^2.1.1",
-    "tailwindcss": "^3.3.3"
+    "@astrojs/markdoc": "*",
+    "@astrojs/tailwind": "*",
+    "@fontsource/lato": "*",
+    "@fontsource/raleway": "*",
+    "@tailwindcss/typography": "*",
+    "astro": "*",
+    "markdoc-html-tag-schemas": "*",
+    "tailwindcss": "*"
   }
 }
