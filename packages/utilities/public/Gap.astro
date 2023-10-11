@@ -128,6 +128,8 @@ const { spaces, color = "" } = Astro.props;
       const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
 
       const parentElementsDisplayIsBlock = parentElementDisplay.includes("block");
+      
+      const parentElementsDisplayIsFlowRoot = parentElementDisplay.includes("flow-root");
 
       const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
 
@@ -139,6 +141,7 @@ const { spaces, color = "" } = Astro.props;
 
       const anyOfTheConditionsRequiredToSetTheHeightOfTheElementAreTrue = [
         parentElementsDisplayIsBlock,
+        parentElementsDisplayIsFlowRoot,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsRow,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsColumn,
       ].some((value) => value === true);
