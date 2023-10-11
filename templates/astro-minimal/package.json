@@ -21,6 +21,7 @@
     "astro-icon": "*"
   },
   "devDependencies": {
+    "astro": "*",
     "@astrojs/tailwind": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",

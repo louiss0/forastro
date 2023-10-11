@@ -21,6 +21,7 @@
     "tailwindcss": "*"
   },
   "devDependencies": {
+    "astro": "*",
     "@astrojs/preact": "*",
     "@astrojs/tailwind": "*",
     "@iconify/json": "*",

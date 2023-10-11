@@ -24,6 +24,7 @@
     "vue": "*"
   },
   "devDependencies": {
+    "astro": "*",
     "@astrojs/tailwind": "*",
     "@astrojs/vue": "*",
     "@fontsource/lato": "*",
