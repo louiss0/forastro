@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## Fixed
+
+- Types are now exported in the index
+- Gap can now work with parents that have a display
+  - block
+  - inline
+  - inline-grid
+  - inline-flex
+  - flow-root
+
 ## [4.0.0] - 2023-10-10
 
 ### Added
