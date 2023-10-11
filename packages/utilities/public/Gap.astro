@@ -93,6 +93,8 @@ const { spaces, color = "" } = Astro.props;
 
       const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
 
+      const parentElementsDisplayIsInline = parentElementDisplay.includes("inline");
+
       const parentElementStyleFlexDirectionIsRow =
         parentElementFlexDirection.includes("row");
 
@@ -100,6 +102,7 @@ const { spaces, color = "" } = Astro.props;
         parentElementGridAutoFlow.includes("column");
 
       const anyOfTheConditionsRequiredToSetTheWidthOfTheElementAreTrue = [
+        parentElementsDisplayIsInline,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsRow,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsColumn,
       ].some((value) => value === true);
@@ -124,6 +127,8 @@ const { spaces, color = "" } = Astro.props;
 
       const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
 
+      const parentElementsDisplayIsBlock = parentElementDisplay.includes("block");
+
       const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
 
       const parentElementStyleFlexDirectionIsColumn =
@@ -133,6 +138,7 @@ const { spaces, color = "" } = Astro.props;
         parentElementGridAutoFlow.includes("row");
 
       const anyOfTheConditionsRequiredToSetTheHeightOfTheElementAreTrue = [
+        parentElementsDisplayIsBlock,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsRow,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsColumn,
       ].some((value) => value === true);
