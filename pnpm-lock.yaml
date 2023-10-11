@@ -143,6 +143,9 @@ importers:
 
   templates/astro-markdoc:
     dependencies:
+      '@code-fixer-23/cn-efs':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@forastro/flow':
         specifier: '*'
         version: link:../../packages/flow
@@ -180,6 +183,9 @@ importers:
 
   templates/astro-mdx:
     dependencies:
+      '@code-fixer-23/cn-efs':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@forastro/utilities':
         specifier: '*'
         version: link:../../packages/utilities
@@ -202,6 +208,9 @@ importers:
 
   templates/astro-minimal:
     dependencies:
+      '@code-fixer-23/cn-efs':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@forastro/flow':
         specifier: '*'
         version: link:../../packages/flow
@@ -230,12 +239,12 @@ importers:
 
   templates/astro-preact:
     dependencies:
+      '@code-fixer-23/cn-efs':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@forastro/utilities':
         specifier: '*'
         version: link:../../packages/utilities
-      clsx:
-        specifier: '*'
-        version: 0.0.1
       preact:
         specifier: '*'
         version: 1.2.0
@@ -264,6 +273,9 @@ importers:
 
   templates/astro-vue:
     dependencies:
+      '@code-fixer-23/cn-efs':
+        specifier: ^1.0.0
+        version: 1.0.0
       '@forastro/utilities':
         specifier: '*'
         version: link:../../packages/utilities
@@ -2211,6 +2223,12 @@ packages:
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
     dev: true
+
+  /@code-fixer-23/cn-efs@1.0.0:
+    resolution: {integrity: sha512-9R7UlqBqX0xP/oVkEE4MPgNlSuEWs+YAMngT+toorh3RrfzkPEHOP8vxlELD2BpfOAauki8GsbDPQmeuYdwZ3A==}
+    dependencies:
+      clsx: 2.0.0
+    dev: false
 
   /@cspotcode/source-map-support@0.8.1:
     resolution: {integrity: sha512-IchNf6dN4tHoMFIn/7OE8LWZ19Y6q/67Bmf6vnGREv8RSbBVb9LPJxEcnwrcwX6ixSvaiGoomAUvu4YSxXrVgw==}
@@ -5518,15 +5536,9 @@ packages:
     engines: {node: '>=0.8'}
     dev: true
 
-  /clsx@0.0.1:
-    resolution: {integrity: sha512-61/OtC13AAjydK2EY9yFcnAMh0xt9QBNH8uiQb52tSuN+jr0Me1DZ4lz2zDpYCtJTiF5lWXML80xr55IxF+zFw==}
-    engines: {node: '>=6'}
-    dev: false
-
   /clsx@2.0.0:
     resolution: {integrity: sha512-rQ1+kcj+ttHG0MKVGBUXwayCCF1oh39BF5COIpRzuCEv8Mwjv0XucrI2ExNTOn9IlLifGClWQcU9BrZORvtw6Q==}
     engines: {node: '>=6'}
-    dev: true
 
   /color-convert@1.9.3:
     resolution: {integrity: sha512-QfAUtd+vFdAtFQcC8CCyYt1fYWxSqAiK2cSD6zDB8N3cpsEBAvRxp9zOGg6G/SHHJYAT88/az/IuDGALsNVbGg==}
@@ -5547,6 +5559,7 @@ packages:
 
   /color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+    requiresBuild: true
     dev: true
 
   /color-string@1.9.1:

@@ -18,13 +18,14 @@
   "author": "Shelton Louis",
   "license": "ISC",
   "devDependencies": {
-    "astro": "*",
     "@astrojs/mdx": "*",
     "@fontsource/lato": "*",
-    "@fontsource/raleway": "*"
+    "@fontsource/raleway": "*",
+    "astro": "*"
   },
   "dependencies": {
-    "astro-icon": "*",
-    "@forastro/utilities": "*"
+    "@code-fixer-23/cn-efs": "^1.0.0",
+    "@forastro/utilities": "*",
+    "astro-icon": "*"
   }
 }

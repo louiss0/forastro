@@ -15,17 +15,18 @@
     "directory": "/packages/astro-markdoc"
   },
   "dependencies": {
+    "@code-fixer-23/cn-efs": "^1.0.0",
     "@forastro/flow": "*",
     "@forastro/utilities": "*",
     "astro-icon": "*"
   },
   "devDependencies": {
-    "astro": "*",
     "@astrojs/markdoc": "*",
     "@astrojs/tailwind": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
     "@tailwindcss/typography": "*",
+    "astro": "*",
     "markdoc-html-tag-schemas": "*",
     "tailwindcss": "*"
   }
