@@ -1,6 +1,8 @@
 
 import type { FunctionalComponent } from "preact";
-import { clsx } from 'clsx'
+import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
+
+
 type Props<T extends string> = {
   src: string;
   alt: string;
@@ -10,11 +12,11 @@ type Props<T extends string> = {
 };
 
 
-export const Image:ImageFunctionalComponent = (props:Props<T>) => {
+export const Image: ImageFunctionalComponent = (props: Props<T>) => {
 
   const { src, alt, width, height, class: $class } = props;
-return <img class={clsx("object-cover",$class)} {...{src, alt, width, height}} />
-} 
+  return <img class={tailwindOrWindiCSSEvaluatorSorterAndFilter("object-cover", $class)} {...{ src, alt, width, height }} />
+}
 
 
 
