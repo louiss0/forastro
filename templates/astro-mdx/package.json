@@ -24,6 +24,6 @@
     "astro-icon": "*"
   },
   "dependencies": {
-    "@forastro/utilities": "workspace:^"
+    "@forastro/utilities": "*"
   }
 }
