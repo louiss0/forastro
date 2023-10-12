@@ -172,7 +172,7 @@ importers:
         specifier: '*'
         version: 1.0.2(astro@3.2.3)
       unocss:
-        specifier: ^0.56.5
+        specifier: '*'
         version: 0.56.5(vite@4.4.11)
 
   templates/astro-mdx:
@@ -200,7 +200,7 @@ importers:
         specifier: '*'
         version: 3.2.3(@types/node@20.8.4)
       unocss:
-        specifier: ^0.56.5
+        specifier: '*'
         version: 0.56.5(vite@4.4.11)
 
   templates/astro-minimal:
@@ -228,7 +228,7 @@ importers:
         specifier: '*'
         version: 3.2.3(@types/node@20.8.4)
       unocss:
-        specifier: ^0.56.5
+        specifier: '*'
         version: 0.56.5(vite@4.4.11)
 
   templates/astro-preact:
@@ -259,7 +259,7 @@ importers:
         specifier: '*'
         version: 3.2.4(@types/node@20.8.4)
       unocss:
-        specifier: ^0.56.5
+        specifier: '*'
         version: 0.56.5(vite@4.4.11)
       unplugin-icons:
         specifier: '*'
@@ -299,7 +299,7 @@ importers:
         specifier: '*'
         version: 5.1.6
       unocss:
-        specifier: ^0.56.5
+        specifier: '*'
         version: 0.56.5(vite@4.4.11)
       unplugin-icons:
         specifier: '*'
