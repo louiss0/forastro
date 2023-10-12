@@ -22,7 +22,6 @@
     "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
     "@vueuse/core": "*",
-    "unocss": "*",
     "vue": "*"
   },
   "devDependencies": {
@@ -32,6 +31,7 @@
     "@iconify/json": "*",
     "astro": "*",
     "typescript": "*",
+    "unocss": "*",
     "unplugin-icons": "*",
     "unplugin-vue-components": "*",
     "vite-plugin-vue-nested-sfc": "*",

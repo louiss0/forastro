@@ -18,8 +18,7 @@
     "@code-fixer-23/cn-efs": "*",
     "@forastro/flow": "*",
     "@forastro/utilities": "*",
-    "astro-icon": "*",
-    "unocss": "*"
+    "astro-icon": "*"
   },
   "devDependencies": {
     "@astrojs/markdoc": "*",
@@ -27,6 +26,7 @@
     "@fontsource/raleway": "*",
     "@tailwindcss/typography": "*",
     "astro": "*",
-    "markdoc-html-tag-schemas": "*"
+    "markdoc-html-tag-schemas": "*",
+    "unocss": "*"
   }
 }

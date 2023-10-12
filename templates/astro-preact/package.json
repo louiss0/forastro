@@ -18,14 +18,14 @@
     "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
     "preact": "*",
-    "ts-pattern": "*",
-    "unocss": "*"
+    "ts-pattern": "*"
   },
   "devDependencies": {
     "@astrojs/preact": "*",
     "@iconify/json": "*",
     "@svgr/core": "*",
     "astro": "*",
+    "unocss": "*",
     "unplugin-icons": "*"
   }
 }
