@@ -15,16 +15,17 @@
     "directory": "/packages/astro-preact"
   },
   "dependencies": {
+    "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
-    "clsx": "*",
     "preact": "*",
-    "tailwindcss": "*"
+    "ts-pattern": "*"
   },
   "devDependencies": {
     "@astrojs/preact": "*",
-    "@astrojs/tailwind": "*",
     "@iconify/json": "*",
     "@svgr/core": "*",
+    "astro": "*",
+    "unocss": "*",
     "unplugin-icons": "*"
   }
 }

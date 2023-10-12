@@ -1,8 +1,8 @@
 
-import { BorderOrOutlineSizes } from "~/utilities/types";
+import { type BorderOrOutlineSizes } from "~/utilities/types";
 import { allTailwindColors } from "~/utilities/constants";
 import type { FunctionComponent } from "preact";
-import clsx from "clsx";
+import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
 
 /**
  ** The border component by default creates a border that surrounds a component
@@ -13,13 +13,13 @@ import clsx from "clsx";
 
 type Props =
   | {
-      borderSizeClass?: `border-${BorderOrOutlineSizes}`;
-      class?: never;
-    }
+    borderSizeClass?: `border-${BorderOrOutlineSizes}`;
+    class?: never;
+  }
   | {
-      class: string;
-      borderSizeClass?: never;
-    };
+    class: string;
+    borderSizeClass?: never;
+  };
 
 const borderColors = allTailwindColors.map((value) => `border-${value}`);
 
@@ -29,14 +29,14 @@ const errorMessage =
     `;
 
 
-export const Border:FunctionComponent<Props> = (props) => {
-  
-const { borderSizeClass, class: $class, children } = props;
+export const Border: FunctionComponent<Props> = (props) => {
 
-const borderClassesAreValid =
-  typeof $class === "undefined"
-    ? true
-    : $class
+  const { borderSizeClass, class: $class, children } = props;
+
+  const borderClassesAreValid =
+    typeof $class === "undefined"
+      ? true
+      : $class
         .split(" ")
         .every((classColor) =>
           borderColors.some((borderColor) => classColor.includes(borderColor))
@@ -44,17 +44,17 @@ const borderClassesAreValid =
 
 
 
-return <div
-  data-border-box
-  class={clsx(
-    "border border-current",
-    borderSizeClass, 
-    $class  
-  )
-  }
->
-  {borderClassesAreValid ? children : errorMessage()}
-</div>
+  return <div
+    data-border-box
+    class={tailwindOrWindiCSSEvaluatorSorterAndFilter(
+      "border border-current",
+      borderSizeClass,
+      $class
+    )
+    }
+  >
+    {borderClassesAreValid ? children : errorMessage()}
+  </div>
 
 }
 
