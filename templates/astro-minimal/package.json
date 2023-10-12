@@ -16,16 +16,15 @@
     "directory": "/packages/astro-minimal"
   },
   "dependencies": {
-    "@code-fixer-23/cn-efs": "^1.0.0",
-    "@forastro/flow": "*",
+    "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
-    "astro-icon": "*"
+    "astro-icon": "*",
+    "ts-pattern": "*",
+    "unocss": "^0.56.5"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "astro": "*",
-    "tailwindcss": "*"
+    "astro": "*"
   }
 }

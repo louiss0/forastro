@@ -16,16 +16,16 @@
   },
   "dependencies": {
     "@code-fixer-23/cn-efs": "^1.0.0",
-    "@forastro/utilities": "*",
-    "preact": "*",
-    "tailwindcss": "*"
+    "@forastro/utilities": "^4.0.0",
+    "preact": "^10.18.1",
+    "ts-pattern": "^5.0.5",
+    "unocss": "^0.56.5"
   },
   "devDependencies": {
-    "@astrojs/preact": "*",
-    "@astrojs/tailwind": "*",
-    "@iconify/json": "*",
-    "@svgr/core": "*",
-    "astro": "*",
-    "unplugin-icons": "*"
+    "@astrojs/preact": "^3.0.1",
+    "@iconify/json": "^2.2.127",
+    "@svgr/core": "^8.1.0",
+    "astro": "^3.2.4",
+    "unplugin-icons": "^0.17.0"
   }
 }

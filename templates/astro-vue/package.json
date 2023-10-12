@@ -19,19 +19,18 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@code-fixer-23/cn-efs": "^1.0.0",
+    "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
     "@vueuse/core": "*",
+    "unocss": "^0.56.5",
     "vue": "*"
   },
   "devDependencies": {
-    "@astrojs/tailwind": "*",
     "@astrojs/vue": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
     "@iconify/json": "*",
     "astro": "*",
-    "tailwindcss": "*",
     "typescript": "*",
     "unplugin-icons": "*",
     "unplugin-vue-components": "*",
