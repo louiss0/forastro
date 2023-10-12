@@ -21,9 +21,12 @@
     "@astrojs/mdx": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "astro-icon": "*"
+    "astro": "*",
+    "unocss": "*"
   },
   "dependencies": {
-    "@forastro/utilities": "workspace:^"
+    "@code-fixer-23/cn-efs": "*",
+    "@forastro/utilities": "*",
+    "astro-icon": "*"
   }
 }

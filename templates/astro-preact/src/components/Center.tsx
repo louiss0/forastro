@@ -1,5 +1,5 @@
 
-import clsx from "clsx";
+import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
 import type { FunctionalComponent } from "preact";
 /**
  * This component is created to make sure that everything in between it is in the center 
@@ -23,63 +23,63 @@ interface Props {
 }
 
 
-  
+
 const Center: FunctionalComponent<Props> = (props) => {
-    
-    const {
-  gapClass = "gap-4",
-  flexDirectionClass = "flex-col",
-  smGapClass,
-  mdGapClass,
-  lgGapClass,
-  xlGapClass,
-  xl2GapClass,
-  until,
-  children
-} =props;
 
-const flexRowMap = new Map<
-  AllowedTailwindScreenWidths[number],
-  `${AllowedTailwindScreenWidths[number]}:flex-row`
->([
-  ["sm", "sm:flex-row"],
-  ["md", "md:flex-row"],
-  ["lg", "lg:flex-row"],
-  ["xl", "xl:flex-row"],
-  ["2xl", "2xl:flex-row"],
-]);
-const flexColMap = new Map<
-  AllowedTailwindScreenWidths[number],
-  `${AllowedTailwindScreenWidths[number]}:flex-col`
->([
-  ["sm", "sm:flex-col"],
-  ["md", "md:flex-col"],
-  ["lg", "lg:flex-col"],
-  ["xl", "xl:flex-col"],
-  ["2xl", "2xl:flex-col"],
-]);
+  const {
+    gapClass = "gap-4",
+    flexDirectionClass = "flex-col",
+    smGapClass,
+    mdGapClass,
+    lgGapClass,
+    xlGapClass,
+    xl2GapClass,
+    until,
+    children
+  } = props;
 
-const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap =
-  flexDirectionClass === "flex-row" && until
-    ? flexRowMap.get(until)
-    : flexDirectionClass === "flex-row" && until
-      ? flexColMap.get(until)
-      : null;
+  const flexRowMap = new Map<
+    AllowedTailwindScreenWidths[number],
+    `${AllowedTailwindScreenWidths[number]}:flex-row`
+  >([
+    ["sm", "sm:flex-row"],
+    ["md", "md:flex-row"],
+    ["lg", "lg:flex-row"],
+    ["xl", "xl:flex-row"],
+    ["2xl", "2xl:flex-row"],
+  ]);
+  const flexColMap = new Map<
+    AllowedTailwindScreenWidths[number],
+    `${AllowedTailwindScreenWidths[number]}:flex-col`
+  >([
+    ["sm", "sm:flex-col"],
+    ["md", "md:flex-col"],
+    ["lg", "lg:flex-col"],
+    ["xl", "xl:flex-col"],
+    ["2xl", "2xl:flex-col"],
+  ]);
+
+  const ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap =
+    flexDirectionClass === "flex-row" && until
+      ? flexRowMap.get(until)
+      : flexDirectionClass === "flex-row" && until
+        ? flexColMap.get(until)
+        : null;
 
 
 
-    
-return <div
-  data-center-box
-  class={clsx([
-    "flex justify-center items-center h-full",
-    flexDirectionClass,
-    gapClass,
-    ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
-  ])}
->
-  {children}
-</div>
+
+  return <div
+    data-center-box
+    class={tailwindOrWindiCSSEvaluatorSorterAndFilter([
+      "flex justify-center items-center h-full",
+      flexDirectionClass,
+      gapClass,
+      ifFlexDirectionClassISFlexRowAndUntilIsSpecifiedGetFromFlexRowMapIfNotGetFromFlexColMap,
+    ])}
+  >
+    {children}
+  </div>
 
 }
 

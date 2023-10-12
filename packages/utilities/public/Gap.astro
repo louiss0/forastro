@@ -19,11 +19,13 @@ export interface Props {
 const { spaces, color = "" } = Astro.props;
 ---
 
-<div data-id="gap" data-spaces={spaces} data-color={color}><!--gap  --></div>
+<div  data-forastro-element="gap" data-spaces={spaces} data-color={color}>
+  <!--gap  -->
+</div>
 
 <script>
   {
-    const dataGapSelector = "[data-id='gap']";
+    const dataGapSelector = "[data-forastro-element='gap']";
 
     const gaps = document.querySelectorAll<HTMLElement>(dataGapSelector);
 
@@ -41,7 +43,7 @@ const { spaces, color = "" } = Astro.props;
         const { nextElementSibling, previousElementSibling } = gap;
 
         gap.setAttribute(
-          "data-id",
+          "data-forastro-element",
           `gap${Math.ceil(Math.random() * Date.now())}`
         );
 
@@ -93,6 +95,8 @@ const { spaces, color = "" } = Astro.props;
 
       const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
 
+      const parentElementsDisplayIsInline = parentElementDisplay.includes("inline");
+
       const parentElementStyleFlexDirectionIsRow =
         parentElementFlexDirection.includes("row");
 
@@ -100,6 +104,7 @@ const { spaces, color = "" } = Astro.props;
         parentElementGridAutoFlow.includes("column");
 
       const anyOfTheConditionsRequiredToSetTheWidthOfTheElementAreTrue = [
+        parentElementsDisplayIsInline,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsRow,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsColumn,
       ].some((value) => value === true);
@@ -124,6 +129,10 @@ const { spaces, color = "" } = Astro.props;
 
       const parentElementsDisplayIsFlex = parentElementDisplay.includes("flex");
 
+      const parentElementsDisplayIsBlock = parentElementDisplay.includes("block");
+      
+      const parentElementsDisplayIsFlowRoot = parentElementDisplay.includes("flow-root");
+
       const parentElementsDisplayIsGrid = parentElementDisplay.includes("grid");
 
       const parentElementStyleFlexDirectionIsColumn =
@@ -133,6 +142,8 @@ const { spaces, color = "" } = Astro.props;
         parentElementGridAutoFlow.includes("row");
 
       const anyOfTheConditionsRequiredToSetTheHeightOfTheElementAreTrue = [
+        parentElementsDisplayIsBlock,
+        parentElementsDisplayIsFlowRoot,
         parentElementsDisplayIsGrid && parentElementStyleGridAutoFlowIsRow,
         parentElementsDisplayIsFlex && parentElementStyleFlexDirectionIsColumn,
       ].some((value) => value === true);
@@ -181,16 +192,16 @@ const { spaces, color = "" } = Astro.props;
       nextElementSibling: Element
     ) {
       const previousElementOrNextElementHasADataIdOfGap =
-        previousElementSibling.hasAttribute("data-id") ||
-        nextElementSibling.hasAttribute("data-id");
+        previousElementSibling.hasAttribute("data-forastro-element") ||
+        nextElementSibling.hasAttribute("data-forastro-element");
 
       const previousElementSiblingDataId =
-        previousElementSibling.getAttribute("data-id");
+        previousElementSibling.getAttribute("data-forastro-element");
 
-      const elementDataId = element.getAttribute("data-id");
+      const elementDataId = element.getAttribute("data-forastro-element");
 
       const nextElementSiblingDataId =
-        nextElementSibling.getAttribute("data-id");
+        nextElementSibling.getAttribute("data-forastro-element");
 
       if (previousElementOrNextElementHasADataIdOfGap) {
         throw new Error(

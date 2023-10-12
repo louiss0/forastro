@@ -1,8 +1,8 @@
 import { iterate } from '@forastro/utilities'
-import clsx from "clsx";
-import type { FunctionComponent,  } from "preact";
+import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
 import type { FunctionComponent, } from "preact";
-import  { useState, useEffect } from "preact/hooks";
+import type { FunctionComponent, } from "preact";
+import { useState, useEffect } from "preact/hooks";
 
 /**  
 
@@ -21,23 +21,23 @@ type Props = {
 };
 
 
-export const List:FunctionComponent<Props> = (props) => {
- 
-  
-  
-  const { title, items,  listClass, itemClass, children } = props;
+export const List: FunctionComponent<Props> = (props) => {
 
- 
+
+
+  const { title, items, listClass, itemClass, children } = props;
+
+
   return <>
-  
-  {title ? <strong  class={"text-xl"}>{title}</strong> : null}
 
-  <ul title={title} class={clsx("list-inside", listClass)} role="list">
-  
+    {title ? <strong class={"text-xl"}>{title}</strong> : null}
+
+    <ul title={title} class={tailwindOrWindiCSSEvaluatorSorterAndFilter("list-inside", listClass)} role="list">
+
       {items.map(item => <li class={itemClass} >{item}</li>)}
-  
-  </ul>
-  
+
+    </ul>
+
   </>
 
 }

@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-import tailwind from "@astrojs/tailwind";
+import UnoCSS from 'unocss/astro'
 import Icons from 'unplugin-icons/vite'
 import IconsResolver from 'unplugin-icons/resolver';
 import VueComponents from 'unplugin-vue-components/vite'
@@ -18,7 +18,7 @@ export default defineConfig({
     ],
   },
   integrations: [
-    tailwind(),
+    UnoCSS({ injectReset: true }),
     vue(),
   ],
 });

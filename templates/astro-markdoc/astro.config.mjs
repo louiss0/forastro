@@ -1,11 +1,11 @@
-import  { defineConfig } from "astro/config";
+import { defineConfig } from "astro/config";
 import markdoc from '@astrojs/markdoc';
 import tailwind from '@astrojs/tailwind';
 
 
 export default defineConfig({
-    integrations:[
-        tailwind(),
+    integrations: [
+        UnoCSS({ injectReset: true }),
         markdoc()
     ]
 })

@@ -8,7 +8,6 @@
   "private": true,
   "devDependencies": {
     "@ahryman40k/nx-vitepress": "^15.1.1",
-    "@astrojs/tailwind": "^5.0.1",
     "@fontsource/palanquin": "^5.0.8",
     "@fontsource/raleway": "^5.0.13",
     "@nx/eslint-plugin-nx": "16.0.0-beta.1",
@@ -21,6 +20,7 @@
     "@types/node": "^20.8.4",
     "@typescript-eslint/eslint-plugin": "6.7.5",
     "@typescript-eslint/parser": "6.7.5",
+    "@vitest/coverage-v8": "^0.34.6",
     "@vitest/ui": "^0.34.6",
     "astro": "^3.2.3",
     "astro-icon": "^0.8.1",
@@ -33,7 +33,6 @@
     "prettier": "^3.0.3",
     "publint": "^0.2.4",
     "release-it": "^16.2.1",
-    "tailwindcss": "^3.3.3",
     "tslib": "^2.6.2",
     "tsup": "^7.2.0",
     "typescript": "~5.2.2",
@@ -45,8 +44,8 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@vitest/coverage-v8": "^0.34.6",
     "better-enums": "^0.2.1",
+    "unocss": "*",
     "vue": "^3.3.4"
   }
 }
