@@ -19,7 +19,7 @@
     "@forastro/utilities": "^4.0.0",
     "preact": "^10.18.1",
     "ts-pattern": "^5.0.5",
-    "unocss": "^0.56.5"
+    "unocss": "*"
   },
   "devDependencies": {
     "@astrojs/preact": "^3.0.1",

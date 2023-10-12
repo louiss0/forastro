@@ -22,7 +22,7 @@
     "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
     "@vueuse/core": "*",
-    "unocss": "^0.56.5",
+    "unocss": "*",
     "vue": "*"
   },
   "devDependencies": {

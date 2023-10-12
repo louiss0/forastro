@@ -19,7 +19,7 @@
     "@forastro/flow": "*",
     "@forastro/utilities": "*",
     "astro-icon": "*",
-    "unocss": "^0.56.5"
+    "unocss": "*"
   },
   "devDependencies": {
     "@astrojs/markdoc": "*",

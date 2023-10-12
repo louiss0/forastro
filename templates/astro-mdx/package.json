@@ -27,6 +27,6 @@
     "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
     "astro-icon": "*",
-    "unocss": "^0.56.5"
+    "unocss": "*"
   }
 }

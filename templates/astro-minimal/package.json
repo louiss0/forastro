@@ -20,7 +20,7 @@
     "@forastro/utilities": "*",
     "astro-icon": "*",
     "ts-pattern": "*",
-    "unocss": "^0.56.5"
+    "unocss": "*"
   },
   "devDependencies": {
     "@fontsource/lato": "*",
