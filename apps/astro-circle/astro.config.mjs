@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
-import tailwind from '@astrojs/tailwind';
+import unocss from 'unocss/astro';
 
 export default defineConfig({
-  integrations: [tailwind()],
+  integrations: [unocss({ injectReset: true })],
 });

@@ -1,204 +1,208 @@
 ---
-import { useDefineTemplateAndProjector, iterate, } from '@forastro/utilities';
+import { useDefineTemplateAndProjector, iterate } from '@forastro/utilities';
 import AstroCircle from '../components/AstroCircle.astro';
 import Layout from '../layouts/Layout.astro';
-import { Icon }  from 'astro-icon';
+import { Icon } from 'astro-icon';
 import TopFiveFrameworksAstroCircle from 'apps/astro-circle/src/components/TopFiveFrameworksAstroCircle.astro';
 
-
-const DIRECTIONS = Object.freeze(["top", "top-left", "top-right", "bottom-left", "bottom-right"])
+const DIRECTIONS = Object.freeze([
+  'top',
+  'top-left',
+  'top-right',
+  'bottom-left',
+  'bottom-right',
+]);
 
 const COMPONENT_RENDERER_ICON_NAMES = Object.freeze([
-	"logos:svelte-icon",
-	"logos:vue", 
-	"logos:angular-icon",
-	"logos:solidjs-icon",
-	 "logos:react"  
-])
+  'logos:svelte-icon',
+  'logos:vue',
+  'logos:angular-icon',
+  'logos:solidjs-icon',
+  'logos:react',
+]);
 
-const LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT = Object.freeze([
-	"/SvelteOnTopLeftAstroCircle.astro",
-	"/VueOnTopLeftAstroCircle.astro", 
-	"/ReactOnTopLeftAstroCircle.astro",
-	"/SolidOnTopLeftAstroCircle.astro",
-	"/AngularOnTopLeftAstroCircle.astro"
-] as const)
+const LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT = Object.freeze(
+  [
+    '/SvelteOnTopLeftAstroCircle.astro',
+    '/VueOnTopLeftAstroCircle.astro',
+    '/ReactOnTopLeftAstroCircle.astro',
+    '/SolidOnTopLeftAstroCircle.astro',
+    '/AngularOnTopLeftAstroCircle.astro',
+  ] as const,
+);
 
-const DirectionsWithIconsMap = new Map(DIRECTIONS.map((value, index) => [value, COMPONENT_RENDERER_ICON_NAMES.at(index)]))
+const DirectionsWithIconsMap = new Map(
+  DIRECTIONS.map((value, index) => [
+    value,
+    COMPONENT_RENDERER_ICON_NAMES.at(index),
+  ]),
+);
 
 const ComponentIconNamesAndLinksToCodeMap = new Map(
-	COMPONENT_RENDERER_ICON_NAMES
-	.map((value, index) => [value, LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT.at(index)!])
-	)
+  COMPONENT_RENDERER_ICON_NAMES.map((value, index) => [
+    value,
+    LINKS_TO_ICONS_WITH_A_COMPONENT_RENDERER_ICON_ON_THE_LEFT.at(index)!,
+  ]),
+);
 
-const [ DefineContainerTemplate, ContainerProjector ] = useDefineTemplateAndProjector()
+const [DefineContainerTemplate, ContainerProjector] =
+  useDefineTemplateAndProjector();
 
-const [ DefineDownloadButtonTemplate, DownloadButtonProjector ] = useDefineTemplateAndProjector<{iconLink:`/${string}`}>()
-
+const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
+  useDefineTemplateAndProjector<{ iconLink: `/${string}` }>();
 ---
 
-
-<DefineContainerTemplate >
-	{(slot)=> (
-	<div data-content class="mx-auto w-4/5 max-w-5xl">
-		{slot()} 
-	</div>		
-	)}
+<DefineContainerTemplate>
+  {
+    (slot) => (
+      <div data-content class="mx-auto w-4/5 max-w-5xl">
+        {slot()}
+      </div>
+    )
+  }
 </DefineContainerTemplate>
 
-<DefineDownloadButtonTemplate >
-	{({iconLink}, slot)=> 
-	 <a
-	href={iconLink}
-	download
-	class:list={[
-		"rounded-md px-12 py-4",
-		"bg-purple-600 text-orange-400",
-		"[&:is(:hover,:focus)]:text-purple-600 [&:is(:hover,:focus)]:bg-orange-400",
-		"active:scale-90 active:opacity-90",
-		"transition-transform duration-500 ease-in",
-		"transition-opacity duration-250 ease-out",
-	]
-	}
-	>
- 	{slot()}
-	</a> 
-	}
+<DefineDownloadButtonTemplate>
+  {
+    ({ iconLink }, slot) => (
+      <a
+        href={iconLink}
+        download
+        class:list={[
+          'rounded-md px-12 py-4',
+          'bg-purple-600 text-orange-400',
+          '[&:is(:hover,:focus)]:text-purple-600 [&:is(:hover,:focus)]:bg-orange-400',
+          'active:scale-90 active:opacity-90',
+          'transition-transform duration-500 ease-in',
+          'transition-opacity duration-250 ease-out',
+        ]}
+      >
+        {slot()}
+      </a>
+    )
+  }
 </DefineDownloadButtonTemplate>
 
-<Layout 
-	title="Astro Circle" 
-	description='This is the site where you can download Astro icons with Frameworks as icons'	 
+<Layout
+  title="Astro Circle"
+  description="This is the site where you can download Astro icons with Frameworks as icons"
 >
+  <header class="py-12 px-16">
+    <div class="flex flex-col justify-center items-center gap-12">
+      <h1 class="text-5xl capitalize">Welcome to the astro circle</h1>
 
+      <p class="text-xl leading-relaxed max-w-[65ch]">
+        This page is a site where you can download a component called the Astro
+        Circle. It's a component that is the Astro Icon surrounded by a purple
+        circle. <br />
+         To use it you must install <code>astro-icon</code> then click on the
+        link to download the icon. This component is a circle with the Astro
+        Icon in the middle.
+      </p>
 
+      <p class="text-xl leading-relaxed max-w-[65ch]">
+        When using this component the name of the slot will render the icon in
+        the following places. <br />
+        <Fragment
+          set:html={iterate(
+            DIRECTIONS,
+            (value) =>
+              `The ${value} slot will render the component in the ${value} side. <br/>`,
+          )}
+        />
+      </p>
+    </div>
+  </header>
+  <main class="px-12 py-6">
+    <section aria-label="Examples">
+      <ContainerProjector>
+        <div class="flex flex-col justify-center items-center gap-6">
+          <DownloadButtonProjector context={{ iconLink: '/AstroCircle.astro' }}>
+            Download Astro Circle
+          </DownloadButtonProjector>
 
-	<header class="py-12 px-16">
-		<div class="flex flex-col justify-center items-center gap-12">
+          <strong class="text-xl leading-relaxed max-w-[65ch]">
+            Below are examples of each icon being rendered in every possible
+            direction.
+          </strong>
 
+          <div class="grid gap-8 grid-cols-2 lg:grid-cols-3">
+            {
+              iterate(DirectionsWithIconsMap, (value, _, key) => (
+                <AstroCircle>
+                  <Fragment slot={key}>
+                    <Icon width="1.5rem" name={value} />
+                  </Fragment>
+                </AstroCircle>
+              ))
+            }
+          </div>
+        </div>
+      </ContainerProjector>
+    </section>
 
-		<h1 class="text-5xl capitalize">Welcome to the astro circle</h1>
-		
-		<p class="text-xl leading-relaxed max-w-[65ch]">
-			This page is a site where you can download a component called the Astro Circle.
-			It's a component that is the Astro Icon surrounded by a purple circle. <br/>
-			To use it you must install <code>astro-icon</code> then click on the link to download the icon.
-			This component is a circle with the Astro Icon in the middle. 
-		</p>
+    <section class="px-12 py-8" aria-label="Downloadable Astro Circles">
+      <ContainerProjector>
+        <div class="flex flex-col gap-6 items-center">
+          <p class="text-xl leading-5">
+            You can download one of these components <span class="text-red-500">
+              but you must also download the circle as well
+            </span>! <br />
+             The code assumes they are located in the same folder.
+          </p>
 
-		<p class="text-xl leading-relaxed max-w-[65ch]">
-			When using this component the name of the slot will render the icon in the following places. <br/> 
-		<Fragment set:html={
-			iterate(
-				DIRECTIONS, 
-				(value)=> `The ${value} slot will render the component in the ${value} side. <br/>`
-			)} />
-		</p>
+          <div class="flex gap-8 flex-wrap justify-center items-center">
+            {
+              iterate(
+                ComponentIconNamesAndLinksToCodeMap,
+                (iconLink, _, iconName) => (
+                  <div class="grid place-items-center gap-4">
+                    <AstroCircle>
+                      <Fragment slot="top-left">
+                        <Icon name={iconName} width="1.5rem" />
+                      </Fragment>
+                    </AstroCircle>
+                    <DownloadButtonProjector context={{ iconLink }}>
+                      Download
+                    </DownloadButtonProjector>
+                  </div>
+                ),
+              )
+            }
+          </div>
+        </div>
+      </ContainerProjector>
+    </section>
 
-		</div>
-	</header>
-	<main class="px-12 py-6 ">
+    <section aria-label="Dowload Circle With Top Five Frontend Frameworks">
+      <ContainerProjector>
+        <div class="flex flex-col gap-8 items-center">
+          <TopFiveFrameworksAstroCircle
+            revealedFrameworks={['react', 'angular', 'vue', 'svelte', 'solid']}
+          />
 
-	
-	<section aria-label="Examples">
-		<ContainerProjector  >
-		 <div class="flex flex-col justify-center items-center gap-6 ">
-		
-			<DownloadButtonProjector 
-				context={{iconLink:"/AstroCircle.astro"}} 
-			>
-			 Download Astro Circle
-			</DownloadButtonProjector>
-		
-			<strong class="text-xl leading-relaxed max-w-[65ch]">
-			 Below are examples of each icon being rendered in every possible direction.
-			</strong>
-		
-			<div class="grid gap-8 grid-cols-2 lg:grid-cols-3 ">
-				{iterate(DirectionsWithIconsMap, (value,_,key)=> (
-					<AstroCircle>
-						<Fragment slot={key} >
-							<Icon width="1.5rem" name={value}  />
-						</Fragment>
-					</AstroCircle >
-		
-				))}
-			</div>
-		 </div>
-		</ContainerProjector>
-	</section>
+          <DownloadButtonProjector
+            context={{ iconLink: '/TopFiveFrameworksAstroCircle.astro' }}
+          >
+            Download Icon With Top Five Frameworks
+          </DownloadButtonProjector>
+        </div>
+      </ContainerProjector>
+    </section>
+  </main>
+  <footer class="px-6 py-3">
+    <ContainerProjector>
+      <div class="flex justify-center items-center gap-6">
+        <div class="flex gap-4">
+          <span class="text-xl">Click on this button</span>
+        </div>
 
-
-	<section class="px-12 py-8" aria-label="Downloadable Astro Circles">
-		<ContainerProjector >
-			<div class="flex flex-col gap-6 items-center">
-				
-				<p class="text-xl leading-5">
-				 You can download one of these components <span class="text-red-500">
-					but you must also download
-					the circle as well
-				 </span>! <br/>
-				 The code assumes they are located in the same folder.
-				</p>
-				
-				<div class="flex gap-8 flex-wrap justify-center items-center">
-					{iterate(
-						ComponentIconNamesAndLinksToCodeMap,
-						(iconLink,_,iconName)=>
-						<div class="grid place-items-center gap-4">
-							<AstroCircle>
-								<Fragment slot="top-left" >
-									<Icon name={iconName} width="1.5rem" />
-									</Fragment>
-							  </AstroCircle>
-							  <DownloadButtonProjector 						  
-							  context={{iconLink}} 
-							  >
-								Download 
-							  </DownloadButtonProjector>
-						</div>
-						)}
-				</div>
-
-			</div>
-
-		</ContainerProjector>
-	</section>
-
-	<section aria-label="Dowload Circle With Top Five Frontend Frameworks">
- 
-		<ContainerProjector>
-
-			<div class="flex flex-col gap-8 items-center">
-				
-				<TopFiveFrameworksAstroCircle 
-				revealedFrameworks={["react", "angular", "vue", "svelte", "solid",]}  
-				/>
-				
-				<DownloadButtonProjector context={{iconLink:"/TopFiveFrameworksAstroCircle.astro"}} >
-					Download Icon With Top Five Frameworks
-				</DownloadButtonProjector>	
-
-			</div>
-			
-		</ContainerProjector>
-
-	</section>
-
-	</main>
-	<footer class="px-6 py-3">
-		<ContainerProjector >
-			<div class="flex justify-center items-center gap-6">
-				<div class="flex gap-4">
-					<span class="text-xl">Click on this button </span>
-				</div>
-
-				<span class="text-lg">
-					Created by <a href="https://github.com/louiss0"  target="_blank">Shelton Louis &nearr;</a>
-				</span>
-			</div>
-		</ContainerProjector>
-	</footer>
+        <span class="text-lg">
+          Created by <a href="https://github.com/louiss0" target="_blank"
+            >Shelton Louis &nearr;</a
+          >
+        </span>
+      </div>
+    </ContainerProjector>
+  </footer>
 </Layout>
-
-	
