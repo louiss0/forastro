@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.0.1] - 2023-10-12
+
 ## Fixed
 
 - Types are now exported in the index
