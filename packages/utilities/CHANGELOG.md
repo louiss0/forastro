@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Fixed 
+
+- Type for `getCollectionPaths` was inlined by `tsup`
+
+
 ## [4.0.1] - 2023-10-12
 
 ## Fixed
