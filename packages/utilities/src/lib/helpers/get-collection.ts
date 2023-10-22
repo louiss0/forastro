@@ -7,7 +7,7 @@ type GetEntryBySlugFunc = typeof getEntryBySlug;
 type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
 
-type CustomGetCollectionFunc = <
+type GetCollectionDataFunc = <
     T extends Parameters<GetCollectionFunc>[0],
     U extends Parameters<GetCollectionFunc>[1]
 >
@@ -24,19 +24,21 @@ type CustomGetCollectionFunc = <
     >
 
 
-const _getCollectionDataList: CustomGetCollectionFunc = async (collection, filter) =>
+const _getCollectionDataList: GetCollectionDataFunc = async (collection, filter) =>
     (await getCollection(collection, filter)).map(entry => ({ slug: entry.slug, ...entry.data }))
 
 
 
 
-const getCollectionDataListFilterNonDrafts: CustomGetCollectionFunc = async (collection, filter) => (
+const getCollectionDataListFilterNonDrafts: GetCollectionDataFunc = async (collection, filter) => (
     await _getCollectionDataList(
         collection,
         getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
     )
 );
-const getCollectionDataListFilterDrafts: CustomGetCollectionFunc = async (collection, filter) => (
+
+
+const getCollectionDataListFilterDrafts: GetCollectionDataFunc = async (collection, filter) => (
     await _getCollectionDataList(
         collection,
         (entry): entry is Parameters<Exclude<typeof filter, undefined>>[0] => {
@@ -63,10 +65,19 @@ export const getEntryData = Object.assign(
 
         const valueFromEntryOrEntryData = await getEntry(collection, slugOrId)
 
-        return {
-            slug: valueFromEntryOrEntryData.slug,
-            ...valueFromEntryOrEntryData.data
+
+        if ("slug" in valueFromEntryOrEntryData) {
+
+            return {
+                slug: valueFromEntryOrEntryData.slug,
+                ...valueFromEntryOrEntryData.data
+            }
+
         }
+
+
+        return valueFromEntryOrEntryData.data
+
 
     },
     {
@@ -89,13 +100,11 @@ export const getDataListFromEntries = async (entries: Parameters<GetEntriesFunc>
 
 type TypeOrArrayOfType<T> = T | Array<T>;
 
-
-
 type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>> =
     { [K in keyof T]: T[K] extends string | number ? T[K] : never }
 
-type MergeCollectionDataWithSlugAndId<T extends string> =
-    Pick<CollectionEntry<T>, "slug">
+type MergeCollectionEntryDataWithEntry<T extends string> =
+    Omit<CollectionEntry<T>, "data">
     & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
     >
 
@@ -105,14 +114,31 @@ type ReturnTypeOnlyIfIItsNotAnArray<U> = U extends Array<any> ? U[number] : U;
 
 type Prettify<T> = { [k in keyof T]: T[k] } & {}
 
-export const getCollectionPaths =
-    async <
-        T extends Parameters<GetCollectionFunc>[0],
-        U extends TypeOrArrayOfType<keyof MergeCollectionDataWithSlugAndId<T>>,
-    >(
-        collection: T,
-        by: U,
-        filter?: Parameters<GetCollectionFunc>[1]
+
+type GetCollectionPaths = <
+    T extends Parameters<GetCollectionFunc>[0],
+    U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
+    V extends Parameters<GetCollectionFunc>[1]
+>(
+    collection: T,
+    by: U,
+    filter?: V
+) => Promise<Array<{
+    params: Prettify<
+        Pick<
+            MergeCollectionEntryDataWithEntry<T>,
+            ReturnTypeOnlyIfIItsNotAnArray<U>
+        >
+
+    >;
+    props: CollectionEntry<T>
+}>>
+
+export const getCollectionPaths: GetCollectionPaths =
+    async (
+        collection,
+        by,
+        filter
     ) => {
 
 
@@ -180,15 +206,13 @@ export const getCollectionPaths =
             }
 
             return {
-                params: (
-                    Object.fromEntries(paramMap) as
-                    Prettify<
-                        Pick<
-                            MergeCollectionDataWithSlugAndId<T>,
-                            ReturnTypeOnlyIfIItsNotAnArray<U>
-                        >
+                params: Object.fromEntries(paramMap) as Prettify<
+                    Pick<
+                        MergeCollectionEntryDataWithEntry<typeof collection>,
+                        ReturnTypeOnlyIfIItsNotAnArray<typeof by>
                     >
-                ),
+
+                >,
                 props: entry
             }
         });
@@ -198,7 +222,7 @@ export const getCollectionPaths =
 
 
 function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(
-    filter: Parameters<CustomGetCollectionFunc>[1]
+    filter: Parameters<GetCollectionDataFunc>[1]
 ) {
     return function (
         entry: Parameters<Exclude<typeof filter, undefined>>[0]

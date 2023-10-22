@@ -6,6 +6,18 @@ declare module 'astro:content' {
     export type CollectionEntry<C extends keyof AnyEntryMap> =
         AnyEntryMap[C][keyof AnyEntryMap[C]];
 
+
+    type Flatten<T> = T extends { [K: string]: infer U } ? U : never;
+
+    export type CollectionKey = keyof AnyEntryMap;
+
+    export type CollectionEntry<C extends CollectionKey> = Flatten<AnyEntryMap[C]>;
+
+    export type ContentCollectionKey = keyof ContentEntryMap;
+
+    export type DataCollectionKey = keyof DataEntryMap;
+
+
     type BaseSchemaWithoutEffects =
         | import('astro/zod').AnyZodObject
         | import('astro/zod').ZodUnion<import('astro/zod').AnyZodObject[]>
@@ -34,9 +46,10 @@ declare module 'astro:content' {
 
     type AllValuesOf<T> = T extends any ? T[keyof T] : never;
 
-    type ValidContentEntrySlug<C extends keyof ContentEntryMap> = AllValuesOf<
-        ContentEntryMap[C]
-    >['slug'];
+    type ValidContentEntrySlug<C extends keyof ContentEntryMap> =
+        AllValuesOf<
+            ContentEntryMap[C]
+        >['slug'];
 
     export function getEntryBySlug<
         C extends keyof ContentEntryMap,
@@ -85,8 +98,11 @@ declare module 'astro:content' {
     ): Promise<CollectionEntry<C>[]>;
 
 
-    Promise<CollectionEntry<C>[]>;
+    type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
 
+    type InferEntrySchema<C extends keyof AnyEntryMap> = import('astro/zod').infer<
+        ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
+    >;
     // Allow generic `string` to avoid excessive type errors in the config
     // if `dev` is not running to update as you edit.
 
@@ -102,11 +118,16 @@ declare module 'astro:content' {
         data: InferEntrySchema<string>
     } & { render(): Render[".md"] }
 
+
+    type DataValue = {
+        id: string;
+        collection: string;
+        data: InferEntrySchema<string>
+    }
+
     type ContentEntryMap = Record<string, Record<string, ContentValue>>;
 
-    type DataEntryMap = {
-
-    };
+    type DataEntryMap = Record<string, Record<string, DataValue>>;
 
     type AnyEntryMap = ContentEntryMap & DataEntryMap;
 
