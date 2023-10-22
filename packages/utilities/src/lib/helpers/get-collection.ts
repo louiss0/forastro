@@ -104,7 +104,7 @@ type MapNonStringOrNumberValuesToNever<T extends Record<string, unknown>> =
     { [K in keyof T]: T[K] extends string | number ? T[K] : never }
 
 type MergeCollectionEntryDataWithEntry<T extends string> =
-    Omit<CollectionEntry<T>, "data">
+    Omit<CollectionEntry<T>, "data" | "render" | "body">
     & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
     >
 
@@ -142,6 +142,9 @@ export const getCollectionPaths: GetCollectionPaths =
     ) => {
 
 
+
+
+
         const paramMap = new Map<PropertyKey, string | number>()
 
         const entries = await getCollection(
@@ -150,6 +153,7 @@ export const getCollectionPaths: GetCollectionPaths =
         );
 
 
+        const notAllowedKeys = ["render", "body"];
         return entries.map((entry, index) => {
 
 
@@ -160,6 +164,16 @@ export const getCollectionPaths: GetCollectionPaths =
 
             if (typeof by === "string") {
 
+
+
+                if (notAllowedKeys.includes(by)) {
+
+
+                    throw new Error(
+                        `Don't use these ${notAllowedKeys.join(" ")} keys at all if you do the values from the entry will be used it will not come from the data.`
+                    )
+
+                }
 
                 const valueFromEntryOrEntryData =
                     by in entry
@@ -185,6 +199,15 @@ export const getCollectionPaths: GetCollectionPaths =
 
                 by.forEach(key => {
 
+
+                    if (typeof key === "string" && notAllowedKeys.includes(key)) {
+
+
+                        throw new Error(
+                            `Don't use these ${notAllowedKeys.join(" ")} keys at all if you do the values from the entry will be used it will not come from the data.`
+                        )
+
+                    }
 
                     const valueFromEntryOrEntryData =
                         key in entry
