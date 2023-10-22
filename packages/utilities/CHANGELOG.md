@@ -2,7 +2,17 @@
 
 ## [Unreleased]
 
-## Fixed
+### Changed
+
+- `<Gap/>` doesn't use pixels or the parent font size style to calculate gap distance it uses em.
+  
+### Fixed
+
+- `getCollectionPaths()` relies on type alias instead of derived types on the function.
+
+## [4.0.1] - 2023-10-12
+
+### Fixed
 
 - Types are now exported in the index
 - Gap can now work with parents that have a display
