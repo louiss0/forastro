@@ -100,11 +100,41 @@ declare module 'astro:content' {
 
     type ReturnTypeOrOriginal<T> = T extends (...args: any[]) => infer R ? R : T;
 
-    type InferEntrySchema<C extends keyof AnyEntryMap> = import('astro/zod').infer<
-        ReturnTypeOrOriginal<Required<ContentConfig['collections'][C]>['schema']>
-    >;
-    // Allow generic `string` to avoid excessive type errors in the config
-    // if `dev` is not running to update as you edit.
+
+    type RecordWithFiveObjectsNestedAndArraysDeepContainingType<T> = T extends new (...args: Array<any>) => any | Iterable<any> ? never
+        : Record<
+            string,
+            T | Array<T>
+            | Record<
+                string,
+                T | Array<T>
+                | Record<
+                    string,
+                    T | Array<T>
+                    | Record<
+                        string,
+                        T | Array<T>
+                        | Record<
+                            string,
+                            T | Array<T>
+                            | Record<
+                                string,
+                                T | Array<T>
+                            >
+                        >
+                    >
+                >
+            >
+        >
+
+
+    type Log = RecordWithFiveObjectsNestedAndArraysDeepContainingType<string>
+
+    type InferEntrySchema = Record<
+        string,
+        string | number | boolean | null | undefined |
+        RecordWithFiveObjectsNestedAndArraysDeepContainingType<string | number | boolean | null | undefined>
+    >
 
 
 

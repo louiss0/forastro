@@ -1,4 +1,4 @@
-import { getCollection, getEntryBySlug, getEntry, getEntries, type CollectionEntry } from 'astro:content';
+import { getCollection, getEntryBySlug, getEntry, getEntries, type CollectionEntry, type CollectionKey } from 'astro:content';
 import { throwUnless } from './conditional';
 
 
@@ -7,19 +7,23 @@ type GetEntryBySlugFunc = typeof getEntryBySlug;
 type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
 
+type FilterFunction<
+    T extends CollectionKey,
+    U extends CollectionEntry<T>
+> = (entry: CollectionEntry<T>) => entry is U;
+
 type GetCollectionDataFunc = <
-    T extends Parameters<GetCollectionFunc>[0],
-    U extends Parameters<GetCollectionFunc>[1]
+    T extends CollectionKey,
+    U extends CollectionEntry<T>
 >
-    (collection: T, filter?: U) =>
+    (collection: T, filter?: FilterFunction<T, U>) =>
     Promise<
         Array<
             Pick<
                 CollectionEntry<T>,
                 "slug"
             >
-            & MapNonStringOrNumberValuesToNever<CollectionEntry<T>["data"]
-            >
+            & CollectionEntry<T>["data"]
         >
     >
 
@@ -244,12 +248,23 @@ export const getCollectionPaths: GetCollectionPaths =
 
 
 
-function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(
-    filter: Parameters<GetCollectionDataFunc>[1]
-) {
+type EntryIsADraft<T extends CollectionKey> = Omit<CollectionEntry<T>, "data"> & {
+    data: { draft: false | undefined };
+};
+
+function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult
+    <
+        T extends CollectionKey,
+        U extends CollectionEntry<T>
+    >
+    (
+        filter?: FilterFunction<T, U>
+    ) {
+
+
     return function (
-        entry: Parameters<Exclude<typeof filter, undefined>>[0]
-    ): entry is Parameters<Exclude<typeof filter, undefined>>[0] {
+        entry: CollectionEntry<T>
+    ): entry is U & EntryIsADraft<T> {
 
 
         const draftIsNotInEntryDataOrDraftIsFalse = !("draft" in entry.data) || "draft" in entry.data && !entry.data["draft"];
@@ -261,3 +276,4 @@ function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterP
     };
 }
 
+// const getAllCollections<T extends Array<CollectionKey>, U extends > = () => { }
