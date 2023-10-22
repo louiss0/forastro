@@ -12,7 +12,7 @@ type FilterFunction<
     U extends CollectionEntry<T>
 > = (entry: CollectionEntry<T>) => entry is U;
 
-type GetCollectionDataFunc = <
+type GetCollectionDataListFunc = <
     T extends CollectionKey,
     U extends CollectionEntry<T>
 >
@@ -20,32 +20,63 @@ type GetCollectionDataFunc = <
     Promise<
         Array<
             Pick<
-                CollectionEntry<T>,
+                U,
                 "slug"
             >
-            & CollectionEntry<T>["data"]
+            & U["data"]
         >
-    >
+    >;
 
-
-const _getCollectionDataList: GetCollectionDataFunc = async (collection, filter) =>
+type GetCollectionDataListFilterDrafts =
+    <
+        T extends CollectionKey,
+        U extends EntryIsADraft<T>
+    >(collection: T, filter?: FilterFunction<T, U>) =>
+        Promise<
+            Array<
+                Pick<
+                    U,
+                    "slug"
+                >
+                & U["data"]
+            >
+        >
+type GetCollectionDataListFilterNonDrafts =
+    <
+        T extends CollectionKey,
+        U extends EntryIsNotADraft<T>
+    >(collection: T, filter?: FilterFunction<T, U>) =>
+        Promise<
+            Array<
+                Pick<
+                    U,
+                    "slug"
+                >
+                & U["data"]
+            >
+        >
+const _getCollectionDataList: GetCollectionDataListFunc = async (collection, filter) =>
     (await getCollection(collection, filter)).map(entry => ({ slug: entry.slug, ...entry.data }))
 
 
 
 
-const getCollectionDataListFilterNonDrafts: GetCollectionDataFunc = async (collection, filter) => (
+const getCollectionDataListFilterNonDrafts: GetCollectionDataListFilterNonDrafts =
+    async (collection, filter) => (
+        await _getCollectionDataList(
+            collection,
+            getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
+        )
+    );
+
+type EntryIsADraft<T extends CollectionKey> = CollectionEntry<T> & {
+    data: { draft: true };
+};
+
+const getCollectionDataListFilterDrafts: GetCollectionDataListFilterDrafts = async (collection, filter) => (
     await _getCollectionDataList(
         collection,
-        getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
-    )
-);
-
-
-const getCollectionDataListFilterDrafts: GetCollectionDataFunc = async (collection, filter) => (
-    await _getCollectionDataList(
-        collection,
-        (entry): entry is Parameters<Exclude<typeof filter, undefined>>[0] => {
+        (entry): entry is EntryIsADraft<typeof collection> => {
 
             const draftIsNotInEntryDataOrDraftIsFalse = "draft" in entry.data
                 || "draft" in entry.data && entry.data["draft"] === true;
@@ -63,6 +94,7 @@ export const getCollectionDataList = Object.assign(
         filterDrafts: getCollectionDataListFilterDrafts,
     }
 )
+
 
 export const getEntryData = Object.assign(
     async (collection: Parameters<GetEntryFunc>[0], slugOrId: Parameters<GetEntryFunc>[1]) => {
@@ -248,9 +280,11 @@ export const getCollectionPaths: GetCollectionPaths =
 
 
 
-type EntryIsADraft<T extends CollectionKey> = Omit<CollectionEntry<T>, "data"> & {
+type EntryIsNotADraft<T extends CollectionKey> = CollectionEntry<T> & {
     data: { draft: false | undefined };
 };
+
+
 
 function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult
     <
@@ -262,9 +296,7 @@ function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterP
     ) {
 
 
-    return function (
-        entry: CollectionEntry<T>
-    ): entry is U & EntryIsADraft<T> {
+    return function (entry: CollectionEntry<T>): entry is U & EntryIsNotADraft<T> {
 
 
         const draftIsNotInEntryDataOrDraftIsFalse = !("draft" in entry.data) || "draft" in entry.data && !entry.data["draft"];

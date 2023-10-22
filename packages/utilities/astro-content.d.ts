@@ -130,8 +130,8 @@ declare module 'astro:content' {
 
     type Log = RecordWithFiveObjectsNestedAndArraysDeepContainingType<string>
 
-    type InferEntrySchema = Record<
-        string,
+    type InferEntrySchema<T extends PropertyKey> = Record<
+        T,
         string | number | boolean | null | undefined |
         RecordWithFiveObjectsNestedAndArraysDeepContainingType<string | number | boolean | null | undefined>
     >
