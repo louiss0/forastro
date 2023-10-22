@@ -17,7 +17,7 @@
   "dependencies": {
     "@code-fixer-23/cn-efs": "*",
     "@forastro/flow": "*",
-    "@forastro/utilities": "*",
+    "@forastro/utilities": "workspace:^",
     "astro-icon": "*"
   },
   "devDependencies": {

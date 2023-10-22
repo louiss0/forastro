@@ -147,8 +147,8 @@ importers:
         specifier: '*'
         version: link:../../packages/flow
       '@forastro/utilities':
-        specifier: '*'
-        version: 4.0.1(astro@3.2.3)
+        specifier: workspace:^
+        version: link:../../packages/utilities
       astro-icon:
         specifier: '*'
         version: 0.1.0
