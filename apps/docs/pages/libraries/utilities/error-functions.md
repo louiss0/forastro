@@ -11,7 +11,7 @@ A function that will throw an error when something is true.
 function throwIf(
 condition: boolean, 
 message = "Something went wrong", 
-cause?: unknown
+
 ): asserts condition is false
 ```
 
@@ -31,7 +31,7 @@ Usage
 function throwUnless(
     condition: boolean, 
     message = "Something went wrong", 
-    cause?: unknown
+    
 ): asserts condition
 ```
 
