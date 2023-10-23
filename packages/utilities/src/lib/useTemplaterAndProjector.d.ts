@@ -16,21 +16,21 @@ type ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<T> =
 type ProjectorSlot = () => RenderTemplateResult | undefined
 
 
-type DefineTemplateProps<
+type TemplaterProps<
     ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
-    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null,
+    TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues | null,
 > =
     ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
-    ? DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    ? TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        context: DefineTemplateContext
+        context: TemplaterContext
         children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
     } : {
         children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
     }
-    : DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    : TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        context: DefineTemplateContext
+        context: TemplaterContext
         children: ((defaultSlot: ProjectorSlot) => unknown)
         | Array<astroHTML.JSX.HTMLAttributes>
         | string;
@@ -47,36 +47,36 @@ type DefineTemplateProps<
 
 
 type ProjectorProps<
-    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null,
+    TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues | null,
     ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
 > =
     ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<
         ProjectorContext
     > extends StringKeyedObjectLiteralWithUnknownValues
     ?
-    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
         context: ProjectorContext
-        children(context: DefineTemplateContext): unknown
+        children(context: TemplaterContext): unknown
     }
     : {
         context: ProjectorContext
         children?: Array<astroHTML.JSX.HTMLAttributes> | string;
     }
-    : DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues
+    : TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        children(context: DefineTemplateContext): unknown
+        children(context: TemplaterContext): unknown
     }
     : { children?: Array<astroHTML.JSX.HTMLAttributes> | string; }
 
 
-declare function DefineTemplate<T, U>(props: DefineTemplateProps<T, U>): any
+declare function Templater<T, U>(props: TemplaterProps<T, U>): any
 
 declare function Projector<T, U>(props: ProjectorProps<T, U>): any
 
 
-export function useDefineTemplateAndProjector<
+export function useTemplaterAndProjector<
     ProjectorContext extends StringKeyedObjectLiteralWithUnknownValues | null,
-    DefineTemplateContext extends StringKeyedObjectLiteralWithUnknownValues | null = null
+    TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues | null = null
 >(debugName?: string):
-    [typeof DefineTemplate<ProjectorContext, DefineTemplateContext>, typeof Projector<DefineTemplateContext, ProjectorContext>] 
+    [typeof Templater<ProjectorContext, TemplaterContext>, typeof Projector<TemplaterContext, ProjectorContext>] 

@@ -1,14 +1,14 @@
 
-import { createAstroFunctionalComponent, } from './lib/helpers';
-import { executeIf, executeIfElse, throwIf, throwUnless } from './lib/helpers/conditional';
-import { isObject, } from './lib/internal';
+import { createAstroFunctionalComponent, } from './helpers';
+import { executeIf, executeIfElse, throwIf, throwUnless } from './helpers/conditional';
+import { isObject, } from './internal';
 
 
 
 let callCount = 0
 
 
-export const useDefineTemplateAndProjector = (debugName) => {
+export const useTemplaterAndProjector = (debugName) => {
 
 
     let storedSlot
