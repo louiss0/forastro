@@ -75,7 +75,7 @@ export default defineConfig({
               { text: "Template Projection", link: "/libraries/utilities/template-projection" },
               {
                 text: "Get Collection Helpers",
-                link: "/libraries/utilities/get-collection-helpers"
+                link: "/libraries/utilities/content-collection-helpers"
               },
               { text: "Miscellaneous", link: "/libraries/utilities/miscellaneous" },
             ]

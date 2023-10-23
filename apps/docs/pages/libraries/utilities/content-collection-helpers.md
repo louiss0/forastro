@@ -1,4 +1,4 @@
-# Get Collection Helpers
+# Content Collection Helpers
 
 These functions are an API on top of the get collection from `"astro:content"`
 They are created to format the data that comes from Astro in a way where you
