@@ -8,7 +8,7 @@
   
 ### Fixed
 
-- `getCollectionPaths()` relies on type alias instead of derived types on the function.
+- All get Collection helpers rely on type alias instead of derived types.
 
 ## [4.0.1] - 2023-10-12
 
