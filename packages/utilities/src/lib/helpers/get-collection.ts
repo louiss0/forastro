@@ -40,6 +40,7 @@ type GetCollectionDataListFilterDrafts =
                 & U["data"]
             >
         >
+
 type GetCollectionDataListFilterNonDrafts =
     <
         T extends CollectionKey,
@@ -126,9 +127,10 @@ const _getEntryData: GetEntryData =
     };
 
 type GetEntryDataBySlug =
-    (collection: Parameters<GetEntryBySlugFunc>[0], slug: Parameters<GetEntryBySlugFunc>[1]) => Promise<Awaited<ReturnType<GetEntryBySlugFunc>>["data"] & {
-        slug: Awaited<ReturnType<GetEntryBySlugFunc>>["slug"]
-    }>
+    (collection: Parameters<GetEntryBySlugFunc>[0], slug: Parameters<GetEntryBySlugFunc>[1]) =>
+        Promise<Awaited<ReturnType<GetEntryBySlugFunc>>["data"] & {
+            slug: Awaited<ReturnType<GetEntryBySlugFunc>>["slug"]
+        }>
 
 
 const getEntryDataBySlug: GetEntryDataBySlug = async (collection, slug) => {
@@ -291,7 +293,6 @@ export const getCollectionPaths: GetCollectionPaths =
                         MergeCollectionEntryDataWithEntry<typeof collection>,
                         ReturnTypeOnlyIfIItsNotAnArray<typeof by>
                     >
-
                 >,
                 props: entry
             }
@@ -329,4 +330,26 @@ function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterP
     };
 }
 
-// const getAllCollections<T extends Array<CollectionKey>, U extends > = () => { }
+
+type GetCollections = <
+    T extends Array<CollectionKey>,
+    U extends CollectionEntry<T[number]>,
+    F extends FilterFunction<T[number], U> | undefined = undefined
+>(
+    collectionNames: T,
+    filter?: F
+) => F extends FilterFunction<T[number], U>
+    ? Promise<Array<U>>
+    : Promise<Array<CollectionEntry<T[number]>>>
+
+export const getCollections: GetCollections = async (collectionNames, filter) => {
+
+    return (
+        await Promise.all(
+            collectionNames
+                .map((collectionName) => getCollection(collectionName, filter))
+        )
+    ).flat()
+
+
+}
