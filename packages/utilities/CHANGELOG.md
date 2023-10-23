@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+
+- `getCollections()` a helper to get multiple collections.
+
 ### Changed
 
 - `<Gap/>` doesn't use pixels or the parent font size style to calculate gap distance it uses em.
