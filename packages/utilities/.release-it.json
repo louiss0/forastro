@@ -15,9 +15,6 @@
             "./src/**/*.{js,astro}"
         ]
     },
-    "npm": {
-        "publish": false
-    },
     "github": {
         "release": true,
         "releaseName": "Release ${name} ${version}"
