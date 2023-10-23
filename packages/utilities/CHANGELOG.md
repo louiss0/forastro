@@ -5,6 +5,7 @@
 ### Changed
 
 - `<Gap/>` doesn't use pixels or the parent font size style to calculate gap distance it uses em.
+- `useDefineTemplateAndProjector` is changed to `useTemplaterAndProjector`
   
 ### Fixed
 
