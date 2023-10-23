@@ -2,7 +2,6 @@ import { getCollection, getEntryBySlug, getEntry, getEntries, type CollectionEnt
 import { throwUnless } from './conditional';
 
 
-type GetCollectionFunc = typeof getCollection;
 type GetEntryBySlugFunc = typeof getEntryBySlug;
 type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
@@ -73,7 +72,10 @@ type EntryIsADraft<T extends CollectionKey> = CollectionEntry<T> & {
     data: { draft: true };
 };
 
-const getCollectionDataListFilterDrafts: GetCollectionDataListFilterDrafts = async (collection, filter) => (
+const getCollectionDataListFilterDrafts: GetCollectionDataListFilterDrafts = async (
+    collection,
+    filter
+) => (
     await _getCollectionDataList(
         collection,
         (entry): entry is EntryIsADraft<typeof collection> => {
@@ -95,11 +97,17 @@ export const getCollectionDataList = Object.assign(
     }
 )
 
+type GetEntryData =
+    (collection: Parameters<GetEntryFunc>[0],
+        slugOrId: Parameters<GetEntryFunc>[1]
+    ) => Promise<Awaited<ReturnType<GetEntryFunc>>["data"] & {
+        slug: Awaited<ReturnType<GetEntryFunc>>["slug"]
+    }>
 
-export const getEntryData = Object.assign(
-    async (collection: Parameters<GetEntryFunc>[0], slugOrId: Parameters<GetEntryFunc>[1]) => {
+const _getEntryData: GetEntryData =
+    async (collection, slugOrId) => {
 
-        const valueFromEntryOrEntryData = await getEntry(collection, slugOrId)
+        const valueFromEntryOrEntryData = await getEntry(collection, slugOrId);
 
 
         if ("slug" in valueFromEntryOrEntryData) {
@@ -107,32 +115,49 @@ export const getEntryData = Object.assign(
             return {
                 slug: valueFromEntryOrEntryData.slug,
                 ...valueFromEntryOrEntryData.data
-            }
+            };
 
         }
 
 
-        return valueFromEntryOrEntryData.data
+        return valueFromEntryOrEntryData.data;
 
 
-    },
-    {
-        bySlug: async (collection: Parameters<GetEntryBySlugFunc>[0], slug: Parameters<GetEntryBySlugFunc>[1]) => {
+    };
 
-            const entryBySlug = await getEntryBySlug(collection, slug)
+type GetEntryDataBySlug =
+    (collection: Parameters<GetEntryBySlugFunc>[0], slug: Parameters<GetEntryBySlugFunc>[1]) => Promise<Awaited<ReturnType<GetEntryBySlugFunc>>["data"] & {
+        slug: Awaited<ReturnType<GetEntryBySlugFunc>>["slug"]
+    }>
 
-            return {
-                slug: entryBySlug.slug,
-                ...entryBySlug.data
+
+const getEntryDataBySlug: GetEntryDataBySlug = async (collection, slug) => {
+
+    const entryBySlug = await getEntryBySlug(collection, slug);
+
+    return {
+        slug: entryBySlug.slug,
+        ...entryBySlug.data
+    };
+
+};
+export const getEntryData = Object.assign(
+    _getEntryData,
+    { bySlug: getEntryDataBySlug, }
+)
+
+
+type GetDataListFromEntries = (entries: Parameters<GetEntriesFunc>[0]) =>
+    Promise<
+        Array<
+            Awaited<ReturnType<GetEntriesFunc>>[number]["data"] & {
+                slug: Awaited<ReturnType<GetEntriesFunc>>[number]["slug"]
             }
+        >
+    >
 
-        },
-
-    })
-
-
-export const getDataListFromEntries = async (entries: Parameters<GetEntriesFunc>[0]) =>
-    (await getEntries(entries)).map((entry) => ({ slug: entry.slug, ...entry.data }));
+export const getDataListFromEntries: GetDataListFromEntries = async (entries) =>
+    (await getEntries(entries)).map((entry) => ({ slug: entry.slug, ...entry.data, }));
 
 type TypeOrArrayOfType<T> = T | Array<T>;
 
@@ -152,9 +177,9 @@ type Prettify<T> = { [k in keyof T]: T[k] } & {}
 
 
 type GetCollectionPaths = <
-    T extends Parameters<GetCollectionFunc>[0],
+    T extends CollectionKey,
     U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
-    V extends Parameters<GetCollectionFunc>[1]
+    V extends FilterFunction<T, EntryIsNotADraft<T>>
 >(
     collection: T,
     by: U,
@@ -171,11 +196,7 @@ type GetCollectionPaths = <
 }>>
 
 export const getCollectionPaths: GetCollectionPaths =
-    async (
-        collection,
-        by,
-        filter
-    ) => {
+    async (collection, by, filter) => {
 
 
 
