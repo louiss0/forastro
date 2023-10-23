@@ -7,8 +7,8 @@ export default defineConfig((ctx) => ({
     external: [
         "astro:content"
     ],
-    format: ["cjs", "esm"],
+    format: "esm",
     dts: true,
     minify: !ctx.watch,
-    clean: !ctx.watch,
+    clean: true,
 }))
