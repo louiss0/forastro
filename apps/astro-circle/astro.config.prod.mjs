@@ -1,5 +1,5 @@
 import { defineConfig } from "astro/config";
-import tailwind from '@astrojs/tailwind';
+import tailwind from 'unocss/astro';
 
 export default defineConfig({
     vite: {
@@ -7,5 +7,5 @@ export default defineConfig({
             noExternal: ["svgo"]
         }
     },
-    integrations: [tailwind()],
+    integrations: [unocss()],
 })
