@@ -2,7 +2,7 @@
     "id": "my-site",
     "path": "src/content/",
     "schema": {
-        "path": "markdoc.config.json",
+        "path": "markdoc.config.mjs",
         "type": "esm",
         "property": "default",
         "watch": true
