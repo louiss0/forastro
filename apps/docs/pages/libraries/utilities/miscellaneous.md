@@ -7,7 +7,7 @@ This page is for components and utilities and components that don't need a page.
 The components below are here to help with using astro.
 
 :::danger
-Components all come from the `@forastro/utilities/components`  
+These components are all server components.  
 :::
 
 :::warning
