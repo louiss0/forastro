@@ -35,7 +35,8 @@
         "playsinline",
         "Preact",
         "referrerpolicy",
-        "refferpolicy"
+        "refferpolicy",
+        "Templater"
     ],
     "todo-tree.tree.scanMode": "workspace only",
     "testing.automaticallyOpenPeekView": "never",
