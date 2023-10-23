@@ -54,19 +54,19 @@ export function executeUnless<T extends Callback>(condition: boolean, cb: T) {
 
 }
 
-export function throwIf(condition: boolean, message = "Something went wrong", cause?: unknown): asserts condition is false {
+export function throwIf(condition: boolean, message = "Something went wrong"): asserts condition is false {
 
 
     executeIf(condition, () => {
-        throw new Error(message, { cause })
+        throw new Error(message,)
     })
 
 
 }
 
 
-export function throwUnless(condition: boolean, message = "Something went wrong", cause?: unknown): asserts condition {
+export function throwUnless(condition: boolean, message = "Something went wrong"): asserts condition {
 
-    throwIf(!condition, message, cause)
+    throwIf(!condition, message,)
 
 }
