@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [4.1.0] - 2023-10-23
+
 ### Added
 
 - `getCollections()` a helper to get multiple collections.
