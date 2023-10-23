@@ -303,7 +303,7 @@ export async function returnErrorAndResultFromPromise<T extends Promise<any>>(pr
 
         if (typeof error === "string") {
 
-            return [null, new Error(error, { cause: "Failed Promise" })] as const
+            return [null, new Error(error)] as const
 
         }
 
@@ -317,7 +317,7 @@ export async function returnErrorAndResultFromPromise<T extends Promise<any>>(pr
 
 
 
-        return [null, new Error("Something went wrong", { cause: "Failed Promise" })] as const
+        return [null, new Error("Something went wrong",)] as const
 
 
 

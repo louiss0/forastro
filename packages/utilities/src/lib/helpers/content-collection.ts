@@ -245,7 +245,6 @@ export const getCollectionPaths: GetCollectionPaths =
                 throwUnless(
                     typeof valueFromEntryOrEntryData === "string" || typeof valueFromEntryOrEntryData === "number",
                     "You can only use strings and numbers as params",
-                    "Invalid entry"
                 )
 
 
@@ -279,7 +278,6 @@ export const getCollectionPaths: GetCollectionPaths =
                     throwUnless(
                         typeof valueFromEntryOrEntryData === "string" || typeof valueFromEntryOrEntryData === "number",
                         "You can only use strings and numbers as params",
-                        "Invalid entry"
                     )
 
                     paramMap.set(key, valueFromEntryOrEntryData)
