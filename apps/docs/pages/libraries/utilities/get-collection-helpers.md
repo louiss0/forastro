@@ -79,40 +79,6 @@ const draftedPosts = getCollectionDataList.filterDrafts("posts")
 
 ```
 
-## Get Entry Data
-
-```ts
-    const getEntryData: (
-        <C extends string, E extends string>(
-            collection:C, 
-            slugOrID:E
-        ) => Promise<EntryDataAndSlug<C>>)
-        & {
-            bySlug: <C extends string, E extends string>(
-                    collection: C,
-                     slug: E
-            ) => Promise<EntryDataAndSlug<C>>;
-        }  
-```
-
-`getEntryData()` is a function that allows gets an entry.
-It takes in a filter function that allows you to filter for the ones you want.
-It returns a list of all the `data:` from the entry and the `slug:`.
-It has a `bySlug()` modifier that allows you to just get the entry by the slug.
-
-## Get Data List From Entries
-
-```ts
-    const getDataListFromEntries: <C extends string, E extends string>
-        (
-            entries:Array<{collection:C, slug:E } | {collection:C, id:E }>
-        ) => Promise<EntryDataAndSlug<C>>
-```
-
-`getEntries()` is a function that returns multiple collection entries
-from the same collection. But it only returns a list of each entry data
-and the slug.
-
 ## Get Collection Paths
 
 ```ts
@@ -170,3 +136,110 @@ You can pass in a filter for even better filtering.
 :::warning
 `getCollectionPaths()` will always get the posts that are not drafts.
 :::
+
+## Get Collections
+
+```ts
+    <
+    T extends Array<CollectionKey>,
+    U extends CollectionEntry<T[number]>,
+    F extends FilterFunction<T[number], U> | undefined = undefined
+>(
+    collectionNames: T,
+    filter?: F
+) => F extends FilterFunction<T[number], U>
+    ? Promise<Array<U>>
+    : Promise<Array<CollectionEntry<T[number]>>>
+
+```
+
+The `getCollections()` is a function that gets multiple collections.
+It queries them in order based on the list of collections you want.
+It' also allows you to pass in a filter based that filter will apply
+to all the queries for each collection.
+
+:::tip Create your own `getAllCollections()`
+
+Since you can get as many collections as you want
+you can also get all collections by using this function.
+
+```ts
+  import {z, defineCollection} from "@forastro/utilities"
+  
+  export const collections {
+    typescript: defineCollection({
+        schema: z.object(
+            {
+                title: z.string(),
+                description: z.string(),
+                pubDate: z.string()
+                .transform((value=> new Date(value)))
+            }
+        )
+    }),
+    solid: defineCollection({
+        schema: z.object(
+            {
+                title: z.string(),
+                description: z.string(),
+                pubDate: z.string()
+                .transform((value=> new Date(value)))
+            }
+        )
+    })
+    react: defineCollection({
+        schema: z.object(
+            {
+                title: z.string(),
+                description: z.string(),
+                pubDate: z.string()
+                .transform((value=> new Date(value)))
+            }
+        )
+    })
+  }
+
+export const collectionNames = Object.keys(collections) as
+Array<keyof typeof collections>
+
+export const getAllCollections = (filter?:(entry:CollectionEntry<CollectionKey>)=>boolean)=>
+getCollections(collectionNames, filter)
+
+
+```
+
+:::
+
+## Get Entry Data
+
+```ts
+    const getEntryData: (
+        <C extends string, E extends string>(
+            collection:C, 
+            slugOrID:E
+        ) => Promise<EntryDataAndSlug<C>>)
+        & {
+            bySlug: <C extends string, E extends string>(
+                    collection: C,
+                     slug: E
+            ) => Promise<EntryDataAndSlug<C>>;
+        }  
+```
+
+`getEntryData()` is a function that allows gets an entry.
+It takes in a filter function that allows you to filter for the ones you want.
+It returns a list of all the `data:` from the entry and the `slug:`.
+It has a `bySlug()` modifier that allows you to just get the entry by the slug.
+
+## Get Data List From Entries
+
+```ts
+    const getDataListFromEntries: <C extends string, E extends string>
+        (
+            entries:Array<{collection:C, slug:E } | {collection:C, id:E }>
+        ) => Promise<EntryDataAndSlug<C>>
+```
+
+`getEntries()` is a function that returns multiple collection entries
+from the same collection. But it only returns a list of each entry data
+and the slug.
