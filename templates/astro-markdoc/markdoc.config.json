@@ -1,0 +1,10 @@
+{
+    "id": "my-site",
+    "path": "src/content/",
+    "schema": {
+        "path": "markdoc.config.json",
+        "type": "esm",
+        "property": "default",
+        "watch": true
+    }
+}

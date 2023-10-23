@@ -1,11 +1,15 @@
 import {
   markdocHTMLTagSchemas
 } from 'markdoc-html-tag-schemas';
+import { defineMarkdocConfig, } from '@astrojs/markdoc/config';
 
-import { defineMarkdocConfig,  } from '@astrojs/markdoc/config';
+const { tags, nodes } = markdocHTMLTagSchemas()
 
 export default defineMarkdocConfig({
-  extends: [
-    markdocHTMLTagSchemas()
-  ]
+  tags: {
+    ...tags
+  },
+  nodes: {
+    ...nodes
+  }
 });
