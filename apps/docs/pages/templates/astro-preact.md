@@ -5,7 +5,7 @@ It uses a class library called `clsx`. The table below should tell you more.
 
 | Type          | Name       |
 | ------------- | ---------- |
-| CSS Framework | Tailwind   |
+| CSS Framework | Uno        |
 | Icon Library  | Iconify    |
 | Font Library  | Fontsource |
 
@@ -66,9 +66,9 @@ yarn run start
 
 ## Configuration
 
-There are only two config files in this repo. `astro.config` and `tailwind.config`. I will split this into two sections.
+There are only two config files in this repo. `astro.config` and `uno.config`. I will split this into two sections.
 
-The `Default.astro` file contains the main stylesheet for tailwind.
+The `Default.astro` file contains the main stylesheet for uno.
 The CSS Variables come from a website called [Utopia](https://utopia.fyi/).
 Which is a site that is good for using typography and fluid spacing.
 I decided to use a 12 - 16 font range with a transition from a minor third to a major third.
@@ -80,9 +80,9 @@ The step variables are used in the Typography component.
 
 For the astro config `astro-assets` are activated. Iconify for Preact is activated with `compiler: 'jsx', jsx: 'preact'`.
 
-### Tailwind Config
+### Uno Config
 
-Tailwind is configured to use dark mode class `vue-use` needs this so that it can trigger dark mode.
+Uno is configured to use dark mode class `vue-use` needs this so that it can trigger dark mode.
 The safelisted classes are `hidden, fixed, translate-x-full, translate-y-full, opacity-0`.
 This is so that no one ever has to turn them on per project.
 Most of the time hidden and fixed will be used but,
@@ -93,7 +93,7 @@ I have found that the translate classes can be used in some projects to make it 
 This is a list of extensions for this library.
 
 - VsCode Extensions
-  - Tailwind Intellisense
+  - Uno Intellisense
   - Astro
   - Astro Snippets
   - Icones

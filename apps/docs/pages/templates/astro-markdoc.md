@@ -45,7 +45,7 @@ For icons `astro-icon` is useful for icons.
 
 | Type          | Name       |
 | ------------- | ---------- |
-| CSS Framework | Tailwind   |
+| CSS Framework | Uno        |
 | Font Library  | Fontsource |
 | Icon Library  | Astro Icon |
 
@@ -78,9 +78,9 @@ yarn run start
 
 ## Configuration
 
-There are only two config files in this repo. `astro.config` and `tailwind.config`. I will split this into two sections.
+There are only two config files in this repo. `astro.config` and `uno.config`. I will split this into two sections.
 
-The `Default.astro` file contains the main stylesheet for tailwind.
+The `Default.astro` file contains the main stylesheet for uno.
 The CSS Variables come from a website called [Utopia](https://utopia.fyi/).
 A site that is good for using typography and fluid spacing.
 I decided to use a 12 - 16 font range with a transition from a minor third to a major third.
@@ -92,9 +92,9 @@ The step variables are used in the Typography component.
 
 Experimental Assets are enabled in this template.  
 
-### Tailwind Config
+### Uno Config
 
-Tailwind is configured to use dark mode class  needs this so that it can trigger dark mode.
+Uno is configured to use dark mode class  needs this so that it can trigger dark mode.
 The safelisted classes are `hidden, fixed, translate-x-full, translate-y-full, opacity-0`.
 This is so that no one ever has to turn them on per project.
 Most of the time hidden and fixed will be used but,
@@ -107,7 +107,7 @@ This is a list of extensions for this library.
 - VsCode Extensions
   - Iconify Intellisense
   - Icones
-  - Tailwind Intellisense
+  - Uno Intellisense
   - Astro
   - Astro Snippets
 

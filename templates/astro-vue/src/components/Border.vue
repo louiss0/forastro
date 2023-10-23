@@ -5,7 +5,7 @@ import { allTailwindColors } from "~/utilities/constants";
 /**
  ** The border component by default creates a border that surrounds a component
  ** It allows the user to pass in a border size for the border size
- ** Or you can just pass in tailwind classes
+ ** Or you can just pass in uno classes
  * This component will give you an error if not all of them are border classes
  */
 
@@ -33,7 +33,7 @@ const borderClassesAreValid =
 
 const errorMessage =
   () => `This class can only use border classes  you can use responsive and media classes but nothing else  
-    remember the valid tailwind classes ${borderColors.join(", ")}
+    remember the valid uno classes ${borderColors.join(", ")}
     `;
 ---
 

@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 import markdoc from '@astrojs/markdoc';
-import tailwind from '@astrojs/tailwind';
+import uno from '@astrojs/uno';
 
 
 export default defineConfig({

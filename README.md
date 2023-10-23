@@ -17,13 +17,13 @@ To do that use `nx run demo:dev`.
 
 ### Tooling
 
-| Type       | Tool         |
-| ---------- | ------------ |
-| testing    | vitest       |
-| changelogs | changesets   |
-| styling    | tailwind css |
-| linter     | eslint       |
-| formatter  | prettier     |
+| Type       | Tool       |
+| ---------- | ---------- |
+| testing    | vitest     |
+| changelogs | changesets |
+| styling    | uno css    |
+| linter     | eslint     |
+| formatter  | prettier   |
 
 ## Repositories
 

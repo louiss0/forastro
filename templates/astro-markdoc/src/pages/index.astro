@@ -2,23 +2,22 @@
 import { Center, Container, List, SpacedBox, Typography } from '~/components';
 import Default from '~/layouts/Default.astro';
 
-
 const DOCUMENTATION_NAMES_AND_LINKS = [
-  { name: 'Astro', link: 'https://docs.astro.build/' },
+  { name: 'Astro', link: 'https://docs.astro.build' },
   {
     name: 'For Astro Utilities',
     link: 'https://forastro-docs.onrender.com/libraries/utilities',
   },
-  { name: 'Tailwind', link: 'https://tailwindcss.com' },
+  { name: 'Uno', link: 'https://unocss.dev' },
 ] as const;
 
 const CORE_LIBRARY_SENTENCES = [
   'Astro Components and Utility Functions  @forastro/utilities',
-  'Styling tailwindcss',
+  'Styling unocss',
 ] as const;
 ---
 
-<Default title="Welcome to Astro." description="this is good">  
+<Default title="Welcome to Astro." description="this is good">
   <header class="px-4 py-12">
     <Center>
       <Typography tag={'h1'}>Welcome to the Astro template.</Typography>
@@ -31,10 +30,10 @@ const CORE_LIBRARY_SENTENCES = [
           This template is created by <a
             class="p-1"
             href="https://github.com/louiss0">Shelton Louis</a
-          >. It uses <code>@fontsource</code> for fonts. Tailwind for styles. Preact
-          of course for UI interactivty. You also get a nice set of Components for
-          you to work faster. Look into the README for more information about this
-          template.
+          >. It uses <code>@fontsource</code> for fonts. Uno for styles. Preact
+          of course for UI interactivty. You also get a nice set of Components
+          for you to work faster. Look into the README for more information
+          about this template.
         </Typography>
 
         <a href="/posts/first" class="px-12 py-4 text-gray-600 bg-gray-300">

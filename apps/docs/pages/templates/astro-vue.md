@@ -11,7 +11,7 @@ It's useful for solving common challenges with astro. Remember that the componen
 
 | Type                | Name       |
 | ------------------- | ---------- |
-| CSS Framework       | Tailwind   |
+| CSS Framework       | Uno        |
 | Icon Library        | Iconify    |
 | Font Library        | Fontsource |
 | Vue Utility Library | Vue Use    |
@@ -74,9 +74,9 @@ pnpm run start
 
 ## Configuration
 
-There are only two config files in this repo. `astro.config` and `tailwind.config`. I will split this into two sections.
+There are only two config files in this repo. `astro.config` and `uno.config`. I will split this into two sections.
 
-The `Default.astro` file contains the main stylesheet for tailwind. The CSS Variables come from a website called [Utopia](https://utopia.fyi/) which is a site that is good for using typography and fluid spacing. I decided to use a 12 - 16 font range with a transition from a minor third to a major third.
+The `Default.astro` file contains the main stylesheet for uno. The CSS Variables come from a website called [Utopia](https://utopia.fyi/) which is a site that is good for using typography and fluid spacing. I decided to use a 12 - 16 font range with a transition from a minor third to a major third.
 
 The `--heading-font` variable is used for headings the `--body-font` variable is used for the body. The step variables are used in the Typography component.
 
@@ -84,9 +84,9 @@ The `--heading-font` variable is used for headings the `--body-font` variable is
 
 The astro config uses the astro and the vue integrations. Object Slots are enabled for JSX. Iconify and the auto importing of vue components are configured for vite in plugins.
 
-### Tailwind Config
+### Uno Config
 
-Tailwind is configured to use dark mode class `vue-use` needs this so that it can trigger dark mode. The safelisted classes are `hidden, fixed, translate-x-full, translate-y-full, opacity-0`. This is so that no one ever has to turn them on per project. Most of the time hidden and fixed will be used but, I have found that the translate classes can be used in some projects to make it so that something moves in a specific direction.
+Uno is configured to use dark mode class `vue-use` needs this so that it can trigger dark mode. The safelisted classes are `hidden, fixed, translate-x-full, translate-y-full, opacity-0`. This is so that no one ever has to turn them on per project. Most of the time hidden and fixed will be used but, I have found that the translate classes can be used in some projects to make it so that something moves in a specific direction.
 
 ## Recommendations
 
@@ -96,7 +96,7 @@ This is a list of extensions for this library.
   - Iconify Intellisense
   - Icones
   - Volar
-  - Tailwind Intellisense
+  - Uno Intellisense
   - Astro
   - Astro Snippets
 
