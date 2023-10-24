@@ -79,15 +79,7 @@ const getCollectionDataListFilterDrafts: GetCollectionDataListFilterDrafts = asy
 ) => (
     await _getCollectionDataList(
         collection,
-        (entry): entry is EntryIsADraft<typeof collection> => {
-
-            const draftIsNotInEntryDataOrDraftIsFalse = "draft" in entry.data
-                || "draft" in entry.data && entry.data["draft"] === true;
-
-            return draftIsNotInEntryDataOrDraftIsFalse && !!filter?.(entry);
-
-
-        }
+        getCheckIfAnEntryDataHasADraftPropOrDraftPropIsTruthyWithFilterParameterResult(collection, filter)
     )
 );
 export const getCollectionDataList = Object.assign(
@@ -213,6 +205,7 @@ export const getCollectionPaths: GetCollectionPaths =
 
 
         const notAllowedKeys = ["render", "body"];
+
         return entries.map((entry, index) => {
 
 
@@ -305,6 +298,21 @@ type EntryIsNotADraft<T extends CollectionKey> = CollectionEntry<T> & {
 };
 
 
+
+function getCheckIfAnEntryDataHasADraftPropOrDraftPropIsTruthyWithFilterParameterResult<
+    T extends CollectionKey,
+    U extends CollectionEntry<T>
+>(collection: T, filter: FilterFunction<T, U> | undefined): FilterFunction<T, EntryIsADraft<T>> | undefined {
+    return (entry): entry is EntryIsADraft<typeof collection> => {
+
+        const draftIsNotInEntryDataOrDraftIsFalse = "draft" in entry.data
+            || "draft" in entry.data && entry.data["draft"] === true;
+
+        return draftIsNotInEntryDataOrDraftIsFalse && !!filter?.(entry);
+
+
+    };
+}
 
 function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult
     <
