@@ -44,6 +44,8 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
+    "@anatine/zod-mock": "^3.13.2",
+    "@faker-js/faker": "^8.2.0",
     "better-enums": "^0.2.1",
     "unocss": "*",
     "vue": "^3.3.4"
