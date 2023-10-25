@@ -1,6 +1,8 @@
-// import { describe, expect, it, test } from "vitest";
 import { iterate, iterateRange, range, syncIterate } from "packages/utilities/src/lib/helpers";
 import { IterationInfo } from "packages/utilities/src/lib/types";
+import { z } from "astro/zod";
+import type { CollectionKey } from "astro:content";
+import { generateMock } from '@anatine/zod-mock';
 
 
 async function generateArrayFromGenerator<T extends AsyncGenerator>(generator: AsyncGenerator) {
@@ -415,3 +417,232 @@ describe("Sync Iterate works", () => {
 
 })
 
+
+
+type Collections<T extends string> = Record<T, Record<string, {
+  id: string;
+  slug: string;
+  body: string;
+  collection: string;
+  data: Record<string, unknown>;
+}>>;
+
+type CollectionEntry<T extends string> = Collections<T>[T][keyof Collections<T>[T]]
+
+type FilterFunction<
+  T extends CollectionKey,
+  U extends CollectionEntry<T>
+> = (entry: CollectionEntry<T>) => entry is U;
+
+
+type EntryIsNotADraft<T extends CollectionKey> = Omit<CollectionEntry<T>, "data"> & {
+  data: NonNullable<CollectionEntry<T>["data"] & { draft: false | undefined }>;
+};
+
+
+function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult
+  <
+    T extends CollectionKey,
+    U extends CollectionEntry<T>
+  >
+  (
+    filter?: FilterFunction<T, U>
+  ) {
+
+
+  return function (entry: CollectionEntry<T>): entry is U & EntryIsNotADraft<T> {
+
+
+    const draftIsNotInEntryDataOrDraftIsFalse = !("draft" in entry.data) || "draft" in entry.data && !entry.data["draft"];
+
+    return draftIsNotInEntryDataOrDraftIsFalse || !!filter?.(entry);
+
+
+
+  };
+}
+
+type EntryIsADraft<T extends CollectionKey> = Omit<CollectionEntry<T>, "data">
+  & {
+    data: NonNullable<CollectionEntry<T>["data"] & { draft: true }>;
+  };
+
+
+function getCheckIfAnEntryDataHasADraftPropOrDraftPropIsTruthyWithFilterParameterResult<
+  T extends CollectionKey,
+  U extends CollectionEntry<T>
+>(filter?: FilterFunction<T, U> | undefined) {
+
+  return function (entry: CollectionEntry<T>): entry is U & EntryIsADraft<T> {
+
+    const draftIsInEntryDataOrDraftIsTrue = "draft" in entry.data
+      || "draft" in entry.data && entry.data["draft"] === true;
+
+    return draftIsInEntryDataOrDraftIsTrue || !!filter?.(entry);
+
+
+  };
+}
+
+
+
+const collectionEntrySchema = z.object({
+  id: z.string().max(10),
+  slug: z.string().max(35),
+  body: z.string().min(100).max(250),
+  collection: z.string().max(10),
+  data: z.object({
+    draft: z.boolean().or(z.undefined()),
+    title: z.string(),
+    description: z.string().min(15).max(60),
+    pubDate: z.string().datetime(),
+    updateDate: z.string().datetime(),
+  })
+})
+
+const collectionEntryDraftsSchema = collectionEntrySchema.extend(
+  {
+    data: collectionEntrySchema.shape.data.extend(
+      {
+        draft: z.literal(true),
+      }
+    )
+  }
+)
+
+const collectionEntryNonDraftsSchema = collectionEntrySchema.extend(
+  {
+    data: collectionEntrySchema.shape.data.extend(
+      {
+        draft: z.literal(false).or(z.undefined()),
+      }
+    )
+  }
+)
+
+
+const collectionsSchema = z.object({
+  angular: z.object({
+    post: collectionEntrySchema,
+    post2: collectionEntrySchema,
+    post3: collectionEntryNonDraftsSchema,
+    post4: collectionEntrySchema,
+    post5: collectionEntryDraftsSchema,
+    post6: collectionEntrySchema,
+  }),
+  typescript: z.object({
+    post: collectionEntrySchema,
+    post2: collectionEntryNonDraftsSchema,
+    post3: collectionEntrySchema,
+    post4: collectionEntryDraftsSchema,
+    post5: collectionEntrySchema,
+  }),
+  react: z.object({
+    post: collectionEntryNonDraftsSchema,
+    post2: collectionEntryDraftsSchema,
+    post3: collectionEntrySchema,
+    post4: collectionEntrySchema,
+    post5: collectionEntryDraftsSchema,
+  }),
+  vue: z.object({
+    post: collectionEntrySchema,
+    post2: collectionEntrySchema,
+    post3: collectionEntryNonDraftsSchema,
+    post4: collectionEntrySchema,
+    post5: collectionEntryDraftsSchema,
+  }),
+})
+
+type CreatedCollections = z.infer<typeof collectionsSchema>;
+
+const collections = generateMock(collectionsSchema)
+
+function getCollection<T extends keyof CreatedCollections, U extends CollectionEntry<T>>(collection: T, filter: FilterFunction<T, U>) {
+
+
+  const filteredValues = Object.values(collections[collection]).filter((value) => filter(value as U))
+
+
+  return filteredValues as Array<U>
+
+
+
+}
+
+describe("Get content collection helpers", () => {
+
+
+  describe("Testing functions that return functions that check if a entry is a draft or not", () => {
+
+
+    describe("Testing getCheckIfAnEntryDataHasADraftPropOrDraftPropIsTruthyWithFilterParameterResult", () => {
+
+      test("It works", () => {
+
+
+        const result = getCollection(
+          "react",
+          getCheckIfAnEntryDataHasADraftPropOrDraftPropIsTruthyWithFilterParameterResult()
+        )
+
+
+        expect(result.length).toBeGreaterThan(0)
+
+
+      })
+
+      test("All values returned are drafts", () => {
+
+        const result = getCollection(
+          "vue",
+          getCheckIfAnEntryDataHasADraftPropOrDraftPropIsTruthyWithFilterParameterResult()
+        )
+
+        expect(result.length).toBeGreaterThan(0)
+
+        expect(result.every(value => value.data.draft === true))
+      })
+
+
+    })
+
+    describe("Testing getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult", () => {
+
+
+      test("It works", () => {
+
+
+        const result = getCollection(
+          "vue",
+          getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult()
+        )
+
+        expect(result.length).toBeGreaterThan(0)
+
+
+
+      })
+
+    })
+
+
+    test("All values returned aren't drafts", () => {
+
+      const result = getCollection(
+        "vue",
+        getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult()
+      )
+
+      expect(result.length).toBeGreaterThan(0)
+
+      expect(result.every(value => value.data.draft === false || value.data.draft === undefined))
+
+    })
+
+
+  })
+
+
+
+
+})
