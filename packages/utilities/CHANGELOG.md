@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.1.1] - 2023-10-25
+
 ### Fixed
 
 - `EntryIsADraft` and `EntryIsNotADraft` types are now properly typed.
