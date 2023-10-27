@@ -1,6 +1,6 @@
 import { defineConfig } from "astro/config";
 import markdoc from '@astrojs/markdoc';
-import uno from '@astrojs/uno';
+import UnoCSS from 'unocss/astro';
 
 
 export default defineConfig({
