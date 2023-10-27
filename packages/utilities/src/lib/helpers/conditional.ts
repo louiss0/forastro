@@ -12,8 +12,8 @@ export function executeIf<T extends Callback>(condition: boolean, cb: T): Return
 
 type IfElseOptions = {
     condition: boolean
-    ifCb: (...args: Array<unknown>) => NonNullable<unknown>
-    elseCb: (...args: Array<unknown>) => NonNullable<unknown>
+    ifCb: () => NonNullable<unknown>
+    elseCb: () => NonNullable<unknown>
 }
 
 export function executeIfElse(options: IfElseOptions):
