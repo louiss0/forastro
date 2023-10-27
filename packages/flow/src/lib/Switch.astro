@@ -22,15 +22,15 @@ html = Astro.slots.has('default')
 executeIf(!!html, unsetCaseInSwitchState);
 ---
 
-<Fragment
-  set:html={executeIfElse(
+{
+  executeIfElse(
     !!html,
-    () => html,
+    () => <Fragment set:html={html} />,
     () => (
       <p style={{ color: '#cf6058' }}>
-        'Please render a proper case and make sure the default one is at the
-        bottom',
+        Please render a proper case and make sure the default one is at the
+        bottom
       </p>
     ),
-  )}
-/>
+  )
+}
