@@ -23,6 +23,14 @@
 
 ## [Unreleased]
 
+### Changed
+
+- Decided to use `executeIf` and the new `executeIfElse` functions for `<Switch/>` and `<Case/>`.
+
+### Fixed
+
+- Remove dependency on buggy `3.1.2` version of `@forastro/utilities`
+
 ## [2.5.3] - 2023-10-02
 
 ### Fixed
