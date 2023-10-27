@@ -40,7 +40,6 @@ Remember that the components used are in-fact astro components.
   
 :::
 
-
 For icons `astro-icon` is useful for icons.
 
 | Type          | Name       |

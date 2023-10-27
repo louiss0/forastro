@@ -1,16 +1,16 @@
 ---
-import { iterateRange} from "@forastro/utilities";
+import { iterateRange } from '@forastro/utilities';
 
-type Props = Parameters<typeof iterateRange>[1]
+type Props = Parameters<typeof iterateRange>[1];
 
 const { start, step = 1, stop, inclusive } = Astro.props;
 ---
 
 <Fragment
-  set:html={iterateRange((...args) => Astro.slots.render("default", args), {
+  set:html={iterateRange((...args) => Astro.slots.render('default', args), {
     start,
     stop,
     step,
-    inclusive
+    inclusive,
   })}
 />

@@ -1,7 +1,8 @@
 ---
+import { executeIf, executeIfElse } from '@forastro/utilities';
 import { setCaseInSwitchState, unsetCaseInSwitchState } from '../helpers';
 
-import  Case from './Case.astro';
+import Case from './Case.astro';
 
 type Props = {
   of: unknown;
@@ -18,11 +19,18 @@ html = Astro.slots.has('default')
   ? await Astro.slots.render('default')
   : 'Please render a case here';
 
-unsetCaseInSwitchState();
+executeIf(!!html, unsetCaseInSwitchState);
 ---
 
 <Fragment
-  set:html={html
-    ? html
-    : 'Please render a proper case and make sure the default one is at the bottom'}
+  set:html={executeIfElse(
+    !!html,
+    () => html,
+    () => (
+      <p style={{ color: '#cf6058' }}>
+        'Please render a proper case and make sure the default one is at the
+        bottom',
+      </p>
+    ),
+  )}
 />

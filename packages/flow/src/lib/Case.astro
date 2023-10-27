@@ -1,5 +1,6 @@
 ---
-import { getCaseFromSwitchState } from "../helpers";
+import { executeIf } from '@forastro/utilities';
+import { getCaseFromSwitchState } from '../helpers';
 
 type FilledCase = {
   of: unknown;
@@ -23,14 +24,18 @@ const caseFromSwitchStateValueIsEqualToCase =
   caseFromSwitchState?.value === of
     ? caseFromSwitchState?.setIsFoundToTrue()
     : !caseFromSwitchState?.isFound && fallback;
+
+const caseFromSwitchStateIsNotTrueAndCloakPropIsTrue = !!(
+  !caseFromSwitchStateValueIsEqualToCase && getCaseFromSwitchState()?.cloak
+);
 ---
 
-{caseFromSwitchStateValueIsEqualToCase && <slot />}
+{executeIf(!!caseFromSwitchStateValueIsEqualToCase, () => <slot />)}
 
 {
-  !caseFromSwitchStateValueIsEqualToCase && getCaseFromSwitchState()?.cloak ? (
+  executeIf(caseFromSwitchStateIsNotTrueAndCloakPropIsTrue, () => (
     <div style="display: none;">
       <slot />
     </div>
-  ) : null
+  ))
 }
