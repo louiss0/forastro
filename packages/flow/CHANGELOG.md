@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [2.5.4] - 2023-10-27
+
 ### Changed
 
 - Decided to use `executeIf` and the new `executeIfElse` functions for `<Switch/>` and `<Case/>`.
