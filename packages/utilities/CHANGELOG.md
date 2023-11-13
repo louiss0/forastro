@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.1.2] - 2023-11-13
+
 ### Changed
 
 - `executeIf` and `executeUnless` are now typed with boolean predicates.
