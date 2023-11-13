@@ -2,7 +2,7 @@ import { isObject } from "../internal"
 import type { Callback } from "../types"
 
 
-export function executeIf<T extends Callback>(condition: boolean, cb: T): ReturnType<T> | null {
+export function executeIf<T extends Callback>(condition: boolean, cb: T): condition is true {
 
 
     return condition ? cb() : null
@@ -47,7 +47,7 @@ export function executeIfElse(
 
 
 
-export function executeUnless<T extends Callback>(condition: boolean, cb: T) {
+export function executeUnless<T extends Callback>(condition: boolean, cb: T): condition is false {
 
 
     return executeIf(!condition, cb)
