@@ -2,6 +2,7 @@
 interface Button extends astroHTML.JSX.ButtonHTMLAttributes {
   href?: never;
   onclick: `${string}()`;
+  type?: never;
 }
 
 interface Anchor extends astroHTML.JSX.AnchorHTMLAttributes {
@@ -12,14 +13,27 @@ interface Anchor extends astroHTML.JSX.AnchorHTMLAttributes {
 type Props = Button | Anchor;
 
 const { type, onclick, href, class: $class, ...rest } = Astro.props;
-
-const Tag = onclick && !href ? "button" : href && !onclick ? "a" : null;
 ---
 
-<Tag
-  type={type}
-  class:list={["[is(:hover,:focus)]:text-gray-400", $class]}
-  {...rest}
->
-  <slot />
-</Tag>
+{
+  (() => {
+    if (!onclick && !href)
+      return 'You shuld pick between a href and a onclick prop';
+
+    if (onclick && href)
+      return 'There should only be one an onclick or a button';
+
+    if (href)
+      return (
+        <a {type} {href} {...rest}>
+          <slot />
+        </a>
+      );
+
+    return (
+      <button type="button" {onclick} {...rest}>
+        <slot />
+      </button>
+    );
+  })()
+}
