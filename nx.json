@@ -1,6 +1,5 @@
 {
   "plugins": ["@nxtensions/astro", "@ahryman40k/nx-vitepress"],
-  "npmScope": "@forastro",
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -14,34 +13,22 @@
   "targetDefaults": {
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
-    "test": {
-      "inputs": ["default", "^production"]
-    },
-    "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore"
-      ]
+      "inputs": ["production", "^production"],
+      "cache": true
     },
     "check": {
-      "inputs": ["production", "^production"]
+      "inputs": ["production", "^production"],
+      "cache": true
+    },
+    "@nx/vite:test": {
+      "inputs": ["default", "^production"],
+      "cache": true
     }
   },
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "runner": "@nrwl/nx-cloud",
-      "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e", "check"],
-        "accessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU="
-      }
-    }
-  },
-  "defaultProject": "docs"
+  "defaultProject": "docs",
+  "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU="
 }
