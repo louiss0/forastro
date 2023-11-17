@@ -23,6 +23,12 @@
 
 ## [Unreleased]
 
+## Fixed
+
+- Removed assertion from `executeIf` and `throwIf`
+- `executeUnless` and  `throwUnless` return `assert condition`
+- Conditional functions no longer require a boolean at all.
+  
 ## [4.1.2] - 2023-11-13
 
 ### Changed
