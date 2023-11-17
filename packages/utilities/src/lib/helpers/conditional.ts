@@ -2,10 +2,12 @@ import { isObject } from "../internal"
 import type { Callback } from "../types"
 
 
-export function executeIf<T extends Callback>(condition: boolean, cb: T): condition is true {
+
+export function executeIf<T extends Callback>(condition: unknown, cb: T): ReturnType<T> | undefined {
 
 
-    return condition ? cb() : null
+    if (condition) return cb()
+
 
 }
 
@@ -47,25 +49,27 @@ export function executeIfElse(
 
 
 
-export function executeUnless<T extends Callback>(condition: boolean, cb: T): condition is false {
-
+export function executeUnless<T extends Callback>(condition: unknown, cb: T): asserts condition {
 
     return executeIf(!condition, cb)
 
 }
 
-export function throwIf(condition: boolean, message = "Something went wrong"): asserts condition is false {
 
+export function throwIf(condition: unknown, message = "Condition is false") {
 
-    executeIf(condition, () => {
-        throw new Error(message,)
-    })
+    executeIf(
+        condition,
+        () => {
+            throw new Error(message,)
+        }
+    )
 
 
 }
 
 
-export function throwUnless(condition: boolean, message = "Something went wrong"): asserts condition {
+export function throwUnless(condition: boolean, message = "Condition is true"): asserts condition {
 
     throwIf(!condition, message,)
 
