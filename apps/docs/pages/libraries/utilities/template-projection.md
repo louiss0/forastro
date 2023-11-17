@@ -4,8 +4,8 @@
 You can create templates in Astro SFC's by using a function called `useTemplaterAndProjector`.
 It's a function that returns two components in a tuple. `Templater` and `Projector`.
 Templater is a component that is supposed to have a child.
-The content inside child is a template that needs to be rendered.
-The Projector is the component that renders the content in  Define template.
+The content inside the child is a template that needs to be rendered.
+Projector is the component that renders the content in  Define template.
 
 The two components can send props to each other through using a prop called the context.
 The context is an object literal that holds information that needs to be used.
@@ -34,8 +34,12 @@ function useTemplaterAndProjector<
 
 The use templater and projector function returns two Astro Components.
 
-- Templater
-- Projector
+- [Template Projection](#template-projection)
+  - [Use Templater and Projector](#use-templater-and-projector)
+  - [Templater](#templater)
+    - [Usage](#usage)
+  - [Projector](#projector)
+    - [Usage](#usage-1)
 
 It uses two generics that influence the types for components returned.
 
@@ -206,7 +210,7 @@ Using the template
  const [RandomStringTemplate, RandomStringProjector] = useTemplaterAndProjector()
 ---
 
-<RandomStringTemplate context={{text: "Hello I'm the Random String Template"}} >
+<RandomStringTemplate context={{ text: "Hello I'm the Random String Template"}} >
     {(slot)=> <div> I'm content {slot()} </div>}
 </RandomStringTemplate>
 ```
@@ -256,9 +260,10 @@ Templater receiving the Context.
 
 :::info
 
+Projector sending the context and a slot.
+
 ```astro
 
-Projector sending the context and a slot.
 
 ---
  const [RandomStringTemplate, RandomStringProjector] = useTemplaterAndProjector()
