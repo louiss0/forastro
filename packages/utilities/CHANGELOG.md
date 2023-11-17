@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.1.3] - 2023-11-17
+
 ## Fixed
 
 - Removed assertion from `executeIf` and `throwIf`
