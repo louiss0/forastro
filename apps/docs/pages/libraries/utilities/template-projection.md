@@ -54,11 +54,17 @@ These ideas are enforced on the type level.
 
  ```ts
    type Templater = {
-        children: (context: {message:string}, defaultSlot: ProjectorSlot) => unknown
-    }
+        children: (
+            message:string, 
+            defaultSlot: {
+                           default: (() => RenderTemplateResult) | undefined
+                           [key: string]: (() => RenderTemplateResult) | undefined
+                         }
+                ) => unknown
+            }
 
     type Projector = {
-        context: {message:string}
+        message:string
         children?: Array<astroHTML.JSX.HTMLAttributes> | string;
     }
 
@@ -77,7 +83,7 @@ These ideas are enforced on the type level.
  ```ts
 
    type Templater = {
-        context: {message:string}
+        message:string
         children: ((defaultSlot: ProjectorSlot) => unknown)
         | Array<astroHTML.JSX.HTMLAttributes>
         | string;
@@ -103,14 +109,20 @@ These ideas are enforced on the type level.
 
  ```ts
    type Templater = {
-        context:  {message:string}
-        children: (context: {text:string}, defaultSlot: ProjectorSlot) => unknown
+        message:string
+        children: (
+            context: {text:string}, 
+            defaultSlot: {
+                 default: (() => RenderTemplateResult) | undefined
+                [key: string]: (() => RenderTemplateResult) | undefined
+            }
+         ) => unknown
     }
 
     
 
     type Projector = {
-        context:{text:string}
+        text:string
         children(context: {message:string}): unknown
     }
 
@@ -203,8 +215,8 @@ Using the template
  const [RandomStringTemplate, RandomStringProjector] = useTemplaterAndProjector()
 ---
 
-<RandomStringTemplate context={{ text: "Hello I'm the Random String Template"}} >
-    {(slot)=> <div> I'm content {slot()} </div>}
+<RandomStringTemplate text="Hello I'm the Random String Template" >
+    {(slots)=> <div> I'm content {slots.default} </div>}
 </RandomStringTemplate>
 ```
 
@@ -238,7 +250,7 @@ Projector sending the context
  const [RandomStringTemplate, RandomStringProjector] = useTemplaterAndProjector()
 ---
 
-<RandomStringProjector context={{text: "Hello I'm the Random String Template"}}/>
+<RandomStringProjector text="Hello I'm the Random String Template"/>
 ```
 
 Templater receiving the Context.
@@ -262,20 +274,20 @@ Projector sending the context and a slot.
  const [RandomStringTemplate, RandomStringProjector] = useTemplaterAndProjector()
 ---
 
-<RandomStringProjector context={{text: "Hello I'm the Random String Template"}}>
+<RandomStringProjector text="Hello I'm the Random String Template">
     I'm simply content
 </RandomStringProjector>
 
 ```
 
-Templater receiving the content and slot.
+Templater receiving the content and slots.
 
 ```astro
 <RandomStringTemplate>
- {({text}, slot)=> 
+ {({text}, slots)=> 
     <div>
         {text}
-        {slot()}
+        {slots.default}
     </div> 
  }
 </RandomStringTemplate>
