@@ -13,11 +13,11 @@ export const useTemplaterAndProjector = (debugName) => {
 
     let storedSlot
 
-    let defineTemplateContext
+    let defineTemplateProps
 
     callCount++
 
-    const DefineTemplate = createAstroFunctionalComponent(({ context }, slots) => {
+    const DefineTemplate = createAstroFunctionalComponent((props, slots) => {
 
 
 
@@ -28,25 +28,15 @@ export const useTemplaterAndProjector = (debugName) => {
         )
 
 
-        const contextIsDefinedButItIsNotAnObjectLiteral = context && !isObject(context);
-
-        throwIf(
-            contextIsDefinedButItIsNotAnObjectLiteral,
-            "The context must be an object literal",
-            `DefineTemplate${debugName?.toUppercase() ?? callCount} Invalid Type`
-
-        )
-
-
         storedSlot = slots.default
 
-        defineTemplateContext = context
+        defineTemplateProps = Object.freeze(props)
 
     })
 
 
 
-    const Projector = createAstroFunctionalComponent(({ context }, slots) => {
+    const Projector = createAstroFunctionalComponent((props, slots) => {
 
 
 
@@ -56,7 +46,7 @@ export const useTemplaterAndProjector = (debugName) => {
 
 
         const theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject =
-            typeof projectorSlotFirstExpression !== "function" && isObject(defineTemplateContext);
+            typeof projectorSlotFirstExpression !== "function" && isObject(defineTemplateProps);
 
 
         throwIf(
@@ -76,8 +66,8 @@ export const useTemplaterAndProjector = (debugName) => {
             executeIfElse(
                 typeof projectorSlotFirstExpression === "function",
                 () => executeIf(
-                    isObject(defineTemplateContext),
-                    () => projectorSlotFirstExpression(defineTemplateContext)
+                    isObject(defineTemplateProps),
+                    () => projectorSlotFirstExpression(defineTemplateProps)
                 ),
                 () => projectorSlotResult
 
@@ -88,9 +78,9 @@ export const useTemplaterAndProjector = (debugName) => {
         return executeIfElse(
             typeof storedSlotFirstExpression === "function",
             () => executeIfElse(
-                isObject(context),
+                isObject(props),
                 () => storedSlotFirstExpression(
-                    context,
+                    Object.freeze(props),
                     getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult
                 ),
                 () => storedSlotFirstExpression(
@@ -109,7 +99,7 @@ export const useTemplaterAndProjector = (debugName) => {
 
 
 
-    return Object.freeze([DefineTemplate, Projector])
+    return [DefineTemplate, Projector]
 
 
 }
