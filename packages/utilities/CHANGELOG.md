@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.2.0] - 2023-11-19
+
 ## Changed
 
 - `Templater` and `Projector` pass all props to each other and don't require context.
