@@ -52,8 +52,8 @@ importers:
         specifier: ^16.2.0
         version: 16.2.0(@nx/js@17.1.2)(@nx/workspace@17.1.2)(astro@3.5.5)(nx@17.1.2)(typescript@5.2.2)
       '@release-it/keep-a-changelog':
-        specifier: ^5.0.0
-        version: 5.0.0(release-it@16.2.1)
+        specifier: ^4.0.0
+        version: 4.0.0(release-it@16.2.1)
       '@types/node':
         specifier: ^20.9.2
         version: 20.9.2
@@ -103,8 +103,8 @@ importers:
         specifier: ^2.6.2
         version: 2.6.2
       tsup:
-        specifier: ^7.3.0
-        version: 7.3.0(typescript@5.2.2)
+        specifier: ^8.0.0
+        version: 8.0.0(typescript@5.2.2)
       typescript:
         specifier: ~5.2.2
         version: 5.2.2
@@ -3555,11 +3555,11 @@ packages:
       - supports-color
     dev: true
 
-  /@release-it/keep-a-changelog@5.0.0(release-it@16.2.1):
-    resolution: {integrity: sha512-Y1xqZe50jqK8qKlzEfGLVTjSkn57e/QlQMXHhKRWGgsv8Qy/X0LN1CJphoskZu7p7sAD3RihxhXrjJhRPE4JcA==}
-    engines: {node: '>=18'}
+  /@release-it/keep-a-changelog@4.0.0(release-it@16.2.1):
+    resolution: {integrity: sha512-a3n6RkBaYGf2qK2Yz/FkHDkpJjLYtMvpoZBIGfOz1zmv+918YU3In9zjoBJn4f2PldIW5yTWuk81hMYAdgPFww==}
+    engines: {node: '>=16'}
     peerDependencies:
-      release-it: ^17.0.0
+      release-it: ^16.0.0
     dependencies:
       detect-newline: 4.0.1
       release-it: 16.2.1(typescript@5.2.2)
@@ -11613,16 +11613,18 @@ packages:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: true
 
-  /tsup@7.3.0(typescript@5.2.2):
-    resolution: {integrity: sha512-Ja1eaSRrE+QarmATlNO5fse2aOACYMBX+IZRKy1T+gpyH+jXgRrl5l4nHIQJQ1DoDgEjHDTw8cpE085UdBZuWQ==}
+  /tsup@8.0.0(typescript@5.2.2):
+    resolution: {integrity: sha512-9rOGn8LsFn2iAg2pCB1jnH7ygVuGjlzIomjw0jKXUxAii3iL5cXgm0jZMPKfFH1bSAjQovJ1DUVPSw+oDuIu8A==}
     engines: {node: '>=18'}
-    deprecated: Breaking node 16
     hasBin: true
     peerDependencies:
+      '@microsoft/api-extractor': ^7.36.0
       '@swc/core': ^1
       postcss: ^8.4.12
       typescript: '>=4.5.0'
     peerDependenciesMeta:
+      '@microsoft/api-extractor':
+        optional: true
       '@swc/core':
         optional: true
       postcss:
