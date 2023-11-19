@@ -23,23 +23,16 @@ The projector function child can only accept the context.
 
 ```ts
 function useTemplaterAndProjector<
- ProjectorContext extends Record<string, unknown> | null,
- TemplaterContext extends Record<string, unknown> | null = null
+ ProjectorProps extends Record<string, unknown> | null,
+ TemplaterProps extends Record<string, unknown> | null = null
 >(debugName?: string): [
-    Templater<ProjectorContext, TemplaterContext>,
-    Projector<TemplaterContext, ProjectorContext>
+    Templater<ProjectorProps, TemplaterProps>,
+    Projector<TemplaterProps, ProjectorProps>
 ]
 
 ```
 
 The use templater and projector function returns two Astro Components.
-
-- [Template Projection](#template-projection)
-  - [Use Templater and Projector](#use-templater-and-projector)
-  - [Templater](#templater)
-    - [Usage](#usage)
-  - [Projector](#projector)
-    - [Usage](#usage-1)
 
 It uses two generics that influence the types for components returned.
 
