@@ -13,24 +13,24 @@ export const useTemplaterAndProjector = (debugName) => {
 
     let storedSlot
 
-    let defineTemplateProps
+    let templaterProps
 
     callCount++
 
-    const DefineTemplate = createAstroFunctionalComponent((props, slots) => {
+    const Templater = createAstroFunctionalComponent((props, slots) => {
 
 
 
         throwUnless(
             typeof slots.default === "function",
             "Please pass a Child into this component",
-            `DefineTemplate${debugName?.toUppercase() ?? callCount} Invalid Child`
+            `Templater${debugName?.toUppercase() ?? callCount} Invalid Child`
         )
 
 
         storedSlot = slots.default
 
-        defineTemplateProps = Object.freeze(props)
+        templaterProps = Object.freeze(props)
 
     })
 
@@ -38,20 +38,16 @@ export const useTemplaterAndProjector = (debugName) => {
 
     const Projector = createAstroFunctionalComponent((props, slots) => {
 
+        const defineTemplatePropsHasNoKeys = Object.keys(templaterProps).length !== 0;
 
-
-        const projectorSlotResult = slots?.default?.()
-
-        const projectorSlotFirstExpression = projectorSlotResult?.expressions.at(0)
-
-
-        const theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject =
-            typeof projectorSlotFirstExpression !== "function" && isObject(defineTemplateProps);
+        const theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextHasProps =
+            typeof projectorSlotFirstExpression !== "function"
+            && defineTemplatePropsHasNoKeys;
 
 
         throwIf(
-            theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextIsAnObject,
-            "You must pass in a function as the child if the defineTemplateContext is used",
+            theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextHasProps,
+            "You must pass in a function as the child if the templater has props",
             `Projector${debugName?.toUppercase() ?? callCount} Invalid Child`
         )
 
@@ -62,32 +58,20 @@ export const useTemplaterAndProjector = (debugName) => {
         const storedSlotFirstExpression = storedSlotResult.expressions.at(0)
 
 
-        const getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult = () =>
-            executeIfElse(
-                typeof projectorSlotFirstExpression === "function",
-                () => executeIf(
-                    isObject(defineTemplateProps),
-                    () => projectorSlotFirstExpression(defineTemplateProps)
-                ),
-                () => projectorSlotResult
-
-            )
-
+        const projectorPropsHasNoKeys = Object.keys(props).length !== 0;
 
 
         return executeIfElse(
             typeof storedSlotFirstExpression === "function",
             () => executeIfElse(
-                isObject(props),
+                projectorPropsHasNoKeys,
                 () => storedSlotFirstExpression(
                     Object.freeze(props),
-                    getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult
+                    slots
                 ),
-                () => storedSlotFirstExpression(
-                    getResultOfTheProjectorSlotWithTheDefineTemplateContextPassedInIfItIsAFunctionIfNotGetTheCurriedProjectorSlotResult
-                )
+                () => storedSlotFirstExpression(slots)
             ),
-            () => storedSlot
+            storedSlot
         )
 
 
@@ -99,7 +83,7 @@ export const useTemplaterAndProjector = (debugName) => {
 
 
 
-    return [DefineTemplate, Projector]
+    return [Templater, Projector]
 
 
 }
