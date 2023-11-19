@@ -1,38 +1,41 @@
 {
-  "name": "astro-circle",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "astro-circle",
   "projectType": "application",
   "sourceRoot": "apps/astro-circle/src",
+  "tags": [
+    "astro:astro-circle"
+  ],
   "targets": {
     "build": {
-      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
-      "executor": "@nxtensions/astro:build",
+      "executor": "nx:run-commands",
       "options": {
-        "config": "astro.config.prod.mjs"
+        "command": "pnpm exec astro --root apps/astro-circle build"
+      }
+    },
+    "add": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/astro-circle add"
+      }
+    },
+    "info": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/astro-circle info"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/astro-circle check"
       }
     },
     "dev": {
-      "executor": "@nxtensions/astro:dev",
+      "executor": "nx:run-commands",
       "options": {
-        "config": "astro.config.mjs"
+        "command": "pnpm exec astro --root apps/astro-circle dev"
       }
-    },
-    "preview": {
-      "dependsOn": [
-        {
-          "target": "build",
-          "projects": "self"
-        }
-      ],
-      "executor": "@nxtensions/astro:preview",
-      "options": {}
-    },
-    "check": {
-      "executor": "@nxtensions/astro:check"
-    },
-    "sync": {
-      "executor": "@nxtensions/astro:sync"
     }
-  },
-  "tags": ["scope:ui"]
+  }
 }
