@@ -17,7 +17,7 @@
     "@nx/workspace": "17.1.2",
     "@nxtensions/astro": "^16.2.0",
     "@release-it/keep-a-changelog": "^5.0.0",
-    "@types/node": "^20.9.1",
+    "@types/node": "^20.9.2",
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
     "@vitest/coverage-v8": "^0.34.6",
@@ -46,7 +46,7 @@
     "@anatine/zod-mock": "^3.13.3",
     "@faker-js/faker": "^8.3.1",
     "better-enums": "^0.2.2",
-    "unocss": "^0.57.5",
+    "unocss": "^0.57.6",
     "vue": "^3.3.8"
   }
 }
