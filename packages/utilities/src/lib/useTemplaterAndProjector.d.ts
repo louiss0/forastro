@@ -22,15 +22,14 @@ type TemplaterProps<
 > =
     ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<ProjectorContext> extends StringKeyedObjectLiteralWithUnknownValues
     ? TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
-    ? {
-        context: TemplaterContext
-        children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
+    ? TemplaterContext & {
+        children: (context: Readonly<ProjectorContext>, defaultSlot: ProjectorSlot) => unknown
     } : {
-        children: (context: ProjectorContext, defaultSlot: ProjectorSlot) => unknown
+        children: (context: Readonly<ProjectorContext>, defaultSlot: ProjectorSlot) => unknown
     }
     : TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
-    ? {
-        context: TemplaterContext
+    ? TemplaterContext & {
+
         children: ((defaultSlot: ProjectorSlot) => unknown)
         | Array<astroHTML.JSX.HTMLAttributes>
         | string;
@@ -55,17 +54,15 @@ type ProjectorProps<
     > extends StringKeyedObjectLiteralWithUnknownValues
     ?
     TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
-    ? {
-        context: ProjectorContext
-        children(context: TemplaterContext): unknown
+    ? ProjectorContext & {
+        children(context: Readonly<TemplaterContext>): unknown
     }
-    : {
-        context: ProjectorContext
+    : ProjectorContext & {
         children?: Array<astroHTML.JSX.HTMLAttributes> | string;
     }
     : TemplaterContext extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        children(context: TemplaterContext): unknown
+        children(context: Readonly<TemplaterContext>): unknown
     }
     : { children?: Array<astroHTML.JSX.HTMLAttributes> | string; }
 
