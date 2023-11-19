@@ -37,9 +37,5 @@
   "keywords": [
     "astro-component",
     "ui"
-  ],
-  "devDependencies": {
-    "@release-it/keep-a-changelog": "^5.0.0",
-    "release-it": "^17.0.0"
-  }
+  ]
 }
