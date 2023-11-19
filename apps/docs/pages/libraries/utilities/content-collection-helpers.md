@@ -35,28 +35,48 @@ type EntryDataAndSlugs<T extends string> = Array<EntryDataAndSlug<T>>
 ## Get Collection Data List
 
 ```ts
-  
-    const getCollectionDataList = 
+
+type EntryIsNotADraft<T extends CollectionKey> = Omit<CollectionEntry<T>, "data"> & {
+    data: NonNullable<CollectionEntry<T>["data"] & { draft: false | undefined }>;
+};
+
+type EntryIsADraft<T extends CollectionKey> = Omit<CollectionEntry<T>, "data">
+    & {
+        data: NonNullable<CollectionEntry<T>["data"] & { draft: true }>;
+    };
+
+const getCollectionDataList = 
     <C extends string, E extends CollectionEntry<C>>
-    ( collection: C, 
-      filter?: ((entry: E) => entry is E) | undefined
-     ): Promise<EntryDataAndSlugs<C>> & {
-        filterNonDrafts: 
+    (collection: C, filter?: ((entry: E) => entry is E) | undefined): Promise<EntryDataAndSlugs<C>>;
+
+getCollectionDataList.filterNonDrafts = <
         <
-        T extends string, 
-        U extends ((entry: CollectionEntry<T>) => 
-        entry is CollectionEntry<T>) | undefined
+        T extends CollectionKey,
+        U extends EntryIsNotADraft<T>
+    >(collection: T, filter?: FilterFunction<T, U>) =>
+        Promise<
+            Array<
+                Pick<
+                    U,
+                    "slug"
+                >
+                & U["data"]
+            >
+        >;
+
+getCollection.filterDrafts =  <
+        T extends CollectionKey,
+        U extends EntryIsADraft<T>
+    >(collection: T, filter?: FilterFunction<T, U>) =>
+        Promise<
+            Array<
+                Pick<
+                    U,
+                    "slug"
+                >
+                & U["data"]
+            >
         >
-            (collection: T, filter: U | undefined) =>   
-            Promise<Array<CollectionEntry<T>>>;
-        filterDrafts: <
-        T extends string, 
-        U extends ((entry: CollectionEntry<T>) => 
-        entry is CollectionEntry<T>) | undefined
-        >
-        (collection: T, filter: U | undefined) =>       
-        Promise<Array<CollectionEntry<T>>>;
-}
 
 ```
 
