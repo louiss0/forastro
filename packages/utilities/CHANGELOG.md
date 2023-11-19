@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.3.0] - 2023-11-19
+
 ### Changed
 
 - `<Projector/>` sends all slots to `<Templater/>` it receives all of them.
