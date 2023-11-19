@@ -23,6 +23,11 @@
 
 ## [Unreleased]
 
+## Changed
+
+- `Templater` and `Projector` pass all props to each other and don't require context.
+- Props sent from `Templater` or `Projector` are shallow readonly.
+
 ## [4.1.3] - 2023-11-17
 
 ## Fixed
