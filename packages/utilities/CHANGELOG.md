@@ -23,9 +23,18 @@
 
 ## [Unreleased]
 
+### Changed
+
+- `<Projector/>` sends all slots to `<Templater/>` it receives all of them.
+
+### Fixed
+
+- Code to check if projector uses a slot when Templater passes props
+is now changed since props are always an object no matter what.
+
 ## [4.2.0] - 2023-11-19
 
-## Changed
+### Changed
 
 - `Templater` and `Projector` pass all props to each other and don't require context.
 - Props sent from `Templater` or `Projector` are shallow readonly.
