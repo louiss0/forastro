@@ -54,9 +54,9 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
 
 <DefineContainerTemplate>
   {
-    (slot) => (
+    (slots) => (
       <div data-content class="mx-auto w-4/5 max-w-5xl">
-        {slot()}
+        {slots.default}
       </div>
     )
   }
@@ -64,7 +64,7 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
 
 <DefineDownloadButtonTemplate>
   {
-    ({ iconLink }, slot) => (
+    ({ iconLink }, slots) => (
       <a
         href={iconLink}
         download
@@ -77,7 +77,7 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
           'transition-opacity duration-250 ease-out',
         ]}
       >
-        {slot()}
+        {slots.default}
       </a>
     )
   }
