@@ -1,5 +1,5 @@
 ---
-import { useDefineTemplateAndProjector, iterate } from '@forastro/utilities';
+import { useTemplaterAndProjector, iterate } from '@forastro/utilities';
 import AstroCircle from '../components/AstroCircle.astro';
 import Layout from '../layouts/Layout.astro';
 import { Icon } from 'astro-icon';
@@ -46,10 +46,10 @@ const ComponentIconNamesAndLinksToCodeMap = new Map(
 );
 
 const [DefineContainerTemplate, ContainerProjector] =
-  useDefineTemplateAndProjector();
+  useTemplaterAndProjector();
 
 const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
-  useDefineTemplateAndProjector<{ iconLink: `/${string}` }>();
+  useTemplaterAndProjector<{ iconLink: `/${string}` }>();
 ---
 
 <DefineContainerTemplate>
@@ -117,7 +117,7 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
     <section aria-label="Examples">
       <ContainerProjector>
         <div class="flex flex-col justify-center items-center gap-6">
-          <DownloadButtonProjector context={{ iconLink: '/AstroCircle.astro' }}>
+          <DownloadButtonProjector iconLink="/AstroCircle.astro">
             Download Astro Circle
           </DownloadButtonProjector>
 
@@ -162,7 +162,7 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
                         <Icon name={iconName} width="1.5rem" />
                       </Fragment>
                     </AstroCircle>
-                    <DownloadButtonProjector context={{ iconLink }}>
+                    <DownloadButtonProjector {iconLink}>
                       Download
                     </DownloadButtonProjector>
                   </div>
@@ -182,7 +182,7 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
           />
 
           <DownloadButtonProjector
-            context={{ iconLink: '/TopFiveFrameworksAstroCircle.astro' }}
+            iconLink="/TopFiveFrameworksAstroCircle.astro"
           >
             Download Icon With Top Five Frameworks
           </DownloadButtonProjector>
