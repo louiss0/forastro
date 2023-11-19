@@ -1,7 +1,6 @@
 
 import { createAstroFunctionalComponent, } from './helpers';
-import { executeIf, executeIfElse, throwIf, throwUnless } from './helpers/conditional';
-import { isObject, } from './internal';
+import { executeIfElse, throwIf, throwUnless } from './helpers/conditional';
 
 
 
