@@ -13,7 +13,7 @@ export default defineConfig({
         /^(?:bg|text|border|outline)-(?:[a-z]+)-[1-9]$/,
         /^(?:object)-[a-z]{2}$/,
         /^(grid)-(?!cols)/,
-        /^(flex)-(?!col)/,
+        /^(flex)-(?!col|wrap)/,
         /^(font|rounded)-\d+/
     ],
 })
