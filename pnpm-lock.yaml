@@ -8,12 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@anatine/zod-mock':
-        specifier: ^3.13.3
-        version: 3.13.3(@faker-js/faker@8.3.1)
-      '@faker-js/faker':
-        specifier: ^8.3.1
-        version: 8.3.1
       better-enums:
         specifier: ^0.2.2
         version: 0.2.2(typescript@5.2.2)
@@ -27,6 +21,12 @@ importers:
       '@ahryman40k/nx-vitepress':
         specifier: ^15.1.1
         version: 15.1.1(tslib@2.6.2)
+      '@anatine/zod-mock':
+        specifier: ^3.13.3
+        version: 3.13.3(@faker-js/faker@8.3.1)
+      '@faker-js/faker':
+        specifier: ^8.3.1
+        version: 8.3.1
       '@fontsource/palanquin':
         specifier: ^5.0.8
         version: 5.0.8
@@ -51,6 +51,9 @@ importers:
       '@nxtensions/astro':
         specifier: ^16.2.0
         version: 16.2.0(@nx/js@17.1.2)(@nx/workspace@17.1.2)(astro@3.5.5)(nx@17.1.2)(typescript@5.2.2)
+      '@release-it/keep-a-changelog':
+        specifier: ^5.0.0
+        version: 5.0.0(release-it@17.0.0)
       '@types/node':
         specifier: ^20.9.2
         version: 20.9.2
@@ -93,6 +96,9 @@ importers:
       publint:
         specifier: ^0.2.5
         version: 0.2.5
+      release-it:
+        specifier: ^17.0.0
+        version: 17.0.0(typescript@5.2.2)
       tslib:
         specifier: ^2.6.2
         version: 2.6.2
@@ -126,13 +132,6 @@ importers:
       '@forastro/utilities':
         specifier: workspace:^
         version: link:../utilities
-    devDependencies:
-      '@release-it/keep-a-changelog':
-        specifier: ^5.0.0
-        version: 5.0.0(release-it@17.0.0)
-      release-it:
-        specifier: ^17.0.0
-        version: 17.0.0(typescript@5.2.2)
 
   packages/remark-html-directives-integration:
     dependencies:
@@ -140,14 +139,7 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
 
-  packages/utilities:
-    devDependencies:
-      '@release-it/keep-a-changelog':
-        specifier: ^5.0.0
-        version: 5.0.0(release-it@17.0.0)
-      release-it:
-        specifier: ^17.0.0
-        version: 17.0.0(typescript@5.2.2)
+  packages/utilities: {}
 
   templates/astro-markdoc:
     dependencies:
@@ -486,7 +478,7 @@ packages:
     dependencies:
       '@faker-js/faker': 8.3.1
       randexp: 0.5.3
-    dev: false
+    dev: true
 
   /@antfu/install-pkg@0.1.1:
     resolution: {integrity: sha512-LyB/8+bSfa0DFGC06zpCEfs89/XoWZwws5ygEa5D+Xsm3OfI+aXQ86VgVG7Acyef+rSZ5HE7J8rrxzrQeM3PjQ==}
@@ -2763,7 +2755,7 @@ packages:
   /@faker-js/faker@8.3.1:
     resolution: {integrity: sha512-FdgpFxY6V6rLZE9mmIBb9hM0xpfvQOSNOLnzolzKwsE1DH+gC7lEKV1p1IbR0lAYyvYd5a4u3qWJzowUkw1bIw==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
-    dev: false
+    dev: true
 
   /@fontsource/lato@5.0.17:
     resolution: {integrity: sha512-K9znoLAeUsm4tqp6zYv/oXBxhVDUeYPjRz6Yc7rKyBOKKOS9eXxkEcxD8pT9klnvCky4/pYXKJ9lab01LXYSEA==}
@@ -6472,7 +6464,7 @@ packages:
   /drange@1.1.1:
     resolution: {integrity: sha512-pYxfDYpued//QpnLIm4Avk7rsNtAtQkUES2cwAYSvD/wd2pKD71gN2Ebj3e7klzXwjocvE8c5vx/1fxwpqmSxA==}
     engines: {node: '>=4'}
-    dev: false
+    dev: true
 
   /dset@3.1.2:
     resolution: {integrity: sha512-g/M9sqy3oHe477Ar4voQxWtaPIFw1jTdKZuomOjhCcBx9nHUNn0pu6NopuFFrTh/TRZIKEj+76vLWFu9BNKk+Q==}
@@ -10420,7 +10412,7 @@ packages:
     dependencies:
       drange: 1.1.1
       ret: 0.2.2
-    dev: false
+    dev: true
 
   /rc@1.2.8:
     resolution: {integrity: sha512-y3bGgqKj3QBdxLbLkomlohkvsA8gdAiUQlSBJnBhfn+BPxg4bc62d8TcBW15wavDfgexCgccckhcZvywyQYPOw==}
@@ -10715,7 +10707,7 @@ packages:
   /ret@0.2.2:
     resolution: {integrity: sha512-M0b3YWQs7R3Z917WRQy1HHA7Ba7D8hvZg6UE5mLykJxQVE2ju0IXbGlaHPPlkY+WN7wFP+wUMXmBFA0aV6vYGQ==}
     engines: {node: '>=4'}
-    dev: false
+    dev: true
 
   /retext-latin@3.1.0:
     resolution: {integrity: sha512-5MrD1tuebzO8ppsja5eEu+ZbBeUNCjoEarn70tkXOS7Bdsdf6tNahsv2bY0Z8VooFF6cw7/6S+d3yI/TMlMVVQ==}

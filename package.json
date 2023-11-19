@@ -8,6 +8,8 @@
   "private": true,
   "devDependencies": {
     "@ahryman40k/nx-vitepress": "^15.1.1",
+    "@anatine/zod-mock": "^3.13.3",
+    "@faker-js/faker": "^8.3.1",
     "@fontsource/palanquin": "^5.0.8",
     "@fontsource/raleway": "^5.0.15",
     "@nx/eslint": "17.1.2",
@@ -16,6 +18,7 @@
     "@nx/vite": "17.1.2",
     "@nx/workspace": "17.1.2",
     "@nxtensions/astro": "^16.2.0",
+    "@release-it/keep-a-changelog": "^5.0.0",
     "@types/node": "^20.9.2",
     "@typescript-eslint/eslint-plugin": "6.11.0",
     "@typescript-eslint/parser": "6.11.0",
@@ -30,6 +33,7 @@
     "nx": "17.1.2",
     "prettier": "^3.1.0",
     "publint": "^0.2.5",
+    "release-it": "^17.0.0",
     "tslib": "^2.6.2",
     "tsup": "^8.0.0",
     "typescript": "~5.2.2",
@@ -41,8 +45,6 @@
     "vitest": "^0.34.6"
   },
   "dependencies": {
-    "@anatine/zod-mock": "^3.13.3",
-    "@faker-js/faker": "^8.3.1",
     "better-enums": "^0.2.2",
     "unocss": "^0.57.6",
     "vue": "^3.3.8"
