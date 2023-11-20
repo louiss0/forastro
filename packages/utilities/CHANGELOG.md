@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.3.1] - 2023-11-19
+
 ### Fixed
 
 - Remove condition from `<Projector/>` that checks if a slot is
