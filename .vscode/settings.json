@@ -1,22 +1,22 @@
 {
     "workbench.colorCustomizations": {
-        "activityBar.activeBackground": "#7295b1",
-        "activityBar.background": "#7295b1",
+        "activityBar.activeBackground": "#ffffff",
+        "activityBar.background": "#ffffff",
         "activityBar.foreground": "#15202b",
         "activityBar.inactiveForeground": "#15202b99",
-        "activityBarBadge.background": "#e8d6e0",
+        "activityBarBadge.background": "#df9f9f",
         "activityBarBadge.foreground": "#15202b",
-        "sash.hoverBorder": "#7295b1",
-        "statusBar.background": "#557c9b",
-        "statusBar.foreground": "#e7e7e7",
-        "statusBarItem.hoverBackground": "#7295b1",
-        "statusBarItem.remoteBackground": "#557c9b",
-        "statusBarItem.remoteForeground": "#e7e7e7",
-        "tab.activeBorder": "#7295b1"
+        "sash.hoverBorder": "#ffffff",
+        "statusBar.background": "#f5f6fa",
+        "statusBar.foreground": "#15202b",
+        "statusBarItem.hoverBackground": "#d3d7e9",
+        "statusBarItem.remoteBackground": "#f5f6fa",
+        "statusBarItem.remoteForeground": "#15202b",
+        "tab.activeBorder": "#ffffff"
     },
     "peacock.color": "#557c9b",
     "git.ignoreLimitWarning": true,
-    "peacock.remoteColor": "#557c9b",
+    "peacock.remoteColor": "#f5f6fa",
     "cSpell.words": [
         "allowpaymentrequest",
         "clsx",

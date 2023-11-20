@@ -23,6 +23,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove condition from `<Projector/>` that checks if a slot is
+a function while templater has props with keys in them.
+
 ## [4.3.0] - 2023-11-19
 
 ### Changed
