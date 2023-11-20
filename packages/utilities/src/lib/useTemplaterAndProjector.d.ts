@@ -65,7 +65,7 @@ type ProjectorProps<
     }
     : TemplaterProps extends StringKeyedObjectLiteralWithUnknownValues
     ? {
-        children(context: Readonly<TemplaterProps>): unknown
+        children?(context: Readonly<TemplaterProps>): unknown
     }
     : { children?: Array<astroHTML.JSX.HTMLAttributes> | string; }
 

@@ -1,6 +1,6 @@
 
 import { createAstroFunctionalComponent, } from './helpers';
-import { executeIfElse, throwIf, throwUnless } from './helpers/conditional';
+import { executeIfElse, executeIf, throwUnless } from './helpers/conditional';
 
 
 
@@ -22,8 +22,8 @@ export const useTemplaterAndProjector = (debugName) => {
 
         throwUnless(
             typeof slots.default === "function",
-            "Please pass a Child into this component",
-            `Templater${debugName?.toUppercase() ?? callCount} Invalid Child`
+            `Please pass a Child into this component
+            Templater${debugName?.toUppercase() ?? callCount} Invalid Child`
         )
 
 
@@ -37,40 +37,53 @@ export const useTemplaterAndProjector = (debugName) => {
 
     const Projector = createAstroFunctionalComponent((props, slots) => {
 
-        const defineTemplatePropsHasNoKeys = Object.keys(templaterProps).length !== 0;
 
-        const theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextHasProps =
-            typeof projectorSlotFirstExpression !== "function"
-            && defineTemplatePropsHasNoKeys;
+        const templaterPropsHasKeys = Object.keys(templaterProps).length > 0;
 
-
-        throwIf(
-            theProjectorSlotFirstExpressionIsNotAFunctionButTheDefineTemplateContextHasProps,
-            "You must pass in a function as the child if the templater has props",
-            `Projector${debugName?.toUppercase() ?? callCount} Invalid Child`
-        )
-
-
-
+    
         const storedSlotResult = storedSlot()
 
         const storedSlotFirstExpression = storedSlotResult.expressions.at(0)
 
 
-        const projectorPropsHasNoKeys = Object.keys(props).length !== 0;
+        const projectorPropsHasKeys = Object.keys(props).length > 0;
 
+
+
+
+
+        let newSlotsMap = executeIf(
+             templaterPropsHasKeys,
+             ()=> Object.entries(slots).reduce(
+                (slotsMap, [key, slotFunction]) => 
+                slotsMap.set(key, ()=> slotFunction(templaterProps)),
+                new Map()
+            )
+        );
+
+      const getSlotsBasedOnIfNewSlotsMapIsZero = 
+                  executeIfElse(
+                        newSlotsMap?.size === 0,
+                        () => Object.fromEntries(newSlotsMap),
+                        () => slots
+                    )
 
         return executeIfElse(
             typeof storedSlotFirstExpression === "function",
-            () => executeIfElse(
-                projectorPropsHasNoKeys,
+            
+            () => executeIfElse(    
+
+                projectorPropsHasKeys,
+        
                 () => storedSlotFirstExpression(
                     Object.freeze(props),
-                    slots
+                  getSlotsBasedOnIfNewSlotsMapIsZero
                 ),
-                () => storedSlotFirstExpression(slots)
+        
+                () => storedSlotFirstExpression(getSlotsBasedOnIfNewSlotsMapIsZero)
             ),
-            storedSlot
+
+           ()=>  storedSlot
         )
 
 
