@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.3.2] - 2023-11-26
+
 ## Fixed
 
 - `<Templater/>` props were not passed to `<Projector/>` when not empty.
