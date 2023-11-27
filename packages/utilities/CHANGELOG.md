@@ -23,6 +23,15 @@
 
 ## [Unreleased]
 
+## Fixed
+
+- `<Templater/>` props were not passed to `<Projector/>` when not empty.
+
+## Changed
+
+- Only the default slot is passed from `<Projector/>` to `<Templater/>`.
+- `getCollections()` is turned into an overload.
+
 ## [4.3.1] - 2023-11-19
 
 ### Fixed
