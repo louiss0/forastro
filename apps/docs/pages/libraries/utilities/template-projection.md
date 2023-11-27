@@ -54,14 +54,11 @@ These ideas are enforced on the type level.
 
  ```ts
    type Templater = {
+       message:string, 
         children: (
-            message:string, 
-            defaultSlot: {
-                           default: (() => RenderTemplateResult) | undefined
-                           [key: string]: (() => RenderTemplateResult) | undefined
-                         }
-                ) => unknown
-            }
+            defaultSlot: (() => RenderTemplateResult) | undefined
+          ) => unknown
+     }
 
     type Projector = {
         message:string
@@ -81,7 +78,8 @@ These ideas are enforced on the type level.
  These are the types for templater and projector.
 
  ```ts
-
+   type ProjectorSlot = (() => RenderTemplateResult) | undefined
+   
    type Templater = {
         message:string
         children: ((defaultSlot: ProjectorSlot) => unknown)
@@ -108,14 +106,14 @@ These ideas are enforced on the type level.
  These are the types for templater and projector.
 
  ```ts
+
+   type ProjectorSlot = (() => RenderTemplateResult) | undefined
+   
    type Templater = {
         message:string
         children: (
             context: {text:string}, 
-            defaultSlot: {
-                 default: (() => RenderTemplateResult) | undefined
-                [key: string]: (() => RenderTemplateResult) | undefined
-            }
+            defaultSlot: ProjectorSlot
          ) => unknown
     }
 
@@ -216,7 +214,7 @@ Using the template
 ---
 
 <RandomStringTemplate text="Hello I'm the Random String Template" >
-    {(slots)=> <div> I'm content {slots.default} </div>}
+    {(slot)=> <div> I'm content {slot?.()} </div>}
 </RandomStringTemplate>
 ```
 
@@ -280,14 +278,14 @@ Projector sending the context and a slot.
 
 ```
 
-Templater receiving the content and slots.
+Templater receiving the content and slot.
 
 ```astro
 <RandomStringTemplate>
- {({text}, slots)=> 
+ {({text}, slot)=> 
     <div>
         {text}
-        {slots.default}
+        {slot?.()}
     </div> 
  }
 </RandomStringTemplate>
