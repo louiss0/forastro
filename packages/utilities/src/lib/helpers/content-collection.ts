@@ -2,14 +2,63 @@ import { getCollection, getEntryBySlug, getEntry, getEntries, type CollectionEnt
 import { throwUnless } from './conditional';
 
 
+
+interface GetCollections {
+    <T extends ReadonlyArray<CollectionKey>, U extends CollectionEntry<T[number]>>(
+        collectionNames: T,
+        filter?: (entry: CollectionEntry<T[number]>) => entry is U
+    ): Promise<
+        Array<U>
+    >;
+    <T extends ReadonlyArray<CollectionKey>>(
+        collectionNames: T,
+        filter?: (entry: CollectionEntry<T[number]>) => unknown
+    ): Promise<
+        Array<CollectionEntry<T[number]>>
+    >;
+}
+
+
+
+export const getCollections: GetCollections
+    = async <T extends ReadonlyArray<CollectionKey>, U extends CollectionEntry<T[number]>>(
+        collectionNames: T,
+        filter?: FilterFunction<T[number], U>) => {
+
+
+        if (filter) {
+
+
+            return (
+                await Promise.all(
+                    collectionNames
+                        .map((collectionName) => getCollection(collectionName, filter)))
+            ).flat()
+
+        }
+
+
+        return (
+            await Promise.all(
+                collectionNames
+                    .map((collectionName) => getCollection(collectionName)))
+        ).flat()
+
+    }
+
+
+
+
 type GetEntryBySlugFunc = typeof getEntryBySlug;
 type GetEntryFunc = typeof getEntry;
 type GetEntriesFunc = typeof getEntries;
 
+
 type FilterFunction<
     T extends CollectionKey,
     U extends CollectionEntry<T>
-> = (entry: CollectionEntry<T>) => entry is U;
+> = ((entry: CollectionEntry<T>) => unknown)
+    | ((entry: CollectionEntry<T>) => entry is U)
 
 type GetCollectionDataListFunc = <
     T extends CollectionKey,
@@ -345,25 +394,3 @@ function getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterP
     };
 }
 
-type GetCollections = <
-    T extends Array<CollectionKey>,
-    U extends CollectionEntry<T[number]>,
-    F extends FilterFunction<T[number], U> | undefined = undefined
->(
-    collectionNames: T,
-    filter?: F
-) => F extends FilterFunction<T[number], U>
-    ? Promise<Array<U>>
-    : Promise<Array<CollectionEntry<T[number]>>>
-
-export const getCollections: GetCollections = async (collectionNames, filter) => {
-
-    return (
-        await Promise.all(
-            collectionNames
-                .map((collectionName) => getCollection(collectionName, filter))
-        )
-    ).flat()
-
-
-}
