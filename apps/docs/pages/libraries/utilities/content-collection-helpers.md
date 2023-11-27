@@ -160,16 +160,24 @@ You can pass in a filter for even better filtering.
 ## Get Collections
 
 ```ts
+    interface GetCollections {
     <
-    T extends Array<CollectionKey>,
-    U extends CollectionEntry<T[number]>,
-    F extends FilterFunction<T[number], U> | undefined = undefined
->(
-    collectionNames: T,
-    filter?: F
-) => F extends FilterFunction<T[number], U>
-    ? Promise<Array<U>>
-    : Promise<Array<CollectionEntry<T[number]>>>
+    T extends ReadonlyArray<CollectionKey>, 
+    U extends CollectionEntry<T[number]>
+    >(
+        collectionNames: T,
+        filter?: (entry: CollectionEntry<T[number]>) => entry is U
+    ): Promise<
+        Array<U>
+    >;
+    
+    <T extends ReadonlyArray<CollectionKey>>(
+        collectionNames: T,
+        filter?: (entry: CollectionEntry<T[number]>) => unknown
+    ): Promise<
+        Array<CollectionEntry<T[number]>>
+    >;
+}
 
 ```
 
