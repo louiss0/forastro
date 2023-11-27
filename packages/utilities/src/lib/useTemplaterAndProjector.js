@@ -23,7 +23,7 @@ export const useTemplaterAndProjector = (debugName) => {
         throwUnless(
             typeof slots.default === "function",
             `Please pass a Child into this component
-            Templater${debugName?.toUppercase() ?? callCount} Invalid Child`
+            Templater${debugName?.toUpperCase() ?? callCount} Invalid Child`
         )
 
 
@@ -40,7 +40,6 @@ export const useTemplaterAndProjector = (debugName) => {
 
         const templaterPropsHasKeys = Object.keys(templaterProps).length > 0;
 
-    
         const storedSlotResult = storedSlot()
 
         const storedSlotFirstExpression = storedSlotResult.expressions.at(0)
@@ -49,41 +48,27 @@ export const useTemplaterAndProjector = (debugName) => {
         const projectorPropsHasKeys = Object.keys(props).length > 0;
 
 
-
-
-
-        let newSlotsMap = executeIf(
-             templaterPropsHasKeys,
-             ()=> Object.entries(slots).reduce(
-                (slotsMap, [key, slotFunction]) => 
-                slotsMap.set(key, ()=> slotFunction(templaterProps)),
-                new Map()
-            )
-        );
-
-      const getSlotsBasedOnIfNewSlotsMapIsZero = 
-                  executeIfElse(
-                        newSlotsMap?.size === 0,
-                        () => Object.fromEntries(newSlotsMap),
-                        () => slots
-                    )
-
         return executeIfElse(
             typeof storedSlotFirstExpression === "function",
-            
-            () => executeIfElse(    
 
+            () => executeIfElse(
                 projectorPropsHasKeys,
-        
+
                 () => storedSlotFirstExpression(
                     Object.freeze(props),
-                  getSlotsBasedOnIfNewSlotsMapIsZero
-                ),
-        
-                () => storedSlotFirstExpression(getSlotsBasedOnIfNewSlotsMapIsZero)
-            ),
 
-           ()=>  storedSlot
+                    executeIfElse(
+                        templaterPropsHasKeys,
+
+                        () => () => slots.default(templaterProps),
+
+                        () => slots.default,
+                    )
+                ),
+
+                () => storedSlotFirstExpression(slots.default)
+            ),
+            storedSlot
         )
 
 
