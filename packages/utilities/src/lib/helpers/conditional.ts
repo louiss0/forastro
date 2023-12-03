@@ -32,8 +32,11 @@ export function executeIfElse(
 
     function valueIsIfElseOptions(value: unknown): value is IfElseOptions {
 
-        return isObject(value) && ["ifCb", "elseCb", "condition"]
-            .every(potentialKey => potentialKey in value)
+        const potentialKeys = ["ifCb", "elseCb", "condition"]
+
+        return isObject(value)
+            && potentialKeys.length === Object.keys(value).length
+            && potentialKeys.every(potentialKey => potentialKey in value)
     }
 
     if (valueIsIfElseOptions(firstParam) && !secondParam && !thirdParam) {
