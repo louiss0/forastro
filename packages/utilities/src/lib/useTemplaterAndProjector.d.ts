@@ -16,7 +16,6 @@ type ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<T> =
 type ProjectorSlot = (() => RenderTemplateResult) | undefined
 
 
-
 type TemplaterProps<
     ProjectorProps extends StringKeyedObjectLiteralWithUnknownValues | null,
     TemplaterProps extends StringKeyedObjectLiteralWithUnknownValues | null,

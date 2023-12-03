@@ -30,7 +30,13 @@ export function executeIfElse(
     thirdParam?: Callback
 ) {
 
-    if (isObject(firstParam)) {
+    function valueIsIfElseOptions(value: unknown): value is IfElseOptions {
+
+        return isObject(value) && ["ifCb", "elseCb", "condition"]
+            .every(potentialKey => potentialKey in value)
+    }
+
+    if (valueIsIfElseOptions(firstParam) && !secondParam && !thirdParam) {
 
         const { condition, ifCb, elseCb } = firstParam
 
@@ -38,11 +44,7 @@ export function executeIfElse(
 
     }
 
-
     return firstParam ? secondParam?.() : thirdParam?.()
-
-
-
 
 
 }
