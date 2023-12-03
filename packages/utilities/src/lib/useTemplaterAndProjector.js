@@ -1,6 +1,7 @@
 
 import { createAstroFunctionalComponent, } from './helpers';
 import { executeIfElse, executeIf, throwUnless } from './helpers/conditional';
+import { isObject } from './internal';
 
 
 
@@ -30,7 +31,13 @@ export const useTemplaterAndProjector = (debugName) => {
         storedSlot = slots.default
 
 
-        if (props) return (templaterProps = Object.freeze(props));
+        const propsFromTemplaterIsAnObjectWithItsOwnKeys = isObject(props) && Object.keys(props).length > 0;
+
+        //! Never return fom this function!
+
+        if (propsFromTemplaterIsAnObjectWithItsOwnKeys) {
+            templaterProps = Object.freeze(props)
+        };
 
 
 
@@ -40,29 +47,25 @@ export const useTemplaterAndProjector = (debugName) => {
 
     const Projector = createAstroFunctionalComponent((props, slots) => {
 
-
-        const templaterPropsHasKeys = templaterProps && Object.keys(templaterProps).length > 0;
-
         const storedSlotResult = storedSlot()
 
         const storedSlotFirstExpression = storedSlotResult.expressions.at(0)
 
 
-        const projectorPropsHasKeys = Object.keys(props).length > 0;
+        const projectorPropsIsAnObjectWithItsOwnKeys = isObject(props) && Object.keys(props).length > 0;
 
 
         return executeIfElse(
             typeof storedSlotFirstExpression === "function",
 
             () => executeIfElse(
-                projectorPropsHasKeys,
+                projectorPropsIsAnObjectWithItsOwnKeys,
 
                 () => storedSlotFirstExpression(
                     Object.freeze(props),
 
                     executeIfElse(
-                        templaterPropsHasKeys,
-
+                        templaterProps,
                         () => () => slots.default(templaterProps),
 
                         () => slots.default,
