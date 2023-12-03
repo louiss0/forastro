@@ -29,7 +29,10 @@ export const useTemplaterAndProjector = (debugName) => {
 
         storedSlot = slots.default
 
-        templaterProps = Object.freeze(props)
+
+        if (props) return (templaterProps = Object.freeze(props));
+
+
 
     })
 
@@ -38,7 +41,7 @@ export const useTemplaterAndProjector = (debugName) => {
     const Projector = createAstroFunctionalComponent((props, slots) => {
 
 
-        const templaterPropsHasKeys = Object.keys(templaterProps).length > 0;
+        const templaterPropsHasKeys = templaterProps && Object.keys(templaterProps).length > 0;
 
         const storedSlotResult = storedSlot()
 
