@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.3.4] - 2023-12-03
+
 ### Fixed
 
 - Remove return statement from templater.
