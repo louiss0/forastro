@@ -23,13 +23,17 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Correct statement for checking whether templater props is an object with keys.
+
 ## [4.3.2] - 2023-11-26
 
-## Fixed
+### Fixed
 
 - `<Templater/>` props were not passed to `<Projector/>` when not empty.
 
-## Changed
+### Changed
 
 - Only the default slot is passed from `<Projector/>` to `<Templater/>`.
 - `getCollections()` is turned into an overload.
