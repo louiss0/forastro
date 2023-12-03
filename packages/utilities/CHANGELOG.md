@@ -23,6 +23,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Make sure the `executeIfElse()` checks if the object is one with only if else options.
+and the other two functions don't exist.
+
 ## [4.3.4] - 2023-12-03
 
 ### Fixed
