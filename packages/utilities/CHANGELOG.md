@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.3.3] - 2023-12-03
+
 ### Fixed
 
 - Correct statement for checking whether templater props is an object with keys.
