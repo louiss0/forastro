@@ -23,6 +23,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Remove return statement from templater.
+- Use `isObject()` to check if props from `<Templater/>` and `<Projector/>` are objects.
+
 ## [4.3.3] - 2023-12-03
 
 ### Fixed
