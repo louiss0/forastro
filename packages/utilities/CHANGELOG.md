@@ -23,6 +23,8 @@
 
 ## [Unreleased]
 
+## [4.3.5] - 2023-12-03
+
 ### Fixed
 
 - Make sure the `executeIfElse()` checks if the object is one with only if else options.
