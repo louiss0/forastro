@@ -270,7 +270,7 @@ export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
     Object.assign((result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
 
         return {
-            result,
+            ...result,
             [Symbol.toStringTag]: 'AstroComponent',
             async *[Symbol.asyncIterator]() {
 
