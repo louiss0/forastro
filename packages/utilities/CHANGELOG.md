@@ -5,7 +5,7 @@
   * There should be an entry for every single version.
   * The same types of changes should be grouped.
   * Versions and sections should be linkable.
-  * The latest version comes first.
+  * The latest version comes first.****
   * The release date of each version is displayed.
   * Mention whether you follow Semantic Versioning.
 
@@ -22,6 +22,10 @@
 # @forastro/utilities
 
 ## [Unreleased]
+
+### Fixed
+
+- If `<Projector/>` doesn't render a default slot it won't throw an error.
 
 ## [4.3.5] - 2023-12-03
 
