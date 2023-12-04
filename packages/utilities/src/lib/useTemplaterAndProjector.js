@@ -47,7 +47,7 @@ export const useTemplaterAndProjector = (debugName) => {
 
     const Projector = createAstroFunctionalComponent((props, slots) => {
 
-        const storedSlotResult = storedSlot()
+        const storedSlotResult = storedSlot?.()
 
         const storedSlotFirstExpression = storedSlotResult?.expressions.at(0)
 
