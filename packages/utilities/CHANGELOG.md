@@ -23,8 +23,6 @@
 
 ## [Unreleased]
 
-## [4.3.6] - 2023-12-04
-
 ### Fixed
 
 - If `<Projector/>` doesn't render a default slot it won't throw an error.
