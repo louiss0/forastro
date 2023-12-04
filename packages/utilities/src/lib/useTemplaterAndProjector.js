@@ -49,7 +49,7 @@ export const useTemplaterAndProjector = (debugName) => {
 
         const storedSlotResult = storedSlot()
 
-        const storedSlotFirstExpression = storedSlotResult.expressions.at(0)
+        const storedSlotFirstExpression = storedSlotResult?.expressions.at(0)
 
 
         const projectorPropsIsAnObjectWithItsOwnKeys = isObject(props) && Object.keys(props).length > 0;
@@ -66,12 +66,11 @@ export const useTemplaterAndProjector = (debugName) => {
 
                     executeIfElse(
                         templaterProps,
-                        () => () => slots.default(templaterProps),
+                        () => () => slots?.default(templaterProps),
 
-                        () => slots.default,
+                        () => slots?.default,
                     )
                 ),
-
                 () => storedSlotFirstExpression(slots.default)
             ),
             storedSlot
