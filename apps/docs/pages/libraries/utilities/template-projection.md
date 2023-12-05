@@ -292,3 +292,34 @@ Templater receiving the content and slot.
 ```
 
 :::
+
+## Limitations  
+
+:::warning When using Templater and Projector you might find that Projector doesn't render.
+This happens when you attempt to use the projector in the slot of a Client Component.
+Client Components render outside of the scope of define templater and projector.
+
+To fix this problem put use templater inside of the Client Component you are rendering.
+
+```astro
+---
+import { useTemplaterAndProjector } from "@forastro/utilities"
+import { ClientComponent } from "@/components/ClientComponent.tsx"
+
+ const [RandomStringTemplate, RandomStringProjector] = useTemplaterAndProjector()
+
+---
+
+<ClientComponent client:idle>
+<RandomStringTemplate>
+    Hello World from Astro.   
+</RandomStringTemplate>
+
+<RandomStringProjector/>
+
+</ClientComponent>
+
+
+```
+
+:::
