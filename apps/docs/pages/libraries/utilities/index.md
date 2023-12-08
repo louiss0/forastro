@@ -5,7 +5,7 @@ next:
 ---
 
 <!-- markdownlint-disable-next-line MD033 -->
-# Utilities <Badge type="info" text="4.3.0"  />
+# Utilities <Badge type="info" text="4.3.7"  />
 
 The `@forastro/utilities` package is a package that has practical functions and components
 that are used for development with [Astro.js](https://astro.build).
@@ -38,6 +38,24 @@ that are used for development with [Astro.js](https://astro.build).
  ```[npm] shell
     npm i @forastro/utilities
  ```
+
+:::
+
+::: warning You must now set `vite.optimizeDeps.exclude` to `["astro:content"]`.
+  This library now uses `astro:content` to expand it's API's
+  to give devs a much better experience when using `getCollections()`.
+  Unfortunately this is the cost.
+
+```ts
+// astro.config.mjs
+  export default {
+   vite: {  //[!code ++]
+      optimizeDeps:{  //[!code ++]
+         exclude: ["astro:content"] //[!code ++]
+      } //[!code ++]
+   } //[!code ++]
+  }
+```
 
 :::
 
