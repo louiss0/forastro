@@ -41,7 +41,7 @@ that are used for development with [Astro.js](https://astro.build).
 
 :::
 
-::: warning You must now set `vite.optimizeDeps.exclude` to `["astro:content"]`.
+::: warning You must now set `vite.optimizeDeps.exclude` to `["astro:content"]` in astro config.
   This library now uses `astro:content` to expand it's API's
   to give devs a much better experience when using `getCollections()`.
   Unfortunately this is the cost.
