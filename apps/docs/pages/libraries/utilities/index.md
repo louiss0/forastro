@@ -5,7 +5,7 @@ next:
 ---
 
 <!-- markdownlint-disable-next-line MD033 -->
-# Utilities <Badge type="info" text="4.3.7"  />
+# Utilities <Badge type="info" text="4.3.8"  />
 
 The `@forastro/utilities` package is a package that has practical functions and components
 that are used for development with [Astro.js](https://astro.build).
