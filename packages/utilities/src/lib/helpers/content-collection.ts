@@ -217,55 +217,120 @@ type ReturnTypeOnlyIfIItsNotAnArray<U> = U extends Array<any> ? U[number] : U;
 type Prettify<T> = { [k in keyof T]: T[k] } & {}
 
 
-type GetCollectionPaths = <
-    T extends CollectionKey,
-    U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
-    V extends FilterFunction<T, EntryIsNotADraft<T>>
->(
-    collection: T,
-    by: U,
-    filter?: V
-) => Promise<Array<{
-    params: Prettify<
-        Pick<
-            MergeCollectionEntryDataWithEntry<T>,
-            ReturnTypeOnlyIfIItsNotAnArray<U>
+interface GetCollectionPaths {
+    <
+        T extends CollectionKey,
+        U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
+    >(
+        collection: T,
+        by: U,
+        filter?: (entry: CollectionEntry<T>) => unknown
+    ): Promise<
+        Array<
+            {
+                params: Prettify<
+                    Pick<
+                        MergeCollectionEntryDataWithEntry<T>,
+                        ReturnTypeOnlyIfIItsNotAnArray<U>
+                    >
+
+                >;
+                props: EntryIsNotADraft<T>
+            }
         >
 
     >;
-    props: CollectionEntry<T>
-}>>
 
-export const getCollectionPaths: GetCollectionPaths =
-    async (collection, by, filter) => {
+    <
+        T extends CollectionKey,
+        U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
+        V extends EntryIsNotADraft<T>
+    >(
+        collection: T,
+        by: U,
+        filter?: (entry: CollectionEntry<T>) => entry is V
+    ): Promise<
+        Array<
+            {
+                params: Prettify<
+                    Pick<
+                        MergeCollectionEntryDataWithEntry<T>,
+                        ReturnTypeOnlyIfIItsNotAnArray<U>
+                    >
+
+                >;
+                props: V
+            }
+        >
+    >;
+}
+
+export const getCollectionPaths: GetCollectionPaths = async (
+    collection: string,
+    by: Array<string>,
+    filter?: (entry: CollectionEntry<CollectionKey>) => unknown
+) => {
 
 
 
 
 
-        const paramMap = new Map<PropertyKey, string | number>()
+    const paramMap = new Map<PropertyKey, string | number>()
 
-        const entries = await getCollection(
-            collection,
-            getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
-        );
-
-
-        const notAllowedKeys = ["render", "body"];
-
-        return entries.map((entry, index) => {
+    const entries = await getCollection(
+        collection,
+        getCheckIfAnEntryDataDoesNotHaveADraftPropOrDraftPropIsFalsyWithFilterParameterResult(filter)
+    );
 
 
-            if (index !== 0) {
+    const notAllowedKeys = ["render", "body"];
 
-                paramMap.clear()
+    return entries.map((entry, index) => {
+
+
+        if (index !== 0) {
+
+            paramMap.clear()
+        }
+
+        if (typeof by === "string") {
+
+
+
+            if (notAllowedKeys.includes(by)) {
+
+
+                throw new Error(
+                    `Don't use these ${notAllowedKeys.join(" ")} keys at all if you do the values from the entry will be used it will not come from the data.`
+                )
+
             }
 
-            if (typeof by === "string") {
+            const valueFromEntryOrEntryData =
+                by in entry
+                    ? entry[by as keyof typeof entry]
+                    : by in entry["data"]
+                        ? entry["data"][by]
+                        : null
 
 
+            throwUnless(
+                typeof valueFromEntryOrEntryData === "string" || typeof valueFromEntryOrEntryData === "number",
+                "You can only use strings and numbers as params",
+            )
 
-                if (notAllowedKeys.includes(by)) {
+
+            paramMap.set(by, valueFromEntryOrEntryData)
+
+        }
+
+
+        if (Array.isArray(by)) {
+
+            by.forEach(key => {
+
+
+                if (typeof key === "string" && notAllowedKeys.includes(key)) {
 
 
                     throw new Error(
@@ -275,10 +340,10 @@ export const getCollectionPaths: GetCollectionPaths =
                 }
 
                 const valueFromEntryOrEntryData =
-                    by in entry
-                        ? entry[by as keyof typeof entry]
-                        : by in entry["data"]
-                            ? entry["data"][by]
+                    key in entry
+                        ? entry[key as keyof typeof entry]
+                        : key in entry["data"]
+                            ? entry["data"][key]
                             : null
 
 
@@ -287,56 +352,22 @@ export const getCollectionPaths: GetCollectionPaths =
                     "You can only use strings and numbers as params",
                 )
 
+                paramMap.set(key, valueFromEntryOrEntryData)
+            })
 
-                paramMap.set(by, valueFromEntryOrEntryData)
+        }
 
-            }
-
-
-            if (Array.isArray(by)) {
-
-                by.forEach(key => {
-
-
-                    if (typeof key === "string" && notAllowedKeys.includes(key)) {
-
-
-                        throw new Error(
-                            `Don't use these ${notAllowedKeys.join(" ")} keys at all if you do the values from the entry will be used it will not come from the data.`
-                        )
-
-                    }
-
-                    const valueFromEntryOrEntryData =
-                        key in entry
-                            ? entry[key as keyof typeof entry]
-                            : key in entry["data"]
-                                ? entry["data"][key]
-                                : null
-
-
-                    throwUnless(
-                        typeof valueFromEntryOrEntryData === "string" || typeof valueFromEntryOrEntryData === "number",
-                        "You can only use strings and numbers as params",
-                    )
-
-                    paramMap.set(key, valueFromEntryOrEntryData)
-                })
-
-            }
-
-            return {
-                params: Object.fromEntries(paramMap) as Prettify<
-                    Pick<
-                        MergeCollectionEntryDataWithEntry<typeof collection>,
-                        ReturnTypeOnlyIfIItsNotAnArray<typeof by>
-                    >
-                >,
-                props: entry
-            }
-        });
-    }
-
+        return {
+            params: Object.fromEntries(paramMap) as Prettify<
+                Pick<
+                    MergeCollectionEntryDataWithEntry<typeof collection>,
+                    ReturnTypeOnlyIfIItsNotAnArray<typeof by>
+                >
+            >,
+            props: entry
+        }
+    });
+}
 
 
 
