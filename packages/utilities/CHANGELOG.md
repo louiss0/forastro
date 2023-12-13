@@ -23,6 +23,11 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Type for `getCollections` to represent real overload for it uses `EntryIsNotADraft`
+instead of `CollectionEntry`.
+
 ## [4.3.7] - 2023-12-04
 
 ### Fixed
