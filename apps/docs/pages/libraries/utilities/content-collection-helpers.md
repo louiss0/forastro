@@ -160,22 +160,51 @@ You can pass in a filter for even better filtering.
 ## Get Collections
 
 ```ts
-    interface GetCollections {
+    interface GetCollectionPaths {
     <
-    T extends ReadonlyArray<CollectionKey>, 
-    U extends CollectionEntry<T[number]>
+        T extends CollectionKey,
+        U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
     >(
-        collectionNames: T,
-        filter?: (entry: CollectionEntry<T[number]>) => entry is U
+        collection: T,
+        by: U,
+        filter?: (entry: CollectionEntry<T>) => unknown
     ): Promise<
-        Array<U>
+        Array<
+            {
+                params: Prettify<
+                    Pick<
+                        MergeCollectionEntryDataWithEntry<T>,
+                        ReturnTypeOnlyIfIItsNotAnArray<U>
+                    >
+
+                >;
+                props: EntryIsNotADraft<T>
+            }
+        >
+
     >;
-    
-    <T extends ReadonlyArray<CollectionKey>>(
-        collectionNames: T,
-        filter?: (entry: CollectionEntry<T[number]>) => unknown
+
+    <
+        T extends CollectionKey,
+        U extends TypeOrArrayOfType<keyof MergeCollectionEntryDataWithEntry<T>>,
+        V extends EntryIsNotADraft<T>
+    >(
+        collection: T,
+        by: U,
+        filter?: (entry: CollectionEntry<T>) => entry is V
     ): Promise<
-        Array<CollectionEntry<T[number]>>
+        Array<
+            {
+                params: Prettify<
+                    Pick<
+                        MergeCollectionEntryDataWithEntry<T>,
+                        ReturnTypeOnlyIfIItsNotAnArray<U>
+                    >
+
+                >;
+                props: V
+            }
+        >
     >;
 }
 
