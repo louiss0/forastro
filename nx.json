@@ -30,5 +30,7 @@
     "libsDir": "packages"
   },
   "defaultProject": "docs",
-  "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU="
+  "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU=",
+  "useInferencePlugins": false,
+  "useLegacyCache": true
 }

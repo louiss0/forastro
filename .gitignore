@@ -5,3 +5,4 @@ mock-app
 **/.env
 **/cache
 pnpm-workspace.yaml
+vite.config.*.timestamp*

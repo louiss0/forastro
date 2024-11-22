@@ -1,0 +1,55 @@
+[NX Daemon Server] - 2024-11-22T14:18:19.462Z - Started listening on: /tmp/aa18895fd8/d.sock
+[NX Daemon Server] - 2024-11-22T14:18:19.463Z - [WATCHER]: Subscribed to changes within: /home/shelton-louis/Desktop/web-dev-projects/forastro (native)
+[NX Daemon Server] - 2024-11-22T14:18:19.467Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:18:19.468Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-11-22T14:18:19.470Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:18:19.471Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:18:19.472Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:18:19.472Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 1.
+[NX Daemon Server] - 2024-11-22T14:18:19.473Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-22T14:18:19.473Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (sources)
+[NX Daemon Server] - 2024-11-22T14:18:19.473Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (outputs)
+[NX Daemon Server] - 2024-11-22T14:20:49.198Z - Started listening on: /tmp/aa18895fd8/d.sock
+[NX Daemon Server] - 2024-11-22T14:20:49.201Z - [WATCHER]: Subscribed to changes within: /home/shelton-louis/Desktop/web-dev-projects/forastro (native)
+[NX Daemon Server] - 2024-11-22T14:20:49.206Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:20:49.207Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-11-22T14:20:49.208Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:20:49.210Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:20:49.210Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:20:49.210Z - Handled FORCE_SHUTDOWN. Handling time: 1. Response time: 0.
+[NX Daemon Server] - 2024-11-22T14:20:49.211Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-22T14:20:49.211Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (sources)
+[NX Daemon Server] - 2024-11-22T14:20:49.212Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (outputs)
+[NX Daemon Server] - 2024-11-22T14:26:31.086Z - Started listening on: /tmp/aa18895fd8/d.sock
+[NX Daemon Server] - 2024-11-22T14:26:31.087Z - [WATCHER]: Subscribed to changes within: /home/shelton-louis/Desktop/web-dev-projects/forastro (native)
+[NX Daemon Server] - 2024-11-22T14:26:31.089Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:26:31.089Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-11-22T14:26:31.090Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:26:31.091Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:26:31.091Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:26:31.091Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2024-11-22T14:26:31.093Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-22T14:26:31.093Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (sources)
+[NX Daemon Server] - 2024-11-22T14:26:31.093Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (outputs)
+[NX Daemon Server] - 2024-11-22T14:30:33.041Z - Started listening on: /tmp/aa18895fd8/d.sock
+[NX Daemon Server] - 2024-11-22T14:30:33.042Z - [WATCHER]: Subscribed to changes within: /home/shelton-louis/Desktop/web-dev-projects/forastro (native)
+[NX Daemon Server] - 2024-11-22T14:30:33.046Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:30:33.047Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-11-22T14:30:33.049Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:30:33.050Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:30:33.051Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:30:33.051Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 1.
+[NX Daemon Server] - 2024-11-22T14:30:33.052Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-22T14:30:33.052Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (sources)
+[NX Daemon Server] - 2024-11-22T14:30:33.052Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (outputs)
+[NX Daemon Server] - 2024-11-22T14:30:40.101Z - Started listening on: /tmp/aa18895fd8/d.sock
+[NX Daemon Server] - 2024-11-22T14:30:40.103Z - [WATCHER]: Subscribed to changes within: /home/shelton-louis/Desktop/web-dev-projects/forastro (native)
+[NX Daemon Server] - 2024-11-22T14:30:40.110Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:30:40.110Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-11-22T14:30:40.111Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-11-22T14:30:40.112Z - [REQUEST]: Responding to the client. Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:30:40.113Z - Done responding to the client Shutdown initiated
+[NX Daemon Server] - 2024-11-22T14:30:40.113Z - Handled FORCE_SHUTDOWN. Handling time: 0. Response time: 1.
+[NX Daemon Server] - 2024-11-22T14:30:40.114Z - Closed a connection. Number of open connections: 0
+[NX Daemon Server] - 2024-11-22T14:30:40.114Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (sources)
+[NX Daemon Server] - 2024-11-22T14:30:40.114Z - [WATCHER]: Stopping the watcher for /home/shelton-louis/Desktop/web-dev-projects/forastro (outputs)

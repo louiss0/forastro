@@ -1,0 +1,1346 @@
+{
+  "version": "6.0",
+  "nxVersion": "20.1.2",
+  "pathMappings": {
+    "@forastro/flow": [
+      "packages/flow/src/index.ts"
+    ],
+    "@forastro/markdoc-html-tags": [
+      "packages/markdoc-html-tags"
+    ],
+    "@forastro/remark-html-directives-integration": [
+      "packages/remark-html-directives-integration"
+    ],
+    "@forastro/utilities": [
+      "packages/utilities/src/index.ts"
+    ]
+  },
+  "nxJsonPlugins": [
+    {
+      "name": "@nxtensions/astro",
+      "version": "^16.2.0"
+    },
+    {
+      "name": "@ahryman40k/nx-vitepress",
+      "version": "^15.1.1"
+    }
+  ],
+  "fileMap": {
+    "projectFileMap": {
+      "docs": [
+        {
+          "file": "apps/docs/.markdownlint.json",
+          "hash": "10869839165212557906"
+        },
+        {
+          "file": "apps/docs/.vitepress/config.mjs",
+          "hash": "12860425743669419787",
+          "deps": [
+            "npm:vitepress",
+            "npm:vite-plugin-vue-nested-sfc",
+            "npm:better-enums"
+          ]
+        },
+        {
+          "file": "apps/docs/.vitepress/theme/components/starter-layout.vue",
+          "hash": "1918020088337342678"
+        },
+        {
+          "file": "apps/docs/.vitepress/theme/index.ts",
+          "hash": "18187475017318244166",
+          "deps": [
+            "npm:vitepress"
+          ]
+        },
+        {
+          "file": "apps/docs/.vitepress/theme/styles/dark-theme.css",
+          "hash": "6669134431855591845"
+        },
+        {
+          "file": "apps/docs/README.md",
+          "hash": "14249929170835436642"
+        },
+        {
+          "file": "apps/docs/pages/index.md",
+          "hash": "329118959557406856"
+        },
+        {
+          "file": "apps/docs/pages/libraries/flow/for.md",
+          "hash": "9245478176867392731"
+        },
+        {
+          "file": "apps/docs/pages/libraries/flow/index.md",
+          "hash": "977422949434703423"
+        },
+        {
+          "file": "apps/docs/pages/libraries/flow/range.md",
+          "hash": "5276039226464601325"
+        },
+        {
+          "file": "apps/docs/pages/libraries/flow/show-and-hide.md",
+          "hash": "1923113826355513022"
+        },
+        {
+          "file": "apps/docs/pages/libraries/flow/switch-and-case.md",
+          "hash": "2860723472259305016"
+        },
+        {
+          "file": "apps/docs/pages/libraries/remark-html-directives/index.md",
+          "hash": "2872102106443197715"
+        },
+        {
+          "file": "apps/docs/pages/libraries/remark-html-directives/tags.md",
+          "hash": "6491157746695318033"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/conditional-functions.md",
+          "hash": "14007998895353313109"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/content-collection-helpers.md",
+          "hash": "11819374772370460504"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/error-functions.md",
+          "hash": "8469472877325699226"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/index.md",
+          "hash": "13679304830853830829"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/iteration-generators.md",
+          "hash": "18250940238453634178"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/miscellaneous.md",
+          "hash": "16166118491618447805"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/range-generators.md",
+          "hash": "648395449685688153"
+        },
+        {
+          "file": "apps/docs/pages/libraries/utilities/template-projection.md",
+          "hash": "3178097128088066392"
+        },
+        {
+          "file": "apps/docs/pages/templates/astro-markdoc.md",
+          "hash": "1663331559852833475"
+        },
+        {
+          "file": "apps/docs/pages/templates/astro-mdx.md",
+          "hash": "13645903444271233880"
+        },
+        {
+          "file": "apps/docs/pages/templates/astro-minimal.md",
+          "hash": "9460336689398434928"
+        },
+        {
+          "file": "apps/docs/pages/templates/astro-preact.md",
+          "hash": "11554216163178915173"
+        },
+        {
+          "file": "apps/docs/pages/templates/astro-vue.md",
+          "hash": "4028251749709474901"
+        },
+        {
+          "file": "apps/docs/project.json",
+          "hash": "13159845855717253375"
+        },
+        {
+          "file": "apps/docs/tsconfig.json",
+          "hash": "15173339979021255500"
+        }
+      ],
+      "@forastro/template_astro-vue": [
+        {
+          "file": "templates/astro-vue/.gitignore",
+          "hash": "7248856489885982743"
+        },
+        {
+          "file": "templates/astro-vue/.vscode/settings.json",
+          "hash": "12494394485626476391"
+        },
+        {
+          "file": "templates/astro-vue/astro.config.mjs",
+          "hash": "13232943834178042036",
+          "deps": [
+            "npm:astro",
+            "npm:unocss",
+            "npm:unplugin-icons",
+            "npm:unplugin-vue-components",
+            "npm:@astrojs/vue"
+          ]
+        },
+        {
+          "file": "templates/astro-vue/components.d.ts",
+          "hash": "1734960492048688922",
+          "deps": [
+            "npm:@vue/runtime-core"
+          ]
+        },
+        {
+          "file": "templates/astro-vue/package.json",
+          "hash": "13016480555058688020",
+          "deps": [
+            "npm:@astrojs/vue",
+            "npm:@fontsource/lato",
+            "npm:@fontsource/raleway",
+            "npm:@iconify/json",
+            "npm:astro",
+            "npm:typescript",
+            "npm:unocss",
+            "npm:unplugin-icons",
+            "npm:unplugin-vue-components",
+            "npm:vite-plugin-vue-nested-sfc",
+            "npm:vue-tsc",
+            "npm:@code-fixer-23/cn-efs",
+            "utilities",
+            "npm:@vueuse/core",
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "templates/astro-vue/public/favicon.svg",
+          "hash": "12424760545971120038"
+        },
+        {
+          "file": "templates/astro-vue/src/components/AstroTopFrameWorksCircle.astro",
+          "hash": "15128190734086606926"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Border.vue",
+          "hash": "3028391779202959781"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Button.vue",
+          "hash": "11575907324650331274"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Card.vue",
+          "hash": "17346036516889243080"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Center.vue",
+          "hash": "5820534205505183347"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Container.vue",
+          "hash": "7595586818541582409"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Head.astro",
+          "hash": "8191572332640515493"
+        },
+        {
+          "file": "templates/astro-vue/src/components/LightDarkSwitch.vue",
+          "hash": "12187017206124326000"
+        },
+        {
+          "file": "templates/astro-vue/src/components/List.vue",
+          "hash": "14762619059381774970"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Navbar.vue",
+          "hash": "1892492815594885313"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Section.astro",
+          "hash": "9893367560892364387"
+        },
+        {
+          "file": "templates/astro-vue/src/components/SpacedBox.vue",
+          "hash": "2460625719695424714"
+        },
+        {
+          "file": "templates/astro-vue/src/components/Typography.astro",
+          "hash": "10356070687533958046"
+        },
+        {
+          "file": "templates/astro-vue/src/composables/useBoolean.ts",
+          "hash": "15459034763958435502",
+          "deps": [
+            "npm:vue"
+          ]
+        },
+        {
+          "file": "templates/astro-vue/src/env.d.ts",
+          "hash": "8583967275856094796"
+        },
+        {
+          "file": "templates/astro-vue/src/layouts/Default.astro",
+          "hash": "2352816885218313426"
+        },
+        {
+          "file": "templates/astro-vue/src/layouts/HMFLayout.astro",
+          "hash": "17593811077336025531"
+        },
+        {
+          "file": "templates/astro-vue/src/pages/index.astro",
+          "hash": "4644296790355168284"
+        },
+        {
+          "file": "templates/astro-vue/src/utilities/constants.ts",
+          "hash": "6708167670089707154"
+        },
+        {
+          "file": "templates/astro-vue/src/utilities/helpers.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "templates/astro-vue/src/utilities/types.ts",
+          "hash": "13662748029984351107"
+        },
+        {
+          "file": "templates/astro-vue/tsconfig.json",
+          "hash": "464083387818147793"
+        },
+        {
+          "file": "templates/astro-vue/uno.config.ts",
+          "hash": "13158619352912821719",
+          "deps": [
+            "npm:unocss"
+          ]
+        }
+      ],
+      "remark-html-directives-integration": [
+        {
+          "file": "packages/remark-html-directives-integration/.release-it.json",
+          "hash": "8077238002150173562"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/CHANGELOG.md",
+          "hash": "9431507000506165477"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/README.md",
+          "hash": "11105449961991923055"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/package.json",
+          "hash": "1139815078299346976",
+          "deps": [
+            "npm:astro",
+            "npm:remark-directive"
+          ]
+        },
+        {
+          "file": "packages/remark-html-directives-integration/project.json",
+          "hash": "4183550223320444830"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/src/index.ts",
+          "hash": "17916400378548914100",
+          "deps": [
+            "npm:astro",
+            "npm:remark-directive"
+          ]
+        },
+        {
+          "file": "packages/remark-html-directives-integration/src/lib/constants/index.ts",
+          "hash": "14017895076248559062"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/src/lib/index.ts",
+          "hash": "10228246443772291057",
+          "deps": [
+            "npm:unist-util-visit",
+            "npm:hastscript"
+          ]
+        },
+        {
+          "file": "packages/remark-html-directives-integration/src/lib/types/index.ts",
+          "hash": "11441840176222991183",
+          "deps": [
+            "npm:unist-util-visit",
+            "npm:astro"
+          ]
+        },
+        {
+          "file": "packages/remark-html-directives-integration/src/lib/utils/index.ts",
+          "hash": "1704880036897143669"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/tsconfig.json",
+          "hash": "6443103955315184547"
+        },
+        {
+          "file": "packages/remark-html-directives-integration/tsup.config.ts",
+          "hash": "7108239627546530731",
+          "deps": [
+            "npm:tsup"
+          ]
+        }
+      ],
+      "@forastro/template_astro-mdx": [
+        {
+          "file": "templates/astro-mdx/astro.config.mjs",
+          "hash": "751839655650772107",
+          "deps": [
+            "npm:astro",
+            "npm:unocss",
+            "npm:@astrojs/mdx"
+          ]
+        },
+        {
+          "file": "templates/astro-mdx/package.json",
+          "hash": "8498479356444183599",
+          "deps": [
+            "npm:@astrojs/mdx",
+            "npm:@fontsource/lato",
+            "npm:@fontsource/raleway",
+            "npm:astro",
+            "npm:unocss",
+            "npm:@code-fixer-23/cn-efs",
+            "utilities",
+            "npm:astro-icon"
+          ]
+        },
+        {
+          "file": "templates/astro-mdx/public/favicon.svg",
+          "hash": "4164818997299313382"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Border.astro",
+          "hash": "13288371596841937856"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/ButtonControl.astro",
+          "hash": "7237856813325306975"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Card.astro",
+          "hash": "4467410291968369030"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Center.astro",
+          "hash": "8493173143886338852"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Container.astro",
+          "hash": "17498956295476880421"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Head.astro",
+          "hash": "6435735974560066623"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Image.astro",
+          "hash": "3920031555970794963"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/List.astro",
+          "hash": "14148926160429012963"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Navbar.astro",
+          "hash": "10411839890972859298"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Section.astro",
+          "hash": "9893367560892364387"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/SpacedBox.astro",
+          "hash": "17260978981953929864"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/Typography.astro",
+          "hash": "10356070687533958046"
+        },
+        {
+          "file": "templates/astro-mdx/src/components/index.ts",
+          "hash": "14389787000868298661"
+        },
+        {
+          "file": "templates/astro-mdx/src/env.d.ts",
+          "hash": "2755340118673137363"
+        },
+        {
+          "file": "templates/astro-mdx/src/layouts/Default.astro",
+          "hash": "4993970879158045575"
+        },
+        {
+          "file": "templates/astro-mdx/src/layouts/HMF.astro",
+          "hash": "14566742150041734440"
+        },
+        {
+          "file": "templates/astro-mdx/src/pages/index.mdx",
+          "hash": "4113534644027419944"
+        },
+        {
+          "file": "templates/astro-mdx/src/utilities/constants.ts",
+          "hash": "6708167670089707154"
+        },
+        {
+          "file": "templates/astro-mdx/src/utilities/helpers.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "templates/astro-mdx/src/utilities/types.ts",
+          "hash": "13662748029984351107"
+        },
+        {
+          "file": "templates/astro-mdx/tsconfig.json",
+          "hash": "12565329774362110166"
+        },
+        {
+          "file": "templates/astro-mdx/uno.config.ts",
+          "hash": "13158619352912821719",
+          "deps": [
+            "npm:unocss"
+          ]
+        }
+      ],
+      "utilities": [
+        {
+          "file": "packages/utilities/.release-it.json",
+          "hash": "13655764330111716850"
+        },
+        {
+          "file": "packages/utilities/CHANGELOG.md",
+          "hash": "12261939656584648626"
+        },
+        {
+          "file": "packages/utilities/README.md",
+          "hash": "5505032585931098339"
+        },
+        {
+          "file": "packages/utilities/astro-content.d.ts",
+          "hash": "11627868543799191388",
+          "deps": [
+            "npm:astro",
+            [
+              "npm:astro",
+              "dynamic"
+            ]
+          ]
+        },
+        {
+          "file": "packages/utilities/package.json",
+          "hash": "12155468483873879381",
+          "deps": [
+            "npm:astro"
+          ]
+        },
+        {
+          "file": "packages/utilities/project.json",
+          "hash": "14456605037752935001"
+        },
+        {
+          "file": "packages/utilities/public/Gap.astro",
+          "hash": "9233541538343144370"
+        },
+        {
+          "file": "packages/utilities/public/PageLink.astro",
+          "hash": "14952758143575452164"
+        },
+        {
+          "file": "packages/utilities/public/components.ts",
+          "hash": "12165138182928073915"
+        },
+        {
+          "file": "packages/utilities/src/index.ts",
+          "hash": "15050627335493840742"
+        },
+        {
+          "file": "packages/utilities/src/lib/helpers/conditional.ts",
+          "hash": "14874632846439457245"
+        },
+        {
+          "file": "packages/utilities/src/lib/helpers/content-collection.ts",
+          "hash": "12011192436940729444"
+        },
+        {
+          "file": "packages/utilities/src/lib/helpers/index.ts",
+          "hash": "17749702727055850238",
+          "deps": [
+            "npm:astro"
+          ]
+        },
+        {
+          "file": "packages/utilities/src/lib/internal.ts",
+          "hash": "8390652808667950223"
+        },
+        {
+          "file": "packages/utilities/src/lib/types.ts",
+          "hash": "6822034561871174802"
+        },
+        {
+          "file": "packages/utilities/src/lib/useTemplaterAndProjector.d.ts",
+          "hash": "10008353269087046900"
+        },
+        {
+          "file": "packages/utilities/src/lib/useTemplaterAndProjector.js",
+          "hash": "6676034174967192611"
+        },
+        {
+          "file": "packages/utilities/test/helpers.test.ts",
+          "hash": "17091246556110671027",
+          "deps": [
+            "npm:astro",
+            "npm:@anatine/zod-mock"
+          ]
+        },
+        {
+          "file": "packages/utilities/test/internal.test.ts",
+          "hash": "9450035441550263498"
+        },
+        {
+          "file": "packages/utilities/tsconfig.json",
+          "hash": "5824759135394087369"
+        },
+        {
+          "file": "packages/utilities/tsconfig.spec.json",
+          "hash": "5371058005543195127"
+        },
+        {
+          "file": "packages/utilities/tsup.config.ts",
+          "hash": "17869959592525597124",
+          "deps": [
+            "npm:tsup"
+          ]
+        },
+        {
+          "file": "packages/utilities/vite.config.ts",
+          "hash": "5467024435196237184",
+          "deps": [
+            "npm:vitest",
+            "npm:vite-tsconfig-paths"
+          ]
+        }
+      ],
+      "@forastro/template_astro-markdoc": [
+        {
+          "file": "templates/astro-markdoc/.gitignore",
+          "hash": "15612394528433788405"
+        },
+        {
+          "file": "templates/astro-markdoc/.vscode/extensions.json",
+          "hash": "4591125310708873372"
+        },
+        {
+          "file": "templates/astro-markdoc/.vscode/launch.json",
+          "hash": "1679638439007128934"
+        },
+        {
+          "file": "templates/astro-markdoc/README.md",
+          "hash": "13233427880776411713"
+        },
+        {
+          "file": "templates/astro-markdoc/astro.config.mjs",
+          "hash": "18130796157982745570",
+          "deps": [
+            "npm:astro",
+            "npm:@astrojs/markdoc",
+            "npm:unocss"
+          ]
+        },
+        {
+          "file": "templates/astro-markdoc/markdoc.config.json",
+          "hash": "10871842273957300485"
+        },
+        {
+          "file": "templates/astro-markdoc/markdoc.config.mjs",
+          "hash": "2544587711876600672",
+          "deps": [
+            "npm:markdoc-html-tag-schemas",
+            "npm:@astrojs/markdoc"
+          ]
+        },
+        {
+          "file": "templates/astro-markdoc/package.json",
+          "hash": "7372236925554611737",
+          "deps": [
+            "npm:@astrojs/markdoc",
+            "npm:@fontsource/lato",
+            "npm:@fontsource/raleway",
+            "npm:astro",
+            "npm:markdoc-html-tag-schemas",
+            "npm:unocss",
+            "npm:@code-fixer-23/cn-efs",
+            "flow",
+            "utilities",
+            "npm:astro-icon"
+          ]
+        },
+        {
+          "file": "templates/astro-markdoc/public/favicon.svg",
+          "hash": "9875909904608765743"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Border.astro",
+          "hash": "1446092358396549066"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/ButtonControl.astro",
+          "hash": "7237856813325306975"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Card.astro",
+          "hash": "4467410291968369030"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Center.astro",
+          "hash": "8700407991080613626"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Container.astro",
+          "hash": "292618755645285317"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Head.astro",
+          "hash": "6435735974560066623"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Image.astro",
+          "hash": "3920031555970794963"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/List.astro",
+          "hash": "14555527369046566262"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Navbar.astro",
+          "hash": "10411839890972859298"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Section.astro",
+          "hash": "9893367560892364387"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/SpacedBox.astro",
+          "hash": "829405228106757150"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/Typography.astro",
+          "hash": "10356070687533958046"
+        },
+        {
+          "file": "templates/astro-markdoc/src/components/index.ts",
+          "hash": "14389787000868298661"
+        },
+        {
+          "file": "templates/astro-markdoc/src/content/config.ts",
+          "hash": "5321686665614851444"
+        },
+        {
+          "file": "templates/astro-markdoc/src/content/posts/first.mdoc",
+          "hash": "9584609234497993228"
+        },
+        {
+          "file": "templates/astro-markdoc/src/content/posts/second.mdoc",
+          "hash": "5110302433492755927"
+        },
+        {
+          "file": "templates/astro-markdoc/src/env.d.ts",
+          "hash": "2755340118673137363"
+        },
+        {
+          "file": "templates/astro-markdoc/src/layouts/Default.astro",
+          "hash": "14171253356608400763"
+        },
+        {
+          "file": "templates/astro-markdoc/src/layouts/HMF.astro",
+          "hash": "9155965639082778575"
+        },
+        {
+          "file": "templates/astro-markdoc/src/pages/index.astro",
+          "hash": "6958797686373748381"
+        },
+        {
+          "file": "templates/astro-markdoc/src/pages/posts/[slug].astro",
+          "hash": "18375995848843783631"
+        },
+        {
+          "file": "templates/astro-markdoc/src/utilities/constants.ts",
+          "hash": "6708167670089707154"
+        },
+        {
+          "file": "templates/astro-markdoc/src/utilities/helpers.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "templates/astro-markdoc/src/utilities/types.ts",
+          "hash": "10013520646305719264"
+        },
+        {
+          "file": "templates/astro-markdoc/tsconfig.json",
+          "hash": "12565329774362110166"
+        },
+        {
+          "file": "templates/astro-markdoc/uno.config.ts",
+          "hash": "13158619352912821719",
+          "deps": [
+            "npm:unocss"
+          ]
+        }
+      ],
+      "@forastro/template_astro-preact": [
+        {
+          "file": "templates/astro-preact/.gitignore",
+          "hash": "1692955241481280733"
+        },
+        {
+          "file": "templates/astro-preact/.vscode/extensions.json",
+          "hash": "13274653438527954747"
+        },
+        {
+          "file": "templates/astro-preact/.vscode/launch.json",
+          "hash": "12906788784371244064"
+        },
+        {
+          "file": "templates/astro-preact/astro.config.mjs",
+          "hash": "6011583571992813418",
+          "deps": [
+            "npm:astro",
+            "npm:unplugin-icons",
+            "npm:@astrojs/preact",
+            "npm:unocss"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/package.json",
+          "hash": "6684762240102731200",
+          "deps": [
+            "npm:@astrojs/preact",
+            "npm:@iconify/json",
+            "npm:@svgr/core",
+            "npm:astro",
+            "npm:unocss",
+            "npm:unplugin-icons",
+            "npm:@code-fixer-23/cn-efs",
+            "utilities",
+            "npm:preact",
+            "npm:ts-pattern"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/public/favicon.svg",
+          "hash": "17021980542885809075"
+        },
+        {
+          "file": "templates/astro-preact/src/components/Border.tsx",
+          "hash": "6821539810583965817",
+          "deps": [
+            "npm:preact",
+            "npm:@code-fixer-23/cn-efs"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Button.tsx",
+          "hash": "13246121033804018710",
+          "deps": [
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Card.tsx",
+          "hash": "3563501958274496226",
+          "deps": [
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Center.tsx",
+          "hash": "13055405434098825657",
+          "deps": [
+            "npm:@code-fixer-23/cn-efs",
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Container.tsx",
+          "hash": "8706090965305307307",
+          "deps": [
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Head.astro",
+          "hash": "6435735974560066623"
+        },
+        {
+          "file": "templates/astro-preact/src/components/Image.astro",
+          "hash": "3920031555970794963"
+        },
+        {
+          "file": "templates/astro-preact/src/components/Image.tsx",
+          "hash": "9736930266176206076",
+          "deps": [
+            "npm:preact",
+            "npm:@code-fixer-23/cn-efs"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/List.tsx",
+          "hash": "7182990699615912791",
+          "deps": [
+            "utilities",
+            "npm:@code-fixer-23/cn-efs",
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Navbar.astro",
+          "hash": "10411839890972859298"
+        },
+        {
+          "file": "templates/astro-preact/src/components/Navbar.tsx",
+          "hash": "16926563951689400291",
+          "deps": [
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Section.astro",
+          "hash": "9893367560892364387"
+        },
+        {
+          "file": "templates/astro-preact/src/components/SpacedBox.tsx",
+          "hash": "11965958638217425131",
+          "deps": [
+            "npm:preact"
+          ]
+        },
+        {
+          "file": "templates/astro-preact/src/components/Typography.astro",
+          "hash": "10356070687533958046"
+        },
+        {
+          "file": "templates/astro-preact/src/env.d.ts",
+          "hash": "17949546991706631409"
+        },
+        {
+          "file": "templates/astro-preact/src/layouts/Default.astro",
+          "hash": "14103001774229839494"
+        },
+        {
+          "file": "templates/astro-preact/src/layouts/HMF.astro",
+          "hash": "17628098196588603480"
+        },
+        {
+          "file": "templates/astro-preact/src/pages/index.astro",
+          "hash": "68051410966147368"
+        },
+        {
+          "file": "templates/astro-preact/src/utilities/constants.ts",
+          "hash": "6708167670089707154"
+        },
+        {
+          "file": "templates/astro-preact/src/utilities/helpers.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "templates/astro-preact/src/utilities/types.ts",
+          "hash": "13662748029984351107"
+        },
+        {
+          "file": "templates/astro-preact/tsconfig.json",
+          "hash": "8059371187479135240"
+        },
+        {
+          "file": "templates/astro-preact/uno.config.ts",
+          "hash": "13158619352912821719",
+          "deps": [
+            "npm:unocss"
+          ]
+        }
+      ],
+      "@forastro/template_astro-minimal": [
+        {
+          "file": "templates/astro-minimal/.gitignore",
+          "hash": "2070515770007298442"
+        },
+        {
+          "file": "templates/astro-minimal/.vscode/extensions.json",
+          "hash": "13274653438527954747"
+        },
+        {
+          "file": "templates/astro-minimal/.vscode/launch.json",
+          "hash": "12906788784371244064"
+        },
+        {
+          "file": "templates/astro-minimal/.vscode/settings.json",
+          "hash": "8846897709492120850"
+        },
+        {
+          "file": "templates/astro-minimal/astro.config.mjs",
+          "hash": "10596096278586844987",
+          "deps": [
+            "npm:astro",
+            "npm:unocss"
+          ]
+        },
+        {
+          "file": "templates/astro-minimal/package.json",
+          "hash": "17732099697626535448",
+          "deps": [
+            "npm:@fontsource/lato",
+            "npm:@fontsource/raleway",
+            "npm:astro",
+            "npm:unocss",
+            "npm:@code-fixer-23/cn-efs",
+            "flow",
+            "utilities",
+            "npm:ts-pattern",
+            "npm:astro-icon"
+          ]
+        },
+        {
+          "file": "templates/astro-minimal/public/favicon.svg",
+          "hash": "12424760545971120038"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Border.astro",
+          "hash": "13288371596841937856"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/ButtonControl.astro",
+          "hash": "7237856813325306975"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Card.astro",
+          "hash": "4467410291968369030"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Center.astro",
+          "hash": "8493173143886338852"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Container.astro",
+          "hash": "17498956295476880421"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Head.astro",
+          "hash": "6435735974560066623"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Image.astro",
+          "hash": "3920031555970794963"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/List.astro",
+          "hash": "14555527369046566262"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Navbar.astro",
+          "hash": "10411839890972859298"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Section.astro",
+          "hash": "9893367560892364387"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/SpacedBox.astro",
+          "hash": "16005204652430145019"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/Typography.astro",
+          "hash": "18029987136133204325"
+        },
+        {
+          "file": "templates/astro-minimal/src/components/index.ts",
+          "hash": "14389787000868298661"
+        },
+        {
+          "file": "templates/astro-minimal/src/env.d.ts",
+          "hash": "10200595446109539152"
+        },
+        {
+          "file": "templates/astro-minimal/src/images/hmf-file.png",
+          "hash": "10440931247459232166"
+        },
+        {
+          "file": "templates/astro-minimal/src/layouts/Default.astro",
+          "hash": "9856365419539344190"
+        },
+        {
+          "file": "templates/astro-minimal/src/layouts/HMF.astro",
+          "hash": "14566742150041734440"
+        },
+        {
+          "file": "templates/astro-minimal/src/pages/index.astro",
+          "hash": "16159990127386635275"
+        },
+        {
+          "file": "templates/astro-minimal/src/utilities/constants.ts",
+          "hash": "6708167670089707154"
+        },
+        {
+          "file": "templates/astro-minimal/src/utilities/helpers.ts",
+          "hash": "3244421341483603138"
+        },
+        {
+          "file": "templates/astro-minimal/src/utilities/types.ts",
+          "hash": "13662748029984351107"
+        },
+        {
+          "file": "templates/astro-minimal/tsconfig.json",
+          "hash": "464083387818147793"
+        },
+        {
+          "file": "templates/astro-minimal/uno.config.ts",
+          "hash": "13158619352912821719",
+          "deps": [
+            "npm:unocss"
+          ]
+        }
+      ],
+      "flow": [
+        {
+          "file": "packages/flow/.release-it.json",
+          "hash": "8107306666417749930"
+        },
+        {
+          "file": "packages/flow/CHANGELOG.md",
+          "hash": "14312265911878258228"
+        },
+        {
+          "file": "packages/flow/README.md",
+          "hash": "11291873946298982242"
+        },
+        {
+          "file": "packages/flow/package.json",
+          "hash": "16835936185277257307",
+          "deps": [
+            "npm:astro",
+            "utilities"
+          ]
+        },
+        {
+          "file": "packages/flow/project.json",
+          "hash": "16727399740562863255"
+        },
+        {
+          "file": "packages/flow/public/index.ts",
+          "hash": "890016076673439556"
+        },
+        {
+          "file": "packages/flow/src/helpers.ts",
+          "hash": "11466066345341483660"
+        },
+        {
+          "file": "packages/flow/src/index.ts",
+          "hash": "2489541060393193262"
+        },
+        {
+          "file": "packages/flow/src/lib/Case.astro",
+          "hash": "5132455697254726735"
+        },
+        {
+          "file": "packages/flow/src/lib/For.astro",
+          "hash": "6933307327769066027"
+        },
+        {
+          "file": "packages/flow/src/lib/Hide.astro",
+          "hash": "6283616423325547786"
+        },
+        {
+          "file": "packages/flow/src/lib/Range.astro",
+          "hash": "16050379187648116216"
+        },
+        {
+          "file": "packages/flow/src/lib/Show.astro",
+          "hash": "3551763236028071037"
+        },
+        {
+          "file": "packages/flow/src/lib/Switch.astro",
+          "hash": "6274098999945486568"
+        },
+        {
+          "file": "packages/flow/test/helpers.test.ts",
+          "hash": "10140446100621844551"
+        },
+        {
+          "file": "packages/flow/tsconfig.json",
+          "hash": "10775061274130539650"
+        },
+        {
+          "file": "packages/flow/tsconfig.spec.json",
+          "hash": "17288283527590454734"
+        },
+        {
+          "file": "packages/flow/vite.config.ts",
+          "hash": "6189832959008433918",
+          "deps": [
+            "npm:vite",
+            "npm:vite-tsconfig-paths"
+          ]
+        }
+      ],
+      "astro-circle": [
+        {
+          "file": "apps/astro-circle/astro.config.mjs",
+          "hash": "4543419490194575336",
+          "deps": [
+            "npm:astro",
+            "npm:unocss"
+          ]
+        },
+        {
+          "file": "apps/astro-circle/astro.config.prod.mjs",
+          "hash": "3405985055870010078",
+          "deps": [
+            "npm:astro",
+            "npm:unocss"
+          ]
+        },
+        {
+          "file": "apps/astro-circle/project.json",
+          "hash": "14597036181048812620"
+        },
+        {
+          "file": "apps/astro-circle/public/AngularOnTopLeftAstroCircle.astro",
+          "hash": "2281948025552959373"
+        },
+        {
+          "file": "apps/astro-circle/public/AstroCircle.astro",
+          "hash": "6964182174616009965"
+        },
+        {
+          "file": "apps/astro-circle/public/ReactOnTopLeftAstroCircle.astro",
+          "hash": "782492890038746994"
+        },
+        {
+          "file": "apps/astro-circle/public/SolidOnTopLeftAstroCircle.astro",
+          "hash": "10334721604378795763"
+        },
+        {
+          "file": "apps/astro-circle/public/SvelteOnTopLeftAstroCircle.astro",
+          "hash": "6237426135093424066"
+        },
+        {
+          "file": "apps/astro-circle/public/TopFiveFrameworksAstroCircle.astro",
+          "hash": "2698584958757960272"
+        },
+        {
+          "file": "apps/astro-circle/public/VueOnTopLeftAstroCircle.astro",
+          "hash": "2539750079920110871"
+        },
+        {
+          "file": "apps/astro-circle/public/favicon.svg",
+          "hash": "4164818997299313382"
+        },
+        {
+          "file": "apps/astro-circle/src/components/AstroCircle.astro",
+          "hash": "4390275289259029978"
+        },
+        {
+          "file": "apps/astro-circle/src/components/Card.astro",
+          "hash": "16097195234910034792"
+        },
+        {
+          "file": "apps/astro-circle/src/components/Head.astro",
+          "hash": "17798349872579784841"
+        },
+        {
+          "file": "apps/astro-circle/src/components/TopFiveFrameworksAstroCircle.astro",
+          "hash": "2698584958757960272"
+        },
+        {
+          "file": "apps/astro-circle/src/env.d.ts",
+          "hash": "8583967275856094796"
+        },
+        {
+          "file": "apps/astro-circle/src/layouts/Layout.astro",
+          "hash": "9639257424539041875"
+        },
+        {
+          "file": "apps/astro-circle/src/pages/index.astro",
+          "hash": "9203252532996176690"
+        },
+        {
+          "file": "apps/astro-circle/tsconfig.json",
+          "hash": "14174907604941768636"
+        },
+        {
+          "file": "apps/astro-circle/uno.config.ts",
+          "hash": "13158619352912821719",
+          "deps": [
+            "npm:unocss"
+          ]
+        }
+      ]
+    },
+    "nonProjectFiles": [
+      {
+        "file": ".eslintignore",
+        "hash": "7663861978715868291"
+      },
+      {
+        "file": ".eslintrc.json",
+        "hash": "13879290823850619353"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "10629114583281175610"
+      },
+      {
+        "file": ".npmrc",
+        "hash": "16382962868484042447"
+      },
+      {
+        "file": ".prettierignore",
+        "hash": "16448050467312557263"
+      },
+      {
+        "file": ".prettierrc",
+        "hash": "16267754514737964994"
+      },
+      {
+        "file": ".vscode/launch.json",
+        "hash": "14688531094848892483"
+      },
+      {
+        "file": ".vscode/settings.json",
+        "hash": "7718419637201944838"
+      },
+      {
+        "file": "README.md",
+        "hash": "15868962075537562672"
+      },
+      {
+        "file": "migrations.json",
+        "hash": "10722708082116126517"
+      },
+      {
+        "file": "nx.json",
+        "hash": "2203525623750527245"
+      },
+      {
+        "file": "package.json",
+        "hash": "3202168558584888261"
+      },
+      {
+        "file": "pnpm-lock.yaml",
+        "hash": "10674391253569193149"
+      },
+      {
+        "file": "tools/generators/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "tools/scripts/patch-nx-cli.js",
+        "hash": "6588040359195443053"
+      },
+      {
+        "file": "tools/scripts/publish.mjs",
+        "hash": "15520198794086158826"
+      },
+      {
+        "file": "tools/tsconfig.tools.json",
+        "hash": "16088922570277978783"
+      },
+      {
+        "file": "tsconfig.base.json",
+        "hash": "18036561975606179345"
+      },
+      {
+        "file": "vitest.workspace.ts",
+        "hash": "10171677410270848637"
+      }
+    ]
+  }
+}
