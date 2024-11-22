@@ -1,7 +1,11 @@
 {
   "name": "@forastro/asciidoc",
   "version": "0.0.1",
-  "dependencies": {},
+  "dependencies": {
+    "asciidoctor": "^3.0.4",
+    "c12": "^2.0.1",
+    "fast-glob": "^3.3.2"
+  },
   "main": "./index.js",
   "module": "./index.mjs",
   "typings": "./index.d.ts"

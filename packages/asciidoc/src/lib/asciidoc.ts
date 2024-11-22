@@ -1,4 +1,20 @@
+import { glob } from "fast-glob";
 
-export function asciidoc(): string {
-  return 'asciidoc';
-}
+
+describe("Testing fast glob", () => {
+
+
+    it('works', async () => {
+
+        const files = await glob('../posts/*.adoc')
+
+
+        expect(files.length).not.toBeGreaterThan(0)
+
+
+    })
+
+
+})
+
+
