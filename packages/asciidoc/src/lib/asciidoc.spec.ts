@@ -1,5 +1,6 @@
 import { glob } from "fast-glob";
-
+import { loadConfig, } from "c12";
+import { createJiti } from "jiti";
 describe('asciidoc', () => {
 
 
@@ -23,6 +24,27 @@ describe('asciidoc', () => {
     expect(filePaths.length).toBeGreaterThan(0)
 
     expect(filePaths).toContain("posts/page.adoc")
+
+
+  })
+
+  test("c12 works", async () => {
+
+    const { config } = await loadConfig({
+      cwd: import.meta.dirname,
+      name: "asciidoc",
+      omit$Keys: true,
+
+    })
+
+
+    expect(config).toBeDefined()
+
+    expectTypeOf(config).toBeObject()
+
+
+
+    expect(config).toHaveProperty("attributes")
 
 
   })
