@@ -54,9 +54,9 @@ describe('asciidoc', () => {
   describe("Testing getAsciidocPaths", () => {
 
 
-    it("works", () => {
+    it("works", async () => {
 
-      const result = getAsciidocPaths()
+      const result = await getAsciidocPaths()
 
       expect(result).toBeDefined()
 
