@@ -1,7 +1,9 @@
+import { glob } from "fast-glob"
 
-export function getAsciidocPaths() {
+
+export async function getAsciidocPaths() {
 
 
-    return []
 
+    return await glob("**/*.{adoc,asciidoc}",)
 }
