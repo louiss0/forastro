@@ -2,4 +2,6 @@
 export function getAsciidocPaths() {
 
 
+    return []
+
 }
