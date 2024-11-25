@@ -114,13 +114,11 @@ describe('asciidoc', () => {
 
           const newError = error as z.ZodError
 
-
-
           expect(newError.format()).toMatchInlineSnapshot(`
             {
               "0": {
                 "_errors": [
-                  "Don't pass in an empty string pass in a value with slashes instead",
+                  "Don't pass in an empty string pass in a value with forward slashes and words instead",
                 ],
               },
               "_errors": [],
