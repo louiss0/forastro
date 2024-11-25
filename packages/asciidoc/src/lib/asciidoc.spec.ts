@@ -98,6 +98,14 @@ describe('asciidoc', () => {
 
     })
 
+    it(
+      "throws an error if the folder name that is passed in is empty",
+      async () => {
+
+
+        expect(getAsciidocPaths('').catch).toThrow()
+
+      })
 
 
 
