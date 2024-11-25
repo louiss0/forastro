@@ -1,6 +1,8 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { createJiti } from "jiti";
+
+import { getAsciidocPaths } from "./internal"
+
 describe('asciidoc', () => {
 
 
@@ -48,5 +50,42 @@ describe('asciidoc', () => {
 
 
   })
+
+  describe("Testing getAsciidocPaths", () => {
+
+
+    it("works", () => {
+
+      const result = getAsciidocPaths()
+
+      expect(result).toBeDefined()
+
+      expectTypeOf(result).toBeArray()
+
+
+
+    })
+
+    it.todo("gets files based on if it's a .adoc or a .asciidoc extension", () => {
+
+
+
+      const result = getAsciidocPaths()
+
+
+      expect(result).toBeDefined()
+
+
+      expectTypeOf(result).toBeArray()
+
+
+
+    })
+
+
+
+
+  })
+
 
 });
