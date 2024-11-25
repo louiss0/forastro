@@ -87,6 +87,16 @@ describe('asciidoc', () => {
     })
 
 
+    it("gets paths from the current working directory only", async () => {
+
+      const result = await getAsciidocPaths()
+
+
+      expect(result.every((value) => value.startsWith('packages/asciidoc/src/lib/')))
+        .toBeTruthy()
+
+    })
+
 
 
   })
