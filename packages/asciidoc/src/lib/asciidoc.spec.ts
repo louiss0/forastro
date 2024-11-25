@@ -66,7 +66,7 @@ describe('asciidoc', () => {
 
     })
 
-    it.todo("gets files based on if it's a .adoc or a .asciidoc extension", () => {
+    it("gets files based on if it's a .adoc or a .asciidoc extension", () => {
 
 
 
@@ -78,6 +78,7 @@ describe('asciidoc', () => {
 
       expectTypeOf(result).toBeArray()
 
+      expect(result.some(value => value.endsWith(".adoc") || value.endsWith(".asciidoc")))
 
 
     })
