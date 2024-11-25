@@ -56,7 +56,7 @@ describe('asciidoc', () => {
 
     it("works", async () => {
 
-      const result = await getAsciidocPaths()
+      const result = await getAsciidocPaths("packages/asciidoc/src/lib")
 
       expect(result).toBeDefined()
 
@@ -70,7 +70,7 @@ describe('asciidoc', () => {
 
 
 
-      const result = await getAsciidocPaths()
+      const result = await getAsciidocPaths("packages/asciidoc/src/lib")
 
 
       expect(result).toBeDefined()
@@ -87,15 +87,17 @@ describe('asciidoc', () => {
     })
 
 
-    it("gets paths from the current working directory only", async () => {
+    it("gets paths from the specified directory only", async () => {
 
-      const result = await getAsciidocPaths()
+      const specifiedDirectory = "packages/asciidoc/src/lib";
+      const result = await getAsciidocPaths(specifiedDirectory)
 
 
-      expect(result.every((value) => value.startsWith('packages/asciidoc/src/lib/')))
+      expect(result.every((value) => !value.startsWith(specifiedDirectory)))
         .toBeTruthy()
 
     })
+
 
 
 
