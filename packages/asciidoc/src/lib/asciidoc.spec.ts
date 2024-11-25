@@ -2,6 +2,7 @@ import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
 
 import { getAsciidocPaths } from "./internal"
+import { z } from "astro/zod";
 
 describe('asciidoc', () => {
 
@@ -103,7 +104,31 @@ describe('asciidoc', () => {
       async () => {
 
 
-        expect(getAsciidocPaths('').catch).toThrow()
+        try {
+
+          await getAsciidocPaths('')
+
+        } catch (error) {
+
+          expect(error).toBeInstanceOf(z.ZodError)
+
+          const newError = error as z.ZodError
+
+
+
+          expect(newError.format()).toMatchInlineSnapshot(`
+            {
+              "0": {
+                "_errors": [
+                  "Don't pass in an empty string pass in a value with slashes instead",
+                ],
+              },
+              "_errors": [],
+            }
+          `)
+
+        }
+
 
       })
 
