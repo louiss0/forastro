@@ -39,6 +39,7 @@ const processorSchema = z.function(
 )
 
 const asciidocGlobalVariablesSchema = z.object({
+    // TODO: When shiki highlighter is implemented add shiki as a word on the list
     sourceHighlighter: z.enum([
         "coderay",
         "highlight.js",
@@ -142,7 +143,7 @@ const configObjectSchema = z.object({
     }).optional()
 }).strict()
 
-export type AsciidocConfigObject = z.infer<typeof configObjectSchema>['attributes']
+export type AsciidocConfigObject = z.infer<typeof configObjectSchema>
 
 export const getLoadAsciidocConfig = (cwd: string) => {
 
