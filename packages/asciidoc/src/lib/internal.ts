@@ -1,6 +1,6 @@
 import { glob } from "fast-glob"
 import { z } from "astro/zod"
-
+import { loadConfig } from "c12"
 
 const getAsciidocPathsSchema = z.function(
     z.tuple([
@@ -24,3 +24,20 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderNa
 
 })
 
+
+export const loadAsciidocConfig = async () => {
+
+
+    const { config, } = await loadConfig({
+        cwd: import.meta.dirname,
+        name: "asciidoc",
+        omit$Keys: true,
+
+    })
+
+
+
+    return config
+
+
+}

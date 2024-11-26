@@ -1,7 +1,7 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
 
-import { getAsciidocPaths } from "./internal"
+import { loadAsciidocConfig, getAsciidocPaths } from "./internal"
 import { z } from "astro/zod";
 
 describe('asciidoc', () => {
@@ -133,6 +133,24 @@ describe('asciidoc', () => {
 
 
   })
+
+  describe("Testing loadAsciidocConfig", () => {
+
+
+    it("works", () => {
+
+
+      const result = loadAsciidocConfig()
+
+
+      expectTypeOf(result).toBeObject()
+
+
+    })
+
+  })
+
+
 
 
 });
