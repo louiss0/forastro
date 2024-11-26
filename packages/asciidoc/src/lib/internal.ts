@@ -6,7 +6,7 @@ const getAsciidocPathsSchema = z.function(
     z.tuple([
         z.string()
             .regex(
-                /[\w+\/]/,
+                /[\w\/]+/m,
                 "Don't pass in an empty string pass in a value with forward slashes and words instead")
     ]),
     z.promise(z.string().array())
