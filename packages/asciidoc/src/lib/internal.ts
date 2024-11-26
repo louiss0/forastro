@@ -74,7 +74,7 @@ const configObjectSchema = z.object({
                 processor: processorSchema,
             }))
     }).optional()
-})
+}).strict()
 
 export const getLoadAsciidocConfig = (cwd: string) => {
 

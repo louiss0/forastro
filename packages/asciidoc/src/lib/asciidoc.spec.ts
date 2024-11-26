@@ -3,6 +3,7 @@ import { loadConfig, } from "c12";
 
 import { getLoadAsciidocConfig, getAsciidocPaths } from "./internal"
 import { z } from "astro/zod";
+import { errorMonitor } from "events";
 
 describe('asciidoc', () => {
 
@@ -172,6 +173,11 @@ describe('asciidoc', () => {
         expect(error).toBeInstanceOf(z.ZodError)
 
 
+        const newError = error as z.ZodError
+
+
+        expect(newError.errors[0]?.message).toMatchInlineSnapshot(`"The asciidoc config file must be a mts or mjs file"`)
+
       }
 
       expect(result).toBeUndefined()
@@ -186,12 +192,19 @@ describe('asciidoc', () => {
     try {
 
       result = await getLoadAsciidocConfig(
-        `${import.meta.dirname}/mocks/bad-config`
+        `${import.meta.dirname}/mocks/bad-props-config`
       )()
 
     } catch (error) {
 
       expect(error).toBeInstanceOf(z.ZodError)
+
+      const newError = error as z.ZodError
+
+      expect(newError.errors.every(
+        error => error?.message.match(/Unrecognized key\(s\) in object: '\w+'/)
+      )).toBeTruthy()
+
 
     }
 
