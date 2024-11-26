@@ -98,6 +98,7 @@ const AsciidocGlobalVariablesSchema = z.object({
     stylesheet: z.string().optional(),
 });
 
+export type AsciidocConfigObject = z.infer<typeof configObjectSchema>
 
 const configObjectSchema = z.object({
     attributes: AsciidocGlobalVariablesSchema.optional(),
@@ -141,7 +142,7 @@ export const getLoadAsciidocConfig = (cwd: string) => {
     return async () => {
 
 
-        const { config, configFile } = await loadConfig<z.infer<typeof configObjectSchema>>({
+        const { config, configFile } = await loadConfig({
             cwd,
             name: "asciidoc",
             omit$Keys: true,
@@ -172,4 +173,4 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 
 }
 
-export const loadAsciidocConfig = getLoadAsciidocConfig(import.meta.dirname)
+export const loadAsciidocConfig = getLoadAsciidocConfig(process.cwd())
