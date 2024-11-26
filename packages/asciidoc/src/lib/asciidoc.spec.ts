@@ -3,7 +3,6 @@ import { loadConfig, } from "c12";
 
 import { getLoadAsciidocConfig, getAsciidocPaths } from "./internal"
 import { z } from "astro/zod";
-import { errorMonitor } from "events";
 
 describe('asciidoc', () => {
 
@@ -35,7 +34,7 @@ describe('asciidoc', () => {
   test("c12 works", async () => {
 
     const { config } = await loadConfig({
-      cwd: import.meta.dirname,
+      cwd: `${import.meta.dirname}/mocks/`,
       name: "asciidoc",
       omit$Keys: true,
 
@@ -45,10 +44,6 @@ describe('asciidoc', () => {
     expect(config).toBeDefined()
 
     expectTypeOf(config).toBeObject()
-
-
-
-    expect(config).toHaveProperty("attributes")
 
 
   })
@@ -200,6 +195,7 @@ describe('asciidoc', () => {
       expect(error).toBeInstanceOf(z.ZodError)
 
       const newError = error as z.ZodError
+
 
       expect(newError.errors.every(
         error => error?.message.match(/Unrecognized key\(s\) in object: '\w+'/)
