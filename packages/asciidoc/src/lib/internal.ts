@@ -18,8 +18,6 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderNa
     return await glob("**/*.{adoc,asciidoc}", {
         cwd: folderName,
         absolute: true
-
-
     })
 
 })
@@ -40,17 +38,27 @@ const processorSchema = z.function(
     z.string()
 )
 
-const AsciidocGlobalVariablesSchema = z.object({
-    sourceHighlighter: z.string().optional(),
-    // TODO: Make author require two words
-    author: z.string().optional(),
+const asciidocGlobalVariablesSchema = z.object({
+    sourceHighlighter: z.enum([
+        "coderay",
+        "highlight.js",
+        "pygments",
+        "rouge"
+    ]).optional(),
+    author: z.string()
+        .regex(
+            /[A-Z][a-z]+\s+[A-Z][a-z]+/,
+            "The author's name must be a name and last name both capitalized with a space in between"
+        )
+        .optional(),
+    email: z.string().email().optional(),
     backend: z.string().optional(),
     filetype: z.boolean().optional(),
     localdir: z.string().optional(),
     localdate: z.string().date().optional(),
     localdatetime: z.string().datetime().optional(),
-    localtime: z.string().datetime().optional(),
-    localyear: z.number().optional(),
+    localtime: z.string().time().optional(),
+    localyear: z.number().int().optional(),
     attributeMissing: z.enum(["drop", "drop-line", "skip", "warn"]).optional(),
     attributeUndefined: z.enum(["drop", "drop-line"]).optional(),
     experimental: z.boolean().optional(),
@@ -84,24 +92,31 @@ const AsciidocGlobalVariablesSchema = z.object({
     authors: z.string().optional(),
     idprefix: z.string().optional(),
     idseparator: z.string().optional(),
-    leveloffset: z.enum(["0", "1", "2", "3", "4", "5"]).optional(),
+    leveloffset: z.enum(["0", "1", "2", "3", "4", "5"])
+        .transform((input) => parseInt(input))
+        .optional(),
     partnums: z.boolean().optional(),
     setanchors: z.boolean().optional(),
     sectids: z.boolean().optional(),
     sectlinks: z.boolean().optional(),
     sectnums: z.boolean().optional(),
-    sectnumlevels: z.enum(["0", "1", "2", "3", "4", "5"]).optional(),
+    sectnumlevels: z.enum(["0", "1", "2", "3", "4", "5"])
+        .transform((input) => parseInt(input))
+        .optional(),
     titleSeparator: z.string().optional(),
-    toc: z.enum(["auto", "left", "right", "macro", "preamble"]).or(z.literal(true)).optional(),
-    toclevels: z.enum(["1", "2", "3", "4", "5"]).optional(),
+    toc: z.enum(["auto", "left", "right", "macro", "preamble"])
+        .or(z.literal(true))
+        .optional(),
+    toclevels: z.enum(["1", "2", "3", "4", "5"])
+        .transform((input) => parseInt(input))
+        .optional(),
     fragment: z.boolean().optional(),
     stylesheet: z.string().optional(),
 });
 
-export type AsciidocConfigObject = z.infer<typeof configObjectSchema>
 
 const configObjectSchema = z.object({
-    attributes: AsciidocGlobalVariablesSchema.optional(),
+    attributes: asciidocGlobalVariablesSchema.optional(),
     blocks: z.record(
         z.string(),
         z.object({
@@ -126,6 +141,8 @@ const configObjectSchema = z.object({
             }))
     }).optional()
 }).strict()
+
+export type AsciidocConfigObject = z.infer<typeof configObjectSchema>['attributes']
 
 export const getLoadAsciidocConfig = (cwd: string) => {
 
