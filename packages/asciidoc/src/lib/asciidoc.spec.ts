@@ -171,11 +171,35 @@ describe('asciidoc', () => {
 
         expect(error).toBeInstanceOf(z.ZodError)
 
+
       }
 
       expect(result).toBeUndefined()
 
     })
+
+  it("throws an error when the config file doesn't have the right properties", async () => {
+
+
+
+    let result
+    try {
+
+      result = await getLoadAsciidocConfig(
+        `${import.meta.dirname}/mocks/bad-config`
+      )()
+
+    } catch (error) {
+
+      expect(error).toBeInstanceOf(z.ZodError)
+
+    }
+
+    expect(result).toBeUndefined()
+
+
+
+  })
 
 
 

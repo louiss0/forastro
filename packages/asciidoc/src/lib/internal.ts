@@ -1,5 +1,5 @@
 import { glob } from "fast-glob"
-import { z } from "astro/zod"
+import { object, z } from "astro/zod"
 import { loadConfig } from "c12"
 
 const getAsciidocPathsSchema = z.function(
@@ -31,20 +31,66 @@ const configFileSchema = z.string()
     )
 
 
+const blockContextSchema = z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar'])
+
+const inlineContextSchema = z.enum(['quoted', 'anchor'])
+
+
+
+const processorSchema = z.function(
+    z.tuple([
+        z.string(),
+        z.record(
+            z.string(),
+            z.union([
+                z.string(),
+                z.number(),
+                z.boolean()
+            ])
+        )
+    ]),
+    z.string()
+)
+const configObjectSchema = z.object({
+
+    attributes: z.record(z.string(), z.unknown()).optional(),
+    blocks: z.record(
+        z.string(),
+        z.object({
+            context: blockContextSchema,
+            processor: processorSchema
+        })).optional(),
+    macros: z.object({
+        inline: z.record(
+            z.string(),
+            z.object({
+                context: inlineContextSchema,
+                processor: processorSchema,
+            })),
+        block: z.record(
+            z.string(),
+            z.object({
+                context: blockContextSchema,
+                processor: processorSchema,
+            }))
+    }).optional()
+})
+
 export const getLoadAsciidocConfig = (cwd: string) => {
 
 
     return async () => {
-        const { config, configFile } = await loadConfig({
+
+
+        const { config, configFile } = await loadConfig<z.infer<typeof configObjectSchema>>({
             cwd,
             name: "asciidoc",
             omit$Keys: true,
         })
 
-        console.log(configFile);
-
-
         configFileSchema.parse(configFile)
+
+        configObjectSchema.parse(config)
 
 
         return config
