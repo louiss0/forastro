@@ -1,6 +1,9 @@
 {
   "name": "@forastro/asciidoc",
   "version": "0.0.1",
+  "peerDependencies": {
+    "astro": "4.16.15"
+  },
   "dependencies": {
     "asciidoctor": "^3.0.4",
     "c12": "^2.0.1",
