@@ -24,20 +24,33 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderNa
 
 })
 
-
-export const loadAsciidocConfig = async () => {
-
-
-    const { config, } = await loadConfig({
-        cwd: import.meta.dirname,
-        name: "asciidoc",
-        omit$Keys: true,
-
-    })
+const configFileSchema = z.string()
+    .regex(
+        /asciidoc.config.m(?:ts|js)/,
+        "The asciidoc config file must be a mts or mjs file"
+    )
 
 
+export const getLoadAsciidocConfig = (cwd: string) => {
 
-    return config
 
+    return async () => {
+        const { config, configFile } = await loadConfig({
+            cwd,
+            name: "asciidoc",
+            omit$Keys: true,
+        })
+
+        console.log(configFile);
+
+
+        configFileSchema.parse(configFile)
+
+
+        return config
+
+    }
 
 }
+
+export const loadAsciidocConfig = getLoadAsciidocConfig(import.meta.dirname)

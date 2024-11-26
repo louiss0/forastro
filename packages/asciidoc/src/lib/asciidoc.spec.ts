@@ -1,7 +1,7 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
 
-import { loadAsciidocConfig, getAsciidocPaths } from "./internal"
+import { getLoadAsciidocConfig, getAsciidocPaths } from "./internal"
 import { z } from "astro/zod";
 
 describe('asciidoc', () => {
@@ -137,10 +137,13 @@ describe('asciidoc', () => {
   describe("Testing loadAsciidocConfig", () => {
 
 
+
+
     it("works", async () => {
 
 
-      const result = await loadAsciidocConfig()
+
+      const result = await getLoadAsciidocConfig(`${import.meta.dirname}/mocks`)()
 
 
       expectTypeOf(result).toBeObject()
@@ -160,13 +163,13 @@ describe('asciidoc', () => {
       let result
       try {
 
-        result = await loadAsciidocConfig()
+        result = await getLoadAsciidocConfig(
+          `${import.meta.dirname}/mocks/false-config`
+        )()
 
       } catch (error) {
 
-
         expect(error).toBeInstanceOf(z.ZodError)
-
 
       }
 
