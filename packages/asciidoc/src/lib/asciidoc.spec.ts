@@ -153,6 +153,26 @@ describe('asciidoc', () => {
   })
 
 
+  it(
+    "throws an error when a file is a not an m js or ts file",
+    async () => {
+
+      let result
+      try {
+
+        result = await loadAsciidocConfig()
+
+      } catch (error) {
+
+
+        expect(error).toBeInstanceOf(z.ZodError)
+
+
+      }
+
+      expect(result).toBeUndefined()
+
+    })
 
 
 
