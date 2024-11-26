@@ -137,18 +137,21 @@ describe('asciidoc', () => {
   describe("Testing loadAsciidocConfig", () => {
 
 
-    it("works", () => {
+    it("works", async () => {
 
 
-      const result = loadAsciidocConfig()
+      const result = await loadAsciidocConfig()
 
 
       expectTypeOf(result).toBeObject()
+
+      expect(Object.getPrototypeOf(result) === Object.prototype).toBeTruthy()
 
 
     })
 
   })
+
 
 
 
