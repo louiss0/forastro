@@ -1,5 +1,5 @@
 import { glob } from "fast-glob"
-import { object, z } from "astro/zod"
+import { z } from "astro/zod"
 import { loadConfig } from "c12"
 
 const getAsciidocPathsSchema = z.function(
@@ -24,18 +24,6 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderNa
 
 })
 
-const configFileSchema = z.string()
-    .regex(
-        /asciidoc.config.m(?:ts|js)/,
-        "The asciidoc config file must be a mts or mjs file"
-    )
-
-
-const blockContextSchema = z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar'])
-
-const inlineContextSchema = z.enum(['quoted', 'anchor'])
-
-
 
 const processorSchema = z.function(
     z.tuple([
@@ -52,25 +40,29 @@ const processorSchema = z.function(
     z.string()
 )
 const configObjectSchema = z.object({
-
+    // TODO: Change attributes schema into proper global attributes.
     attributes: z.record(z.string(), z.unknown()).optional(),
+
     blocks: z.record(
         z.string(),
         z.object({
-            context: blockContextSchema,
+            context:
+                z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
             processor: processorSchema
         })).optional(),
+
     macros: z.object({
         inline: z.record(
             z.string(),
             z.object({
-                context: inlineContextSchema,
+                context: z.enum(['quoted', 'anchor']),
                 processor: processorSchema,
             })),
+
         block: z.record(
             z.string(),
             z.object({
-                context: blockContextSchema,
+                context: z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
                 processor: processorSchema,
             }))
     }).optional()
@@ -88,7 +80,12 @@ export const getLoadAsciidocConfig = (cwd: string) => {
             omit$Keys: true,
         })
 
-        configFileSchema.parse(configFile)
+        z.string()
+            .regex(
+                /asciidoc.config.m(?:ts|js)/,
+                "The asciidoc config file must be a mts or mjs file"
+            )
+            .parse(configFile)
 
         configObjectSchema.parse(config)
 
