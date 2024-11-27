@@ -302,7 +302,10 @@ describe('asciidoc', () => {
 
     })
 
-    it.todo("registers inline macros found in the global config file", () => {
+    $it.todo("registers inline macros found in the global config file", ({ registry }) => {
+
+      expect(registry.hasInlineMacros()).toBeTruthy()
+
 
     })
 
