@@ -1,8 +1,8 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { getLoadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments } from "./internal"
+import { getLoadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, createForAstroRegistryAsciidocFromConfig } from "./internal"
 import { z } from "astro/zod";
-import type { Document } from "asciidoctor";
+import type { AbstractBlock, Document, Extensions } from "asciidoctor";
 
 
 describe('asciidoc', () => {
@@ -270,22 +270,50 @@ describe('asciidoc', () => {
 
     })
 
-    $it.todo("registers blocks found in the global config file", () => {
 
-
-
-    })
-
-    $it.todo("registers inline macros found in the global config file", () => {
-
-    })
-
-    $it.todo("registers block macros found in the global config file", () => {
-
-    })
 
 
   })
+
+
+  describe("Testing createForAstroRegistryAsciidocFromConfig", () => {
+
+
+    const $it = it.extend<{ registry: Extensions.Registry }>({
+
+      async registry({ }, use) {
+
+        const { blocks } = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
+
+
+        use(createForAstroRegistryAsciidocFromConfig(blocks))
+
+      }
+
+
+
+
+    })
+
+
+    $it("registers blocks found in the global config file", ({ registry }) => {
+
+      expect(registry.hasBlocks()).toBeTruthy()
+
+    })
+
+    it.todo("registers inline macros found in the global config file", () => {
+
+    })
+
+
+    it.todo("registers block macros found in the global config file", () => {
+
+    })
+
+  })
+
+
 
 
 

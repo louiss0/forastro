@@ -193,13 +193,56 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 
 const processor = asciidoctor()
 
+
+export const createForAstroRegistryAsciidocFromConfig = (
+    blocks: AsciidocConfigObject['blocks'],
+) => {
+
+    const registry = processor.Extensions.create("forastro/asciidoc")
+
+    if (blocks) {
+
+        for (const [name, { context, processor }] of Object.entries(blocks)) {
+
+            registry.block(name, function () {
+
+                this.process(function (parent, reader, attributes) {
+
+
+
+                    this.createBlock(
+                        parent,
+                        context,
+                        processor(reader.getString(), attributes),
+                        attributes
+                    )
+
+                })
+
+
+            })
+
+        }
+
+
+
+
+
+    }
+
+
+
+    return registry
+
+
+}
+
 export const transformAsciidocFilesIntoAsciidocDocuments = async (
     content_folder_path: string,
     config_folder_path: string,
 ) => {
 
     const paths = await getAsciidocPaths(content_folder_path)
-
 
     const { attributes } = await getLoadAsciidocConfig(config_folder_path)()
 
