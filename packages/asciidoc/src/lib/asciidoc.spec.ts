@@ -223,7 +223,7 @@ describe('asciidoc', () => {
     it("works", async () => {
 
 
-      const result = await transformAsciidocFilesIntoAsciidocDocuments()
+      const result = await transformAsciidocFilesIntoAsciidocDocuments(import.meta.dirname)
 
 
       expectTypeOf(result).toBeArray()

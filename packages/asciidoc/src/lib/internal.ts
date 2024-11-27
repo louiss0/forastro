@@ -194,9 +194,9 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 
 const processor = asciidoctor()
 
-export const transformAsciidocFilesIntoAsciidocDocuments = async () => {
+export const transformAsciidocFilesIntoAsciidocDocuments = async (folder_name: string) => {
 
-    const paths = await getAsciidocPaths(import.meta.dirname)
+    const paths = await getAsciidocPaths(folder_name)
 
 
     return paths.map(path => processor.loadFile(path))
