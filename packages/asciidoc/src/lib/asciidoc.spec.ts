@@ -225,7 +225,10 @@ describe('asciidoc', () => {
     const $it = it.extend<{ documents: Array<Document> }>({
       async documents({ }, use) {
 
-        const result = await transformAsciidocFilesIntoAsciidocDocuments(`${MOCK_FOLDER}/posts`)
+        const result = await transformAsciidocFilesIntoAsciidocDocuments(
+          `${MOCK_FOLDER}/posts`,
+          `${MOCK_FOLDER}/configs`
+        )
 
 
         await use(result)
@@ -260,7 +263,7 @@ describe('asciidoc', () => {
       documents.forEach(document => {
 
         expect(document.getAttributes())
-          .toHaveProperty("author", "Shelton louis")
+          .toHaveProperty("author", "Shelton Louis")
 
       })
 
