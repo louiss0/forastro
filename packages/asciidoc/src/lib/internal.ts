@@ -91,7 +91,6 @@ const asciidocGlobalVariablesSchema = z.object({
     untitledLabel: z.string().optional(),
     warningCaption: z.string().optional(),
     appName: z.string().optional(),
-    authors: z.string().optional(),
     idprefix: z.string().optional(),
     idseparator: z.string().optional(),
     leveloffset: z.enum(["0", "1", "2", "3", "4", "5"])
