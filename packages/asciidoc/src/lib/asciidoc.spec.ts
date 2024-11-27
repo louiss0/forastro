@@ -5,9 +5,6 @@ import { z } from "astro/zod";
 import type { Document } from "asciidoctor";
 
 
-
-
-
 describe('asciidoc', () => {
 
 
@@ -30,7 +27,7 @@ describe('asciidoc', () => {
 
     expect(filePaths.length).toBeGreaterThan(0)
 
-    expect(filePaths).toContain("posts/page.adoc")
+    expect(filePaths).toContain("mocks/posts/page.adoc")
 
 
   })
@@ -134,7 +131,12 @@ describe('asciidoc', () => {
 
   })
 
+
+  const MOCK_FOLDER = `${import.meta.dirname}/mocks`
+
+
   describe("Testing loadAsciidocConfig", () => {
+
 
 
 
@@ -143,7 +145,7 @@ describe('asciidoc', () => {
 
 
 
-      const result = await getLoadAsciidocConfig(`${import.meta.dirname}/mocks`)()
+      const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
 
 
       expectTypeOf(result).toBeObject()
@@ -164,7 +166,7 @@ describe('asciidoc', () => {
       try {
 
         result = await getLoadAsciidocConfig(
-          `${import.meta.dirname}/mocks/false-config`
+          `${MOCK_FOLDER}/false-config`
         )()
 
       } catch (error) {
@@ -193,7 +195,7 @@ describe('asciidoc', () => {
     try {
 
       result = await getLoadAsciidocConfig(
-        `${import.meta.dirname}/mocks/bad-props-config`
+        `${MOCK_FOLDER}/configs/bad-props`
       )()
 
     } catch (error) {
@@ -223,7 +225,7 @@ describe('asciidoc', () => {
     const $it = it.extend<{ documents: Array<Document> }>({
       async documents({ }, use) {
 
-        const result = await transformAsciidocFilesIntoAsciidocDocuments(import.meta.dirname)
+        const result = await transformAsciidocFilesIntoAsciidocDocuments(`${MOCK_FOLDER}/posts`)
 
 
         await use(result)
