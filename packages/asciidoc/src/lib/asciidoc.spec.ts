@@ -306,11 +306,14 @@ describe('asciidoc', () => {
 
       expect(registry.hasInlineMacros()).toBeTruthy()
 
-
     })
 
 
-    it.todo("registers block macros found in the global config file", () => {
+    $it("registers block macros found in the global config file", ({ registry }) => {
+
+
+      expect(registry.hasBlockMacros()).toBeTruthy()
+
 
     })
 
