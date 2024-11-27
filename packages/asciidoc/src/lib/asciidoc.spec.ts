@@ -220,18 +220,29 @@ describe('asciidoc', () => {
   describe("Testing transformAsciidocFilesIntoAsciidocDocuments", () => {
 
 
-    it("works", async () => {
+    const $it = it.extend<{ documents: Array<Document> }>({
+      async documents({ }, use) {
+
+        const result = await transformAsciidocFilesIntoAsciidocDocuments(import.meta.dirname)
 
 
-      const result = await transformAsciidocFilesIntoAsciidocDocuments(import.meta.dirname)
+        await use(result)
+
+      }
+
+    })
+
+    $it("works", async ({ documents }) => {
 
 
-      expectTypeOf(result).toBeArray()
-
-      expect(result.length).toBeGreaterThan(0)
 
 
-      for (const item of result) {
+      expectTypeOf(documents).toBeArray()
+
+      expect(documents.length).toBeGreaterThan(0)
+
+
+      for (const item of documents) {
 
         expectTypeOf(item).toEqualTypeOf<Document>()
 
@@ -241,6 +252,28 @@ describe('asciidoc', () => {
     })
 
 
+    $it.todo("registers attributes defined in the config file ", () => {
+
+
+    })
+
+    $it.todo("registers blocks found in the global config file", () => {
+
+
+
+    })
+
+    $it.todo("registers inline macros found in the global config file", () => {
+
+    })
+
+    $it.todo("registers block macros found in the global config file", () => {
+
+    })
+
+
   })
+
+
 
 });
