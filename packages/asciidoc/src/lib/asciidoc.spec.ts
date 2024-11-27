@@ -1,8 +1,12 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-
-import { getLoadAsciidocConfig, getAsciidocPaths } from "./internal"
+import { getLoadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments } from "./internal"
 import { z } from "astro/zod";
+import type { Document } from "asciidoctor";
+
+
+
+
 
 describe('asciidoc', () => {
 
@@ -213,5 +217,30 @@ describe('asciidoc', () => {
   })
 
 
+  describe("Testing transformAsciidocFilesIntoAsciidocDocuments", () => {
+
+
+    it("works", async () => {
+
+
+      const result = await transformAsciidocFilesIntoAsciidocDocuments()
+
+
+      expectTypeOf(result).toBeArray()
+
+      expect(result.length).toBeGreaterThan(0)
+
+
+      for (const item of result) {
+
+        expectTypeOf(item).toEqualTypeOf<Document>()
+
+      }
+
+
+    })
+
+
+  })
 
 });

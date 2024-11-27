@@ -1,6 +1,7 @@
 import { glob } from "fast-glob"
 import { z } from "astro/zod"
 import { loadConfig } from "c12"
+import asciidoctor from "asciidoctor"
 
 const getAsciidocPathsSchema = z.function(
     z.tuple([
@@ -188,6 +189,18 @@ export const getLoadAsciidocConfig = (cwd: string) => {
         }).parse(config)
 
     }
+
+}
+
+const processor = asciidoctor()
+
+export const transformAsciidocFilesIntoAsciidocDocuments = async () => {
+
+    const paths = await getAsciidocPaths(import.meta.dirname)
+
+
+    return paths.map(path => processor.loadFile(path))
+
 
 }
 
