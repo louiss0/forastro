@@ -283,10 +283,10 @@ describe('asciidoc', () => {
 
       async registry({ }, use) {
 
-        const { blocks } = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
+        const { blocks, macros } = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
 
 
-        use(createForAstroRegistryAsciidocFromConfig(blocks))
+        use(createForAstroRegistryAsciidocFromConfig(blocks, macros))
 
       }
 
@@ -302,7 +302,7 @@ describe('asciidoc', () => {
 
     })
 
-    $it.todo("registers inline macros found in the global config file", ({ registry }) => {
+    $it("registers inline macros found in the global config file", ({ registry }) => {
 
       expect(registry.hasInlineMacros()).toBeTruthy()
 

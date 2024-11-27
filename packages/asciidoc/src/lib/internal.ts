@@ -132,14 +132,14 @@ const configObjectSchema = z.object({
             z.object({
                 context: z.enum(['quoted', 'anchor']),
                 processor: processorSchema,
-            })),
+            })).optional(),
 
         block: z.record(
             z.string(),
             z.object({
                 context: z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
                 processor: processorSchema,
-            }))
+            })).optional()
     }).optional()
 }).strict()
 
@@ -196,6 +196,7 @@ const processor = asciidoctor()
 
 export const createForAstroRegistryAsciidocFromConfig = (
     blocks: AsciidocConfigObject['blocks'],
+    macros: AsciidocConfigObject['macros']
 ) => {
 
     const registry = processor.Extensions.create("forastro/asciidoc")
@@ -224,6 +225,35 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
         }
 
+
+        if (macros?.inline) {
+
+            for (const [name, { context, processor }] of Object.entries(macros.inline)) {
+
+
+                registry.inlineMacro(name, function () {
+
+
+                    this.process(function (parent, target, attributes) {
+
+
+                        this.createInline(
+                            parent,
+                            context,
+                            processor(target, attributes)
+                        )
+
+
+                    })
+
+
+
+                })
+
+
+            }
+
+        }
 
 
 
