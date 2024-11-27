@@ -18,6 +18,12 @@ export default {
                 context: "anchor",
                 processor: (target) => `Info ${target}`
             }
+        },
+        block: {
+            message: {
+                context: 'literal',
+                processor: (target) => `MESSAGE: ${target}`
+            }
         }
     }
 

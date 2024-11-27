@@ -230,9 +230,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
             for (const [name, { context, processor }] of Object.entries(macros.inline)) {
 
-
                 registry.inlineMacro(name, function () {
-
 
                     this.process(function (parent, target, attributes) {
 
@@ -246,10 +244,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
                     })
 
-
-
                 })
-
 
             }
 
@@ -257,6 +252,28 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
 
 
+        if (macros?.block) {
+
+            for (const [name, { context, processor }] of Object.entries(macros.block)) {
+
+                registry.blockMacro(name, function () {
+
+                    this.process(function (parent, target, attributes) {
+
+                        this.createBlock(
+                            parent,
+                            context,
+                            processor(target, attributes),
+                            attributes
+                        )
+
+                    })
+
+                })
+
+            }
+
+        }
 
     }
 
