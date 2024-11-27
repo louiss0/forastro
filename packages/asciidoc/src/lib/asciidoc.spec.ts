@@ -252,7 +252,15 @@ describe('asciidoc', () => {
     })
 
 
-    $it.todo("registers attributes defined in the config file ", () => {
+    $it("registers attributes defined in the config file ", ({ documents }) => {
+
+
+      documents.forEach(document => {
+
+        expect(document.getAttributes())
+          .toHaveProperty("author", "Shelton louis")
+
+      })
 
 
     })
