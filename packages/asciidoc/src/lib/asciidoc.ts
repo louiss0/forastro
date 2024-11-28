@@ -1,22 +1,10 @@
-import { type Loader } from "astro/loaders";
-import { loadAsciidocConfig, getAsciidocPaths, createForAstroRegistryAsciidocFromConfig } from "./internal";
 import asciidoctor from "asciidoctor";
-
-import slugify from "slugify"
-
-const generateSlug = (string: string) => slugify(
-    string,
-    {
-        lower: true,
-        trim: true,
-        remove: /[*+~.()'"!:@]/g
-    })
+import { type Loader } from "astro/loaders";
+import { createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
 
 const processor = asciidoctor()
 
-
-
-export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
+export function createAsciidocLoader(config_folder_name: string, folder_name: string, schema: Loader['schema']) {
 
 
     return {
@@ -28,7 +16,7 @@ export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
 
             const [config, paths] = await Promise.all(
                 [
-                    loadAsciidocConfig(),
+                    getLoadAsciidocConfig(config_folder_name)(),
                     getAsciidocPaths(folder_name)
 
                 ]
@@ -103,3 +91,11 @@ export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
 
 
 }
+
+
+export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
+
+    return createAsciidocLoader(".", folder_name, schema)
+
+}
+

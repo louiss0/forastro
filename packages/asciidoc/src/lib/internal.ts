@@ -1,7 +1,9 @@
-import { glob } from "fast-glob"
+import asciidoctor from "asciidoctor"
+import type { Loader } from "astro/loaders"
 import { z } from "astro/zod"
 import { loadConfig } from "c12"
-import asciidoctor from "asciidoctor"
+import { glob } from "fast-glob"
+import slugify from "slugify"
 
 const getAsciidocPathsSchema = z.function(
     z.tuple([
@@ -308,4 +310,15 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
 
 }
 
+export const generateSlug = (string: string) => slugify(
+    string,
+    {
+        lower: true,
+        trim: true,
+        remove: /[*+~.()'"!:@]/g
+    })
+
 export const loadAsciidocConfig = getLoadAsciidocConfig(process.cwd())
+
+
+
