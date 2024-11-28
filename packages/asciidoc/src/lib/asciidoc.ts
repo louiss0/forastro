@@ -42,7 +42,7 @@ export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
             )
 
 
-            logger.info(" Clearing the store")
+            logger.info("Clearing the store")
 
             store.clear()
 
@@ -93,6 +93,8 @@ export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
                 })
 
             }
+
+            logger.info("Finished")
 
 
         },
