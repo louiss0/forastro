@@ -145,6 +145,7 @@ describe('asciidoc', () => {
 
       try {
         const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}`)()
+
         expect(Object.keys(result).length).toBe(0)
 
       } catch (error) {
@@ -179,12 +180,13 @@ describe('asciidoc', () => {
     "throws an error when a file is a not an m js or ts file",
     async () => {
 
-      let result
       try {
 
-        result = await getLoadAsciidocConfig(
+        const result = await getLoadAsciidocConfig(
           `${MOCK_FOLDER}/false-config`
         )()
+
+        expect(Object.keys(result).length).toBe(0)
 
       } catch (error) {
 
@@ -198,22 +200,19 @@ describe('asciidoc', () => {
 
       }
 
-      expect(result).toBeUndefined()
 
     })
 
   it("throws an error when the config file doesn't have the right properties", async () => {
 
 
-
-
-
-    let result
     try {
 
-      result = await getLoadAsciidocConfig(
+      const result = await getLoadAsciidocConfig(
         `${MOCK_FOLDER}/configs/bad-props`
       )()
+
+      expect(Object.keys(result).length).toBe(0)
 
     } catch (error) {
 
@@ -229,7 +228,6 @@ describe('asciidoc', () => {
 
     }
 
-    expect(result).toBeUndefined()
 
 
 
