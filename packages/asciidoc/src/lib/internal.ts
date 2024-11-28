@@ -166,6 +166,10 @@ export const getLoadAsciidocConfig = (cwd: string) => {
             omit$Keys: true,
         })
 
+        if (Object.keys(config).length === 0) {
+            return config
+        }
+
         z.string()
             .regex(
                 /asciidoc.config.m(?:ts|js)/,

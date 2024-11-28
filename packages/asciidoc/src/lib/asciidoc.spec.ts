@@ -142,10 +142,17 @@ describe('asciidoc', () => {
 
       // The mock folder has no config's and shouldn't. 
       // Passing the mocks folder prevents creating a random empty folder
-      const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}`)()
 
+      try {
+        const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}`)()
+        expect(Object.keys(result).length).toBe(0)
 
-      expectTypeOf(result).toBeUndefined()
+      } catch (error) {
+
+        expect(error).toBeUndefined()
+
+      }
+
 
 
     })
