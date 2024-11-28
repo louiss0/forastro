@@ -62,7 +62,7 @@ export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
 
                 if (!title) {
 
-                    return logger.error(
+                    throw Error(
                         `Please supply a title for the file in this path ${path}`
                     )
 
