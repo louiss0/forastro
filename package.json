@@ -9,6 +9,8 @@
   "devDependencies": {
     "@ahryman40k/nx-vitepress": "^15.1.1",
     "@anatine/zod-mock": "^3.13.4",
+    "@astrojs/check": "^0.5.2",
+    "@astrojs/tailwind": "^5.1.2",
     "@faker-js/faker": "^9.2.0",
     "@fontsource/palanquin": "^5.1.0",
     "@fontsource/raleway": "^5.1.0",
@@ -38,6 +40,7 @@
     "prettier": "^3.3.3",
     "publint": "^0.2.12",
     "release-it": "^17.10.0",
+    "tailwindcss": "^3.0.24",
     "tslib": "^2.8.1",
     "tsup": "^8.3.5",
     "typescript": "5.6.3",
