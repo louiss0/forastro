@@ -138,7 +138,17 @@ describe('asciidoc', () => {
   describe("Testing loadAsciidocConfig", () => {
 
 
+    it("does'nt throw an error on an empty file", async () => {
 
+      // The mock folder has no config's and shouldn't. 
+      // Passing the mocks folder prevents creating a random empty folder
+      const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}`)()
+
+
+      expectTypeOf(result).toBeUndefined()
+
+
+    })
 
 
     it("works", async () => {
@@ -269,7 +279,6 @@ describe('asciidoc', () => {
 
 
     })
-
 
 
 

@@ -160,7 +160,7 @@ export const getLoadAsciidocConfig = (cwd: string) => {
     return async () => {
 
 
-        const { config, configFile } = await loadConfig({
+        const { config, configFile, } = await loadConfig({
             cwd,
             name: "asciidoc",
             omit$Keys: true,
@@ -209,8 +209,6 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
                 this.process(function (parent, reader, attributes) {
 
-
-
                     this.createBlock(
                         parent,
                         context,
@@ -234,13 +232,11 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
                     this.process(function (parent, target, attributes) {
 
-
                         this.createInline(
                             parent,
                             context,
                             processor(target, attributes)
                         )
-
 
                     })
 
@@ -277,8 +273,6 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
     }
 
-
-
     return registry
 
 
@@ -291,10 +285,21 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
 
     const paths = await getAsciidocPaths(content_folder_path)
 
-    const { attributes } = await getLoadAsciidocConfig(config_folder_path)()
+    const { attributes, blocks, macros } = await getLoadAsciidocConfig(config_folder_path)()
+
+    const extensionRegistry = createForAstroRegistryAsciidocFromConfig(
+        blocks,
+        macros
+    )
 
 
-    return paths.map(path => processor.loadFile(path, { attributes }))
+    return paths.map(path => processor.loadFile(
+        path,
+        {
+            attributes,
+            extension_registry: extensionRegistry
+        })
+    )
 
 
 }
