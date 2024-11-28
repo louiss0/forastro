@@ -282,5 +282,30 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
 }
 
+export const transformAsciidocFilesIntoAsciidocDocuments = async (
+    content_folder_path: string,
+    config_folder_path: string,
+) => {
+
+    const paths = await getAsciidocPaths(content_folder_path)
+
+    const { attributes, blocks, macros } = await getLoadAsciidocConfig(config_folder_path)()
+
+    const extensionRegistry = createForAstroRegistryAsciidocFromConfig(
+        blocks,
+        macros
+    )
+
+
+    return paths.map(path => processor.loadFile(
+        path,
+        {
+            attributes,
+            extension_registry: extensionRegistry
+        })
+    )
+
+
+}
 
 export const loadAsciidocConfig = getLoadAsciidocConfig(process.cwd())

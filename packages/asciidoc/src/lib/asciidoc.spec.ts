@@ -1,8 +1,8 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { getLoadAsciidocConfig, getAsciidocPaths, createForAstroRegistryAsciidocFromConfig } from "./internal";
+import { getLoadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, createForAstroRegistryAsciidocFromConfig } from "./internal";
 import { z } from "astro/zod";
-import type { Extensions } from "asciidoctor";
+import type { Document, Extensions } from "asciidoctor";
 
 
 describe('asciidoc', () => {
@@ -233,6 +233,60 @@ describe('asciidoc', () => {
   })
 
 
+  describe("Testing transformAsciidocFilesIntoAsciidocDocuments", () => {
+
+
+    const $it = it.extend<{ documents: Array<Document> }>({
+      async documents({ }, use) {
+
+        const result = await transformAsciidocFilesIntoAsciidocDocuments(
+          `${MOCK_FOLDER}/posts`,
+          `${MOCK_FOLDER}/configs`
+        )
+
+
+        await use(result)
+
+      }
+
+    })
+
+    $it("works", async ({ documents }) => {
+
+
+
+
+      expectTypeOf(documents).toBeArray()
+
+      expect(documents.length).toBeGreaterThan(0)
+
+
+      for (const item of documents) {
+
+        expectTypeOf(item).toEqualTypeOf<Document>()
+
+      }
+
+
+    })
+
+
+    $it("registers attributes defined in the config file ", ({ documents }) => {
+
+
+      documents.forEach(document => {
+
+        expect(document.getAttributes())
+          .toHaveProperty("author", "Shelton Louis")
+
+      })
+
+
+    })
+
+
+
+  })
 
 
   describe("Testing createForAstroRegistryAsciidocFromConfig", () => {
