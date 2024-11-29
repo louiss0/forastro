@@ -7,9 +7,6 @@ export default defineConfig((ctx) => ({
     format: "esm",
     dts: true,
     outDir: "dist/packages/asciidoc",
-    async onSuccess() {
-
-    },
     minify: !ctx.watch,
     clean: true,
 }))
