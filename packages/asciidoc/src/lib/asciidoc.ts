@@ -9,8 +9,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
     return {
         name: "forastro/asciidoc-loader",
-        async load({ store, generateDigest, logger, parseData }) {
-
+        async load({ store, generateDigest, logger, parseData, }) {
 
             logger.info("Loading Asciidoc paths and config file")
 

@@ -19,24 +19,22 @@
       }
     },
     "build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "executor": "nx:run-commands",
       "defaultConfiguration": "production",
       "options": {
-        "outputPath": "dist/packages/asciidoc"
-      },
-      "configurations": {
-        "development": {
-          "mode": "development"
-        },
-        "production": {
-          "mode": "production"
-        }
+        "parallel": false,
+        "commands": [
+          "pnpm exec tsup --config asciidoc.tsup.config.ts",
+          "cp packages/asciidoc/README.md ./dist/packages/asciidoc",
+          "cp packages/asciidoc/package.json ./dist/packages/asciidoc"
+        ]
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/packages/asciidoc"
       }
