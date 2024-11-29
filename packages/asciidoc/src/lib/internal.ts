@@ -1,7 +1,7 @@
 import asciidoctor from "asciidoctor"
 import { z } from "astro/zod"
 import { loadConfig } from "c12"
-import { glob } from "fast-glob"
+import glob from "fast-glob"
 import slugify from "slugify"
 
 const getAsciidocPathsSchema = z.function(

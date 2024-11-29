@@ -46,4 +46,6 @@
     },
     "todo-tree.tree.scanMode": "workspace only",
     "testing.automaticallyOpenPeekView": "never",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
 }

@@ -22,6 +22,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 ]
             )
 
+
             logger.info("Creating Asciidoc Registry from using config file")
 
             const registry = createForAstroRegistryAsciidocFromConfig(
@@ -58,7 +59,13 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 const attributes = document.getAttributes()
 
-                const data = await parseData(attributes)
+
+                const data = await parseData({
+                    id: generateSlug(title),
+                    data: attributes,
+                    filePath: path
+                })
+
 
                 store.set({
                     id: generateSlug(title),

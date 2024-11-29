@@ -1,27 +1,47 @@
 {
-  "name": "asciidoc-loader-mock",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "asciidoc-loader-mock",
   "projectType": "application",
   "sourceRoot": "apps/asciidoc-loader-mock/src",
+  "tags": [
+    "astro:asciidoc-loader-mock"
+  ],
   "targets": {
     "build": {
-      "executor": "@nxtensions/astro:build",
-      "options": {}
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/asciidoc-loader-mock build"
+      }
+    },
+    "add": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/asciidoc-loader-mock add"
+      }
+    },
+    "info": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/asciidoc-loader-mock info"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/asciidoc-loader-mock check"
+      }
     },
     "dev": {
-      "executor": "@nxtensions/astro:dev",
-      "options": {}
-    },
-    "preview": {
-      "executor": "@nxtensions/astro:preview",
-      "options": {}
-    },
-    "check": {
-      "executor": "@nxtensions/astro:check"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/asciidoc-loader-mock dev"
+      }
     },
     "sync": {
-      "executor": "@nxtensions/astro:sync"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/asciidoc-loader-mock sync"
+      }
     }
-  },
-  "tags": []
+  }
 }
