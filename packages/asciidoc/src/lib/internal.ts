@@ -1,5 +1,4 @@
 import asciidoctor from "asciidoctor"
-import type { Loader } from "astro/loaders"
 import { z } from "astro/zod"
 import { loadConfig } from "c12"
 import { glob } from "fast-glob"
