@@ -4,7 +4,7 @@ import { createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPath
 
 const processor = asciidoctor()
 
-export function createAsciidocLoader(config_folder_name: string, folder_name: string, schema: Loader['schema']) {
+export function createAsciidocLoader(config_folder_name: string, folder_name: string) {
 
 
     return {
@@ -86,16 +86,15 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
 
         },
-        schema
     } satisfies Loader
 
 
 }
 
 
-export function asciidocLoader(folder_name: string, schema: Loader['schema']) {
+export function asciidocLoader(folder_name: string) {
 
-    return createAsciidocLoader(".", folder_name, schema)
+    return createAsciidocLoader(".", folder_name,)
 
 }
 
