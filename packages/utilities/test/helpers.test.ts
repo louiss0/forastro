@@ -182,7 +182,7 @@ describe("Range works", () => {
       for (const _ of range(1, 1, { step: 1 })) { }
 
 
-    }).toThrowErrorMatchingInlineSnapshot('"Start can\'t be the same as stop"')
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Start can't be the same as stop]`)
 
   })
 
@@ -193,7 +193,7 @@ describe("Range works", () => {
 
       for (const _ of range(6, 4, { step: 0 })) { }
 
-    }).toThrowErrorMatchingInlineSnapshot('"Step can\'t be zero or a negative number"')
+    }).toThrowErrorMatchingInlineSnapshot(`[Error: Step can't be zero or a negative number]`)
 
   })
 
