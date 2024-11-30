@@ -3,13 +3,35 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/utilities",
   "projectType": "library",
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
+      }
+    }
+  },
   "targets": {
     "check": {
       "executor": "@nxtensions/astro:check"
     },
+    "build": {
+      "executor": "nx:run-commands",
+      "defaultConfiguration": "production",
+      "options": {
+        "parallel": false,
+        "commands": [
+          "pnpm exec tsup --config utilities.tsup.config.ts",
+          "cp packages/utilities/README.md ./dist/packages/utilities",
+          "cp packages/utilities/package.json ./dist/packages/utilities"
+        ]
+      }
+    },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/packages/utilities"],
+      "outputs": [
+        "{workspaceRoot}/coverage/packages/utilities"
+      ],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/utilities"

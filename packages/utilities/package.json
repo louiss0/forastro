@@ -5,18 +5,15 @@
   "module": "./dist/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "default": "./dist/index.js"
+      "import": "./index.js",
+      "default": "./index.js"
     },
     "./components": {
-      "import": "./dist/components.ts"
+      "import": "./components.ts"
     }
   },
   "scripts": {
-    "dev": "tsup --watch",
-    "coverage": "vitest run --coverage",
-    "release": "tsup && dotenv release-it",
-    "publint": "publint"
+    "coverage": "vitest run --coverage"
   },
   "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
   "repository": {
