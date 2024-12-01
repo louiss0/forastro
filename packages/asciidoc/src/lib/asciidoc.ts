@@ -28,7 +28,7 @@ export const asciidocBaseSchema = z.object({
     middlename: z.string().regex(/[A-Z][a-z]+/),
     lastname: z.string().regex(/[A-Z][a-z]+/),
     description: z.string()
-        .min(35, "It's good for a description to at least be two sentnces")
+        .min(35, "It's good for a description to at least be two sentences")
         .max(160, "A title needs to be at least 160 characters max")
 }).transform((parsedInput) => {
 
@@ -64,7 +64,7 @@ export const ASCIIDOC_POST_STAGE = z.enum(
     ]
 );
 
-export type PostStage = z.infer<typeof ASCIIDOC_POST_STAGE>
+export type AsciidocPostStage = z.infer<typeof ASCIIDOC_POST_STAGE>
 
 export const asciidocDraftSchema = asciidocBaseSchema.and(
     z.object({
