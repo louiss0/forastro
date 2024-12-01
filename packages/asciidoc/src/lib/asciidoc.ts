@@ -6,7 +6,7 @@ const processor = asciidoctor()
 
 const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = [".adoc", ".asciidoc"]
 
-const fullFilePathRE = /(?<folder_path>.+\/)(?<file_name>[\w\s\d-]+)(?<extension>\.[a-z]+)/
+const fullFilePathRE = /(?<folder_path>.+\/)(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/
 
 export function createAsciidocLoader(config_folder_name: string, folder_name: string) {
 
@@ -40,6 +40,8 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
             logger.info("Extracting data from files then storing it")
 
+            const fileNameToSlugMap = new Map<string, string>()
+
             for (const path of paths) {
 
 
@@ -51,16 +53,15 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                     throw Error(`This path isn't correct.
                          A folder can use any set of characters but must end in a forward slash.
                          A filename must use word characters digits and whitespace no other characters.
-                         The extensions must be ${SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.join(",")}
                         `)
 
                 }
 
-                const { file_name } = fullFilePathMatch.groups!
+                const { filename } = fullFilePathMatch.groups!
 
-                if (!file_name) {
+                if (!filename) {
 
-                    throw Error("There should be a word called file_name in the word group")
+                    throw Error("There should be a word called filename in the word group")
 
                 }
 
@@ -87,14 +88,16 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
 
                 const data = await parseData({
-                    id: generateSlug(file_name),
+                    id: generateSlug(filename),
                     data: attributes,
                     filePath: path
                 })
 
 
+                const sluggedFilename = generateSlug(filename);
+
                 store.set({
-                    id: generateSlug(file_name),
+                    id: sluggedFilename,
                     data,
                     digest: generateDigest(data),
                     rendered: {
@@ -113,13 +116,178 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                     }
                 })
 
+                fileNameToSlugMap.set(filename, sluggedFilename)
+
             }
 
 
-            logger.info("Finished")
 
-            watcher?.on("all", async (_, path) => {
 
+            watcher?.on("add", async (path) => {
+
+                const pathEndsWithOneOfTheSupportedAsciidocExtensions = SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some(ext => path.endsWith(ext));
+
+                if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return
+
+
+                const fullFilePathMatch = path.match(fullFilePathRE)
+
+                if (!fullFilePathMatch) {
+
+
+                    throw Error(`This path ${path} isn't correct.
+                         A folder can use any set of characters but must end in a forward slash.
+                         A filename must use word characters digits and whitespace no other characters.
+                        `)
+
+                }
+
+                logger.info(`You added this file ${path} it's info will be now parsed an added to the store`)
+
+                const { filename } = fullFilePathMatch.groups!
+
+                if (!filename) {
+
+                    throw Error("There should be a word called filename in the word group")
+
+                }
+
+
+
+                const document = processor.loadFile(
+                    path,
+                    {
+                        attributes: config.attributes,
+                        catalog_assets: true,
+                        extension_registry: registry
+                    })
+
+
+                const title = document.getTitle();
+
+                if (!title) {
+
+                    throw Error(
+                        `Please supply a title for the file in this path ${path}`
+                    )
+
+                }
+
+                const attributes = document.getAttributes()
+
+                const data = await parseData({
+                    id: generateSlug(filename),
+                    data: attributes,
+                    filePath: path
+                })
+
+
+                const sluggedFilename = generateSlug(filename);
+
+                store.set({
+                    id: sluggedFilename,
+                    data,
+                    digest: generateDigest(data),
+                    rendered: {
+                        metadata: {
+                            frontmatter: data,
+                            imagePaths: document.getImages().map(image => image.getTarget()),
+                            headings: document.getSections()
+                                .map(section => ({
+                                    text: section.getTitle() ?? '',
+                                    depth: section.getLevel(),
+                                    slug: generateSlug(section.getTitle() ?? '')
+                                })),
+
+                        },
+                        html: document.getContent() ?? ""
+                    }
+                })
+
+                fileNameToSlugMap.set(filename, sluggedFilename)
+
+                logger.info(`Finished adding the file now you can go to /${sluggedFilename} depending on your route to access it.`)
+
+
+            })
+
+            watcher?.on("change", async (path) => {
+
+
+                const pathEndsWithOneOfTheSupportedAsciidocExtensions = SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some(ext => path.endsWith(ext));
+
+                if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return
+
+
+                const filename = path.match(fullFilePathRE)![2]!
+
+                logger.info(`You changed this ${filename} the store is being updated`)
+
+                const slug = fileNameToSlugMap.get(filename);
+
+                if (!slug) {
+
+                    throw Error(`A slug is supposed to exist using this file name ${slug}.
+                        Some thing is wrong with the loader please file a report 
+                        `)
+                }
+
+                store.delete(slug)
+
+                const document = processor.loadFile(
+                    path,
+                    {
+                        attributes: config.attributes,
+                        catalog_assets: true,
+                        extension_registry: registry
+                    })
+
+
+                const title = document.getTitle();
+
+                if (!title) {
+
+                    throw Error(
+                        `Please supply a title for the file in this path ${path}`
+                    )
+
+                }
+
+                const attributes = document.getAttributes()
+
+                const data = await parseData({
+                    id: slug,
+                    data: attributes,
+                    filePath: path
+                })
+
+
+                store.set({
+                    id: slug,
+                    data,
+                    digest: generateDigest(data),
+                    rendered: {
+                        metadata: {
+                            frontmatter: data,
+                            imagePaths: document.getImages().map(image => image.getTarget()),
+                            headings: document.getSections()
+                                .map(section => ({
+                                    text: section.getTitle() ?? '',
+                                    depth: section.getLevel(),
+                                    slug: generateSlug(section.getTitle() ?? '')
+                                })),
+
+                        },
+                        html: document.getContent() ?? ""
+                    }
+                })
+
+                logger.info(`The store is updated`)
+
+            })
+
+
+            watcher?.on('unlink', (path) => {
 
 
                 const pathEndsWithOneOfTheSupportedAsciidocExtensions = SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some(ext => path.endsWith(ext));
@@ -135,73 +303,37 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                     throw Error(`This path isn't correct.
                          A folder can use any set of characters but must end in a forward slash.
                          A filename must use word characters digits and whitespace no other characters.
-                         The extensions must be ${SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.join(",")}
                         `)
 
                 }
 
-                const { file_name } = fullFilePathMatch.groups!
+                const { filename } = fullFilePathMatch.groups!
 
-                if (!file_name) {
+                if (!filename) {
 
-                    throw Error("There should be a word called file_name in the word group")
-
-                }
-
-
-                store.delete(file_name)
-
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        extension_registry: registry
-                    })
-
-
-                const title = document.getTitle();
-
-                if (!title) {
-
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
+                    throw Error("There should be a word called filename in the word group")
 
                 }
 
-                const attributes = document.getAttributes()
+                logger.info(`You deleted this file ${filename}`)
 
-                const data = await parseData({
-                    id: generateSlug(file_name),
-                    data: attributes,
-                    filePath: path
-                })
+                const slug = fileNameToSlugMap.get(filename);
 
+                if (!slug) {
 
-                store.set({
-                    id: generateSlug(file_name),
-                    data,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
+                    throw Error(`A slug is supposed to exist using this file name ${slug}.
+                        Some thing is wrong with the loader please file a report.
+                        From unlink event using this path ${path}.
+                        `)
+                }
 
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
+                store.delete(slug)
 
+                logger.info("The store has now been updated!")
 
             })
 
+            logger.info("Finished")
 
         },
     } satisfies Loader
