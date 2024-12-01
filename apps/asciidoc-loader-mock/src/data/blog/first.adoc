@@ -1,5 +1,9 @@
 # First
 
+:test: This is a word
+
+:hmr: HMR
+
 This is the very first page 
 
 
@@ -26,7 +30,3 @@ I did this, foo
 Nice id kkkkkkmwl
 ====
 
-
-This is sooo cool for you HMR HMR HMR
-
-WHOOOOO
