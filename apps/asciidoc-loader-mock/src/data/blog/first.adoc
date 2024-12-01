@@ -1,4 +1,4 @@
-# First 
+# First
 
 This is the very first page 
 
@@ -15,4 +15,18 @@ This is [.text-underline]#underline#
 If you write test logic then you write too much code
 ====
 
-{sectids}
+This is good for you too nice.
+
+Why? Fooo
+
+I did this, foo 
+
+[TIP]
+====
+Nice id kkkkkkmwl
+====
+
+
+NO NO 
+
+nice why kkkk
