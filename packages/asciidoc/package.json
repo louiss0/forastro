@@ -12,6 +12,9 @@
   },
   "type": "module",
   "module": "./src/index.ts",
+  "keywords": [
+    "astro-integration"
+  ],
   "exports": {
     ".": {
       "import": "./src/index.ts",
