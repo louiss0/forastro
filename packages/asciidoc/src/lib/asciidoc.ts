@@ -221,7 +221,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 const filename = path.match(fullFilePathRE)![2]!
 
-                logger.info(`You changed this ${filename} the store is being updated`)
+                logger.info(`You changed this file ${filename} the store is being updated`)
 
                 const slug = fileNameToSlugMap.get(filename);
 
