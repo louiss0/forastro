@@ -4,6 +4,9 @@
   "peerDependencies": {
     "astro": "4.16.15"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "asciidoctor": "^3.0.4",
     "c12": "^2.0.1",
