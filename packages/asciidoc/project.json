@@ -24,9 +24,9 @@
       "options": {
         "parallel": false,
         "commands": [
-          "pnpm exec tsup --config asciidoc.tsup.config.ts",
-          "cp packages/asciidoc/README.md ./dist/packages/asciidoc",
-          "cp packages/asciidoc/package.json ./dist/packages/asciidoc"
+          "cp -r packages/asciidoc/src/ dist/packages/asciidoc",
+          "cp packages/asciidoc/README.md dist/packages/asciidoc",
+          "cp packages/asciidoc/package.json dist/packages/asciidoc"
         ]
       }
     },
