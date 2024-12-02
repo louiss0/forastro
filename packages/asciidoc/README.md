@@ -100,3 +100,25 @@ The config file takes the following properties.
 
 Remember to `export default` the config file.
 If you need help with the types please use the config file use the `AsciidocConfigObject` type.
+
+```ts
+import { AsciidocConfigObject } from "@forastro/asciidoc"
+
+ export default {
+    attributes: {
+
+    },
+    blocks: {
+
+    },
+    macros:{
+        inline:{},
+        block:{}
+    }
+ } satisfies AsciidocConfigObject 
+```
+
+## Contributions
+
+If you want to file issues or make a contribution go to the [For Astro Repo](https://github.com/louiss0/forastro).
+If you are a member of the Asciidoc team I will gladly transfer this library to you.
