@@ -25,7 +25,7 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderNa
 })
 
 
-const processorSchema = z.function(
+const renderSchema = z.function(
     z.tuple([
         z.string(),
         z.record(
@@ -124,7 +124,7 @@ const configObjectSchema = z.object({
         z.object({
             context:
                 z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
-            processor: processorSchema
+            render: renderSchema
         })).optional(),
 
     macros: z.object({
@@ -132,14 +132,14 @@ const configObjectSchema = z.object({
             z.string(),
             z.object({
                 context: z.enum(['quoted', 'anchor']),
-                processor: processorSchema,
+                render: renderSchema,
             })).optional(),
 
         block: z.record(
             z.string(),
             z.object({
                 context: z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
-                processor: processorSchema,
+                render: renderSchema,
             })).optional()
     }).optional()
 }).strict()
@@ -196,7 +196,7 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 
 }
 
-const processor = asciidoctor()
+const render = asciidoctor()
 
 
 export const createForAstroRegistryAsciidocFromConfig = (
@@ -204,11 +204,11 @@ export const createForAstroRegistryAsciidocFromConfig = (
     macros: AsciidocConfigObject['macros']
 ) => {
 
-    const registry = processor.Extensions.create("forastro/asciidoc")
+    const registry = render.Extensions.create("forastro/asciidoc")
 
     if (blocks) {
 
-        for (const [name, { context, processor }] of Object.entries(blocks)) {
+        for (const [name, { context, render }] of Object.entries(blocks)) {
 
             registry.block(name, function () {
 
@@ -217,7 +217,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
                     this.createBlock(
                         parent,
                         context,
-                        processor(reader.getString(), attributes),
+                        render(reader.getString(), attributes),
                         attributes
                     )
 
@@ -231,7 +231,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
         if (macros?.inline) {
 
-            for (const [name, { context, processor }] of Object.entries(macros.inline)) {
+            for (const [name, { context, render }] of Object.entries(macros.inline)) {
 
                 registry.inlineMacro(name, function () {
 
@@ -240,7 +240,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
                         this.createInline(
                             parent,
                             context,
-                            processor(target, attributes)
+                            render(target, attributes)
                         )
 
                     })
@@ -255,7 +255,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
 
         if (macros?.block) {
 
-            for (const [name, { context, processor }] of Object.entries(macros.block)) {
+            for (const [name, { context, render }] of Object.entries(macros.block)) {
 
                 registry.blockMacro(name, function () {
 
@@ -264,7 +264,7 @@ export const createForAstroRegistryAsciidocFromConfig = (
                         this.createBlock(
                             parent,
                             context,
-                            processor(target, attributes),
+                            render(target, attributes),
                             attributes
                         )
 
@@ -298,7 +298,7 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
     )
 
 
-    return paths.map(path => processor.loadFile(
+    return paths.map(path => render.loadFile(
         path,
         {
             attributes,
