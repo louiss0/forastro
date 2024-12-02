@@ -117,7 +117,7 @@ const asciidocGlobalVariablesSchema = z.object({
 });
 
 
-const configObjectSchema = z.object({
+export const asciidocConfigObjectSchema = z.object({
     attributes: asciidocGlobalVariablesSchema.optional(),
     blocks: z.record(
         z.string(),
@@ -144,7 +144,6 @@ const configObjectSchema = z.object({
     }).optional()
 }).strict()
 
-export type AsciidocConfigObject = z.infer<typeof configObjectSchema>
 
 export const getLoadAsciidocConfig = (cwd: string) => {
 
@@ -181,7 +180,7 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 
 
 
-        return configObjectSchema.transform(({ attributes, blocks, macros }) => {
+        return asciidocConfigObjectSchema.transform(({ attributes, blocks, macros }) => {
 
             return {
                 attributes: attributes && transformObjectKeysIntoDashedCase(attributes),
@@ -196,15 +195,15 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 
 }
 
-const render = asciidoctor()
+const processor = asciidoctor()
 
 
 export const createForAstroRegistryAsciidocFromConfig = (
-    blocks: AsciidocConfigObject['blocks'],
-    macros: AsciidocConfigObject['macros']
+    blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
+    macros: z.infer<typeof asciidocConfigObjectSchema>['macros']
 ) => {
 
-    const registry = render.Extensions.create("forastro/asciidoc")
+    const registry = processor.Extensions.create("forastro/asciidoc")
 
     if (blocks) {
 
@@ -298,7 +297,7 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
     )
 
 
-    return paths.map(path => render.loadFile(
+    return paths.map(path => processor.loadFile(
         path,
         {
             attributes,
