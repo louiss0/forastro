@@ -1,6 +1,11 @@
 import asciidoctor from "asciidoctor";
 import { type Loader } from "astro/loaders";
-import { createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
+import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
+import type { z } from "astro/zod";
+
+
+export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>
+
 
 const processor = asciidoctor()
 

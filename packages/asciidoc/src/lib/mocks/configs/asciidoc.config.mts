@@ -1,4 +1,4 @@
-import { type AsciidocConfigObject } from "../../internal"
+import { type AsciidocConfigObject } from "../../asciidoc"
 
 export default {
     attributes: {
@@ -9,20 +9,20 @@ export default {
     blocks: {
         shout: {
             context: "literal",
-            processor: (content) => `SHOUT:\n${content}`
+            render: (content) => `SHOUT:\n${content}`
         }
     },
     macros: {
         inline: {
             info: {
                 context: "anchor",
-                processor: (target) => `Info ${target}`
+                render: (target) => `Info ${target}`
             }
         },
         block: {
             message: {
                 context: 'literal',
-                processor: (target) => `MESSAGE: ${target}`
+                render: (target) => `MESSAGE: ${target}`
             }
         }
     }

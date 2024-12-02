@@ -91,4 +91,12 @@ With either an `.mjs` or `.mts` file. Any other extension will give out an error
 The config file takes the following properties.
 
 - `attributes:` An object literal of global attributes that are allowed to be applied to each document.
-- `blocks:` An object literal 
+- `blocks:` An object literal that takes in keys with and name whose values must be two an object literal with two props.
+  - `context` The context for the block.
+  - `render` The function that will render the content that will be displayed
+- `macros:` An object literal that takes `inline:` and `block:` as properties.
+  - The `inline:` and `block:` props both take in an object literal that must provide props
+    Who's values are an object literal with both `context:` and `render:`.
+
+Remember to `export default` the config file.
+If you need help with the types please use the config file use the `AsciidocConfigObject` type.

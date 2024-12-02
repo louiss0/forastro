@@ -1,8 +1,5 @@
 export * from './lib/asciidoc';
 import { z } from "astro/zod";
-import type { asciidocConfigObjectSchema } from './lib/internal';
-
-export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>
 
 const authorSchema = z.string().regex(
     /^(?:[A-Z][a-z]+\s)+[A-Z][a-z]+$/,
