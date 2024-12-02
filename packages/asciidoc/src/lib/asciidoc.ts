@@ -56,6 +56,8 @@ export const asciidocBaseSchema = z.object({
 
 })
 
+export type AsciidocBaseSchema = z.infer<typeof asciidocBaseSchema>
+
 export const ASCIIDOC_POST_STAGE = z.enum(
     [
         "draft",
