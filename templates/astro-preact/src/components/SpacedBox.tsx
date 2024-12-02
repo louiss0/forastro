@@ -1,4 +1,3 @@
-
 /** 
  * The point of this component is to just create space between elements.
  * The vertical prop is to add flex col and make sure that there is vertical spacing. 
@@ -8,8 +7,9 @@
  
  */
 
-import type { FunctionalComponent } from "preact";
-import { SpacingNumbers } from "../utilities/types";
+import type { FunctionalComponent } from 'preact';
+import { type SpacingNumbers } from '../utilities/types';
+import { windiCN_EFS } from '@code-fixer-23/cn-efs';
 
 type Props = {
   gapClass?: `gap-${SpacingNumbers}`;
@@ -19,10 +19,8 @@ type Props = {
   lgGapClass?: `lg:gap-${SpacingNumbers}`;
   xlGapClass?: `xl:gap-${SpacingNumbers}`;
   xl2GapClass?: `2xl:gap-${SpacingNumbers}`;
-  spacingClass?: `justify-${"between" | "evenly" | "around"}`;
+  spacingClass?: `justify-${'between' | 'evenly' | 'around'}`;
 };
-
-
 
 export const SpacedBox: FunctionalComponent<Props> = (props) => {
   const {
@@ -34,25 +32,25 @@ export const SpacedBox: FunctionalComponent<Props> = (props) => {
     vertical,
     mdGapClass,
     xl2GapClass,
-    children
+    children,
   } = props;
-  
-  return <div
-  data-spaced-box
-  class="flex flex-wrap"
-  class:list={[
-    spacingClass,
-    gapClass,
-    vertical && "flex-col",
-    smGapClass,
-    mdGapClass,
-    lgGapClass,
-    xlGapClass,
-    xl2GapClass,
-  ]}
->
-  {children}
-</div>
 
-}
-
+  return (
+    <div
+      data-spaced-box
+      class={windiCN_EFS(
+        'flex flex-wrap',
+        spacingClass,
+        gapClass,
+        vertical && 'flex-col',
+        smGapClass,
+        mdGapClass,
+        lgGapClass,
+        xlGapClass,
+        xl2GapClass,
+      )}
+    >
+      {children}
+    </div>
+  );
+};

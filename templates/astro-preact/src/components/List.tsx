@@ -1,8 +1,5 @@
-import { iterate } from '@forastro/utilities'
-import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
-import type { FunctionComponent, } from "preact";
-import type { FunctionComponent, } from "preact";
-import { useState, useEffect } from "preact/hooks";
+import { windiCN_EFS } from '@code-fixer-23/cn-efs';
+import type { FunctionComponent } from 'preact';
 
 /**  
 
@@ -16,31 +13,26 @@ import { useState, useEffect } from "preact/hooks";
 type Props = {
   title?: string;
   listClass?: string;
-  itemClass?: string
+  itemClass?: string;
   items: ReadonlyArray<string>;
 };
 
-
 export const List: FunctionComponent<Props> = (props) => {
+  const { title, items, listClass, itemClass } = props;
 
+  return (
+    <>
+      {title ? <strong class={'text-xl'}>{title}</strong> : null}
 
-
-  const { title, items, listClass, itemClass, children } = props;
-
-
-  return <>
-
-    {title ? <strong class={"text-xl"}>{title}</strong> : null}
-
-    <ul title={title} class={tailwindOrWindiCSSEvaluatorSorterAndFilter("list-inside", listClass)} role="list">
-
-      {items.map(item => <li class={itemClass} >{item}</li>)}
-
-    </ul>
-
-  </>
-
-}
-
-
-
+      <ul
+        title={title}
+        class={windiCN_EFS('list-inside', listClass)}
+        role="list"
+      >
+        {items.map((item) => (
+          <li class={itemClass}>{item}</li>
+        ))}
+      </ul>
+    </>
+  );
+};
