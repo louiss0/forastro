@@ -11,10 +11,7 @@
       }
     }
   },
-  "tags": [
-    "nx:lib",
-    "nx:lib-ongoing"
-  ],
+  "tags": ["nx:lib", "nx:lib-ongoing"],
   "targets": {
     "nx-release-publish": {
       "options": {
@@ -22,22 +19,24 @@
       }
     },
     "build": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/vite:build",
+      "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
-        "parallel": false,
-        "commands": [
-          "cp -r packages/asciidoc/src/ dist/packages/asciidoc",
-          "cp packages/asciidoc/README.md dist/packages/asciidoc",
-          "cp packages/asciidoc/package.json dist/packages/asciidoc"
-        ]
+        "outputPath": "dist/packages/asciidoc"
+      },
+      "configurations": {
+        "development": {
+          "mode": "development"
+        },
+        "production": {
+          "mode": "production"
+        }
       }
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/packages/asciidoc"
       }
