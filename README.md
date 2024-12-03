@@ -14,7 +14,7 @@ The packages folder is for all of my packages. It's the one where all of my pack
 To use this repo you need to know how `nx` works.
 The point of this library is to create packages then test them out so what you want to do is start the server.
 To do that use `nx run demo:dev`.
-
+<!-- TODO: Add more info about tools -->
 ### Tooling
 
 | Type       | Tool       |
@@ -26,6 +26,7 @@ To do that use `nx run demo:dev`.
 | formatter  | prettier   |
 
 ## Repositories
+<!-- TODO: Add the Asciidoc entry -->
 
 This section is about giving you an overview of all of the packages that I have created for this mono-repo.
 Each title is the name of a folder that exists in this monorepo.
@@ -57,7 +58,5 @@ All of them are exported in a index.ts file.
 The templates that exist in this Mono repo are.
 
 - [Astro Minimal](/docs/templates/astro-minimal.md)
-- [Astro Vue](/docs/templates/astro-vue.md)
 - [Astro Preact](/docs/templates/astro-preact.md)
 - [Astro Mdx](/docs/templates/astro-mdx.md)
-- [Astro Markdoc](/docs/templates/astro-markdoc.md)
