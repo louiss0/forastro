@@ -33,6 +33,7 @@
     "astro": "^4.16.14",
     "astro-icon": "^1.1.2",
     "dotenv-cli": "^7.4.4",
+    "esbuild": "^0.19.2",
     "eslint": "9.15.0",
     "eslint-config-prettier": "9.1.0",
     "jsdom": "~25.0.1",
@@ -54,6 +55,7 @@
     "vitest": "^2.1.5"
   },
   "dependencies": {
+    "@nx/esbuild": "20.1.4",
     "better-enums": "^0.2.2",
     "unocss": "^0.64.1",
     "vue": "^3.5.13"

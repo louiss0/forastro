@@ -1,0 +1,49 @@
+{
+  "name": "asciidoc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/asciidoc/src",
+  "projectType": "library",
+  "release": {
+    "version": {
+      "generatorOptions": {
+        "packageRoot": "dist/{projectRoot}",
+        "currentVersionResolver": "git-tag"
+      }
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/asciidoc",
+        "main": "packages/asciidoc/src/index.ts",
+        "tsConfig": "packages/asciidoc/tsconfig.lib.json",
+        "format": [
+          "esm"
+        ],
+        "assets": [
+          "packages/asciidoc/*.md"
+        ],
+        "minify": true
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/asciidoc"
+      }
+    }
+  }
+}
