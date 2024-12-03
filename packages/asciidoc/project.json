@@ -11,7 +11,10 @@
       }
     }
   },
-  "tags": [],
+  "tags": [
+    "nx:lib",
+    "nx:lib-ongoing"
+  ],
   "targets": {
     "nx-release-publish": {
       "options": {

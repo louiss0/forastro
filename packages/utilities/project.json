@@ -38,5 +38,8 @@
       }
     }
   },
-  "tags": []
+  "tags": [
+    "nx:lib",
+    "nx:lib-ongoing"
+  ]
 }

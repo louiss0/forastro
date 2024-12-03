@@ -9,12 +9,16 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{workspaceRoot}/coverage/packages/flow"],
+      "outputs": [
+        "{workspaceRoot}/coverage/packages/flow"
+      ],
       "options": {
         "passWithNoTests": true,
         "reportsDirectory": "../../coverage/packages/flow"
       }
     }
   },
-  "tags": []
+  "tags": [
+    "nx:lib"
+  ]
 }
