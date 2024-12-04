@@ -86,7 +86,7 @@
   "release": {
     "projectsRelationship": "independent",
     "version": {
-      "preVersionCommand": "pnpm dlx nx run-many -t build --projects=tag:nx:lib,tag:nx:lib-ongoing"
+      "preVersionCommand": "pnpm dlx nx run-many -t build --projects=nx:lib:ongoing"
     }
   }
 }
