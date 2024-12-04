@@ -14,5 +14,5 @@
     "slugify": "^1.6.6"
   },
   "type": "module",
-  "typings": "./index.d.ts"
+  "typings": "./src/index.d.ts"
 }
