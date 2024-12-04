@@ -3,6 +3,9 @@
   "compilerOptions": {
     "module": "ES2020",
     "moduleResolution": "bundler",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
+    "jsxImportSource": "astro",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "noImplicitReturns": true,
