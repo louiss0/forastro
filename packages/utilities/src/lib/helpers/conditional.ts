@@ -6,7 +6,7 @@ import type { Callback } from "../types"
 export function executeIf<T extends Callback>(condition: unknown, cb: T): ReturnType<T> | undefined {
 
 
-    if (condition) return cb()
+    return condition ? cb() : undefined
 
 
 }
