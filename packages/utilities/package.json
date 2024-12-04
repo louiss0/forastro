@@ -1,8 +1,24 @@
 {
   "name": "@forastro/utilities",
   "version": "4.3.8",
+  "peerDependencies": {
+    "astro": ">2.0.0"
+  },
   "dependencies": {},
   "type": "module",
-  "main": "./index.js",
+  "module": "./index.js",
+  "exports": {
+    "./components": {
+      "import": "./components.ts"
+    }
+  },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
+  },
+  "keywords": [
+    "astro-component",
+    "ui"
+  ],
   "typings": "./index.d.ts"
 }
