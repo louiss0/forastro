@@ -29,7 +29,8 @@
           "esm"
         ],
         "assets": [
-          "packages/utilities/*.md"
+          "packages/utilities/*.md",
+          "public"
         ],
         "minify": true
       }
