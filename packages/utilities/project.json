@@ -30,7 +30,7 @@
         ],
         "assets": [
           "packages/utilities/*.md",
-          "public"
+          "packages/utilities/src/components/*"
         ],
         "minify": true
       }
