@@ -9,7 +9,7 @@
   "module": "./index.js",
   "exports": {
     "./components": {
-      "import": "./components.ts"
+      "import": "./src/components/index.ts"
     }
   },
   "author": {
