@@ -2,7 +2,7 @@
   "name": "@forastro/asciidoc",
   "version": "0.0.2",
   "peerDependencies": {
-    "astro": "*"
+    "astro": ">4.16.0"
   },
   "publishConfig": {
     "access": "public"
