@@ -1,4 +1,4 @@
-import asciidoctor from "asciidoctor";
+import asciidoctor, { Extensions } from "asciidoctor";
 import { type Loader } from "astro/loaders";
 import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
 import type { z } from "astro/zod";
@@ -25,13 +25,26 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 ]
             )
 
+            if (paths.length === 0) {
 
-            logger.info("Creating Asciidoc Registry from using config file")
+                throw Error(`There are no files in this folder ${folder_name}.
+                    Please use a different folder. 
+                    `)
 
-            const registry = createForAstroRegistryAsciidocFromConfig(
-                config.blocks,
-                config.macros
-            )
+            }
+
+
+            let registry: Extensions.Registry | undefined
+
+            if (Object.keys(config).length !== 0) {
+
+                logger.info(`Creating Asciidoc Registry from using config file`)
+
+                registry = createForAstroRegistryAsciidocFromConfig(
+                    config.blocks,
+                    config.macros
+                )
+            }
 
 
             logger.info("Clearing the store")
@@ -269,6 +282,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 store.set({
                     id: slug,
                     data,
+                    filePath: path,
                     digest: generateDigest(data),
                     rendered: {
                         metadata: {
