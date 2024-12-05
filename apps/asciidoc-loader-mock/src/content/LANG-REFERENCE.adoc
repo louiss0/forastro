@@ -1,0 +1,423 @@
+// This is the title
+= Language Reference
+// This is the author's name and email  
+Shelton Louis <sheltonl@mailtrap.com>
+:description: This is the Language reference guide for Asciidoc.
+
+
+{description} I wrote this because It's 
+easier to look at this page rather than having to look at the docs.
+I won't teach you everything but the essentials will taught. 
+One of the first things I'd like you to know is that Asciidoc 
+is compatible with Markdown syntax. 
+
+One thing you have noticed so far is that I didn't write any front matter.
+You can but this isn't idiomatic and for the most part unnecessary. I also used the `{}`
+syntax with a word that was called description This is interpolation. 
+I created a custom attribute called `:description:` Then decided to interpolate it. 
+
+An Asciidoc page always starts with title that you can interpolate by using `doctitle`.
+The Second line is called the _Author line_. Which allows you to type in the Author's Full name and then an email. The *email must be surrounded by angle brackets*.
+By writing the author line you get.
+
+* The Authors full name by interpolating `author`.
+* The Emaill by interpolating `email`.
+* The Author's inittials by interpolating `authorinitials`.
+* The first name by interpolating `firstname`.
+* The last name by interpolating `lastname`.
+
+There's more stuff but this is what most people would use anyway.
+
+== Writing Syntax 
+
+A paragraph in Asciidoc is just one or more sentences. Just like markdown!
+
+Bold is written like this.  `\*Bold*`
+
+Italic is written like this. `\_Italic_`
+
+Underline is written like this. [.underline]#underline#
+
+Line through is written like this. `\[.line-through]\#line through#`
+
+Highlight is written like this.   `\#highlight#`
+
+Super script is written like this.  `\^super^script`
+
+Subscript is written like this. `\~sub~script`
+
+A double quote is written like this. `\"`double quote`"``
+
+A single quote is written like this. `\"`single quote`"``
+
+An apostrophe is written like this.  `apostrophe`"`
+
+A bare link is written like this `\https://asciidoctor.org`
+
+A named link is written like this `\https://asciidoctor.org[Asciidoctor]`
+
+A inline code is written like this \``script.ts``.
+
+A thematic break is written like this.
+
+`''''`
+
+A page break is written like this 
+
+`<<<`
+
+A block of code is written like this.
+
+\````sh pnpm run test````
+
+
+A code block can also be written like this.
+
+
+[source,adoc]
+----
+  [,sh]
+  ----
+  pnpm run dev
+  ----
+----
+
+A hard line break is written like this.
+
+[,adoc]
+----
+Roses are red, +
+violets are blue.
+----
+
+Hard breaks can also be added to attributes as well.
+
+[source,adoc] 
+----
+:fruits: apple +
+         orange +
+         kiwi 
+----
+
+
+A lead paragraph is written like this. 
+
+[,adoc]
+----
+[.lead]
+I lead with this. 
+----
+
+=== Lists
+
+A list is item is a sentence that is prefixed with one or more stars.
+Each star is an indicator of how many levels deep a list item is.
+
+This is how you write an unordered list.
+
+[,adoc]
+----
+* Level 1 list item
+** Level 2 list item
+*** Level 3 list item
+**** Level 4 list item
+***** Level 5 list item
+****** etc.
+* Level 1 list item
+----
+
+This is how you write an ordered list.
+
+[,adoc]
+----
+. Level 1 list item
+.. Level 2 list item
+... Level 3 list item
+.... Level 4 list item
+..... Level 5 list item
+...... etc.
+. Level 1 list item
+----
+
+A description list 
+
+[,adoc]
+----
+First term:: The description can be placed on the same line
+as the term.
+Second term:: Description of the second term.
+The description can also start on its own line.
+----
+
+A check list. Both the star and X mean checked.
+
+```adoc
+* [*] checked
+* [x] also checked
+* [ ] not checked
+```
+
+=== Sections 
+
+A section is written by using a word prefixed with either 1-5 hashes `#` or equals `=`.
+
+CAUTION: You can only only use one equal sign at the top level as the doc title.
+
+[source,adoc]
+----
+= Document Title (Level 0)
+
+== Level 1 Section Title
+
+=== Level 2 Section Title
+
+==== Level 3 Section Title
+
+===== Level 4 Section Title
+
+====== Level 5 Section Title
+
+== Another Level 1 Section Title
+----
+
+
+== Blocks  
+
+A block is a container that tells Asciidoc to do something special with a series of content. They normally start with 3-4 dots equal signs or dashes under the attribute list and a the same symbols at the bottom. Some block's may require one sign.
+Some blocks require an attribute list. `[,adoc]` 
+
+
+.A Sidebar block
+==== 
+```adoc
+****
+    I live aside from the main content.
+****
+```
+====
+
+.An Example block
+==== 
+```adoc
+  ====
+      I'm clearly an example.
+  ====
+```
+====
+
+.Blockquote
+====
+[source,adoc]
+----
+
+[quote,Abraham Lincoln,Address delivered at the dedication of the Cemetery at Gettysburg]
+____
+Four score and seven years ago our fathers brought forth
+on this continent a new nation...
+____
+
+----
+====
+
+.Pass though block. *A block that render's content as is*.
+====
+```adoc
+++++
+<p>
+Content in a passthrough block is passed to the output unprocessed.
+That means you can include raw HTML, like this embedded Gist:
+</p>
+
+<script src="https://gist.github.com/mojavelinux/5333524.js">
+</script>
+++++
+```
+====
+
+
+[TIP]
+.A block can also have a title.
+====
+When it has a title it must start with a *.*
+
+[source,adoc]
+----
+  .Title
+  ----
+  ----
+----
+====
+
+=== Attributes
+
+A block attribute list is a syntax that goes on top of blocks. It adds
+special characteristics to that block that controls it's behavior.
+It's written by using opposing brackets as delimiters `[attr]`.
+An attribute can either be a word `source` or a word followed by an equal sign then ended with double quotes `width="25%"` or a number `cols=3`. Each list of attributes are separated by commas.
+
+
+[NOTE] 
+.An attribute being added to a block
+====
+[source,adoc]
+----
+
+[xml]
+++++
+<dependency>
+  <groupId>org.asciidoctor</groupId>
+</dependency>
+++++
+
+----
+====
+
+
+[TIP]
+.Attribute lists can be suffixed or prefixed with symbols.
+====
+ A dot prefix `.text-red-400` is the shorthand for a class name. A hash prefix is the shorthand for an id  
+====
+
+IMPORTANT: A paragraph or a sentence is a block.
+
+=== Admonitions 
+
+Admonition blocks are blocks that render text that is supposed to be noted by the user.
+People call them *call outs* in other markup languages. They are written by using the keywords *NOTE IMPORTANT CAUTION WARNING*. 
+
+IMPORTANT: Yes they must be written in uppercase.
+
+IMPORTANT: Admonitions use 4 equal signs `====` as delimiters.
+
+[source,adoc]
+----
+
+[NOTE]
+====
+ This is a note.
+====
+
+----
+
+
+=== Tables 
+
+A table is a special block that is written by using three equal signs prefixed with a pipe `|===` at the top and the bottom. To write a row in between the delimiters you first type pipe `|` which then type words. Columns are separated by commas.
+The first row is the header row followed by a space. 
+
+[source,adoc]
+----
+
+|=== 
+| Column 1, Column 2
+
+| Cell 1, Cell 2
+
+|===
+
+----
+
+Columns are specified by using the the cols attribute `cols=3`. If not specified the respected cols will be based on the ones that are in the header. The cold attribute can take an int or a string with numbers separated by commas. Each number added dictates then number of columns rendered.  
+
+[source,adoc]
+----
+.Applications
+[cols="1,1,2"]
+|===
+|Name |Category |Description
+
+|Firefox
+|Browser
+|Mozilla Firefox is an open source web browser.
+It's designed for standards compliance,
+performance, portability.
+
+|Arquillian
+|Testing
+|An innovative and highly extensible testing platform.
+Empowers developers to easily create real, automated tests.
+|===
+----
+
+
+== Macros
+
+A macro is a special syntax that uses a word followed by a colon then an attribute list at the end `element:[]`.
+
+[NOTE]
+.Image Macro
+====
+[source,adoc]
+----
+ image:sunset.jpg[] 
+----
+====
+
+[NOTE]
+.Link Macro
+====
+[source,adoc]
+----
+link:index.html[]
+----
+====
+
+
+[NOTE]
+.Video Macro
+====
+[source,adoc]
+----
+video::clip.mp4[]
+----
+====
+
+[NOTE]
+.Audio Macro
+====
+[source,adoc]
+----
+audio::ocean-waves.wav[]
+
+audio::ocean-waves.wav[start=60,opts=autoplay]
+----
+====
+
+== Referencing and Transclusion
+
+Different sections of a document can be linked to each other.
+Inter document references can be done too. When using transclusion you can select ranges lines of text or even 
+
+
+.Referencing a section
+====
+
+```adoc
+<<_writing_syntax>>
+```
+==== 
+
+.Referencing a Section then rendering s different name
+====
+
+```adoc
+<<_writing_syntax, The Writing Syntax>>
+```
+====
+
+.Referring to another doc
+====
+
+```adoc
+Refer to link:document-b.html#section-b[Section B] for more information.
+```
+
+====
+
+.Transclusion
+====
+```adoc
+  include::partial.adoc[]
+```
+====
