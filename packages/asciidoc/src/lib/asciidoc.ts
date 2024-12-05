@@ -1,4 +1,4 @@
-import asciidoctor, { Extensions } from "asciidoctor";
+import asciidoctor, { type Extensions } from "asciidoctor";
 import { type Loader } from "astro/loaders";
 import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
 import type { z } from "astro/zod";

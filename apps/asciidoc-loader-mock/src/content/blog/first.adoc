@@ -1,11 +1,11 @@
 # First
 
-:test: This is a word
-
+:test: 'This is a word'
+:pubDate: "boo"
 :hmr: HMR
 
 This is the very first page 
-
+``
 
 TIP: Please remember this 
 
@@ -30,3 +30,4 @@ I did this, foo
 Nice id kkkkkkmwl
 ====
 
+{pubDate} {hmr}

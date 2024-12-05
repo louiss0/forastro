@@ -14,5 +14,11 @@
     "slugify": "^1.6.6"
   },
   "type": "module",
-  "typings": "./src/index.d.ts"
+  "module": "./src/index.ts",
+  "keywords": [
+    "astro",
+    "astro-loader",
+    "asciidoc",
+    "utils"
+  ]
 }

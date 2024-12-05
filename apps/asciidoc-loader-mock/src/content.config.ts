@@ -4,7 +4,7 @@ import { defineCollection, z } from "astro:content";
 
 const asciidocLoader = createAsciidocLoader(
     "/apps/asciidoc-loader-mock",
-    "apps/asciidoc-loader-mock/src/data"
+    "apps/asciidoc-loader-mock/src/content"
 )
 
 export const collections = {
