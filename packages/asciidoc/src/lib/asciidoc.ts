@@ -1,8 +1,7 @@
-import asciidoctor, { Document, type Extensions } from "asciidoctor";
+import asciidoctor, { type Document, type Extensions } from "asciidoctor";
 import { type Loader } from "astro/loaders";
 import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
 import type { z } from "astro/zod";
-import { icons } from "unocss/preset-icons";
 
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>
@@ -105,9 +104,6 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 const attributes = document.getAttributes()
 
-
-
-                console.groupEnd()
 
                 const data = await parseData({
                     id: generateSlug(filename),
@@ -305,7 +301,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 store.set({
                     id: sluggedFilename,
                     data,
-                    body: document.getContent(),
+                    // body: document.getContent(),
                     digest: generateDigest(data),
                     rendered: {
                         metadata: {
