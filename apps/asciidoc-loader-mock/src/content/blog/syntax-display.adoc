@@ -1,0 +1,130 @@
+# Syntax Display
+:icons: image
+:imagesdir: src/assets/
+:iconsdir: src/assets/icons
+:icontype: svg
+
+[.title]{doctitle}
+
+ifdef::icons[The icons are set]
+
+
+This is bold *word*
+
+This is italic _word_
+
+This is underline [.underline]#underline#
+
+This is line through [.line-through]#line through#
+
+This is overline [.overline]#overline#
+
+This is nobreak [.nobreak]#nobreak#
+
+This is nowrap [.nowrap]#nowrap#
+
+This is pre-wrap [.pre-wrap]#pre-wrap#
+
+This is highlight #highlight#
+
+This is code `function`
+
+This is a double quote "`double quote`"
+
+This is a single quote '`single quote`'
+
+This is literal backticks ``npm``
+
+```ts
+ function doSomething() {
+
+    console.log("Hey World!")
+ }
+```
+
+* List item 1
+
+* List item 2
+** List item 2-1
+* List item 3
+
+
+## Admonitions
+
+TIP: This is a tip
+
+WARNING: This is a warning
+
+NOTE: This is a note
+
+CAUTION: This is a caution
+
+IMPORTANT: This is a important
+
+
+[IMPORTANT]
+.Don't use test logic 
+====
+When writing test logic you are only writing boilerplate code.
+You aren't testing logic at all.
+In fact in some cases you are only reinforcing with held biases. 
+====
+
+
+## Definition List
+
+CPU:: The brain of the computer.
+Hard drive:: Permanent storage for operating system and/or user files.
+RAM:: Temporarily stores information the CPU uses during operation.
+
+ 
+[horizontal]
+Keyboard:: Used to enter text or control items on the screen.
+Mouse:: Used to point to and select items on your computer screen.
+Monitor:: Displays information in visual form using text and graphics.
+
+## Sections 2-5 
+
+## Section 2
+
+### Section 3
+
+#### Section 4
+
+##### Section 5
+
+## Question and Answer list
+
+[qanda]
+What is the answer?::
+This is the answer.
+
+Are cameras allowed?::
+Are backpacks allowed?::
+No.
+
+
+## Table 
+
+[cols="1,2,2,2,1,1", options="header"]
+|===
+| Employee ID | Name            | Department   | Position           | Salary   | Hire Date
+
+| 101         | Alice Johnson   | Engineering  | Software Engineer  | 85000    | 2020-05-15
+| 102         | Bob Smith       | Marketing    | Marketing Manager  | 72000    | 2018-08-22
+| 103         | Catherine Lee   | HR           | HR Specialist      | 68000    | 2019-03-10
+| 104         | David Kim       | Engineering  | Data Scientist     | 95000    | 2021-01-05
+| 105         | Emma Brown      | Finance      | Accountant         | 70000    | 2017-11-30
+|===
+
+[%autowidth]
+|===
+| Product ID | Name                | Category      | Stock  | Price   | Added Date
+
+| 201        | Wireless Mouse      | Electronics   | 150    | 25.99   | 2023-02-15
+| 202        | Coffee Maker        | Appliances    | 80     | 49.99   | 2023-01-20
+| 203        | Gaming Chair        | Furniture     | 45     | 199.99  | 2023-03-10
+| 204        | Bluetooth Headphones| Electronics   | 200    | 59.99   | 2023-04-05
+| 205        | Desk Lamp           | Furniture     | 120    | 35.99   | 2023-02-28
+|===
+

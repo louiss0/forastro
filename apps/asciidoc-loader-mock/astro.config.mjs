@@ -1,14 +1,13 @@
 import { defineConfig } from 'astro/config';
-import tailwind from '@astrojs/tailwind';
-import { fileURLToPath } from 'node:url';
+
+import UnoCSS from 'unocss/astro';
+
 // https://astro.build/config
 export default defineConfig({
   outDir: '../../dist/apps/asciidoc-loader-mock',
   integrations: [
-    tailwind({
-      configFile: fileURLToPath(
-        new URL('./tailwind.config.cjs', import.meta.url),
-      ),
+    UnoCSS({
+      injectReset: true,
     }),
   ],
 });
