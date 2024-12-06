@@ -1,7 +1,8 @@
-import asciidoctor, { type Extensions } from "asciidoctor";
+import asciidoctor, { Document, type Extensions } from "asciidoctor";
 import { type Loader } from "astro/loaders";
 import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
 import type { z } from "astro/zod";
+import { icons } from "unocss/preset-icons";
 
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>
@@ -90,6 +91,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                         extension_registry: registry
                     })
 
+
                 const title = document.getTitle();
 
 
@@ -104,34 +106,20 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 const attributes = document.getAttributes()
 
 
+
+                console.groupEnd()
+
                 const data = await parseData({
                     id: generateSlug(filename),
                     data: attributes,
-                    filePath: path
+                    // TODO: Fix this path later it's supposed to be a relative path.
+                    // filePath: path
                 })
 
 
                 const sluggedFilename = generateSlug(filename);
 
-                store.set({
-                    id: sluggedFilename,
-                    data,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
-
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
+                setStoreUsingExtractedInfo(sluggedFilename, data, document);
 
                 fileNameToSlugMap.set(filename, sluggedFilename)
 
@@ -176,50 +164,26 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                     {
                         attributes: config.attributes,
                         catalog_assets: true,
+                        // TODO: Decide safe level.
+                        // safe
                         extension_registry: registry
                     })
 
 
-                const title = document.getTitle();
-
-                if (!title) {
-
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
-
-                }
 
                 const attributes = document.getAttributes()
 
                 const data = await parseData({
                     id: generateSlug(filename),
                     data: attributes,
-                    filePath: path
+                    // TODO: Fix this path later it's supposed to be a relative path.
+                    // filePath: path
                 })
 
 
                 const sluggedFilename = generateSlug(filename);
 
-                store.set({
-                    id: sluggedFilename,
-                    data,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
-
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
+                setStoreUsingExtractedInfo(sluggedFilename, data, document)
 
                 fileNameToSlugMap.set(filename, sluggedFilename)
 
@@ -272,33 +236,16 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 const attributes = document.getAttributes()
 
+
                 const data = await parseData({
                     id: slug,
                     data: attributes,
-                    filePath: path
+                    // TODO: Fix this path later it's supposed to be a relative path.
+                    // filePath: path
                 })
 
 
-                store.set({
-                    id: slug,
-                    data,
-                    filePath: path,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
-
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
+                setStoreUsingExtractedInfo(slug, data, document)
 
                 logger.info(`The store is updated`)
 
@@ -353,6 +300,28 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
             logger.info("Finished")
 
+
+            function setStoreUsingExtractedInfo(sluggedFilename: string, data: any, document: Document) {
+                store.set({
+                    id: sluggedFilename,
+                    data,
+                    body: document.getContent(),
+                    digest: generateDigest(data),
+                    rendered: {
+                        metadata: {
+                            frontmatter: data,
+                            imagePaths: document.getImages().map(image => image.getTarget()),
+                            headings: document.getSections()
+                                .map(section => ({
+                                    text: section.getTitle() ?? '',
+                                    depth: section.getLevel(),
+                                    slug: generateSlug(section.getTitle() ?? '')
+                                })),
+                        },
+                        html: document.convert()
+                    }
+                });
+            }
         },
     } satisfies Loader
 
