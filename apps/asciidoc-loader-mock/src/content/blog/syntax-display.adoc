@@ -1,37 +1,37 @@
 # Syntax Display
-:icons: image
-:imagesdir: src/assets/
-:iconsdir: src/assets/icons
-:icontype: svg
+Shelton Louis
+:experimental:
+:hero_image: ../../assets/images/couple-9215839_640.jpg
 
-[.title]{doctitle}
+[.title]#{doctitle}#
 
-ifdef::icons[The icons are set]
+ifdef::icons[The icons aren't set]
+
 
 
 This is bold *word*
 
 This is italic _word_
 
-This is underline [.underline]#underline#
+This is underline [.underline]#word#
 
-This is line through [.line-through]#line through#
+This is line through [.line-through]#word#
 
-This is overline [.overline]#overline#
+This is overline [.overline]#word#
 
-This is nobreak [.nobreak]#nobreak#
+This is nobreak [.nobreak]#word#
 
-This is nowrap [.nowrap]#nowrap#
+This is nowrap [.nowrap]#word#
 
-This is pre-wrap [.pre-wrap]#pre-wrap#
+This is pre-wrap [.pre-wrap]#word#
 
-This is highlight #highlight#
+This is highlight #word#
 
 This is code `function`
 
-This is a double quote "`double quote`"
+This is a double quote "`word`"
 
-This is a single quote '`single quote`'
+This is a single quote '`word`'
 
 This is literal backticks ``npm``
 
@@ -46,6 +46,8 @@ This is literal backticks ``npm``
 
 * List item 2
 ** List item 2-1
+** List item 2-2
+** List item 2-4
 * List item 3
 
 
@@ -104,6 +106,25 @@ Are backpacks allowed?::
 No.
 
 
+## Foot notes
+
+The hail-and-rainbow protocol can be initiated at five levels: 
+double footnote:[The double hail-and-rainbow level makes my toes tingle.]
+
+. tertiary
+. supernumerary
+. supermassive
+. apocalyptic
+
+
+
+A bold statement! footnote:disclaimer[Opinions are my own.]
+
+Another outrageous statement.footnote:disclaimer[]
+
+
+
+
 ## Table 
 
 [cols="1,2,2,2,1,1", options="header"]
@@ -127,4 +148,19 @@ No.
 | 204        | Bluetooth Headphones| Electronics   | 200    | 59.99   | 2023-04-05
 | 205        | Desk Lamp           | Furniture     | 120    | 35.99   | 2023-02-28
 |===
+
+## Keyboard
+
+
+kbd:[F11] Toggle fullscreen
+
+kbd:[Ctrl+T] Open a new tab
+
+kbd:[Ctrl+Shift+N] New incognito window
+
+kbd:[\ ] Used to escape characters
+
+kbd:[Ctrl+\]] Jump to keyword
+
+kbd:[Ctrl + +] Increase zoom
 

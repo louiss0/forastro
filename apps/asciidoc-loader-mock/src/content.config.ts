@@ -3,8 +3,8 @@ import { defineCollection, z } from "astro:content";
 
 
 const asciidocLoader = createAsciidocLoader(
-    "/apps/asciidoc-loader-mock",
-    "apps/asciidoc-loader-mock/src/content"
+    ".",
+    "src/content"
 )
 
 export const collections = {
@@ -12,8 +12,9 @@ export const collections = {
     blog: defineCollection({
         type: "content_layer",
         loader: asciidocLoader,
-        schema: z.object({
-            doctitle: z.string()
+        schema: ({ image }) => z.object({
+            doctitle: z.string(),
+            hero_image: image().optional()
         })
     })
 

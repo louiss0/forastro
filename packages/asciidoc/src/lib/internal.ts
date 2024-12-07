@@ -19,7 +19,7 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderNa
 
     return await glob("**/*.{adoc,asciidoc}", {
         cwd: folderName,
-        absolute: true
+        // absolute: true
     })
 
 })

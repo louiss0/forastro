@@ -3,31 +3,50 @@ import { type Loader } from "astro/loaders";
 import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
 import type { z } from "astro/zod";
 
+import { resolve } from "node:path"
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>
 
 
 const processor = asciidoctor()
 
-export function createAsciidocLoader(config_folder_name: string, folder_name: string) {
+
+class FilePathAndSlug {
+
+    constructor (
+        public readonly pathRelativeToRoot: string,
+        public readonly slug: string
+    ) {
+
+    }
+
+}
+
+export function createAsciidocLoader(configFolderName: string, contentFolderName: string) {
 
     return {
         name: "forastro/asciidoc-loader",
-        async load({ store, generateDigest, logger, parseData, watcher, }) {
+        async load({ store, config: astroConfig, generateDigest, logger, parseData, watcher, }) {
+
 
             logger.info("Loading Asciidoc paths and config file")
 
+            const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}/`
+
+
             const [config, paths] = await Promise.all(
                 [
-                    getLoadAsciidocConfig(config_folder_name)(),
-                    getAsciidocPaths(folder_name)
+                    getLoadAsciidocConfig(resolve(configFolderName))(),
+                    getAsciidocPaths(`${resolvedRootRepo}${contentFolderName}`)
 
                 ]
             )
 
+
+
             if (paths.length === 0) {
 
-                throw Error(`There are no files in this folder ${folder_name}.
+                throw Error(`There are no files in this folder ${contentFolderName}.
                     Please use a different folder. 
                     `)
 
@@ -53,7 +72,7 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
             logger.info("Extracting data from files then storing it")
 
-            const fileNameToSlugMap = new Map<string, string>()
+            const fileNameToSlugMap = new Map<string, FilePathAndSlug>()
 
             const fullFilePathRE = /(?<folder_path>.+\/)(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/
 
@@ -65,7 +84,6 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 const fullFilePathMatch = path.match(fullFilePathRE)
 
                 if (!fullFilePathMatch) {
-
 
                     throw Error(`This path isn't correct.
                          A folder can use any set of characters but must end in a forward slash.
@@ -82,42 +100,27 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 }
 
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        extension_registry: registry
-                    })
+                const pathPrefixedWithFolderName = `${contentFolderName}/${path}`;
 
-
-                const title = document.getTitle();
-
-
-                if (!title) {
-
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
-
-                }
-
-                const attributes = document.getAttributes()
-
-
-                const data = await parseData({
-                    id: generateSlug(filename),
-                    data: attributes,
-                    // TODO: Fix this path later it's supposed to be a relative path.
-                    // filePath: path
-                })
+                const document = loadFileWithRegistryAndAttributes(
+                    `${resolvedRootRepo}${pathPrefixedWithFolderName}`
+                )
 
 
                 const sluggedFilename = generateSlug(filename);
 
-                setStoreUsingExtractedInfo(sluggedFilename, data, document);
+                await setStoreUsingExtractedInfo(
+                    pathPrefixedWithFolderName,
+                    sluggedFilename,
+                    document
+                );
 
-                fileNameToSlugMap.set(filename, sluggedFilename)
+                fileNameToSlugMap.set(filename,
+                    new FilePathAndSlug(
+                        pathPrefixedWithFolderName,
+                        sluggedFilename
+                    )
+                )
 
             }
 
@@ -143,7 +146,9 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 }
 
-                logger.info(`You added this file ${path} it's info will be now parsed an added to the store`)
+                logger.info(
+                    `You added this file ${path} it's info will be now parsed an added to the store`
+                )
 
                 const { filename } = fullFilePathMatch.groups!
 
@@ -154,36 +159,49 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
                 }
 
 
+                const extractPath = (filePath: string, targetPath: string) => {
 
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        // TODO: Decide safe level.
-                        // safe
-                        extension_registry: registry
-                    })
+                    const escapedTargetPath = targetPath.replace(
+                        /[.*+?^${}()|[\]\\]/g,
+                        '\\$&'
+                    ); // Escape special regex characters
 
+                    const regex = new RegExp(`${escapedTargetPath}.*`);
+                    const match = filePath.match(regex);
 
+                    if (!match) {
 
-                const attributes = document.getAttributes()
+                        throw Error(
+                            "Please place the values in the right place don't change any params"
+                        )
+                    }
 
-                const data = await parseData({
-                    id: generateSlug(filename),
-                    data: attributes,
-                    // TODO: Fix this path later it's supposed to be a relative path.
-                    // filePath: path
-                })
+                    return match[0]
+                }
 
+                const pathRelativeToProjectRoot = extractPath(path, contentFolderName);
+
+                const document = loadFileWithRegistryAndAttributes(path)
 
                 const sluggedFilename = generateSlug(filename);
 
-                setStoreUsingExtractedInfo(sluggedFilename, data, document)
+                await setStoreUsingExtractedInfo(
+                    sluggedFilename,
+                    pathRelativeToProjectRoot,
+                    document
+                )
 
-                fileNameToSlugMap.set(filename, sluggedFilename)
+                fileNameToSlugMap.set(
+                    filename,
+                    new FilePathAndSlug(
+                        pathRelativeToProjectRoot,
+                        sluggedFilename
+                    )
+                )
 
-                logger.info(`Finished adding the file now you can go to /${sluggedFilename} depending on your route to access it.`)
+                logger.info(
+                    `Finished adding the file now you can go to /${sluggedFilename} depending on your route to access it.`
+                )
 
 
             })
@@ -200,48 +218,28 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 logger.info(`You changed this file ${filename} the store is being updated`)
 
-                const slug = fileNameToSlugMap.get(filename);
+                const filePathAndSlug = fileNameToSlugMap.get(filename);
 
-                if (!slug) {
+                if (!filePathAndSlug) {
 
-                    throw Error(`A slug is supposed to exist using this file name ${slug}.
+                    throw Error(`A slug is supposed to exist using this file name ${filename}.
                         Some thing is wrong with the loader please file a report 
                         `)
                 }
 
-                store.delete(slug)
 
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        extension_registry: registry
-                    })
+                store.delete(filePathAndSlug.slug)
 
 
-                const title = document.getTitle();
+                const document = loadFileWithRegistryAndAttributes(
+                    path
+                )
 
-                if (!title) {
-
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
-
-                }
-
-                const attributes = document.getAttributes()
-
-
-                const data = await parseData({
-                    id: slug,
-                    data: attributes,
-                    // TODO: Fix this path later it's supposed to be a relative path.
-                    // filePath: path
-                })
-
-
-                setStoreUsingExtractedInfo(slug, data, document)
+                await setStoreUsingExtractedInfo(
+                    filePathAndSlug.pathRelativeToRoot,
+                    filePathAndSlug.slug,
+                    document
+                )
 
                 logger.info(`The store is updated`)
 
@@ -278,30 +276,55 @@ export function createAsciidocLoader(config_folder_name: string, folder_name: st
 
                 logger.info(`You deleted this file ${filename}`)
 
-                const slug = fileNameToSlugMap.get(filename);
+                const fileNameAndSlug = fileNameToSlugMap.get(filename);
 
-                if (!slug) {
+                if (!fileNameAndSlug) {
 
-                    throw Error(`A slug is supposed to exist using this file name ${slug}.
+                    throw Error(`A slug is supposed to exist using this file name ${filename}.
                         Some thing is wrong with the loader please file a report.
                         From unlink event using this path ${path}.
                         `)
                 }
 
-                store.delete(slug)
+                store.delete(fileNameAndSlug.slug)
 
                 logger.info("The store has now been updated!")
 
+                logger.info("Finished")
+
+
             })
 
-            logger.info("Finished")
+            function loadFileWithRegistryAndAttributes(path: string) {
+                return processor.loadFile(
+                    path,
+                    {
+                        attributes: config.attributes,
+                        safe: 10,
+                        catalog_assets: true,
+                        extension_registry: registry
+                    });
+            }
+
+            async function setStoreUsingExtractedInfo(
+                projectRelativePath: string,
+                slug: string,
+                document: Document
+            ) {
 
 
-            function setStoreUsingExtractedInfo(sluggedFilename: string, data: any, document: Document) {
+
+                const data = await parseData({
+                    id: slug,
+                    data: document.getAttributes(),
+                    filePath: projectRelativePath
+                })
+
+
                 store.set({
-                    id: sluggedFilename,
+                    id: slug,
                     data,
-                    // body: document.getContent(),
+                    filePath: projectRelativePath,
                     digest: generateDigest(data),
                     rendered: {
                         metadata: {
