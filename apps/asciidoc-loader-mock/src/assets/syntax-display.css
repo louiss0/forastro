@@ -58,13 +58,13 @@
   inherits: false;
   initial-value: #f1f5f9;
 }
-/* End slate */
 
 @property --faa-prose-color-50 {
   syntax: '<color>';
   inherits: false;
   initial-value: #f8fafc;
 }
+/* End slate */
 
 @property --faa-prose-tip-color {
   syntax: '<color>';
@@ -101,72 +101,35 @@
   initial-value: #71717a;
 }
 
-@property --faa-prose-step-neg-2 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-neg-1 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-0 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-1 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-2 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-3 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-4 {
-  syntax: '<length>';
-  inherits: true;
-}
-
-@property --faa-prose-step-5 {
-  syntax: '<length>';
-  inherits: true;
-}
-
 /* @link https://utopia.fyi/type/calculator?c=320,16,1.2,1240,20,1.333,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
 .prose {
   /* Base elements */
-
-  --faa-prose-step-neg-2: clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem);
-  --faa-prose-step-neg-1: clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem);
-  --faa-prose-step-0: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
-  --faa-prose-step-1: clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem);
-  --faa-prose-step-2: clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem);
-  --faa-prose-step-3: clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem);
-  --faa-prose-step-4: clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem);
-  --faa-prose-step-5: clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem);
-
   --faa-prose-main-gap: 1.5rem;
 
   display: flex;
   flex-direction: column;
   row-gap: var(--faa-prose-main-gap);
   color: var(--faa-prose-color-900);
-
   padding: 1rem 2rem;
-
   background-color: var(--faa-prose-color-50);
-
   font-size: var(--faa-prose-step-0);
+
+  --faa-prose-step-neg-2: clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem);
+
+  --faa-prose-step-neg-1: clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem);
+
+  --faa-prose-step-0: clamp(1rem, 0.913rem + 0.4348vw, 1.25rem);
+
+  --faa-prose-step-1: clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem);
+
+  --faa-prose-step-2: clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem);
+
+  --faa-prose-step-3: clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem);
+
+  --faa-prose-step-4: clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem);
+
+  --faa-prose-step-5: clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem);
 
   a {
     color: var(--faa-prose-color-500);
@@ -182,7 +145,7 @@
   :is(#toctitle, .sidebarblock > .content > .title) {
     font-weight: 300;
     text-rendering: optimizeLegibility;
-    margin: 1rem 0 0.5rem;
+    margin: 1rem 0.5rem;
     line-height: 1.2;
     word-spacing: -0.05rem;
 
@@ -218,8 +181,12 @@
 
   p {
     line-height: 1.6;
-    margin-bottom: 1.25rem;
     text-rendering: optimizeLegibility;
+  }
+
+  p:has(.keyseq) {
+    display: flex;
+    gap: 0.5rem;
   }
 
   :is(h1, h2, h3, h4, h5) > small {
@@ -228,7 +195,7 @@
   }
 
   :is(code, kbd, pre, samp) {
-    font-size: 1rem;
+    font-size: 1em;
   }
 
   pre {
@@ -248,13 +215,11 @@
 
   :is(ul, ol, dl) {
     line-height: 1.6;
-    font-size: var(--faa-prose-step-neg-1);
-    margin: 0 0 1.25rem 1.5rem;
     list-style-position: outside;
   }
 
   :is(ul, ol) li :is(ul, ol) {
-    margin-left: 1.25rem;
+    padding-inline: 1.25em;
     margin-bottom: 0;
   }
 
@@ -268,8 +233,9 @@
   }
 
   blockquote {
-    margin: 0 0 1.25rem;
-    padding: 0.5625rem 1.25rem 0 1.1875rem;
+    padding-top: 0.5625rem;
+    padding-inline: 1.25rem;
+    padding-bottom: 1.1875rem;
     border-left: 1px solid currentColor;
   }
 
@@ -284,14 +250,9 @@
     word-wrap: normal;
   }
 
-  :is(thead, tfoot) {
-    background: var(--bg-header);
-  }
-
   :is(thead, tfoot) :is(th, td) {
     padding: 0.5rem 0.625rem;
     font-size: inherit;
-    color: var(--text-main);
     text-align: left;
   }
 
@@ -302,7 +263,6 @@
 
   :is(#header, #content, #footnotes, #footer) {
     width: 100%;
-    margin: 0 auto;
     max-width: 62.5rem;
     position: relative;
     padding: 0 0.9375rem;
@@ -354,13 +314,16 @@
   }
 
   .admonitionblock > table:not(:has(td.content .paragraph)) {
-    td.icon {
-      padding-inline: 0.5rem;
+    tr {
       border-inline: 1px solid currentColor;
     }
 
+    td.icon {
+      padding-inline: 0.5rem;
+    }
+
     td.content {
-      border-inline: 1px solid currentColor;
+      border-left: 1px solid currentColor;
     }
   }
 
@@ -369,11 +332,18 @@
   }
 
   .admonitionblock > table:has(td.content .paragraph) {
-    position: relative;
+    tr {
+      display: flex;
+      flex-direction: column;
+      border-inline: 4px solid currentColor;
+      background: #fff;
+    }
+
+    td {
+      padding-inline: 1.5em;
+    }
 
     td.content {
-      border-inline: 1px solid currentColor;
-      /* padding-top: 3em; */
       padding-inline: 0.75em;
       word-wrap: anywhere;
 
@@ -382,16 +352,12 @@
       gap: 0.5em;
 
       .title {
-        font-size: var(--faa-prose-step-1);
+        font-size: 1.2em;
       }
-    }
 
-    td.icon {
-      position: absolute;
-      top: 0;
-      padding: 0;
-      left: 20px;
-      transform: translateY(-100%);
+      .paragraph {
+        padding-inline: 0.25em;
+      }
     }
   }
 
@@ -431,7 +397,6 @@
   }
 
   .sidebarblock > .content > .title {
-    margin: 0;
     text-align: center;
   }
 
@@ -544,7 +509,7 @@
   }
 
   .nobreak {
-    word-break: normal;
+    word-break: none;
   }
 
   .nowrap {
@@ -552,10 +517,33 @@
   }
 
   .pre-wrap {
-    word-wrap: break-word;
+    word-wrap: pre;
   }
 
   .stretch {
     width: 100%;
   }
+
+  kbd {
+    padding-block: 0.25em;
+    border: 1px solid currentColor;
+    border-radius: 0.25rem;
+    padding-inline: 0.75em;
+    background-color: var(--faa-prose-color-200);
+  }
+
+  kbd:hover {
+    background-color: var(--faa-prose-color-100);
+    transition: color 250ms ease-in;
+  }
+
+  .keyseq {
+    display: flex;
+    gap: 0.25em;
+    align-items: center;
+  }
+}
+
+.prose > :where(p) {
+  max-width: 65ch;
 }
