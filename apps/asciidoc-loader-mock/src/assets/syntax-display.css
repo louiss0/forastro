@@ -107,14 +107,6 @@
   /* Base elements */
   --faa-prose-main-gap: 1.5rem;
 
-  display: flex;
-  flex-direction: column;
-  row-gap: var(--faa-prose-main-gap);
-  color: var(--faa-prose-color-900);
-  padding: 1rem 2rem;
-  background-color: var(--faa-prose-color-50);
-  font-size: var(--faa-prose-step-0);
-
   --faa-prose-step-neg-2: clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem);
 
   --faa-prose-step-neg-1: clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem);
@@ -130,6 +122,14 @@
   --faa-prose-step-4: clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem);
 
   --faa-prose-step-5: clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem);
+
+  display: flex;
+  flex-direction: column;
+  row-gap: var(--faa-prose-main-gap);
+  color: var(--faa-prose-color-900);
+  padding: 1rem 2rem;
+  background-color: var(--faa-prose-color-50);
+  font-size: var(--faa-prose-step-0);
 
   a {
     color: var(--faa-prose-color-500);
@@ -179,8 +179,9 @@
     font-size: var(--faa-prose-step-1);
   }
 
-  p {
+  .paragraph {
     line-height: 1.6;
+    max-width: 65ch;
     text-rendering: optimizeLegibility;
   }
 
@@ -195,7 +196,7 @@
   }
 
   :is(code, kbd, pre, samp) {
-    font-size: 1em;
+    font-size: 1.25rem;
   }
 
   pre {
@@ -210,16 +211,18 @@
   }
 
   mark {
+    padding: 0.25rem;
     background-color: var(--faa-prose-color-200);
   }
 
   :is(ul, ol, dl) {
     line-height: 1.6;
     list-style-position: outside;
+    font-size: calc(var(--faa-prose-step-2) * 0.75%);
   }
 
   :is(ul, ol) li :is(ul, ol) {
-    padding-inline: 1.25em;
+    padding-inline: 1.25rem;
     margin-bottom: 0;
   }
 
@@ -233,7 +236,7 @@
   }
 
   blockquote {
-    padding-top: 0.5625rem;
+    padding-top: 0.525rem;
     padding-inline: 1.25rem;
     padding-bottom: 1.1875rem;
     border-left: 1px solid currentColor;
@@ -542,8 +545,4 @@
     gap: 0.25em;
     align-items: center;
   }
-}
-
-.prose > :where(p) {
-  max-width: 65ch;
 }
