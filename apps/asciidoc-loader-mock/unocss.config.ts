@@ -5,7 +5,7 @@ export default defineConfig({
     presets: [
         // Use WindiCSS classes. 
         presetWind(),
-        presetTypography()
+        // presetTypography()
     ],
     transformers: [
         // Enable variant groups.

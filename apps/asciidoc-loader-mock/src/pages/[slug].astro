@@ -31,6 +31,7 @@ const { entry } = Astro.props
 const { Content } = await render(entry)
 
 ---
-<article class="prose  prose-sky px-12 py-4">
+<link rel="stylesheet" href="src/assets/syntax-display.css">
+<article class="prose translate-x-10">
 <Content/>
 </article>

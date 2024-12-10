@@ -8,7 +8,6 @@ Shelton Louis
 ifdef::icons[The icons aren't set]
 
 
-
 This is bold *word*
 
 This is italic _word_
