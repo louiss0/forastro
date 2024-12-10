@@ -10,7 +10,6 @@ const asciidocLoader = createAsciidocLoader(
 export const collections = {
 
     blog: defineCollection({
-        type: "content_layer",
         loader: asciidocLoader,
         schema: ({ image }) => z.object({
             doctitle: z.string(),
