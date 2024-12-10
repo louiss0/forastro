@@ -541,16 +541,20 @@
     text-decoration: overline;
   }
 
-  .nobreak {
-    word-break: none;
+  :not(pre).nobreak {
+    word-wrap: normal;
   }
 
-  .nowrap {
-    word-wrap: none;
+  :not(pre).nowrap {
+    white-space: nowrap;
   }
 
-  .pre-wrap {
-    word-wrap: pre;
+  :not(pre).pre-wrap {
+    white-space: pre-wrap;
+  }
+
+  div.unbreakable {
+    page-break-inside: avoid;
   }
 
   .stretch {
@@ -563,11 +567,6 @@
     border-radius: 0.25rem;
     padding-inline: 0.75em;
     background-color: var(--faa-prose-color-200);
-  }
-
-  kbd:hover {
-    background-color: var(--faa-prose-color-100);
-    transition: color 250ms ease-in;
   }
 
   .keyseq {
