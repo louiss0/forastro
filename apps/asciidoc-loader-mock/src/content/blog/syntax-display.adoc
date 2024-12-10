@@ -49,9 +49,24 @@ This is literal backticks ``npm``
 ** List item 2-4
 * List item 3
 
+
 .After landing the cloaked Klingon bird of prey in Golden Gate park:
 [quote,Captain James T. Kirk,Star Trek IV: The Voyage Home]
 Everybody remember where we parked.
+
+> > What's new?
+>
+> I've got Markdown in my AsciiDoc!
+>
+> > Like what?
+>
+> * Blockquotes
+> * Headings
+> * Fenced code blocks
+>
+> > Is there more?
+>
+> Yep. AsciiDoc and Markdown share a lot of common syntax already.
 
 ## Admonitions
 

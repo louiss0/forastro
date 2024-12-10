@@ -196,7 +196,7 @@
   }
 
   :is(code, kbd, pre, samp) {
-    font-size: 1.25rem;
+    font-size: var(--faa-prose-step-neg-1);
   }
 
   pre {
@@ -389,7 +389,7 @@
     border-radius: 4px;
     overflow-x: auto;
     padding: 1rem;
-    font-size: 0.8125rem;
+    font-size: 0.825rem;
   }
 
   .sidebarblock {
@@ -397,6 +397,22 @@
     margin-bottom: 1.25rem;
     padding: 1.25rem;
     border-radius: 4px;
+  }
+
+  .quoteblock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+
+    blockquote {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .attribution {
+      font-size: var(--faa-prose-step-neg-1);
+    }
   }
 
   .sidebarblock > .content > .title {
@@ -413,9 +429,6 @@
 
       p + p:not(:has(em)) {
         padding-inline: 0.75rem;
-      }
-      em {
-        font-size: var(--faa-prose-step-1);
       }
     }
   }
