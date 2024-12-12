@@ -2,7 +2,7 @@
 Shelton Louis
 :experimental:
 :hero_image: ../../assets/images/couple-9215839_640.jpg
-
+:toc: auto
 [.title]#{doctitle}#
 
 ifdef::icons[The icons aren't set]
