@@ -150,7 +150,7 @@
 
   display: flex;
   flex-direction: column;
-  row-gap: var(--faa-prose-main-gap);
+  row-gap: var(--faa-prose-space-9);
   color: var(--faa-prose-color-900);
   padding: var(--faa-prose-space-7) var(--faa-prose-space-12);
   background-color: var(--faa-prose-color-50);
@@ -327,7 +327,7 @@
   :is([class^='sect']) {
     display: flex;
     flex-direction: column;
-    row-gap: var(--faa-prose-space-12);
+    row-gap: var(--faa-prose-space-9);
   }
 
   :is([class$='block'], [class$='list']) > .title {
