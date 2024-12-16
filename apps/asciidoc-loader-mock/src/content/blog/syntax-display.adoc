@@ -8,6 +8,8 @@ Shelton Louis
 ifdef::icons[The icons aren't set]
 
 
+## Writing Syntax
+
 This is bold *word*
 
 This is italic _word_
@@ -82,11 +84,11 @@ IMPORTANT: This is a important
 
 
 [IMPORTANT]
-.Don't use test logic 
+.Don't use test logic
 ====
 When writing test logic you are only writing boilerplate code.
 You aren't testing logic at all.
-In fact in some cases you are only reinforcing with held biases. 
+In fact in some cases you are only reinforcing with held biases.
 ====
 
 
@@ -96,13 +98,13 @@ CPU:: The brain of the computer.
 Hard drive:: Permanent storage for operating system and/or user files.
 RAM:: Temporarily stores information the CPU uses during operation.
 
- 
+
 [horizontal]
 Keyboard:: Used to enter text or control items on the screen.
 Mouse:: Used to point to and select items on your computer screen.
 Monitor:: Displays information in visual form using text and graphics.
 
-## Sections 2-5 
+## Sections 2-5
 
 ## Section 2
 
@@ -125,7 +127,7 @@ No.
 
 ## Foot notes
 
-The hail-and-rainbow protocol can be initiated at five levels: 
+The hail-and-rainbow protocol can be initiated at five levels:
 double footnote:[The double hail-and-rainbow level makes my toes tingle.]
 
 . tertiary
@@ -142,7 +144,7 @@ Another outrageous statement.footnote:disclaimer[]
 
 
 
-## Table 
+## Table
 
 [cols="1,2,2,2,1,1", options="header"]
 |===
@@ -180,5 +182,3 @@ kbd:[\ ] Used to escape characters
 kbd:[Ctrl+\]] Jump to keyword
 
 kbd:[Ctrl + +] Increase zoom
-
-
