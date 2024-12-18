@@ -111,7 +111,6 @@
   --faa-prose-step-1: clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem);
 
   --faa-prose-step-2: clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem);
-
   --faa-prose-step-3: clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem);
 
   --faa-prose-step-4: clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem);
@@ -153,6 +152,8 @@
   row-gap: var(--faa-prose-space-9);
   padding: var(--faa-prose-space-7) var(--faa-prose-space-12);
   font-size: var(--faa-prose-step-0);
+  max-width: 56rem;
+  margin-inline: auto;
 
   a {
     color: var(--faa-prose-color-500);
