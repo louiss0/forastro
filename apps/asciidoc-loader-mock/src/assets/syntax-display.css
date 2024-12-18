@@ -356,10 +356,6 @@
     }
   }
 
-  .admonitionblock:has(td.content .paragraph) {
-    padding-block: 2.5rem;
-  }
-
   .admonitionblock > table:has(td.content .paragraph) {
     tr {
       display: flex;
