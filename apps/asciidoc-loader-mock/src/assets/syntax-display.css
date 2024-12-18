@@ -195,20 +195,20 @@
   .toc {
     display: flex;
     flex-direction: column;
-    gap: var(--faa-prose-space-6);
-    padding-inline: var(--faa-prose-space-8);
-    padding-block: var(--faa-prose-space-4);
-
+    gap: var(--faa-prose-space-4);
+    padding-inline: var(--faa-prose-space-15);
+    padding-block: var(--faa-prose-space-5);
     #toctitle {
       font-weight: 500;
       padding-block: var(--faa-prose-space-2);
     }
 
     ul {
+      font-size: var(--faa-prose-step-neg-1);
       li:has(ul) {
         display: flex;
         flex-direction: column;
-        gap: var(--faa-prose-space-4);
+        column-gap: var(--faa-prose-space-2);
       }
     }
   }
