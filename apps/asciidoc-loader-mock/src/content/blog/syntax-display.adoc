@@ -168,11 +168,11 @@ Another outrageous statement.footnote:disclaimer[]
 | 205        | Desk Lamp           | Furniture     | 120    | 35.99   | 2023-02-28
 |===
 
-## Keyboard
 
 
 kbd:[F11] Toggle fullscreen
 
+## Keyboard
 kbd:[Ctrl+T] Open a new tab
 
 kbd:[Ctrl+Shift+N] New incognito window
@@ -184,7 +184,6 @@ kbd:[Ctrl+\]] Jump to keyword
 kbd:[Ctrl + +] Increase zoom
 
 ## Blocks
-
 
 ////
 
@@ -231,3 +230,13 @@ TIP: They can contain any type of content.
 const { expect, expectCalledWith, heredoc } = require('../test/test-utils')
 ----
 ****
+
+## Button and Menu 
+
+Press the btn:[OK] button when you are finished.
+
+Select a file in the file navigator and click btn:[Open].
+
+To save the file, select menu:File[Save].
+
+Select menu:View[Zoom > Reset] to reset the zoom level to the default setting.

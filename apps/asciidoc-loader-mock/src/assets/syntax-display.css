@@ -428,6 +428,35 @@
     font-size: var(--faa-prose-space-6);
   }
 
+  .button {
+    padding-inline: var(--faa-prose-space-2);
+    padding-block: var(--faa-prose-space-1);
+
+    color: var(--faa-prose-color-700);
+    display: flex inline;
+    column-gap: var(--faa-prose-space-2);
+  }
+
+  .menuseq {
+    color: var(--faa-prose-color-700);
+
+    .caret {
+      color: var(--faa-prose-color-400);
+    }
+
+    .menuitem {
+      color: var(--faa-prose-color-500);
+    }
+  }
+
+  .button:before {
+    content: '[';
+  }
+
+  .button:after {
+    content: ']';
+  }
+
   .sidebarblock {
     border: 1px solid currentColor;
     padding: var(--faa-prose-space-7);
@@ -481,9 +510,9 @@
     flex-direction: column;
     gap: var(--faa-prose-space-4);
 
+    display: flex;
+    flex-direction: column;
     blockquote {
-      display: flex;
-      flex-direction: column;
       gap: var(--faa-prose-space-2);
     }
 
