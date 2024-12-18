@@ -182,3 +182,52 @@ kbd:[\ ] Used to escape characters
 kbd:[Ctrl+\]] Jump to keyword
 
 kbd:[Ctrl + +] Increase zoom
+
+## Blocks
+
+
+////
+
+! These are the differences between a listing and a literal blocks 
+listing - computer input
+source - a listing block that features syntax highlighting
+literal - computer output
+////
+
+.Literal Block
+....
+Im'a literal block.
+.... 
+
+.Listing Block
+----
+This is a listing block
+----
+
+.Example Block
+====
+
+This is an example block
+
+====
+
+.Pass Block
+++++
+<div>
+I'm a pass block as HTML
+</div>
+++++
+
+.Sidebar Block 
+****
+Sidebars are used to visually separate auxiliary bits of content
+that supplement the main text.
+
+TIP: They can contain any type of content.
+
+.Source code block in a sidebar
+[source,js]
+----
+const { expect, expectCalledWith, heredoc } = require('../test/test-utils')
+----
+****

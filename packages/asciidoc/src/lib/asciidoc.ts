@@ -235,6 +235,8 @@ export function createAsciidocLoader(configFolderName: string, contentFolderName
                     path
                 )
 
+
+
                 await setStoreUsingExtractedInfo(
                     filePathAndSlug.pathRelativeToRoot,
                     filePathAndSlug.slug,
