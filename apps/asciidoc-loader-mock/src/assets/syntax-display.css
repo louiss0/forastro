@@ -145,7 +145,9 @@ a {
   line-height: inherit;
 }
 
-a:is(:hover, :focus, :active) {
+a:hover,
+a:focus,
+a:active {
   color: var(--faa-prose-color-600);
   outline: 0;
 }
@@ -184,15 +186,24 @@ h5 {
   line-height: 1.5;
 }
 
-:is(#header, #content, #footnotes, #footer) {
+#header,
+#content,
+#footnotes,
+#footer {
   width: 100%;
   max-width: 62.5rem;
   position: relative;
   padding: var(--faa-prose-space-2) var(--faa-prose-space-6);
 }
 
-:is(#header, #content, #footnotes, #footer)::before,
-:is(#header, #content, #footnotes, #footer)::after {
+#header::before,
+#content::before,
+#footnotes::before,
+#footer::before,
+#header::after,
+#content::after,
+#footnotes::after,
+#footer::after {
   content: ' ';
   display: table;
   clear: both;
@@ -428,12 +439,19 @@ p:has(.keyseq) {
   gap: var(--faa-prose-space-4);
 }
 
-:is(h1, h2, h3, h4, h5) > small {
+h1 > small,
+h2 > small,
+h3 > small,
+h4 > small,
+h5 > small {
   font-size: 60%;
   padding: var(--faa-prose-space-2) var(--faa-prose-space-4);
 }
 
-:is(code, kbd, pre, samp) {
+code,
+kbd,
+pre,
+samp {
   font-size: var(--faa-prose-step-neg-1);
 }
 
@@ -453,7 +471,9 @@ mark {
   background-color: var(--faa-prose-color-200);
 }
 
-:is(ul, ol, dl) {
+ul,
+ol,
+dl {
   line-height: 1.6;
   list-style-position: outside;
   display: flex;
@@ -461,7 +481,10 @@ mark {
   gap: var(--faa-prose-space-6);
 }
 
-:is(ul, ol) li :is(ul, ol) {
+ul li ul,
+ul li ol,
+ol li ul,
+ol li ol {
   padding-inline: var(--faa-prose-space-9);
   gap: var(--faa-prose-space-5);
 }
@@ -499,13 +522,17 @@ table {
   word-wrap: normal;
 }
 
-:is(thead, tfoot) :is(th, td) {
+thead th,
+thead td,
+tfoot th,
+tfoot td {
   padding: var(--faa-prose-space-3) var(--faa-prose-space-4);
   font-size: inherit;
   text-align: left;
 }
 
-:is(th, td) {
+th,
+td {
   padding: var(--faa-prose-space-3) var(--faa-prose-space-5);
   font-size: inherit;
 }
@@ -558,15 +585,18 @@ kbd {
   text-decoration: overline;
 }
 
-:not(pre).nobreak {
+pre.nobreak,
+not(pre).nobreak {
   word-wrap: normal;
 }
 
-:not(pre).nowrap {
+pre.nowrap,
+not(pre).nowrap {
   white-space: nowrap;
 }
 
-:not(pre).pre-wrap {
+pre.pre-wrap,
+not(pre).pre-wrap {
   white-space: pre-wrap;
 }
 
