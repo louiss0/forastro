@@ -168,11 +168,11 @@ Another outrageous statement.footnote:disclaimer[]
 | 205        | Desk Lamp           | Furniture     | 120    | 35.99   | 2023-02-28
 |===
 
+## Keyboard
 
 
 kbd:[F11] Toggle fullscreen
 
-## Keyboard
 kbd:[Ctrl+T] Open a new tab
 
 kbd:[Ctrl+Shift+N] New incognito window
@@ -185,58 +185,13 @@ kbd:[Ctrl + +] Increase zoom
 
 ## Blocks
 
-////
-
-! These are the differences between a listing and a literal blocks 
-listing - computer input
-source - a listing block that features syntax highlighting
-literal - computer output
-////
-
-.Literal Block
-....
-Im'a literal block.
-.... 
-
 .Listing Block
-----
-This is a listing block
-----
+....
+Im'a listing block
+....
 
 .Example Block
 ====
-
-This is an example block
+Im'a listing block
 
 ====
-
-.Pass Block
-++++
-<div>
-I'm a pass block as HTML
-</div>
-++++
-
-.Sidebar Block 
-****
-Sidebars are used to visually separate auxiliary bits of content
-that supplement the main text.
-
-TIP: They can contain any type of content.
-
-.Source code block in a sidebar
-[source,js]
-----
-const { expect, expectCalledWith, heredoc } = require('../test/test-utils')
-----
-****
-
-## Button and Menu 
-
-Press the btn:[OK] button when you are finished.
-
-Select a file in the file navigator and click btn:[Open].
-
-To save the file, select menu:File[Save].
-
-Select menu:View[Zoom > Reset] to reset the zoom level to the default setting.
