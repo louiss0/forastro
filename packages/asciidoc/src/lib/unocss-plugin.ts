@@ -1,4 +1,4 @@
-import { definePreset, type PreflightContext, type Preset } from 'unocss';
+import { definePreset, type Preset } from 'unocss';
 import type { Theme } from 'unocss/preset-mini';
 
 const CSS_abstracts_Classes = {
@@ -453,10 +453,8 @@ const preflights = {
   ...CSS_UtilitiesClasses,
 };
 
-const TYPOGRAPHY_SELECTOR_NAME = 'prose';
-
-const getCSS = () => {
-  return Object.entries(preflights).reduce(
+const fetchCSS_StringGeneratorUsingInput = (mainSelector: string) => () =>
+  Object.entries(preflights).reduce(
     (prevResult, [selectorName, declarationBlock]) => {
       const selectorBlockString = `{ ${Object.entries(declarationBlock).map((key, value) => `${key}:${value}`)} }`;
 
@@ -472,21 +470,26 @@ const getCSS = () => {
         const newSelectorName = selectorsFromCommaSeparation
           .map(
             (selectorFromCommaSeparation) =>
-              `${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorFromCommaSeparation})${notProseSelector}`,
+              `${mainSelector} :where(${selectorFromCommaSeparation})${notProseSelector}`,
           )
           .join(',');
 
-        return `${TYPOGRAPHY_SELECTOR_NAME} ${newSelectorName} ${selectorBlockString}`;
+        return `${mainSelector} ${newSelectorName} ${selectorBlockString}`;
       }
 
-      return `${prevResult} ${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorName}) ${selectorBlockString}`;
+      return `${prevResult} ${mainSelector} :where(${selectorName}) ${selectorBlockString}`;
     },
     '',
   );
-};
 
 export default definePreset(() => {
-  const selectorColorRE = new RegExp(`${TYPOGRAPHY_SELECTOR_NAME}-([a-z-]+)`);
+  const TYPOGRAPHY_SELECTOR_NAME = 'prose';
+  const typographySelectorNameRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}$`);
+  const selectorColorRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}-([a-z-]+)$`);
+
+  const selectorInvertColorColorRE = new RegExp(
+    `^${TYPOGRAPHY_SELECTOR_NAME}-invert-([a-z-]+)$`,
+  );
 
   return {
     name: 'forastro/asciidoc:typography',
@@ -494,45 +497,47 @@ export default definePreset(() => {
     layer: 'typography',
     rules: [
       [
-        TYPOGRAPHY_SELECTOR_NAME,
-        {
-          '--faa-prose-step-neg-2':
-            'clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem)',
-          '--faa-prose-step-neg-1':
-            'clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem)',
-          '--faa-prose-step-0': 'clamp(1rem, 0.913rem + 0.4348vw, 1.25rem)',
-          '--faa-prose-step-1':
-            'clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem)',
-          '--faa-prose-step-2':
-            'clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem)',
-          '--faa-prose-step-3':
-            'clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem)',
-          '--faa-prose-step-4':
-            'clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem)',
-          '--faa-prose-step-5':
-            'clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem)',
-          '--faa-prose-space-1': '0.15em',
-          '--faa-prose-space-2': '0.3em',
-          '--faa-prose-space-3': '0.45em',
-          '--faa-prose-space-4': '0.6em',
-          '--faa-prose-space-5': '0.75em',
-          '--faa-prose-space-6': '0.9em',
-          '--faa-prose-space-7': '1.05em',
-          '--faa-prose-space-8': '1.2em',
-          '--faa-prose-space-9': '1.35em',
-          '--faa-prose-space-10': '1.5em',
-          '--faa-prose-space-11': '1.65em',
-          '--faa-prose-space-12': '1.8em',
-          '--faa-prose-space-13': '1.95em',
-          '--faa-prose-space-14': '2.1em',
-          '--faa-prose-space-15': '2.25em',
-          display: 'flex',
-          'flex-direction': 'column',
-          'row-gap': 'var(--faa-prose-space-9)',
-          padding: 'var(--faa-prose-space-7) var(--faa-prose-space-12)',
-          'font-size': 'var(--faa-prose-step-0)',
-          'max-width': '56rem',
-          'margin-inline': 'auto',
+        typographySelectorNameRE,
+        () => {
+          return {
+            '--faa-prose-step-neg-2':
+              'clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem)',
+            '--faa-prose-step-neg-1':
+              'clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem)',
+            '--faa-prose-step-0': 'clamp(1rem, 0.913rem + 0.4348vw, 1.25rem)',
+            '--faa-prose-step-1':
+              'clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem)',
+            '--faa-prose-step-2':
+              'clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem)',
+            '--faa-prose-step-3':
+              'clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem)',
+            '--faa-prose-step-4':
+              'clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem)',
+            '--faa-prose-step-5':
+              'clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem)',
+            '--faa-prose-space-1': '0.15em',
+            '--faa-prose-space-2': '0.3em',
+            '--faa-prose-space-3': '0.45em',
+            '--faa-prose-space-4': '0.6em',
+            '--faa-prose-space-5': '0.75em',
+            '--faa-prose-space-6': '0.9em',
+            '--faa-prose-space-7': '1.05em',
+            '--faa-prose-space-8': '1.2em',
+            '--faa-prose-space-9': '1.35em',
+            '--faa-prose-space-10': '1.5em',
+            '--faa-prose-space-11': '1.65em',
+            '--faa-prose-space-12': '1.8em',
+            '--faa-prose-space-13': '1.95em',
+            '--faa-prose-space-14': '2.1em',
+            '--faa-prose-space-15': '2.25em',
+            display: 'flex',
+            'flex-direction': 'column',
+            'row-gap': 'var(--faa-prose-space-9)',
+            padding: 'var(--faa-prose-space-7) var(--faa-prose-space-12)',
+            'font-size': 'var(--faa-prose-step-0)',
+            'max-width': '56rem',
+            'margin-inline': 'auto',
+          };
         },
         {
           layer: 'typography',
@@ -560,7 +565,24 @@ export default definePreset(() => {
             '--faa-prose-color-700': colorObject[700] as string,
             '--faa-prose-color-800': colorObject[800] as string,
             '--faa-prose-color-900': colorObject[900] as string,
-            // Inverted colors
+          };
+        },
+        {
+          layer: 'typography',
+        },
+      ],
+      [
+        selectorInvertColorColorRE,
+        ([, color], { theme }) => {
+          if (!color) return;
+
+          const colorObject = theme.colors?.[color];
+
+          if (!colorObject || typeof colorObject === 'string') {
+            return;
+          }
+
+          return {
             '--faa-prose-color-invert-50': colorObject[900] as string,
             '--faa-prose-color-invert-100': colorObject[800] as string,
             '--faa-prose-color-invert-200': colorObject[700] as string,
@@ -581,7 +603,7 @@ export default definePreset(() => {
     preflights: [
       {
         layer: 'typography',
-        getCSS,
+        getCSS: fetchCSS_StringGeneratorUsingInput('.prose'),
       },
     ],
   } satisfies Preset<Theme>;
