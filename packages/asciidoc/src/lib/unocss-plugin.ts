@@ -453,7 +453,7 @@ const preflights = {
   ...CSS_UtilitiesClasses,
 };
 
-export const typographyPreset = definePreset(() => {
+export const presetAdocTypograhy = definePreset(() => {
   const TYPOGRAPHY_SELECTOR_NAME = 'prose';
   const typographySelectorNameRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}$`);
   const selectorColorRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}-([a-z-]+)$`);
