@@ -453,36 +453,7 @@ const preflights = {
   ...CSS_UtilitiesClasses,
 };
 
-const fetchCSS_StringGeneratorUsingInput = (mainSelector: string) => () =>
-  Object.entries(preflights).reduce(
-    (prevResult, [selectorName, declarationBlock]) => {
-      const selectorBlockString = `{ ${Object.entries(declarationBlock).map((key, value) => `${key}:${value}`)} }`;
-
-      if (selectorName.startsWith('@property')) {
-        return `${prevResult} ${selectorName} ${selectorBlockString}`;
-      }
-
-      const selectorsFromCommaSeparation = selectorName.split(',');
-
-      if (selectorsFromCommaSeparation.length > 0) {
-        const notProseSelector = `:not(:where(.not-prose,.not-prose *))`;
-
-        const newSelectorName = selectorsFromCommaSeparation
-          .map(
-            (selectorFromCommaSeparation) =>
-              `${mainSelector} :where(${selectorFromCommaSeparation})${notProseSelector}`,
-          )
-          .join(',');
-
-        return `${mainSelector} ${newSelectorName} ${selectorBlockString}`;
-      }
-
-      return `${prevResult} ${mainSelector} :where(${selectorName}) ${selectorBlockString}`;
-    },
-    '',
-  );
-
-export default definePreset(() => {
+export const typographyPreset = definePreset(() => {
   const TYPOGRAPHY_SELECTOR_NAME = 'prose';
   const typographySelectorNameRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}$`);
   const selectorColorRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}-([a-z-]+)$`);
@@ -603,7 +574,34 @@ export default definePreset(() => {
     preflights: [
       {
         layer: 'typography',
-        getCSS: fetchCSS_StringGeneratorUsingInput('.prose'),
+        getCSS: () =>
+          Object.entries(preflights).reduce(
+            (prevResult, [selectorName, declarationBlock]) => {
+              const selectorBlockString = `{ ${Object.entries(declarationBlock).map((key, value) => `${key}:${value}`)} }`;
+
+              if (selectorName.startsWith('@property')) {
+                return `${prevResult} ${selectorName} ${selectorBlockString}`;
+              }
+
+              const selectorsFromCommaSeparation = selectorName.split(',');
+
+              if (selectorsFromCommaSeparation.length > 0) {
+                const notProseSelector = `:not(:where(.not-${TYPOGRAPHY_SELECTOR_NAME},.not-${TYPOGRAPHY_SELECTOR_NAME} *))`;
+
+                const newSelectorName = selectorsFromCommaSeparation
+                  .map(
+                    (selectorFromCommaSeparation) =>
+                      `.${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorFromCommaSeparation})${notProseSelector}`,
+                  )
+                  .join(',');
+
+                return `.${TYPOGRAPHY_SELECTOR_NAME} ${newSelectorName} ${selectorBlockString}`;
+              }
+
+              return `${prevResult} .${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorName}) ${selectorBlockString}`;
+            },
+            '',
+          ),
       },
     ],
   } satisfies Preset<Theme>;
