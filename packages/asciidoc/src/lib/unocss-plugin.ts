@@ -589,13 +589,13 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
 
         if (typeof value === "boolean" || isNaN(Number(value))) {
 
-          return `${key}:${value};`
+          return `\t${key}:${value};`
 
         }
 
-        return `${key}:'${value}';`
+        return `\t${key}:'${value}';`
 
-      }).join("\n")}\n}\n\n`;
+      }).join("\n")}\n}\n`;
 
       if (selectorName.startsWith('@property')) {
         return `${selectorName} ${selectorBlockString}`;
