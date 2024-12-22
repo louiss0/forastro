@@ -581,43 +581,29 @@ export const presetAdocTypograhy = definePreset(() => {
 });
 
 export function getCSSWithSelectorName(typographySelectorName: string) {
+
+
+  const notProseSelector = `:not(:where(.not-${typographySelectorName},.not-${typographySelectorName} *))`;
+
   return () => Object.entries(preflights).map(
     ([selectorName, declarationBlock]) => {
 
-      const selectorBlockString = `{\n${Object.entries(declarationBlock).map(([key, value]) => {
+      const refinedProperties = Object.entries(declarationBlock).map(([key, value]) =>
 
+        typeof value !== "boolean" && isNaN(Number(value)) && !value.startsWith("#")
+          ? `\t${key}:'${value}';`
+          : `\t${key}:${value};`
 
-        if (typeof value !== "boolean" && isNaN(Number(value)) && !value.startsWith("#")) {
+      ).join("\n");
 
-          return `\t${key}:'${value}';`
-
-        }
-
-        return `\t${key}:${value};`
-
-
-      }).join("\n")}\n}\n`;
+      const selectorBlockString = `{\n${refinedProperties}\n}\n`;
 
       if (selectorName.startsWith('@property')) {
         return `${selectorName} ${selectorBlockString}`;
       }
 
-      const selectorsFromCommaSeparation = selectorName.split(',');
 
-      if (selectorsFromCommaSeparation.length > 0) {
-        const notProseSelector = `:not(:where(.not-${typographySelectorName},.not-${typographySelectorName} *))`;
-
-        const newSelectorName = selectorsFromCommaSeparation
-          .map(
-            (selectorFromCommaSeparation) =>
-              `:where(${selectorFromCommaSeparation})${notProseSelector}`
-          )
-          .join(',');
-
-        return `.${typographySelectorName} ${newSelectorName} ${selectorBlockString}`;
-      }
-
-      return `.${typographySelectorName} :where(${selectorName}) ${selectorBlockString}`;
+      return `.${typographySelectorName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
     },
   ).join("\n");
 }
