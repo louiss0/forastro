@@ -140,7 +140,6 @@ const CSS_BaseClasses = {
   },
   pre: {
     'white-space': 'pre-wrap',
-    color: 'var(--text-main)',
     'line-height': '1.45',
     'text-rendering': 'optimizeSpeed',
   },

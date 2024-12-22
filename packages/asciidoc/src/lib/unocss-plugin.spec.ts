@@ -216,7 +216,6 @@ describe("Testing Unocss Plugin functions", () => {
 
               .prose :where(pre):not(:where(.not-prose,.not-prose *)) {
               	white-space:pre-wrap;
-              	color:var(--text-main);
               	line-height:1.45;
               	text-rendering:optimizeSpeed;
               }
