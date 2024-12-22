@@ -4,82 +4,82 @@ import type { Theme } from 'unocss/preset-mini';
 const CSS_abstracts_Classes = {
   '@property --faa-prose-color-950': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#020617',
   },
   '@property --faa-prose-color-900': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#0f172a',
   },
   '@property --faa-prose-color-800': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#1e293b',
   },
   '@property --faa-prose-color-700': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#334155',
   },
   '@property --faa-prose-color-600': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#475569',
   },
   '@property --faa-prose-color-500': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#64748b',
   },
   '@property --faa-prose-color-400': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#94a3b8',
   },
   '@property --faa-prose-color-300': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#cbd5e1',
   },
   '@property --faa-prose-color-200': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#e2e8f0',
   },
   '@property --faa-prose-color-100': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#f1f5f9',
   },
   '@property --faa-prose-color-50': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#f8fafc',
   },
   '@property --faa-prose-tip-color': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#10b981',
   },
   '@property --faa-prose-warning-color': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#eab308',
   },
   '@property --faa-prose-caution-color': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#ef4444',
   },
   '@property --faa-prose-note-color': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#06b6d4',
   },
   '@property --faa-prose-important-color': {
     syntax: '<color>',
-    inherits: false,
+    inherits: "false",
     'initial-value': '#71717a',
   },
 };
@@ -588,8 +588,7 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
     ([selectorName, declarationBlock]) => {
 
       const refinedProperties = Object.entries(declarationBlock).map(([key, value]) =>
-
-        typeof value !== "boolean" && isNaN(Number(value)) && !value.startsWith("#")
+        /^\<\w+>$/.test(value)
           ? `\t${key}:'${value}';`
           : `\t${key}:${value};`
 
