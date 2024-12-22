@@ -182,11 +182,11 @@ const CSS_LayoutClasses = {
     padding: 'var(--faa-prose-space-2) var(--faa-prose-space-6)',
   },
   '#header::before, #content::before, #footnotes::before, #footer::before, #header::after, #content::after, #footnotes::after, #footer::after':
-    {
-      content: '" "',
-      display: 'table',
-      clear: 'both',
-    },
+  {
+    content: '" "',
+    display: 'table',
+    clear: 'both',
+  },
 };
 
 const CSS_ComponentClasses = {
@@ -465,7 +465,7 @@ export const presetAdocTypograhy = definePreset(() => {
   return {
     name: 'forastro/asciidoc:typography',
     enforce: 'post',
-    layer: 'typography',
+    layer: "typography",
     rules: [
       [
         typographySelectorNameRE,
@@ -574,35 +574,39 @@ export const presetAdocTypograhy = definePreset(() => {
     preflights: [
       {
         layer: 'typography',
-        getCSS: () =>
-          Object.entries(preflights).reduce(
-            (prevResult, [selectorName, declarationBlock]) => {
-              const selectorBlockString = `{ ${Object.entries(declarationBlock).map((key, value) => `${key}:${value}`)} }`;
-
-              if (selectorName.startsWith('@property')) {
-                return `${prevResult} ${selectorName} ${selectorBlockString}`;
-              }
-
-              const selectorsFromCommaSeparation = selectorName.split(',');
-
-              if (selectorsFromCommaSeparation.length > 0) {
-                const notProseSelector = `:not(:where(.not-${TYPOGRAPHY_SELECTOR_NAME},.not-${TYPOGRAPHY_SELECTOR_NAME} *))`;
-
-                const newSelectorName = selectorsFromCommaSeparation
-                  .map(
-                    (selectorFromCommaSeparation) =>
-                      `.${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorFromCommaSeparation})${notProseSelector}`,
-                  )
-                  .join(',');
-
-                return `.${TYPOGRAPHY_SELECTOR_NAME} ${newSelectorName} ${selectorBlockString}`;
-              }
-
-              return `${prevResult} .${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorName}) ${selectorBlockString}`;
-            },
-            '',
-          ),
+        getCSS: getCSSWithSelectorName(TYPOGRAPHY_SELECTOR_NAME),
       },
     ],
   } satisfies Preset<Theme>;
 });
+
+export function getCSSWithSelectorName(TYPOGRAPHY_SELECTOR_NAME: string) {
+  return () => Object.entries(preflights).reduce(
+    (prevResult, [selectorName, declarationBlock]) => {
+      const selectorBlockString = `{ ${Object.entries(declarationBlock).map(([key, value]) => `${key}:${value};`).join("\n")} }`;
+
+      if (selectorName.startsWith('@property')) {
+        return `${prevResult} ${selectorName} ${selectorBlockString}\n`;
+      }
+
+      const selectorsFromCommaSeparation = selectorName.split(',');
+
+      if (selectorsFromCommaSeparation.length > 0) {
+        const notProseSelector = `:not(:where(.not-${TYPOGRAPHY_SELECTOR_NAME},.not-${TYPOGRAPHY_SELECTOR_NAME} *))`;
+
+        const newSelectorName = selectorsFromCommaSeparation
+          .map(
+            (selectorFromCommaSeparation) =>
+              `:where(${selectorFromCommaSeparation})${notProseSelector}`
+          )
+          .join(',');
+
+        return `${prevResult} .${TYPOGRAPHY_SELECTOR_NAME} ${newSelectorName} ${selectorBlockString}\n`;
+      }
+
+      return `${prevResult} .${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorName}) ${selectorBlockString}\n`;
+    },
+    ''
+  );
+}
+
