@@ -587,13 +587,14 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
       const selectorBlockString = `{\n${Object.entries(declarationBlock).map(([key, value]) => {
 
 
-        if (typeof value === "boolean" || isNaN(Number(value))) {
+        if (typeof value !== "boolean" && isNaN(Number(value)) && !value.startsWith("#")) {
 
-          return `\t${key}:${value};`
+          return `\t${key}:'${value}';`
 
         }
 
-        return `\t${key}:'${value}';`
+        return `\t${key}:${value};`
+
 
       }).join("\n")}\n}\n`;
 
