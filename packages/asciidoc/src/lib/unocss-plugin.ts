@@ -582,7 +582,6 @@ export const presetAdocTypograhy = definePreset(() => {
 
 export function getCSSWithSelectorName(typographySelectorName: string) {
 
-
   const notProseSelector = `:not(:where(.not-${typographySelectorName},.not-${typographySelectorName} *))`;
 
   return () => Object.entries(preflights).map(
@@ -598,12 +597,10 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
 
       const selectorBlockString = `{\n${refinedProperties}\n}\n`;
 
-      if (selectorName.startsWith('@property')) {
-        return `${selectorName} ${selectorBlockString}`;
-      }
+      return selectorName.startsWith('@property')
+        ? `${selectorName} ${selectorBlockString}`
+        : `.${typographySelectorName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
 
-
-      return `.${typographySelectorName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
     },
   ).join("\n");
 }
