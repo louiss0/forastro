@@ -580,19 +580,31 @@ export const presetAdocTypograhy = definePreset(() => {
   } satisfies Preset<Theme>;
 });
 
-export function getCSSWithSelectorName(TYPOGRAPHY_SELECTOR_NAME: string) {
-  return () => Object.entries(preflights).reduce(
-    (prevResult, [selectorName, declarationBlock]) => {
-      const selectorBlockString = `{ ${Object.entries(declarationBlock).map(([key, value]) => `${key}:${value};`).join("\n")} }`;
+export function getCSSWithSelectorName(typographySelectorName: string) {
+  return () => Object.entries(preflights).map(
+    ([selectorName, declarationBlock]) => {
+
+      const selectorBlockString = `{\n${Object.entries(declarationBlock).map(([key, value]) => {
+
+
+        if (typeof value === "boolean" || isNaN(Number(value))) {
+
+          return `${key}:${value};`
+
+        }
+
+        return `${key}:'${value}';`
+
+      }).join("\n")}\n}\n\n`;
 
       if (selectorName.startsWith('@property')) {
-        return `${prevResult} ${selectorName} ${selectorBlockString}\n`;
+        return `${selectorName} ${selectorBlockString}`;
       }
 
       const selectorsFromCommaSeparation = selectorName.split(',');
 
       if (selectorsFromCommaSeparation.length > 0) {
-        const notProseSelector = `:not(:where(.not-${TYPOGRAPHY_SELECTOR_NAME},.not-${TYPOGRAPHY_SELECTOR_NAME} *))`;
+        const notProseSelector = `:not(:where(.not-${typographySelectorName},.not-${typographySelectorName} *))`;
 
         const newSelectorName = selectorsFromCommaSeparation
           .map(
@@ -601,12 +613,11 @@ export function getCSSWithSelectorName(TYPOGRAPHY_SELECTOR_NAME: string) {
           )
           .join(',');
 
-        return `${prevResult} .${TYPOGRAPHY_SELECTOR_NAME} ${newSelectorName} ${selectorBlockString}\n`;
+        return `.${typographySelectorName} ${newSelectorName} ${selectorBlockString}`;
       }
 
-      return `${prevResult} .${TYPOGRAPHY_SELECTOR_NAME} :where(${selectorName}) ${selectorBlockString}\n`;
+      return `.${typographySelectorName} :where(${selectorName}) ${selectorBlockString}`;
     },
-    ''
-  );
+  ).join("\n");
 }
 
