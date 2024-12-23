@@ -270,14 +270,6 @@ const CSS_ComponentClasses = {
   '.admonitionblock.caution': {
     color: 'var(--faa-prose-caution-color)',
   },
-  '.literalblock': {
-    'background-color': 'var(--faa-prose-color-200)',
-    'padding-inline': 'var(--faa-prose-space-9)',
-    'padding-block': 'var(--faa-prose-space-6)',
-    'border-radius': 'var(--faa-prose-space-3)',
-    color: 'var(--faa-prose-color-700)',
-    'font-size': 'var(--faa-prose-step-neg-1)',
-  },
   '.button': {
     'padding-inline': 'var(--faa-prose-space-2)',
     'padding-block': 'var(--faa-prose-space-1)',
@@ -285,10 +277,10 @@ const CSS_ComponentClasses = {
     display: 'flex inline',
     'column-gap': 'var(--faa-prose-space-2)',
   },
-  '.button:before': {
+  '.button::before': {
     content: "'['",
   },
-  '.button:after': {
+  '.button::after': {
     content: "']'",
   },
   '.menuseq': {
@@ -319,7 +311,21 @@ const CSS_ComponentClasses = {
     color: 'var(--faa-prose-color-700)',
   },
   '.listingblock': {
+    display: 'flex',
+    'flex-direction': 'column',
+    'row-gap': 'var(--faa-prose-space-3)',
     'background-color': 'var(--faa-prose-color-100)',
+    'padding-inline': 'var(--faa-prose-space-9)',
+    'padding-block': 'var(--faa-prose-space-6)',
+    'border-radius': 'var(--faa-prose-space-3)',
+    color: 'var(--faa-prose-color-700)',
+    'font-size': 'var(--faa-prose-step-neg-1)',
+  },
+  '.literalblock': {
+    display: 'flex',
+    'flex-direction': 'column',
+    'row-gap': 'var(--faa-prose-space-3)',
+    'background-color': 'var(--faa-prose-color-200)',
     'padding-inline': 'var(--faa-prose-space-9)',
     'padding-block': 'var(--faa-prose-space-6)',
     'border-radius': 'var(--faa-prose-space-3)',
@@ -595,9 +601,26 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
 
       const selectorBlockString = `{\n${refinedProperties}\n}\n`;
 
-      return selectorName.startsWith('@property')
-        ? `${selectorName} ${selectorBlockString}`
-        : `.${typographySelectorName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
+
+      if (selectorName.startsWith('@property')) {
+
+        return `${selectorName} ${selectorBlockString}`
+      }
+
+      const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w-]+)(?<pseudoSelector>\:{1,2}[\w-]+)$/.exec(selectorName)?.groups
+
+      if (selectorWithPseudoSelectorGroups) {
+
+        const { targetSelector, pseudoSelector } = selectorWithPseudoSelectorGroups
+
+        if (targetSelector && pseudoSelector) {
+
+          return `.${typographySelectorName} :where(${targetSelector})${pseudoSelector}${notProseSelector} ${selectorBlockString}`
+        }
+
+      }
+
+      return `.${typographySelectorName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
 
     },
   ).join("\n");
