@@ -231,10 +231,10 @@ describe("Testing Unocss Plugin functions", () => {
 
               .prose :where(ul, ol, dl):not(:where(.not-prose,.not-prose *)) {
               	line-height:1.6;
-              	list-style-position:outside;
               	display:flex;
               	flex-direction:column;
               	gap:var(--faa-prose-space-6);
+              	padding-inline:var(--faa-prose-space-3);
               }
 
               .prose :where(ul li ul, ul li ol, ol li ul, ol li ol):not(:where(.not-prose,.not-prose *)) {
@@ -268,6 +268,37 @@ describe("Testing Unocss Plugin functions", () => {
               	clear:both;
               }
 
+              .prose :where(table.tableblock):not(:where(.not-prose,.not-prose *)) {
+              	font-size:var(--faa-prose-step-neg-1);
+              	color:var(--faa-prose-color-700);
+              	border-bottom:3px solid var(--faa-prose-color-600);
+              }
+
+              .prose :where(.tableblock tr):nth-child(2n):not(:where(.not-prose,.not-prose *)) {
+              	background-color:var(--faa-prose-color-200);
+              	color:var(--faa-prose-color-600);
+              	border-bottom:2px solid var(--faa-prose-color-600);
+              }
+
+              .prose :where(.tableblock th):not(:where(.not-prose,.not-prose *)) {
+              	background-color:var(--faa-prose-color-300);
+              	border-bottom:1px solid var(--faa-prose-color-500);
+              }
+
+              .prose :where(.qlist ol):not(:where(.not-prose,.not-prose *)) {
+              	list-style-type:none;
+              	display:flex;
+              	flex-direction:column;
+              	row-gap:var(--faa-prose-space-2);
+              }
+
+              .prose :where(.qlist li)::before:not(:where(.not-prose,.not-prose *)) {
+              	content:'\\0051';
+              	color:var(--faa-prose-color-400);
+              	font-size:var(--faa-prose-step-neg-1);
+              	padding-inline:var(--faa-prose-space-2);
+              }
+
               .prose :where(.paragraph):not(:where(.not-prose,.not-prose *)) {
               	line-height:1.6;
               	max-width:65ch;
@@ -291,7 +322,7 @@ describe("Testing Unocss Plugin functions", () => {
               	font-size:var(--faa-prose-step-neg-1);
               }
 
-              .prose :where(.toc ul li:has(ul)):not(:where(.not-prose,.not-prose *)) {
+              .prose :where(.toc ul li):has(ul):not(:where(.not-prose,.not-prose *)) {
               	display:flex;
               	flex-direction:column;
               	column-gap:var(--faa-prose-space-2);
@@ -369,15 +400,6 @@ describe("Testing Unocss Plugin functions", () => {
               	color:var(--faa-prose-caution-color);
               }
 
-              .prose :where(.literalblock):not(:where(.not-prose,.not-prose *)) {
-              	background-color:var(--faa-prose-color-200);
-              	padding-inline:var(--faa-prose-space-9);
-              	padding-block:var(--faa-prose-space-6);
-              	border-radius:var(--faa-prose-space-3);
-              	color:var(--faa-prose-color-700);
-              	font-size:var(--faa-prose-step-neg-1);
-              }
-
               .prose :where(.button):not(:where(.not-prose,.not-prose *)) {
               	padding-inline:var(--faa-prose-space-2);
               	padding-block:var(--faa-prose-space-1);
@@ -386,11 +408,11 @@ describe("Testing Unocss Plugin functions", () => {
               	column-gap:var(--faa-prose-space-2);
               }
 
-              .prose :where(.button:before):not(:where(.not-prose,.not-prose *)) {
+              .prose :where(.button::before):not(:where(.not-prose,.not-prose *)) {
               	content:'[';
               }
 
-              .prose :where(.button:after):not(:where(.not-prose,.not-prose *)) {
+              .prose :where(.button::after):not(:where(.not-prose,.not-prose *)) {
               	content:']';
               }
 
@@ -428,7 +450,22 @@ describe("Testing Unocss Plugin functions", () => {
               }
 
               .prose :where(.listingblock):not(:where(.not-prose,.not-prose *)) {
+              	display:flex;
+              	flex-direction:column;
+              	row-gap:var(--faa-prose-space-3);
               	background-color:var(--faa-prose-color-100);
+              	padding-inline:var(--faa-prose-space-9);
+              	padding-block:var(--faa-prose-space-6);
+              	border-radius:var(--faa-prose-space-3);
+              	color:var(--faa-prose-color-700);
+              	font-size:var(--faa-prose-step-neg-1);
+              }
+
+              .prose :where(.literalblock):not(:where(.not-prose,.not-prose *)) {
+              	display:flex;
+              	flex-direction:column;
+              	row-gap:var(--faa-prose-space-3);
+              	background-color:var(--faa-prose-color-200);
               	padding-inline:var(--faa-prose-space-9);
               	padding-block:var(--faa-prose-space-6);
               	border-radius:var(--faa-prose-space-3);
