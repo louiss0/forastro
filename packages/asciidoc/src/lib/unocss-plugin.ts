@@ -152,10 +152,11 @@ const CSS_BaseClasses = {
   },
   'ul, ol, dl': {
     'line-height': '1.6',
-    'list-style-position': 'outside',
     display: 'flex',
     'flex-direction': 'column',
     gap: 'var(--faa-prose-space-6)',
+    'padding-inline': 'var(--faa-prose-space-3)',
+
   },
   'ul li ul, ul li ol, ol li ul, ol li ol': {
     'padding-inline': 'var(--faa-prose-space-9)',
@@ -189,6 +190,34 @@ const CSS_LayoutClasses = {
 };
 
 const CSS_ComponentClasses = {
+  'table.tableblock': {
+    'font-size': 'var(--faa-prose-step-neg-1)',
+    'color': "var(--faa-prose-color-700)",
+    'border-bottom': "3px solid var(--faa-prose-color-600)"
+  },
+  '.tableblock tr:nth-child(2n)': {
+    'background-color': "var(--faa-prose-color-200)",
+    'color': "var(--faa-prose-color-600)",
+    'border-bottom': "2px solid var(--faa-prose-color-600)"
+  },
+  '.tableblock th': {
+    'background-color': "var(--faa-prose-color-300)",
+    'border-bottom': "1px solid var(--faa-prose-color-500)"
+  },
+  '.qlist ol': {
+    'list-style-type': 'none',
+    'display': 'flex',
+    'flex-direction': 'column',
+    'row-gap': 'var(--faa-prose-space-2)',
+  },
+
+  '.qlist li::before': {
+    content: "'\\0051'", /* Unicode for uppercase 'Q' */
+    color: 'var(--faa-prose-color-400)',
+    'font-size': 'var(--faa-prose-step-neg-1)',
+    'padding-inline': 'var(--faa-prose-space-2)',
+
+  },
   '.paragraph': {
     'line-height': '1.6',
     'max-width': '65ch',
@@ -607,7 +636,7 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
         return `${selectorName} ${selectorBlockString}`
       }
 
-      const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w-]+)(?<pseudoSelector>\:{1,2}[\w-]+)$/.exec(selectorName)?.groups
+      const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w\-]+(?:\s+\w+)+)(?<pseudoSelector>\:{1,2}[\w\-()]+)$/.exec(selectorName)?.groups
 
       if (selectorWithPseudoSelectorGroups) {
 
