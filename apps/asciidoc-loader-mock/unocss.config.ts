@@ -6,7 +6,7 @@ import {
   presetWind
 } from 'unocss';
 
-import { presetAdocTypograhy } from "@forastro/asciidoc/unocss"
+import { presetAdocTypograhy } from "@forastro/asciidoc/plugins"
 
 // I won't use preset icons again. It's hard to size icons.
 export default defineConfig({
