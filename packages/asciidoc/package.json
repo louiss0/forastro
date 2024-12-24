@@ -13,8 +13,19 @@
     "fast-glob": "^3.3.2",
     "slugify": "^1.6.6"
   },
+  "optionalDependencies": {
+    "unocss": "=>0.65.0"
+  },
   "type": "module",
-  "module": "./src/index.ts",
+  "main": "./src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    },
+    "./plugins": {
+      "import": "./src/lib/plugins.ts"
+    }
+  },
   "keywords": [
     "astro",
     "astro-loader",
