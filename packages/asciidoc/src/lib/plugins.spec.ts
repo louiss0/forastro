@@ -1,55 +1,56 @@
-import { getCSSWithSelectorName } from "./unocss-plugin";
+import { getCSSWithSelectorName } from "./plugins";
+
 describe("Testing Unocss Plugin functions", () => {
 
 
-    describe("Testing getCSSWithSelectorName", () => {
+	describe("Testing getCSSWithSelectorName", () => {
 
 
-        test("it works", () => {
+		test("it works", () => {
 
-            const getCSS = getCSSWithSelectorName(".prose")
+			const getCSS = getCSSWithSelectorName(".prose")
 
-            const result = getCSS()
+			const result = getCSS()
 
-            expect(result).toContain(".prose")
+			expect(result).toContain(".prose")
 
-            expect(result).toContain("@property")
+			expect(result).toContain("@property")
 
-        })
-
-
-        test("css output has doesn't have :where() with @property in it", () => {
-
-            const getCSS = getCSSWithSelectorName(".prose")
-
-            const result = getCSS()
-
-            expect(result).not.toContain(":is(@property)")
+		})
 
 
-        })
+		test("css output has doesn't have :where() with @property in it", () => {
 
-        test("css output has the :is() selector on", () => {
+			const getCSS = getCSSWithSelectorName(".prose")
 
-            const getCSS = getCSSWithSelectorName("prose")
+			const result = getCSS()
 
-            const result = getCSS()
-
-            const selectorNames = result
-                .split(/\s+/)
-
-            expect(selectorNames.some(string => string.match(/:where\(.+\),?/))).toBeTruthy()
-
-        })
-
-        test("css output is what is expected", () => {
-
-            const getCSS = getCSSWithSelectorName("prose")
-
-            const result = getCSS()
+			expect(result).not.toContain(":is(@property)")
 
 
-            expect(result).toMatchInlineSnapshot(`
+		})
+
+		test("css output has the :is() selector on", () => {
+
+			const getCSS = getCSSWithSelectorName("prose")
+
+			const result = getCSS()
+
+			const selectorNames = result
+				.split(/\s+/)
+
+			expect(selectorNames.some(string => string.match(/:where\(.+\),?/))).toBeTruthy()
+
+		})
+
+		test("css output is what is expected", () => {
+
+			const getCSS = getCSSWithSelectorName("prose")
+
+			const result = getCSS()
+
+
+			expect(result).toMatchInlineSnapshot(`
               "@property --faa-prose-color-950 {
               	syntax:'<color>';
               	inherits:false;
@@ -616,8 +617,8 @@ describe("Testing Unocss Plugin functions", () => {
               "
             `)
 
-        })
+		})
 
-    })
+	})
 
 })

@@ -654,4 +654,3 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
     },
   ).join("\n");
 }
-
