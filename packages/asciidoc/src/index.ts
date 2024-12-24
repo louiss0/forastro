@@ -1,5 +1,4 @@
 export * from './lib/asciidoc';
-export { presetAdocTypograhy } from './lib/unocss-plugin';
 import { z } from 'astro/zod';
 
 const authorSchema = z
