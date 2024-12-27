@@ -52,8 +52,8 @@ export function createAsciidocLoader(
                     `);
       }
 
-      if (config.attributes.sourceHighlighter === 'shiki') {
-        await registerShiki(processor, config.attributes.shikiTheme);
+      if (config.attributes['source-highlighter'] === 'shiki') {
+        await registerShiki(processor, config.attributes['shiki-theme']);
       }
 
       let registry: Extensions.Registry | undefined;
