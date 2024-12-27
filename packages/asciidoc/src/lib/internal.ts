@@ -1,321 +1,370 @@
-import asciidoctor from "asciidoctor"
-import { z } from "astro/zod"
-import { loadConfig } from "c12"
-import glob from "fast-glob"
-import slugify from "slugify"
+import asciidoctor, { Asciidoctor } from 'asciidoctor';
+import { z } from 'astro/zod';
+import { loadConfig } from 'c12';
+import glob from 'fast-glob';
+import {
+  bundledLanguages,
+  bundledThemes,
+  createHighlighter,
+  type BundledTheme,
+} from 'shiki';
+import slugify from 'slugify';
 
 const getAsciidocPathsSchema = z.function(
-    z.tuple([
-        z.string()
-            .regex(
-                /[\w/]+/m,
-                "Don't pass in an empty string pass in a value with forward slashes and words instead")
-    ]),
-    z.promise(z.string().array())
-)
+  z.tuple([
+    z
+      .string()
+      .regex(
+        /[\w/]+/m,
+        "Don't pass in an empty string pass in a value with forward slashes and words instead",
+      ),
+  ]),
+  z.promise(z.string().array()),
+);
 
-
-export const getAsciidocPaths = getAsciidocPathsSchema.implement(async (folderName: string) => {
-
-    return await glob("**/*.{adoc,asciidoc}", {
-        cwd: folderName,
-        // absolute: true
-    })
-
-})
-
+export const getAsciidocPaths = getAsciidocPathsSchema.implement(
+  async (folderName: string) => {
+    return await glob('**/*.{adoc,asciidoc}', {
+      cwd: folderName,
+      // absolute: true
+    });
+  },
+);
 
 const renderSchema = z.function(
-    z.tuple([
-        z.string(),
-        z.record(
-            z.string(),
-            z.union([
-                z.string(),
-                z.number(),
-                z.boolean()
-            ])
-        )
-    ]),
-    z.string()
-)
+  z.tuple([
+    z.string(),
+    z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
+  ]),
+  z.string(),
+);
 
-const asciidocGlobalVariablesSchema = z.object({
-    // TODO: When shiki highlighter is implemented add shiki as a word on the list
-    sourceHighlighter: z.enum([
-        "coderay",
-        "highlight.js",
-        "pygments",
-        "rouge"
-    ]).optional(),
-    author: z.string()
-        .regex(
-            /[A-Z][a-z]+\s+[A-Z][a-z]+/,
-            "The author's name must be a name and last name both capitalized with a space in between"
-        )
-        .optional(),
-    email: z.string().email().optional(),
-    backend: z.string().optional(),
-    filetype: z.boolean().optional(),
-    localdir: z.string().optional(),
-    localdate: z.string().date().optional(),
-    localdatetime: z.string().datetime().optional(),
-    localtime: z.string().time().optional(),
-    localyear: z.number().int().optional(),
-    attributeMissing: z.enum(["drop", "drop-line", "skip", "warn"]).optional(),
-    attributeUndefined: z.enum(["drop", "drop-line"]).optional(),
-    experimental: z.boolean().optional(),
-    appendixCaption: z.string().optional(),
-    appendixNumber: z.string().optional(),
-    appendixRefsig: z.string().optional(),
-    cautionCaption: z.string().optional(),
-    cautionNumber: z.string().optional(),
-    cautionRefsig: z.string().optional(),
-    cautionSignifier: z.string().optional(),
-    exampleCaption: z.string().optional(),
-    exampleNumber: z.string().optional(),
-    figureCaption: z.string().optional(),
-    figureNumber: z.number().optional(),
-    footnoteNumber: z.number().optional(),
-    importantCaption: z.string().optional(),
-    lastUpdateLabel: z.string().optional(),
-    listingCaption: z.string().optional(),
-    listingNumber: z.number().optional(),
-    noteCaption: z.string().optional(),
-    partRefsig: z.string().optional(),
-    partSignifier: z.string().optional(),
-    prefaceTitle: z.string().optional(),
-    tableCaption: z.string().optional(),
-    tableNumber: z.string().optional(),
-    tipCaption: z.string().optional(),
-    tocTitle: z.string().optional(),
-    untitledLabel: z.string().optional(),
-    warningCaption: z.string().optional(),
-    appName: z.string().optional(),
-    idprefix: z.string().optional(),
-    idseparator: z.string().optional(),
-    leveloffset: z.enum(["0", "1", "2", "3", "4", "5"])
-        .transform((input) => parseInt(input))
-        .optional(),
-    partnums: z.boolean().optional(),
-    setanchors: z.boolean().optional(),
-    sectids: z.boolean().optional(),
-    sectlinks: z.boolean().optional(),
-    sectnums: z.boolean().optional(),
-    sectnumlevels: z.enum(["0", "1", "2", "3", "4", "5"])
-        .transform((input) => parseInt(input))
-        .optional(),
-    titleSeparator: z.string().optional(),
-    toc: z.enum(["auto", "left", "right", "macro", "preamble"])
-        .or(z.literal(true))
-        .optional(),
-    toclevels: z.enum(["1", "2", "3", "4", "5"])
-        .transform((input) => parseInt(input))
-        .optional(),
-    fragment: z.boolean().optional(),
-    stylesheet: z.string().optional(),
+const commonAttributes = z.object({
+  author: z
+    .string()
+    .regex(
+      /[A-Z][a-z]+\s+[A-Z][a-z]+/,
+      "The author's name must be a name and last name both capitalized with a space in between",
+    )
+    .optional(),
+  email: z.string().email().optional(),
+  backend: z.string().optional(),
+  filetype: z.boolean().optional(),
+  localdir: z.string().optional(),
+  localdate: z.string().date().optional(),
+  localdatetime: z.string().datetime().optional(),
+  localtime: z.string().time().optional(),
+  localyear: z.number().int().optional(),
+  attributeMissing: z.enum(['drop', 'drop-line', 'skip', 'warn']).optional(),
+  attributeUndefined: z.enum(['drop', 'drop-line']).optional(),
+  experimental: z.boolean().optional(),
+  appendixCaption: z.string().optional(),
+  appendixNumber: z.string().optional(),
+  appendixRefsig: z.string().optional(),
+  cautionCaption: z.string().optional(),
+  cautionNumber: z.string().optional(),
+  cautionRefsig: z.string().optional(),
+  cautionSignifier: z.string().optional(),
+  exampleCaption: z.string().optional(),
+  exampleNumber: z.string().optional(),
+  figureCaption: z.string().optional(),
+  figureNumber: z.number().optional(),
+  footnoteNumber: z.number().optional(),
+  importantCaption: z.string().optional(),
+  lastUpdateLabel: z.string().optional(),
+  listingCaption: z.string().optional(),
+  listingNumber: z.number().optional(),
+  noteCaption: z.string().optional(),
+  partRefsig: z.string().optional(),
+  partSignifier: z.string().optional(),
+  prefaceTitle: z.string().optional(),
+  tableCaption: z.string().optional(),
+  tableNumber: z.string().optional(),
+  tipCaption: z.string().optional(),
+  tocTitle: z.string().optional(),
+  untitledLabel: z.string().optional(),
+  warningCaption: z.string().optional(),
+  appName: z.string().optional(),
+  idprefix: z.string().optional(),
+  idseparator: z.string().optional(),
+  leveloffset: z
+    .enum(['0', '1', '2', '3', '4', '5'])
+    .transform((input) => parseInt(input))
+    .optional(),
+  partnums: z.boolean().optional(),
+  setanchors: z.boolean().optional(),
+  sectids: z.boolean().optional(),
+  sectlinks: z.boolean().optional(),
+  sectnums: z.boolean().optional(),
+  sectnumlevels: z
+    .enum(['0', '1', '2', '3', '4', '5'])
+    .transform((input) => parseInt(input))
+    .optional(),
+  titleSeparator: z.string().optional(),
+  toc: z
+    .enum(['auto', 'left', 'right', 'macro', 'preamble'])
+    .or(z.literal(true))
+    .optional(),
+  toclevels: z
+    .enum(['1', '2', '3', '4', '5'])
+    .transform((input) => parseInt(input))
+    .optional(),
+  fragment: z.boolean().optional(),
+  stylesheet: z.string().optional(),
 });
 
+const bundledThemeNames = Object.keys(bundledThemes) as unknown as Array<
+  keyof typeof bundledThemes
+>;
 
-export const asciidocConfigObjectSchema = z.object({
+const BundledLanguageNamesSchema = z.enum([
+  bundledThemeNames[0]!,
+  ...bundledThemeNames.slice(1),
+]);
+
+const asciidocGlobalVariablesSchema = z
+  .object({
+    sourceHighlighter: z
+      .enum(['coderay', 'highlight.js', 'pygments', 'rouge'])
+      .optional(),
+  })
+  .or(
+    z.object({
+      sourceHighlighter: z.literal('shiki'),
+      shikiTheme: z
+        .object({
+          light: BundledLanguageNamesSchema,
+          dark: BundledLanguageNamesSchema,
+          dim: BundledLanguageNamesSchema.optional(),
+        })
+        .refine(({ light, dark }) => light !== dark, {
+          path: ['shikiTheme.dark', 'shikiTheme.light'],
+          message: `The light theme and dark theme must be different from each other`,
+        })
+        .superRefine(({ light, dark, dim }, ctx) => {
+          if (light === dim) {
+            ctx.addIssue({
+              path: ['shikiTheme.light', 'shikiTheme.dim'],
+              code: 'custom',
+              message: 'The light theme must not be equal to the light theme',
+            });
+          }
+
+          if (dark === dim) {
+            ctx.addIssue({
+              path: ['shikiTheme.dark', 'shikiTheme.dim'],
+              code: 'custom',
+              message: 'The light theme must not be equal to the light theme',
+            });
+          }
+        }),
+    }),
+  )
+  .and(commonAttributes);
+
+export const asciidocConfigObjectSchema = z
+  .object({
     attributes: asciidocGlobalVariablesSchema.optional(),
-    blocks: z.record(
+    blocks: z
+      .record(
         z.string(),
         z.object({
-            context:
-                z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
-            render: renderSchema
-        })).optional(),
+          context: z.enum([
+            'example',
+            'listing',
+            'literal',
+            'pass',
+            'quote',
+            'sidebar',
+          ]),
+          render: renderSchema,
+        }),
+      )
+      .optional(),
 
-    macros: z.object({
-        inline: z.record(
+    macros: z
+      .object({
+        inline: z
+          .record(
             z.string(),
             z.object({
-                context: z.enum(['quoted', 'anchor']),
-                render: renderSchema,
-            })).optional(),
+              context: z.enum(['quoted', 'anchor']),
+              render: renderSchema,
+            }),
+          )
+          .optional(),
 
-        block: z.record(
+        block: z
+          .record(
             z.string(),
             z.object({
-                context: z.enum(['example', 'listing', 'literal', 'pass', 'quote', 'sidebar']),
-                render: renderSchema,
-            })).optional()
-    }).optional()
-}).strict()
-
+              context: z.enum([
+                'example',
+                'listing',
+                'literal',
+                'pass',
+                'quote',
+                'sidebar',
+              ]),
+              render: renderSchema,
+            }),
+          )
+          .optional(),
+      })
+      .optional(),
+  })
+  .strict();
 
 export const getLoadAsciidocConfig = (cwd: string) => {
+  const transformObjectKeysIntoDashedCase = (input: Record<string, any>) => {
+    const toDashedCase = (str: string) =>
+      str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
 
+    return Object.fromEntries(
+      Object.entries(input).map(([key, value]) => [toDashedCase(key), value]),
+    );
+  };
 
-    const transformObjectKeysIntoDashedCase = (input: Record<string, any>) => {
-        const toDashedCase = (str: string) =>
-            str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+  return async () => {
+    const { config, configFile } = await loadConfig({
+      cwd,
+      name: 'asciidoc',
+      omit$Keys: true,
+    });
 
-        return Object.fromEntries(
-            Object.entries(input).map(([key, value]) => [toDashedCase(key), value])
-        );
+    if (Object.keys(config).length === 0) {
+      return config;
     }
 
-    return async () => {
+    z.string()
+      .regex(
+        /asciidoc.config.m(?:ts|js)/,
+        'The asciidoc config file must be a mts or mjs file',
+      )
+      .parse(configFile);
 
+    return asciidocConfigObjectSchema
+      .transform(({ attributes, blocks, macros }) => {
+        return {
+          attributes:
+            attributes && transformObjectKeysIntoDashedCase(attributes),
+          blocks,
+          macros,
+        };
+      })
+      .parse(config);
+  };
+};
 
-        const { config, configFile, } = await loadConfig({
-            cwd,
-            name: "asciidoc",
-            omit$Keys: true,
-        })
+const processor = asciidoctor();
 
-        if (Object.keys(config).length === 0) {
-            return config
-        }
+export const registerShiki = async (
+  processor: Asciidoctor,
+  themeOptions: {
+    light: BundledTheme;
+    dark: BundledTheme;
+    dim?: BundledTheme;
+  },
+) => {
+  const themes = [themeOptions.light, themeOptions.dark];
 
-        z.string()
-            .regex(
-                /asciidoc.config.m(?:ts|js)/,
-                "The asciidoc config file must be a mts or mjs file"
-            )
-            .parse(configFile)
+  if (themeOptions.dim) {
+    themes.push(themeOptions.dim);
+  }
 
+  const highlighter = await createHighlighter({
+    themes,
+    langs: Object.keys(bundledLanguages),
+  });
 
-
-
-        return asciidocConfigObjectSchema.transform(({ attributes, blocks, macros }) => {
-
-            return {
-                attributes: attributes && transformObjectKeysIntoDashedCase(attributes),
-                blocks,
-                macros
-            }
-
-
-        }).parse(config)
-
-    }
-
-}
-
-const processor = asciidoctor()
-
+  processor.SyntaxHighlighter.register('shiki', {
+    highlight(_, source, lang) {
+      return highlighter.codeToHtml(source, {
+        lang,
+        cssVariablePrefix: '--faa-shiki-',
+        defaultColor: 'light',
+        themes: themeOptions,
+      });
+    },
+  });
+};
 
 export const createForAstroRegistryAsciidocFromConfig = (
-    blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
-    macros: z.infer<typeof asciidocConfigObjectSchema>['macros']
+  blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
+  macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
 ) => {
+  const registry = processor.Extensions.create('forastro/asciidoc');
 
-    const registry = processor.Extensions.create("forastro/asciidoc")
-
-    if (blocks) {
-
-        for (const [name, { context, render }] of Object.entries(blocks)) {
-
-            registry.block(name, function () {
-
-                this.process(function (parent, reader, attributes) {
-
-                    this.createBlock(
-                        parent,
-                        context,
-                        render(reader.getString(), attributes),
-                        attributes
-                    )
-
-                })
-
-
-            })
-
-        }
-
-
-        if (macros?.inline) {
-
-            for (const [name, { context, render }] of Object.entries(macros.inline)) {
-
-                registry.inlineMacro(name, function () {
-
-                    this.process(function (parent, target, attributes) {
-
-                        this.createInline(
-                            parent,
-                            context,
-                            render(target, attributes)
-                        )
-
-                    })
-
-                })
-
-            }
-
-        }
-
-
-
-        if (macros?.block) {
-
-            for (const [name, { context, render }] of Object.entries(macros.block)) {
-
-                registry.blockMacro(name, function () {
-
-                    this.process(function (parent, target, attributes) {
-
-                        this.createBlock(
-                            parent,
-                            context,
-                            render(target, attributes),
-                            attributes
-                        )
-
-                    })
-
-                })
-
-            }
-
-        }
-
+  if (blocks) {
+    for (const [name, { context, render }] of Object.entries(blocks)) {
+      registry.block(name, function () {
+        this.process(function (parent, reader, attributes) {
+          this.createBlock(
+            parent,
+            context,
+            render(reader.getString(), attributes),
+            attributes,
+          );
+        });
+      });
     }
 
-    return registry
+    if (macros?.inline) {
+      for (const [name, { context, render }] of Object.entries(macros.inline)) {
+        registry.inlineMacro(name, function () {
+          this.process(function (parent, target, attributes) {
+            this.createInline(parent, context, render(target, attributes));
+          });
+        });
+      }
+    }
 
+    if (macros?.block) {
+      for (const [name, { context, render }] of Object.entries(macros.block)) {
+        registry.blockMacro(name, function () {
+          this.process(function (parent, target, attributes) {
+            this.createBlock(
+              parent,
+              context,
+              render(target, attributes),
+              attributes,
+            );
+          });
+        });
+      }
+    }
+  }
 
-}
+  return registry;
+};
 
 export const transformAsciidocFilesIntoAsciidocDocuments = async (
-    content_folder_path: string,
-    config_folder_path: string,
+  content_folder_path: string,
+  config_folder_path: string,
 ) => {
+  const paths = await getAsciidocPaths(content_folder_path);
 
-    const paths = await getAsciidocPaths(content_folder_path)
+  const { attributes, blocks, macros } =
+    await getLoadAsciidocConfig(config_folder_path)();
 
-    const { attributes, blocks, macros } = await getLoadAsciidocConfig(config_folder_path)()
+  const extensionRegistry = createForAstroRegistryAsciidocFromConfig(
+    blocks,
+    macros,
+  );
 
-    const extensionRegistry = createForAstroRegistryAsciidocFromConfig(
-        blocks,
-        macros
-    )
+  return paths.map((path) =>
+    processor.loadFile(path, {
+      attributes,
+      extension_registry: extensionRegistry,
+    }),
+  );
+};
 
+export const generateSlug = (string: string) =>
+  slugify(string, {
+    lower: true,
+    trim: true,
+    remove: /[*+~.()'"!:@]/g,
+  });
 
-    return paths.map(path => processor.loadFile(
-        path,
-        {
-            attributes,
-            extension_registry: extensionRegistry
-        })
-    )
-
-
-}
-
-export const generateSlug = (string: string) => slugify(
-    string,
-    {
-        lower: true,
-        trim: true,
-        remove: /[*+~.()'"!:@]/g
-    })
-
-export const loadAsciidocConfig = getLoadAsciidocConfig(process.cwd())
-
-
+export const loadAsciidocConfig = getLoadAsciidocConfig(process.cwd());
