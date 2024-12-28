@@ -538,18 +538,22 @@ export const asciidocConfigObjectSchema = z
   })
   .strict();
 
+export const transformObjectKeysIntoDashedCase = (
+  input: Record<string, any>,
+) => {
+  const toDashedCase = (str: string) =>
+    str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+
+  return Object.fromEntries(
+    Object.entries(input).map(([key, value]) => [toDashedCase(key), value]),
+  );
+};
+
 export const getLoadAsciidocConfig = (cwd: string) => {
-  const transformObjectKeysIntoDashedCase = (input: Record<string, any>) => {
-    const toDashedCase = (str: string) =>
-      str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
-
-    return Object.fromEntries(
-      Object.entries(input).map(([key, value]) => [toDashedCase(key), value]),
-    );
-  };
-
   return async () => {
-    const { config, configFile } = await loadConfig({
+    const { config, configFile } = await loadConfig<
+      z.infer<typeof asciidocConfigObjectSchema>
+    >({
       cwd,
       name: 'asciidoc',
       omit$Keys: true,
@@ -566,16 +570,7 @@ export const getLoadAsciidocConfig = (cwd: string) => {
       )
       .parse(configFile);
 
-    return asciidocConfigObjectSchema
-      .transform(({ attributes, blocks, macros }) => {
-        return {
-          attributes:
-            attributes && transformObjectKeysIntoDashedCase(attributes),
-          blocks,
-          macros,
-        };
-      })
-      .parse(config);
+    return asciidocConfigObjectSchema.parse(config);
   };
 };
 

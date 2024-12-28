@@ -7,6 +7,7 @@ import {
   getAsciidocPaths,
   getLoadAsciidocConfig,
   registerShiki,
+  transformObjectKeysIntoDashedCase,
 } from './internal';
 import type { z } from 'astro/zod';
 
@@ -52,8 +53,8 @@ export function createAsciidocLoader(
                     `);
       }
 
-      if (config.attributes['source-highlighter'] === 'shiki') {
-        await registerShiki(processor, config.attributes['shiki-theme']);
+      if (config.attributes?.sourceHighlighter === 'shiki') {
+        await registerShiki(processor, config.attributes.shikiTheme);
       }
 
       let registry: Extensions.Registry | undefined;
@@ -261,7 +262,9 @@ export function createAsciidocLoader(
 
       function loadFileWithRegistryAndAttributes(path: string) {
         return processor.loadFile(path, {
-          attributes: config.attributes,
+          attributes:
+            config.attributes &&
+            transformObjectKeysIntoDashedCase(config.attributes),
           safe: 10,
           catalog_assets: true,
           extension_registry: registry,
