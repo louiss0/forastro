@@ -1,4 +1,4 @@
-import asciidoctor, { Asciidoctor } from 'asciidoctor';
+import asciidoctor from 'asciidoctor';
 import { z } from 'astro/zod';
 import { loadConfig } from 'c12';
 import glob from 'fast-glob';
@@ -577,7 +577,7 @@ export const getLoadAsciidocConfig = (cwd: string) => {
 const processor = asciidoctor();
 
 export const registerShiki = async (
-  processor: Asciidoctor,
+  processor: ReturnType<typeof asciidoctor>,
   themeOptions: {
     light: BundledTheme;
     dark: BundledTheme;
