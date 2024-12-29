@@ -3,7 +3,6 @@ import { defineCollection, z } from "astro:content";
 
 
 const asciidocLoader = createAsciidocLoader(
-    ".",
     "src/content"
 )
 
