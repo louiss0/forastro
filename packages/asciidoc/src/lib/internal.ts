@@ -222,7 +222,9 @@ const asciidocGlobalVariablesSchema = z
       'xcode',
       'xt256',
       'zenburn',
-    ]),
+    ])
+      .default("github")
+      .optional(),
     highlightjsLanguages: z
       .enum([
         '1c',
@@ -559,13 +561,6 @@ export const loadAsciidocConfig = async (cwd: string) => {
     name: 'asciidoc',
     omit$Keys: true,
   });
-
-  console.group("getLoadAsciidocConfig")
-  console.table({
-    cwd,
-    configFile
-  })
-  console.groupEnd()
 
   if (Object.keys(config).length === 0) {
     return config;
