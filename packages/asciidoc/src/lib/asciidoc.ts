@@ -18,16 +18,13 @@ export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
 const processor = asciidoctor();
 
 class FilePathAndSlug {
-  constructor(
+  constructor (
     public readonly pathRelativeToRoot: string,
     public readonly slug: string,
-  ) {}
+  ) { }
 }
 
-export function createAsciidocLoader(
-  configFolderName: string,
-  contentFolderName: string,
-) {
+export function createAsciidocLoader(contentFolderName: string) {
   return {
     name: 'forastro/asciidoc-loader',
     async load({
@@ -43,7 +40,7 @@ export function createAsciidocLoader(
       const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}/`;
 
       const [config, paths] = await Promise.all([
-        getLoadAsciidocConfig(resolve(configFolderName))(),
+        getLoadAsciidocConfig(resolvedRootRepo)(),
         getAsciidocPaths(`${resolvedRootRepo}${contentFolderName}`),
       ]);
 
@@ -261,6 +258,7 @@ export function createAsciidocLoader(
       });
 
       function loadFileWithRegistryAndAttributes(path: string) {
+
         return processor.loadFile(path, {
           attributes:
             config.attributes &&
@@ -308,5 +306,5 @@ export function createAsciidocLoader(
 }
 
 export function asciidocLoader(folder_name: string) {
-  return createAsciidocLoader('.', folder_name);
+  return createAsciidocLoader(folder_name);
 }

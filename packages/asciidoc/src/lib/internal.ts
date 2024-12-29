@@ -449,7 +449,8 @@ const asciidocGlobalVariablesSchema = z
         'yaml',
         'json',
         'plaintext',
-      ]),
+      ])
+      .optional(),
   })
   .or(
     z.object({
@@ -558,6 +559,15 @@ export const getLoadAsciidocConfig = (cwd: string) => {
       name: 'asciidoc',
       omit$Keys: true,
     });
+
+    console.group("getLoadAsciidocConfig")
+    console.table({
+      cwd,
+      configFile
+    })
+    console.dir(config)
+
+    console.groupEnd()
 
     if (Object.keys(config).length === 0) {
       return config;
