@@ -26,7 +26,6 @@ export const getAsciidocPaths = getAsciidocPathsSchema.implement(
   async (folderName: string) => {
     return await glob('**/*.{adoc,asciidoc}', {
       cwd: folderName,
-      // absolute: true
     });
   },
 );
@@ -662,6 +661,7 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
   content_folder_path: string,
   config_folder_path: string,
 ) => {
+
   const paths = await getAsciidocPaths(content_folder_path);
 
   const { attributes, blocks, macros } =
@@ -673,7 +673,7 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
   );
 
   return paths.map((path) =>
-    processor.loadFile(path, {
+    processor.loadFile(`${content_folder_path}/${path}`, {
       attributes,
       extension_registry: extensionRegistry,
     }),
