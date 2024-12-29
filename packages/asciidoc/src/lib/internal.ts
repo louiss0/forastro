@@ -550,38 +550,35 @@ export const transformObjectKeysIntoDashedCase = (
   );
 };
 
-export const getLoadAsciidocConfig = (cwd: string) => {
-  return async () => {
-    const { config, configFile } = await loadConfig<
-      z.infer<typeof asciidocConfigObjectSchema>
-    >({
-      cwd,
-      name: 'asciidoc',
-      omit$Keys: true,
-    });
+export const loadAsciidocConfig = async (cwd: string) => {
 
-    console.group("getLoadAsciidocConfig")
-    console.table({
-      cwd,
-      configFile
-    })
-    console.dir(config)
+  const { config, configFile } = await loadConfig<
+    z.infer<typeof asciidocConfigObjectSchema>
+  >({
+    cwd,
+    name: 'asciidoc',
+    omit$Keys: true,
+  });
 
-    console.groupEnd()
+  console.group("getLoadAsciidocConfig")
+  console.table({
+    cwd,
+    configFile
+  })
+  console.groupEnd()
 
-    if (Object.keys(config).length === 0) {
-      return config;
-    }
+  if (Object.keys(config).length === 0) {
+    return config;
+  }
 
-    z.string()
-      .regex(
-        /asciidoc.config.m(?:ts|js)/,
-        'The asciidoc config file must be a mts or mjs file',
-      )
-      .parse(configFile);
+  z.string()
+    .regex(
+      /asciidoc.config.m(?:ts|js)/,
+      'The asciidoc config file must be a mts or mjs file',
+    )
+    .parse(configFile);
 
-    return asciidocConfigObjectSchema.parse(config);
-  };
+  return asciidocConfigObjectSchema.parse(config);
 };
 
 const processor = asciidoctor();
@@ -673,7 +670,7 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
   const paths = await getAsciidocPaths(content_folder_path);
 
   const { attributes, blocks, macros } =
-    await getLoadAsciidocConfig(config_folder_path)();
+    await loadAsciidocConfig(config_folder_path);
 
   const extensionRegistry = createForAstroRegistryAsciidocFromConfig(
     blocks,
@@ -695,4 +692,3 @@ export const generateSlug = (string: string) =>
     remove: /[*+~.()'"!:@]/g,
   });
 
-export const loadAsciidocConfig = getLoadAsciidocConfig(process.cwd());

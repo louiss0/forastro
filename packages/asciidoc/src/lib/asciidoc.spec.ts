@@ -1,6 +1,6 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { getLoadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, createForAstroRegistryAsciidocFromConfig } from "./internal";
+import { loadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, createForAstroRegistryAsciidocFromConfig } from "./internal";
 import { z } from "astro/zod";
 import type { Document, Extensions } from "asciidoctor";
 
@@ -144,7 +144,7 @@ describe('asciidoc', () => {
             // Passing the mocks folder prevents creating a random empty folder
 
             try {
-                const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}`)()
+                const result = await loadAsciidocConfig(`${MOCK_FOLDER}`)
 
                 expect(Object.keys(result).length).toBe(0)
 
@@ -163,7 +163,7 @@ describe('asciidoc', () => {
 
 
 
-            const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
+            const result = await loadAsciidocConfig(`${MOCK_FOLDER}/configs`)
 
 
             expectTypeOf(result).toBeObject()
@@ -182,9 +182,9 @@ describe('asciidoc', () => {
 
             try {
 
-                const result = await getLoadAsciidocConfig(
+                const result = await loadAsciidocConfig(
                     `${MOCK_FOLDER}/false-config`
-                )()
+                )
 
                 expect(Object.keys(result).length).toBe(0)
 
@@ -208,9 +208,9 @@ describe('asciidoc', () => {
 
         try {
 
-            const result = await getLoadAsciidocConfig(
+            const result = await loadAsciidocConfig(
                 `${MOCK_FOLDER}/configs/bad-props`
-            )()
+            )
 
             expect(Object.keys(result).length).toBe(0)
 
@@ -296,7 +296,7 @@ describe('asciidoc', () => {
 
             async registry({ }, use) {
 
-                const { blocks, macros } = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
+                const { blocks, macros } = await loadAsciidocConfig(`${MOCK_FOLDER}/configs`)
 
 
                 use(createForAstroRegistryAsciidocFromConfig(blocks, macros))

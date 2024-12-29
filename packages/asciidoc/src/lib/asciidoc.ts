@@ -5,7 +5,7 @@ import {
   createForAstroRegistryAsciidocFromConfig,
   generateSlug,
   getAsciidocPaths,
-  getLoadAsciidocConfig,
+  loadAsciidocConfig,
   registerShiki,
   transformObjectKeysIntoDashedCase,
 } from './internal';
@@ -40,7 +40,7 @@ export function createAsciidocLoader(contentFolderName: string) {
       const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}/`;
 
       const [config, paths] = await Promise.all([
-        getLoadAsciidocConfig(resolvedRootRepo)(),
+        loadAsciidocConfig(resolvedRootRepo),
         getAsciidocPaths(`${resolvedRootRepo}${contentFolderName}`),
       ]);
 
