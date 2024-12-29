@@ -54,12 +54,12 @@ export function createAsciidocLoader(contentFolderName: string) {
         await registerShiki(processor, config.attributes.shikiTheme);
       }
 
-      let registry: Extensions.Registry | undefined;
 
       if (Object.keys(config).length !== 0) {
         logger.info(`Creating Asciidoc Registry from using config file`);
 
-        registry = createForAstroRegistryAsciidocFromConfig(
+        createForAstroRegistryAsciidocFromConfig(
+          processor,
           config.blocks,
           config.macros,
         );
@@ -165,6 +165,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         const document = loadFileWithRegistryAndAttributes(path);
 
+
         const sluggedFilename = generateSlug(filename);
 
         await setStoreUsingExtractedInfo(
@@ -264,8 +265,8 @@ export function createAsciidocLoader(contentFolderName: string) {
             config.attributes &&
             transformObjectKeysIntoDashedCase(config.attributes),
           safe: 10,
+          standalone: true,
           catalog_assets: true,
-          extension_registry: registry,
         });
       }
 
@@ -279,6 +280,7 @@ export function createAsciidocLoader(contentFolderName: string) {
           data: document.getAttributes(),
           filePath: projectRelativePath,
         });
+
 
         store.set({
           id: slug,

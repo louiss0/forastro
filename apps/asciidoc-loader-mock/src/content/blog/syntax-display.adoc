@@ -3,12 +3,14 @@ Shelton Louis
 :experimental:
 :hero_image: ../../assets/images/couple-9215839_640.jpg
 :toc: auto
+:standalone:
 [.title]#{doctitle}#
 
-ifdef::icons[The icons aren't set]
+shout::foo[]
 
 
 ## Writing Syntax
+
 
 This is bold *word*
 
@@ -255,6 +257,10 @@ Select menu:View[Zoom > Reset] to reset the zoom level to the default setting.
 ## Code Blocks 
 
 Source Highlighter: {source-highlighter}
+
+ifdef::standalone[]
+I'm alone
+endif::[]
 
 [source, html]
 ----

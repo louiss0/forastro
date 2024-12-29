@@ -596,6 +596,9 @@ export const registerShiki = async (
     langs: Object.keys(bundledLanguages),
   });
 
+
+
+
   processor.SyntaxHighlighter.register('shiki', {
     highlight(_, source, lang) {
       return highlighter.codeToHtml(source, {
@@ -609,40 +612,51 @@ export const registerShiki = async (
 };
 
 export const createForAstroRegistryAsciidocFromConfig = (
+  processor: ReturnType<typeof asciidoctor>,
   blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
   macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
 ) => {
-  const registry = processor.Extensions.create('forastro/asciidoc');
 
-  if (blocks) {
-    for (const [name, { context, render }] of Object.entries(blocks)) {
-      registry.block(name, function () {
-        this.process(function (parent, reader, attributes) {
-          this.createBlock(
-            parent,
-            context,
-            render(reader.getString(), attributes),
-            attributes,
-          );
-        });
-      });
-    }
+  processor.Extensions.register(function () {
 
-    if (macros?.inline) {
-      for (const [name, { context, render }] of Object.entries(macros.inline)) {
-        registry.inlineMacro(name, function () {
-          this.process(function (parent, target, attributes) {
-            this.createInline(parent, context, render(target, attributes));
+    if (blocks) {
+      for (const [name, { context, render }] of Object.entries(blocks)) {
+
+        this.block(name, function () {
+          this.process(function (parent, reader, attributes) {
+            return this.createBlock(
+              parent,
+              context,
+              render(reader.getString(), attributes),
+              attributes,
+            );
           });
         });
       }
     }
 
-    if (macros?.block) {
-      for (const [name, { context, render }] of Object.entries(macros.block)) {
-        registry.blockMacro(name, function () {
+    if (macros?.inline) {
+      for (const [name, { context, render }] of Object.entries(macros.inline)) {
+        this.inlineMacro(name, function () {
+
           this.process(function (parent, target, attributes) {
-            this.createBlock(
+            return this.createInline(parent, context, render(target, attributes));
+          });
+        });
+      }
+    }
+
+
+
+    if (macros?.block) {
+
+      for (const [name, { context, render }] of Object.entries(macros.block)) {
+        this.blockMacro(name, function () {
+
+
+          this.process(function (parent, target, attributes) {
+
+            return this.createBlock(
               parent,
               context,
               render(target, attributes),
@@ -652,9 +666,9 @@ export const createForAstroRegistryAsciidocFromConfig = (
         });
       }
     }
-  }
 
-  return registry;
+
+  })
 };
 
 export const transformAsciidocFilesIntoAsciidocDocuments = async (
@@ -664,10 +678,10 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
 
   const paths = await getAsciidocPaths(content_folder_path);
 
-  const { attributes, blocks, macros } =
-    await loadAsciidocConfig(config_folder_path);
+  const { attributes, blocks, macros } = await loadAsciidocConfig(config_folder_path);
 
-  const extensionRegistry = createForAstroRegistryAsciidocFromConfig(
+  createForAstroRegistryAsciidocFromConfig(
+    processor,
     blocks,
     macros,
   );
@@ -675,7 +689,6 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
   return paths.map((path) =>
     processor.loadFile(`${content_folder_path}/${path}`, {
       attributes,
-      extension_registry: extensionRegistry,
     }),
   );
 };

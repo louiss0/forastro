@@ -433,20 +433,41 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/styles/github.min.css">
 </head>
 <body class="article">
 <div id="header">
 <h1>Syntax Display</h1>
 <div class="details">
 <span id="author" class="author">Shelton Louis</span><br>
+<span id="revdate">[.title]#Syntax Display#</span>
+</div>
+<div id="toc" class="toc">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_writing_syntax">Writing Syntax</a></li>
+<li><a href="#_admonitions">Admonitions</a></li>
+<li><a href="#_definition_list">Definition List</a></li>
+<li><a href="#_sections_2_5">Sections 2-5</a></li>
+<li><a href="#_section_2">Section 2</a>
+<ul class="sectlevel2">
+<li><a href="#_section_3">Section 3</a></li>
+</ul>
+</li>
+<li><a href="#_question_and_answer_list">Question and Answer list</a></li>
+<li><a href="#_foot_notes">Foot notes</a></li>
+<li><a href="#_table">Table</a></li>
+<li><a href="#_keyboard">Keyboard</a></li>
+<li><a href="#_blocks">Blocks</a></li>
+<li><a href="#_button_and_menu">Button and Menu</a></li>
+<li><a href="#_code_blocks">Code Blocks</a></li>
+</ul>
 </div>
 </div>
 <div id="content">
-<div id="preamble">
+<div class="sect1">
+<h2 id="_writing_syntax">Writing Syntax</h2>
 <div class="sectionbody">
-<div class="paragraph">
-<p><span class="title">Syntax Display</span></p>
-</div>
 <div class="paragraph">
 <p>This is bold <strong>word</strong></p>
 </div>
@@ -488,7 +509,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlight"><code class="language-ts" data-lang="ts"> function doSomething() {
+<pre class="highlightjs highlight"><code class="language-ts hljs" data-lang="ts"> function doSomething() {
 
     console.log("Hey World!")
  }</code></pre>
@@ -519,6 +540,72 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>List item 3</p>
 </li>
 </ul>
+</div>
+<div class="quoteblock">
+<div class="title">After landing the cloaked Klingon bird of prey in Golden Gate park:</div>
+<blockquote>
+Everybody remember where we parked.
+</blockquote>
+<div class="attribution">
+&#8212; Captain James T. Kirk<br>
+<cite>Star Trek IV: The Voyage Home</cite>
+</div>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>What&#8217;s new?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>I&#8217;ve got Markdown in my AsciiDoc!</p>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Like what?</p>
+</div>
+</blockquote>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Blockquotes</p>
+</li>
+<li>
+<p>Headings</p>
+</li>
+<li>
+<p>Fenced code blocks</p>
+</li>
+</ul>
+</div>
+<div class="quoteblock">
+<blockquote>
+<div class="paragraph">
+<p>Is there more?</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>Yep. AsciiDoc and Markdown share a lot of common syntax already.</p>
+</div>
+</blockquote>
+</div>
+<div class="paragraph">
+<p>This is a paragraph.</p>
+</div>
+<div class="paragraph">
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis risus quam, interdum non posuere sit amet, varius vel nibh. Maecenas venenatis et mauris eu dignissim. In hendrerit ex sit amet nibh suscipit, id sagittis justo tincidunt. Maecenas mollis, lectus vel varius porta, justo quam hendrerit urna, a volutpat mi ante id tellus. Integer a nunc ac nisi hendrerit hendrerit. Integer nec orci a felis fermentum euismod. Fusce venenatis tincidunt nibh sed maximus. Aliquam erat volutpat. Pellentesque fringilla tortor a molestie lacinia. Nulla ac mi quam. Nunc congue ac elit vitae pharetra. Nam pretium, tortor ac mollis blandit, dolor tortor condimentum ipsum, ac varius risus nisl in libero. Vestibulum sit amet dui lectus. Etiam augue nibh, sagittis eu dolor a, volutpat malesuada risus.</p>
+</div>
+<div class="paragraph">
+<p>Donec in erat sit amet arcu varius lobortis non non elit. Praesent eu sollicitudin nisi. Aliquam elementum et leo ut ullamcorper. Donec a justo auctor, mollis nunc quis, tristique ante. Duis sed felis eu diam tincidunt pellentesque sit amet a arcu. Suspendisse sagittis pretium elementum. Curabitur vitae magna est. Praesent ornare, est vitae elementum varius, odio ligula condimentum odio, sit amet tempor nisl magna varius arcu. Sed sit amet semper ligula. Nullam tempor felis vestibulum urna suscipit, at semper lacus luctus. Curabitur volutpat accumsan libero et maximus.</p>
+</div>
+<div class="paragraph">
+<p>Aliquam erat volutpat. Fusce eu nunc non justo cursus pulvinar quis pharetra urna. Donec viverra hendrerit velit eu vehicula. Sed diam nisi, pretium quis nulla sed, euismod consectetur turpis. Pellentesque porta tortor orci, ac feugiat magna ornare a. Pellentesque malesuada tellus.</p>
 </div>
 </div>
 </div>
@@ -856,10 +943,10 @@ double <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_fo
 <h2 id="_keyboard">Keyboard</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p><kbd>F11</kbd> Toggle fullscreen</p>
+<p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>T</kbd></span> Open a new tab</p>
 </div>
 <div class="paragraph">
-<p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>T</kbd></span> Open a new tab</p>
+<p><kbd>F11</kbd> Toggle fullscreen</p>
 </div>
 <div class="paragraph">
 <p><span class="keyseq"><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd></span> New incognito window</p>
@@ -875,6 +962,108 @@ double <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_fo
 </div>
 </div>
 </div>
+<div class="sect1">
+<h2 id="_blocks">Blocks</h2>
+<div class="sectionbody">
+<div class="literalblock">
+<div class="title">Literal Block</div>
+<div class="content">
+<pre>   Im'a literal block.</pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">Listing Block</div>
+<div class="content">
+<pre>This is a listing block</pre>
+</div>
+</div>
+<div class="exampleblock">
+<div class="title">Example 1. Example Block</div>
+<div class="content">
+<div class="paragraph">
+<p>This is an example block</p>
+</div>
+</div>
+</div>
+<div>
+I'm a pass block as HTML
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="title">Sidebar Block</div>
+<div class="paragraph">
+<p>Sidebars are used to visually separate auxiliary bits of content
+that supplement the main text.</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+They can contain any type of content.
+</td>
+</tr>
+</table>
+</div>
+<div class="listingblock">
+<div class="title">Source code block in a sidebar</div>
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-js hljs" data-lang="js">const { expect, expectCalledWith, heredoc } = require('../test/test-utils')</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_button_and_menu">Button and Menu</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Press the <b class="button">OK</b> button when you are finished.</p>
+</div>
+<div class="paragraph">
+<p>Select a file in the file navigator and click <b class="button">Open</b>.</p>
+</div>
+<div class="paragraph">
+<p>To save the file, select <span class="menuseq"><b class="menu">File</b>&#160;<b class="caret">&#8250;</b> <b class="menuitem">Save</b></span>.</p>
+</div>
+<div class="paragraph">
+<p>Select <span class="menuseq"><b class="menu">View</b>&#160;<b class="caret">&#8250;</b> <b class="submenu">Zoom</b>&#160;<b class="caret">&#8250;</b> <b class="menuitem">Reset</b></span> to reset the zoom level to the default setting.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_code_blocks">Code Blocks</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Source Highlighter: highlight.js</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-html hljs" data-lang="html">&lt;div class="bg-red-500"&gt;
+&lt;/div&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-css hljs" data-lang="css">p {
+   line-height: 1.5;
+   max-width: 65ch;
+
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-markdown hljs" data-lang="markdown">## First post
+
+This is my life</code></pre>
+</div>
+</div>
+</div>
+</div>
 </div>
 <div id="footnotes">
 <hr>
@@ -887,8 +1076,15 @@ double <sup class="footnote">[<a id="_footnoteref_1" class="footnote" href="#_fo
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2024-12-08 10:10:24 -0500
+Last updated 2024-12-28 21:27:27 -0500
 </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>
+<script>
+if (!hljs.initHighlighting.called) {
+  hljs.initHighlighting.called = true
+  ;[].slice.call(document.querySelectorAll('pre.highlight > code[data-lang]')).forEach(function (el) { hljs.highlightBlock(el) })
+}
+</script>
 </body>
 </html>
