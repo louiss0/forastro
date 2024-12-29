@@ -205,7 +205,7 @@ literal - computer output
 
 .Literal Block
 ....
-Im'a literal block.
+   Im'a literal block.
 .... 
 
 .Listing Block
@@ -251,3 +251,30 @@ To save the file, select menu:File[Save].
 
 Select menu:View[Zoom > Reset] to reset the zoom level to the default setting.
 
+
+## Code Blocks 
+
+Source Highlighter: {source-highlighter}
+
+[source, html]
+----
+<div class="bg-red-500">
+</div>
+----
+
+
+[source, css]
+----
+p {
+   line-height: 1.5;
+   max-width: 65ch;
+
+}
+----
+
+[source, markdown]
+----
+## First post
+
+This is my life 
+----
