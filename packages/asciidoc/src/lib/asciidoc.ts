@@ -265,7 +265,7 @@ export function createAsciidocLoader(contentFolderName: string) {
             config.attributes &&
             transformObjectKeysIntoDashedCase(config.attributes),
           safe: 10,
-          standalone: true,
+          // standalone: true,
           catalog_assets: true,
         });
       }

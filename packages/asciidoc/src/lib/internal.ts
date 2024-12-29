@@ -577,6 +577,8 @@ export const loadAsciidocConfig = async (cwd: string) => {
 
 const processor = asciidoctor();
 
+
+
 export const registerShiki = async (
   processor: ReturnType<typeof asciidoctor>,
   themeOptions: {
@@ -596,17 +598,24 @@ export const registerShiki = async (
     langs: Object.keys(bundledLanguages),
   });
 
-
-
+  console.log("inside registerShiki")
 
   processor.SyntaxHighlighter.register('shiki', {
-    highlight(_, source, lang) {
+    initialize(name, backend, opts) {
+      this.super(name, backend, opts)
+      this.$$name = "shiki"
+    },
+    handlesHighlighting: () => true,
+    highlight(_, source, lang,) {
+
       return highlighter.codeToHtml(source, {
         lang,
         cssVariablePrefix: '--faa-shiki-',
         defaultColor: 'light',
         themes: themeOptions,
-      });
+      })
+
+
     },
   });
 };
