@@ -504,8 +504,6 @@ export const registerBlocksAndMacrosFromConfig = (
   macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
 ) => {
 
-
-
   processor.Extensions.register(function () {
 
     if (blocks) {
@@ -541,7 +539,6 @@ export const registerBlocksAndMacrosFromConfig = (
 
       for (const [name, { context, render }] of Object.entries(macros.block)) {
         this.blockMacro(name, function () {
-
 
           this.process(function (parent, target, attributes) {
 

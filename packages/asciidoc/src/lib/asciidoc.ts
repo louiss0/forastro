@@ -1,4 +1,4 @@
-import asciidoctor, { type Document, type Extensions } from 'asciidoctor';
+import asciidoctor, { type Document } from 'asciidoctor';
 import { type Loader } from 'astro/loaders';
 import {
   asciidocConfigObjectSchema,
@@ -24,7 +24,6 @@ class FilePathAndSlug {
     public readonly slug: string,
   ) { }
 }
-
 export function createAsciidocLoader(contentFolderName: string) {
   return {
     name: 'forastro/asciidoc-loader',
@@ -230,6 +229,7 @@ export function createAsciidocLoader(contentFolderName: string) {
       });
 
       watcher?.on('unlink', (path) => {
+
         const pathEndsWithOneOfTheSupportedAsciidocExtensions =
           SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
 
@@ -277,7 +277,6 @@ export function createAsciidocLoader(contentFolderName: string) {
             config.attributes &&
             transformObjectKeysIntoDashedCase(config.attributes),
           safe: 10,
-          // standalone: true,
           catalog_assets: true,
         });
       }
@@ -287,6 +286,7 @@ export function createAsciidocLoader(contentFolderName: string) {
         slug: string,
         document: Document,
       ) {
+
         const data = await parseData({
           id: slug,
           data: document.getAttributes(),
