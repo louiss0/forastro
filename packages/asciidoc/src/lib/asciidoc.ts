@@ -6,6 +6,7 @@ import {
   generateSlug,
   getAsciidocPaths,
   loadAsciidocConfig,
+  registerPrism_JS,
   registerShiki,
   transformObjectKeysIntoDashedCase,
 } from './internal';
@@ -50,9 +51,20 @@ export function createAsciidocLoader(contentFolderName: string) {
                     `);
       }
 
-      if (config.attributes?.sourceHighlighter === 'shiki') {
-        await registerShiki(processor, config.attributes.shikiTheme);
+
+      switch (config.attributes?.sourceHighlighter) {
+
+
+        case 'shiki':
+          await registerShiki(processor, config.attributes.shikiTheme);
+          break
+
+        case 'prism':
+          registerPrism_JS(processor, config.attributes.prismLanguages!)
+          break
+
       }
+
 
 
       if (Object.keys(config).length !== 0) {

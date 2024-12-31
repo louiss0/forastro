@@ -2,11 +2,8 @@ import { AsciidocConfigObject } from "@forastro/asciidoc";
 
 export default {
     attributes: {
-        sourceHighlighter: "shiki",
-        shikiTheme: {
-            light: "github-light-default",
-            dark: "github-dark-default"
-        }
+        sourceHighlighter: "prism",
+
 
     },
     macros: {
