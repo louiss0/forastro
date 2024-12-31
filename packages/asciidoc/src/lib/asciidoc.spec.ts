@@ -1,8 +1,9 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { loadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, createForAstroRegistryAsciidocFromConfig } from "./internal";
+import { loadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, registerBlocksAndMacrosFromConfig } from "./internal";
 import { z } from "astro/zod";
 import type { Document, Extensions } from "asciidoctor";
+import asciidoctor from "asciidoctor";
 
 
 describe('asciidoc', () => {
@@ -287,54 +288,6 @@ describe('asciidoc', () => {
 
 
     })
-
-
-    describe("Testing createForAstroRegistryAsciidocFromConfig", () => {
-
-
-        const $it = it.extend<{ registry: Extensions.Registry }>({
-
-            async registry({ }, use) {
-
-                const { blocks, macros } = await loadAsciidocConfig(`${MOCK_FOLDER}/configs`)
-
-
-                use(createForAstroRegistryAsciidocFromConfig(blocks, macros))
-
-            }
-
-
-
-
-        })
-
-
-        $it("registers blocks found in the global config file", ({ registry }) => {
-
-            expect(registry.hasBlocks()).toBeTruthy()
-
-        })
-
-        $it("registers inline macros found in the global config file", ({ registry }) => {
-
-            expect(registry.hasInlineMacros()).toBeTruthy()
-
-        })
-
-
-        $it("registers block macros found in the global config file", ({ registry }) => {
-
-
-            expect(registry.hasBlockMacros()).toBeTruthy()
-
-
-        })
-
-    })
-
-
-
-
 
 
 });
