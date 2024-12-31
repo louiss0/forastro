@@ -192,16 +192,17 @@ const CSS_LayoutClasses = {
 const CSS_ComponentClasses = {
   'table.tableblock': {
     'font-size': 'var(--faa-prose-step-neg-1)',
-    'color': "var(--faa-prose-color-700)",
+    'color': "var(--faa-prose-color-500)",
     'border-bottom': "3px solid var(--faa-prose-color-600)"
   },
   '.tableblock tr:nth-child(2n)': {
     'background-color': "var(--faa-prose-color-200)",
-    'color': "var(--faa-prose-color-600)",
+    'color': "var(--faa-prose-color-700)",
     'border-bottom': "2px solid var(--faa-prose-color-600)"
   },
   '.tableblock th': {
-    'background-color': "var(--faa-prose-color-300)",
+    'background-color': "var(--faa-prose-color-400)",
+    'color': "var(--faa-prose-color-700)",
     'border-bottom': "1px solid var(--faa-prose-color-500)"
   },
   '.qlist ol': {
@@ -325,7 +326,7 @@ const CSS_ComponentClasses = {
     border: '1px solid currentColor',
     padding: 'var(--faa-prose-space-7)',
     'border-radius': '4px',
-    'background-color': 'var(--faa-prose-color-100)',
+    'background-color': 'var(--faa-prose-color-300)',
     'font-size': 'var(--faa-prose-step-neg-1)',
   },
   '.sidebarblock .content': {
