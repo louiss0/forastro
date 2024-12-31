@@ -304,13 +304,14 @@ const asciidocGlobalVariablesSchema = z
   })
   .or(
     z.object({
-      sourceHighlighter: z.literal('shiki'),
+      sourceHighlighter: z.literal('shiki').default('shiki').optional(),
       shikiTheme: z
         .object({
           light: BundledLanguageNamesSchema,
           dark: BundledLanguageNamesSchema,
           dim: BundledLanguageNamesSchema.optional(),
         })
+
         .refine(({ light, dark }) => light !== dark, {
           path: ['shikiTheme.dark', 'shikiTheme.light'],
           message: `The light theme and dark theme must be different from each other`,
@@ -331,7 +332,10 @@ const asciidocGlobalVariablesSchema = z
               message: 'The light theme must not be equal to the light theme',
             });
           }
-        }),
+        })
+        .default({ dark: "github-light", light: "github-dark", dim: 'github-dark-dimmed' })
+        .optional()
+      ,
     }),
   )
   .and(commonAttributes);
@@ -427,8 +431,6 @@ export const loadAsciidocConfig = async (cwd: string) => {
 const processor = asciidoctor();
 
 
-
-
 export const registerPrism_JS = (
   processor: ReturnType<typeof asciidoctor>,
   languages: z.infer<typeof PrismLanguagesSchema>) => {
@@ -496,11 +498,13 @@ export const registerShiki = async (
   });
 };
 
-export const createForAstroRegistryAsciidocFromConfig = (
+export const registerBlocksAndMacrosFromConfig = (
   processor: ReturnType<typeof asciidoctor>,
   blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
   macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
 ) => {
+
+
 
   processor.Extensions.register(function () {
 
@@ -552,8 +556,9 @@ export const createForAstroRegistryAsciidocFromConfig = (
       }
     }
 
-
   })
+
+
 };
 
 export const transformAsciidocFilesIntoAsciidocDocuments = async (
@@ -565,7 +570,7 @@ export const transformAsciidocFilesIntoAsciidocDocuments = async (
 
   const { attributes, blocks, macros } = await loadAsciidocConfig(config_folder_path);
 
-  createForAstroRegistryAsciidocFromConfig(
+  registerBlocksAndMacrosFromConfig(
     processor,
     blocks,
     macros,

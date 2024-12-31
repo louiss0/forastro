@@ -2,7 +2,7 @@ import asciidoctor, { type Document, type Extensions } from 'asciidoctor';
 import { type Loader } from 'astro/loaders';
 import {
   asciidocConfigObjectSchema,
-  createForAstroRegistryAsciidocFromConfig,
+  registerBlocksAndMacrosFromConfig,
   generateSlug,
   getAsciidocPaths,
   loadAsciidocConfig,
@@ -56,7 +56,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
 
         case 'shiki':
-          await registerShiki(processor, config.attributes.shikiTheme);
+          await registerShiki(processor, config.attributes.shikiTheme!);
           break
 
         case 'prism':
@@ -70,7 +70,7 @@ export function createAsciidocLoader(contentFolderName: string) {
       if (Object.keys(config).length !== 0) {
         logger.info(`Creating Asciidoc Registry from using config file`);
 
-        createForAstroRegistryAsciidocFromConfig(
+        registerBlocksAndMacrosFromConfig(
           processor,
           config.blocks,
           config.macros,
