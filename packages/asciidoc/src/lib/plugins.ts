@@ -1,6 +1,8 @@
 import { definePreset, type Preset } from 'unocss';
 import type { Theme } from 'unocss/preset-mini';
 import plugin from 'tailwindcss/plugin';
+import colors from 'tailwindcss/colors';
+import type { TypeOf } from 'astro:schema';
 
 const CSS_abstracts_Classes = {
   '@property --faa-prose-color-950': {
@@ -670,13 +672,42 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
 
   const notProseSelector = `:not(:where([class~=".not-${TYPOGRAPHY_SELECTOR_NAME}"],[class~=".not-${TYPOGRAPHY_SELECTOR_NAME}"] *))`;
 
+  const typographySelectorClassName = `.${TYPOGRAPHY_SELECTOR_NAME}`
 
+
+  const proseColorSelectorsObject = Object.fromEntries(
+    ['slate', 'zinc', 'neutral', 'gray', 'stone'].reduce((classMap, color) => {
+
+      return classMap.set(`${typographySelectorClassName}-${color}`, {
+        '--faa-prose-color-50': colors[color as keyof typeof colors][50],
+        '--faa-prose-color-100': colors[color as keyof typeof colors][100],
+        '--faa-prose-color-200': colors[color as keyof typeof colors][200],
+        '--faa-prose-color-300': colors[color as keyof typeof colors][300],
+        '--faa-prose-color-400': colors[color as keyof typeof colors][400],
+        '--faa-prose-color-500': colors[color as keyof typeof colors][500],
+        '--faa-prose-color-600': colors[color as keyof typeof colors][600],
+        '--faa-prose-color-700': colors[color as keyof typeof colors][700],
+        '--faa-prose-color-800': colors[color as keyof typeof colors][800],
+        '--faa-prose-color-900': colors[color as keyof typeof colors][900],
+        // For reverse colors 
+        '--faa-prose-color-invert-50': colors[color as keyof typeof colors][900],
+        '--faa-prose-color-invert-100': colors[color as keyof typeof colors][800],
+        '--faa-prose-color-invert-200': colors[color as keyof typeof colors][700],
+        '--faa-prose-color-invert-300': colors[color as keyof typeof colors][600],
+        '--faa-prose-color-invert-400': colors[color as keyof typeof colors][500],
+        '--faa-prose-color-invert-500': colors[color as keyof typeof colors][400],
+        '--faa-prose-color-invert-600': colors[color as keyof typeof colors][300],
+        '--faa-prose-color-invert-700': colors[color as keyof typeof colors][200],
+        '--faa-prose-color-invert-800': colors[color as keyof typeof colors][100],
+        '--faa-prose-color-invert-900': colors[color as keyof typeof colors][50],
+      },)
+    }, new Map<string, Record<string, string>>()
+    ))
 
   const generateClassObjectWithProperProseSelectorNamesAsKeys = (
     object: Record<string, Record<string, string>>
   ) => {
 
-    const typographySelectorClassName = `.${TYPOGRAPHY_SELECTOR_NAME}`
 
     const mapWithProseSelectorKeys = Object.entries(object).reduce(
       (classMap, [classSelector, classProperties]) => {
@@ -757,8 +788,23 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
         'font-size': 'var(--faa-prose-step-0)',
         'max-width': '56rem',
         'margin-inline': 'auto',
-      }
+      },
+      [`.${TYPOGRAPHY_SELECTOR_NAME}-invert`]: {
+        '--faa-prose-color-50': 'var(--faa-prose-color-invert-50)',
+        '--faa-prose-color-100': 'var(--faa-prose-color-invert-100)',
+        '--faa-prose-color-200': 'var(--faa-prose-color-invert-200)',
+        '--faa-prose-color-300': 'var(--faa-prose-color-invert-300)',
+        '--faa-prose-color-400': 'var(--faa-prose-color-invert-400)',
+        '--faa-prose-color-500': 'var(--faa-prose-color-invert-500)',
+        '--faa-prose-color-600': 'var(--faa-prose-color-invert-600)',
+        '--faa-prose-color-700': 'var(--faa-prose-color-invert-700)',
+        '--faa-prose-color-800': 'var(--faa-prose-color-invert-800)',
+        '--faa-prose-color-900': 'var(--faa-prose-color-invert-900)',
+
+      },
+
     },
+    proseColorSelectorsObject,
     generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_BaseClasses),
 
   ])
