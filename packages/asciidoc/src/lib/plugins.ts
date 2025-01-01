@@ -2,7 +2,7 @@ import { definePreset, type Preset } from 'unocss';
 import type { Theme } from 'unocss/preset-mini';
 import plugin from 'tailwindcss/plugin';
 import colors from 'tailwindcss/colors';
-import type { TypeOf } from 'astro:schema';
+
 
 const CSS_abstracts_Classes = {
   '@property --faa-prose-color-950': {
@@ -676,9 +676,9 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
 
 
   const proseColorSelectorsObject = Object.fromEntries(
-    ['slate', 'zinc', 'neutral', 'gray', 'stone'].reduce((classMap, color) => {
+    ['slate', 'zinc', 'neutral', 'gray', 'stone'].reduce((proseColorSelectorsMap, color) => {
 
-      return classMap.set(`${typographySelectorClassName}-${color}`, {
+      return proseColorSelectorsMap.set(`${typographySelectorClassName}-${color}`, {
         '--faa-prose-color-50': colors[color as keyof typeof colors][50],
         '--faa-prose-color-100': colors[color as keyof typeof colors][100],
         '--faa-prose-color-200': colors[color as keyof typeof colors][200],
@@ -750,7 +750,7 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
   addBase([
     CSS_abstracts_Classes,
     {
-      [`.${TYPOGRAPHY_SELECTOR_NAME}`]: {
+      [typographySelectorClassName]: {
         '--faa-prose-step-neg-2':
           'clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem)',
         '--faa-prose-step-neg-1':
@@ -766,6 +766,7 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
           'clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem)',
         '--faa-prose-step-5':
           'clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem)',
+        "--faa-prose-max-width": "56rem",
         '--faa-prose-space-1': '0.15em',
         '--faa-prose-space-2': '0.3em',
         '--faa-prose-space-3': '0.45em',
@@ -781,14 +782,44 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
         '--faa-prose-space-13': '1.95em',
         '--faa-prose-space-14': '2.1em',
         '--faa-prose-space-15': '2.25em',
+        '--faa-prose-space-16': '2.40em',
         display: 'flex',
         'flex-direction': 'column',
         'row-gap': 'var(--faa-prose-space-9)',
-        padding: 'var(--faa-prose-space-7) var(--faa-prose-space-12)',
+        padding: 'var(--faa-prose-space-7) var(--faa-prose-space-14)',
+        'max-width': '56em',
         'font-size': 'var(--faa-prose-step-0)',
-        'max-width': '56rem',
         'margin-inline': 'auto',
       },
+
+      [`${typographySelectorClassName}-sm`]: {
+        'max-width': '48em',
+        'row-gap': 'var(--faa-prose-space-6)',
+        padding: 'var(--faa-prose-space-4) var(--faa-prose-space-8)'
+
+      },
+      [`${typographySelectorClassName}-lg`]: {
+        'max-width': '64em',
+        'row-gap': 'var(--faa-prose-space-7)',
+        padding: 'var(--faa-prose-space-5) var(--faa-prose-space-10)'
+
+      },
+      [`${typographySelectorClassName}-xl`]: {
+        'max-width': '72em',
+        'row-gap': 'var(--faa-prose-space-8)',
+        padding: 'var(--faa-prose-space-6) var(--faa-prose-space-12)'
+
+      },
+      [`${typographySelectorClassName}-2xl`]: {
+        'max-width': '80em',
+        'row-gap': 'var(--faa-prose-space-10)',
+        padding: 'var(--faa-prose-space-8) var(--faa-prose-space-16)'
+
+      },
+
+    },
+    proseColorSelectorsObject,
+    {
       [`.${TYPOGRAPHY_SELECTOR_NAME}-invert`]: {
         '--faa-prose-color-50': 'var(--faa-prose-color-invert-50)',
         '--faa-prose-color-100': 'var(--faa-prose-color-invert-100)',
@@ -801,10 +832,8 @@ export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, add
         '--faa-prose-color-800': 'var(--faa-prose-color-invert-800)',
         '--faa-prose-color-900': 'var(--faa-prose-color-invert-900)',
 
-      },
-
+      }
     },
-    proseColorSelectorsObject,
     generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_BaseClasses),
 
   ])
