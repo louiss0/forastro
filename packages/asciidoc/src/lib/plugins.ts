@@ -1,5 +1,6 @@
 import { definePreset, type Preset } from 'unocss';
 import type { Theme } from 'unocss/preset-mini';
+import plugin from 'tailwindcss/plugin';
 
 const CSS_abstracts_Classes = {
   '@property --faa-prose-color-950': {
@@ -619,6 +620,9 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
 
   const notProseSelector = `:not(:where(.not-${typographySelectorName},.not-${typographySelectorName} *))`;
 
+  const typographySelectorClassName = `.${typographySelectorName}`
+
+
   return () => Object.entries(preflights).map(
     ([selectorName, declarationBlock]) => {
 
@@ -645,13 +649,125 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
 
         if (targetSelector && pseudoSelector) {
 
-          return `.${typographySelectorName} :where(${targetSelector})${pseudoSelector}${notProseSelector} ${selectorBlockString}`
+          return `${typographySelectorClassName} :where(${targetSelector})${pseudoSelector}${notProseSelector} ${selectorBlockString}`
         }
 
       }
 
-      return `.${typographySelectorName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
+      return `${typographySelectorClassName} :where(${selectorName})${notProseSelector} ${selectorBlockString}`;
 
     },
   ).join("\n");
 }
+
+
+
+// TODO: Work on this plugin
+export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, addUtilities, }) => {
+
+
+  const TYPOGRAPHY_SELECTOR_NAME = 'prose';
+
+  const notProseSelector = `:not(:where([class~=".not-${TYPOGRAPHY_SELECTOR_NAME}"],[class~=".not-${TYPOGRAPHY_SELECTOR_NAME}"] *))`;
+
+
+
+  const generateClassObjectWithProperProseSelectorNamesAsKeys = (
+    object: Record<string, Record<string, string>>
+  ) => {
+
+    const typographySelectorClassName = `.${TYPOGRAPHY_SELECTOR_NAME}`
+
+    const mapWithProseSelectorKeys = Object.entries(object).reduce(
+      (classMap, [classSelector, classProperties]) => {
+
+        const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w\-]+(?:\s+\w+)+)(?<pseudoSelector>\:{1,2}[\w\-()]+)$/.exec(classSelector)?.groups;
+
+        if (selectorWithPseudoSelectorGroups) {
+
+          const { targetSelector, pseudoSelector } = selectorWithPseudoSelectorGroups;
+
+          if (targetSelector && pseudoSelector) {
+
+
+            return classMap.set(
+              `${typographySelectorClassName} :where(${targetSelector})${pseudoSelector}${notProseSelector} `,
+              classProperties
+
+            );
+
+
+          }
+
+
+        }
+
+        return classMap.set(
+          `${typographySelectorClassName} :where(${classSelector})${notProseSelector}`,
+          classProperties
+        );
+
+
+      }, new Map<string, Record<string, string>>());
+
+
+    return Object.fromEntries(mapWithProseSelectorKeys)
+
+  }
+
+
+  addBase([
+    CSS_abstracts_Classes,
+    {
+      [`.${TYPOGRAPHY_SELECTOR_NAME}`]: {
+        '--faa-prose-step-neg-2':
+          'clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem)',
+        '--faa-prose-step-neg-1':
+          'clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem)',
+        '--faa-prose-step-0': 'clamp(1rem, 0.913rem + 0.4348vw, 1.25rem)',
+        '--faa-prose-step-1':
+          'clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem)',
+        '--faa-prose-step-2':
+          'clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem)',
+        '--faa-prose-step-3':
+          'clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem)',
+        '--faa-prose-step-4':
+          'clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem)',
+        '--faa-prose-step-5':
+          'clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem)',
+        '--faa-prose-space-1': '0.15em',
+        '--faa-prose-space-2': '0.3em',
+        '--faa-prose-space-3': '0.45em',
+        '--faa-prose-space-4': '0.6em',
+        '--faa-prose-space-5': '0.75em',
+        '--faa-prose-space-6': '0.9em',
+        '--faa-prose-space-7': '1.05em',
+        '--faa-prose-space-8': '1.2em',
+        '--faa-prose-space-9': '1.35em',
+        '--faa-prose-space-10': '1.5em',
+        '--faa-prose-space-11': '1.65em',
+        '--faa-prose-space-12': '1.8em',
+        '--faa-prose-space-13': '1.95em',
+        '--faa-prose-space-14': '2.1em',
+        '--faa-prose-space-15': '2.25em',
+        display: 'flex',
+        'flex-direction': 'column',
+        'row-gap': 'var(--faa-prose-space-9)',
+        padding: 'var(--faa-prose-space-7) var(--faa-prose-space-12)',
+        'font-size': 'var(--faa-prose-step-0)',
+        'max-width': '56rem',
+        'margin-inline': 'auto',
+      }
+    },
+    generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_BaseClasses),
+
+  ])
+
+  addComponents([
+    generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_LayoutClasses),
+    generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_ComponentClasses)
+  ])
+
+  addUtilities(generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_UtilitiesClasses))
+
+},)
