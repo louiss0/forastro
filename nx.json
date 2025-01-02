@@ -92,6 +92,7 @@
     },
     "version": {
       "conventionalCommits": true,
+      "skipLockFileUpdate": true,
       "preVersionCommand": "pnpm dlx nx run-many -t build --projects=nx:lib:ongoing"
     }
   }
