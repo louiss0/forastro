@@ -1,7 +1,7 @@
 {
   "name": "@forastro/template_astro-minimal",
   "type": "module",
-  "version": "0.0.1",
+  "version": "0.0.7",
   "private": true,
   "scripts": {
     "dev": "astro dev",
@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "@code-fixer-23/cn-efs": "*",
-    "@forastro/flow": "workspace:*",
+    "@forastro/flow": "2.11.0",
     "@forastro/utilities": "*",
     "ts-pattern": "*",
     "astro-icon": "*"

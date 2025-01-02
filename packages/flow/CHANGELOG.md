@@ -1,3 +1,35 @@
+## 2.11.0 (2025-01-02)
+
+### 🚀 Features
+
+- add tags to each file to indicate that they are libraries ([c93e7ce](https://github.com/louiss0/forastro/commit/c93e7ce))
+- Add principles from keep a changelog into the repo. ([53e5326](https://github.com/louiss0/forastro/commit/53e5326))
+- **flow:** Add inclusive to Range. ([0f4412f](https://github.com/louiss0/forastro/commit/0f4412f))
+- **flow:** Create the index file for flow ([e88e8ec](https://github.com/louiss0/forastro/commit/e88e8ec))
+
+### 🩹 Fixes
+
+- Put fragment in the  if Callback instead of outside of it. ([b5e5c6f](https://github.com/louiss0/forastro/commit/b5e5c6f))
+- configure release it to only use npm publish false not dismiss npm ([8f0f1b9](https://github.com/louiss0/forastro/commit/8f0f1b9))
+- try using name instead of npm name for release it ([849c367](https://github.com/louiss0/forastro/commit/849c367))
+- change into the proper command for release script ([ddcb725](https://github.com/louiss0/forastro/commit/ddcb725))
+- remove injected code from changelog ([efd523c](https://github.com/louiss0/forastro/commit/efd523c))
+- remove pnpm publish from the configuration ([7308df6](https://github.com/louiss0/forastro/commit/7308df6))
+- try to use the after releaes hook to make sure a package is released using pnpm ([7146462](https://github.com/louiss0/forastro/commit/7146462))
+- try to use the after bump hook to make sure a package is released ([327fa0f](https://github.com/louiss0/forastro/commit/327fa0f))
+- Revert changelog back to the way it was before release ([810548f](https://github.com/louiss0/forastro/commit/810548f))
+- configure release it to publish the package before release ([e4a3443](https://github.com/louiss0/forastro/commit/e4a3443))
+- Add homepage to the json files for each flow, remark-html-directives-integration, and utilities ([7d9eef2](https://github.com/louiss0/forastro/commit/7d9eef2))
+- Remove all scripts associated with tsup from utilities and flow. ([83c595d](https://github.com/louiss0/forastro/commit/83c595d))
+- **flow:** use type of in array instead of importing the type ([b0d7926](https://github.com/louiss0/forastro/commit/b0d7926))
+- **flow&utilities:** using the test folder instead of src ([d6f7d44](https://github.com/louiss0/forastro/commit/d6f7d44))
+- **flow:** use the package.json file ([0dfd2df](https://github.com/louiss0/forastro/commit/0dfd2df))
+- **flow:** move test folder into the root ([e9ab97b](https://github.com/louiss0/forastro/commit/e9ab97b))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 <!--
 
 * Guiding Principles
