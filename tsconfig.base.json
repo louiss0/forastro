@@ -21,7 +21,6 @@
     "baseUrl": ".",
     "paths": {
       "@forastro/asciidoc": ["packages/asciidoc/src/index.ts"],
-      "@forastro/flow": ["packages/flow/src/index.ts"],
       "@forastro/markdoc-html-tags": ["packages/markdoc-html-tags"],
       "@forastro/remark-html-directives-integration": [
         "packages/remark-html-directives-integration"
