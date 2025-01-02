@@ -491,7 +491,7 @@ const preflights = {
   ...CSS_UtilitiesClasses,
 };
 
-export const presetAdocTypograhy = definePreset(() => {
+export const presetAsciidocTypography = definePreset(() => {
   const TYPOGRAPHY_SELECTOR_NAME = 'prose';
   const typographySelectorNameRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}$`);
   const selectorColorRE = new RegExp(`^${TYPOGRAPHY_SELECTOR_NAME}-([a-z-]+)$`);
@@ -663,9 +663,7 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
 }
 
 
-
-// TODO: Work on this plugin
-export const tailwindAsciidocProsePlugin = plugin(({ addBase, addComponents, addUtilities, }) => {
+export const tailwindAsciidocTypography = plugin(({ addBase, addComponents, addUtilities, }) => {
 
 
   const TYPOGRAPHY_SELECTOR_NAME = 'prose';
