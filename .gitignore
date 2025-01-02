@@ -4,6 +4,7 @@ dist
 mock-app
 **/.env
 **/cache
-.nx/workspace-data/** 
+.nx/workspace-data/**
 pnpm-workspace.yaml
 vite.config.*.timestamp*
+vitest.config.*.timestamp*

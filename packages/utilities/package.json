@@ -6,8 +6,8 @@
   },
   "dependencies": {},
   "type": "module",
-  "module": "./index.js",
   "exports": {
+    ".": "./src/index.ts",
     "./components": {
       "import": "./src/components/index.ts"
     }
@@ -19,6 +19,5 @@
   "keywords": [
     "astro-component",
     "ui"
-  ],
-  "typings": "./index.d.ts"
+  ]
 }

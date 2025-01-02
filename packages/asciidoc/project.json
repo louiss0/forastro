@@ -24,6 +24,9 @@
       "options": {
         "outputPath": "dist/packages/asciidoc",
         "main": "packages/asciidoc/src/index.ts",
+        "additionalEntryPoints": [
+          "packages/asciidoc/src/lib/plugins.ts"
+        ],
         "tsConfig": "packages/asciidoc/tsconfig.lib.json",
         "format": [
           "esm"

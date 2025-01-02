@@ -1,5 +1,6 @@
 import { } from 'astro';
-import { throwUnless } from './conditional';
+import { throwUnless } from '@forastro/utilities';
+import { type CollectionKey, type CollectionEntry, getCollection, getEntryBySlug, getEntry, getEntries } from 'astro:content';
 
 
 
@@ -32,7 +33,10 @@ export const getCollections: GetCollections
             return (
                 await Promise.all(
                     collectionNames
-                        .map((collectionName) => getCollection(collectionName, filter)))
+                        .map((collectionName) => getCollection(
+                            collectionName,
+                            (entry) => filter(entry)
+                        )))
             ).flat()
 
         }

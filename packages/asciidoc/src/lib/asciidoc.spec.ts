@@ -1,8 +1,9 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { getLoadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, createForAstroRegistryAsciidocFromConfig } from "./internal";
+import { loadAsciidocConfig, getAsciidocPaths, transformAsciidocFilesIntoAsciidocDocuments, registerBlocksAndMacrosFromConfig } from "./internal";
 import { z } from "astro/zod";
 import type { Document, Extensions } from "asciidoctor";
+import asciidoctor from "asciidoctor";
 
 
 describe('asciidoc', () => {
@@ -144,7 +145,7 @@ describe('asciidoc', () => {
             // Passing the mocks folder prevents creating a random empty folder
 
             try {
-                const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}`)()
+                const result = await loadAsciidocConfig(`${MOCK_FOLDER}`)
 
                 expect(Object.keys(result).length).toBe(0)
 
@@ -163,7 +164,7 @@ describe('asciidoc', () => {
 
 
 
-            const result = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
+            const result = await loadAsciidocConfig(`${MOCK_FOLDER}/configs`)
 
 
             expectTypeOf(result).toBeObject()
@@ -182,9 +183,9 @@ describe('asciidoc', () => {
 
             try {
 
-                const result = await getLoadAsciidocConfig(
+                const result = await loadAsciidocConfig(
                     `${MOCK_FOLDER}/false-config`
-                )()
+                )
 
                 expect(Object.keys(result).length).toBe(0)
 
@@ -208,9 +209,9 @@ describe('asciidoc', () => {
 
         try {
 
-            const result = await getLoadAsciidocConfig(
+            const result = await loadAsciidocConfig(
                 `${MOCK_FOLDER}/configs/bad-props`
-            )()
+            )
 
             expect(Object.keys(result).length).toBe(0)
 
@@ -287,53 +288,6 @@ describe('asciidoc', () => {
 
 
     })
-
-
-    describe("Testing createForAstroRegistryAsciidocFromConfig", () => {
-
-
-        const $it = it.extend<{ registry: Extensions.Registry }>({
-
-            async registry({ }, use) {
-
-                const { blocks, macros } = await getLoadAsciidocConfig(`${MOCK_FOLDER}/configs`)()
-
-
-                use(createForAstroRegistryAsciidocFromConfig(blocks, macros))
-
-            }
-
-
-
-
-        })
-
-
-        $it("registers blocks found in the global config file", ({ registry }) => {
-
-            expect(registry.hasBlocks()).toBeTruthy()
-
-        })
-
-        $it("registers inline macros found in the global config file", ({ registry }) => {
-
-            expect(registry.hasInlineMacros()).toBeTruthy()
-
-        })
-
-
-        $it("registers block macros found in the global config file", ({ registry }) => {
-
-
-            expect(registry.hasBlockMacros()).toBeTruthy()
-
-
-        })
-
-    })
-
-
-
 
 
 });

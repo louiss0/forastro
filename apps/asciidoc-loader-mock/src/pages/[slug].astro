@@ -3,23 +3,24 @@ import { type InferGetStaticPropsType } from 'astro'
 import { render } from 'astro:content'
 import { getCollection } from 'astro:content'
 
-// TODO: Switch to using tsup as bundler. 
+
+// TODO: Switch to using tsup as bundler.
 
 
 export const getStaticPaths = async ({}) => {
-    
+
 const collection = await getCollection("blog")
 
 
-return  collection.map(entry => ({ 
+return  collection.map(entry => ({
     params: {
         slug: entry.id,
     },
     props: {
-       entry 
+       entry
     },
 }
-)) 
+))
 
 
 }
@@ -31,6 +32,6 @@ const { entry } = Astro.props
 const { Content } = await render(entry)
 
 ---
-<div>
+<article class="prose prose-truegray selection:(bg-red-500 text-blue-300) ">
 <Content/>
-</div>
+</article>

@@ -1,354 +1,324 @@
-import asciidoctor from "asciidoctor";
-import { type Loader } from "astro/loaders";
-import { asciidocConfigObjectSchema, createForAstroRegistryAsciidocFromConfig, generateSlug, getAsciidocPaths, getLoadAsciidocConfig, } from "./internal";
-import type { z } from "astro/zod";
+import asciidoctor, { type Document } from 'asciidoctor';
+import { type Loader } from 'astro/loaders';
+import {
+  asciidocConfigObjectSchema,
+  registerBlocksAndMacrosFromConfig,
+  generateSlug,
+  getAsciidocPaths,
+  loadAsciidocConfig,
+  registerPrism_JS,
+  registerShiki,
+  transformObjectKeysIntoDashedCase,
+} from './internal';
+import type { z } from 'astro/zod';
+
+import { resolve } from 'node:path';
+
+export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
+
+const processor = asciidoctor();
+
+class FilePathAndSlug {
+  constructor (
+    public readonly pathRelativeToRoot: string,
+    public readonly slug: string,
+  ) { }
+}
+export function createAsciidocLoader(contentFolderName: string) {
+  return {
+    name: 'forastro/asciidoc-loader',
+    async load({
+      store,
+      config: astroConfig,
+      generateDigest,
+      logger,
+      parseData,
+      watcher,
+    }) {
+      logger.info('Loading Asciidoc paths and config file');
+
+      const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}/`;
+
+      const [config, paths] = await Promise.all([
+        loadAsciidocConfig(resolvedRootRepo),
+        getAsciidocPaths(`${resolvedRootRepo}${contentFolderName}`),
+      ]);
+
+      if (paths.length === 0) {
+        throw Error(`There are no files in this folder ${contentFolderName}.
+                    Please use a different folder.
+                    `);
+      }
 
 
-export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>
+      switch (config.attributes?.sourceHighlighter) {
 
 
-const processor = asciidoctor()
+        case 'shiki':
+          await registerShiki(processor, config.attributes.shikiTheme!);
+          break
 
-export function createAsciidocLoader(config_folder_name: string, folder_name: string) {
+        case 'prism':
+          registerPrism_JS(processor, config.attributes.prismLanguages!)
+          break
 
-    return {
-        name: "forastro/asciidoc-loader",
-        async load({ store, generateDigest, logger, parseData, watcher, }) {
-
-            logger.info("Loading Asciidoc paths and config file")
-
-            const [config, paths] = await Promise.all(
-                [
-                    getLoadAsciidocConfig(config_folder_name)(),
-                    getAsciidocPaths(folder_name)
-
-                ]
-            )
+      }
 
 
-            logger.info("Creating Asciidoc Registry from using config file")
 
-            const registry = createForAstroRegistryAsciidocFromConfig(
-                config.blocks,
-                config.macros
-            )
+      if (Object.keys(config).length !== 0) {
+        logger.info(`Creating Asciidoc Registry from using config file`);
 
+        registerBlocksAndMacrosFromConfig(
+          processor,
+          config.blocks,
+          config.macros,
+        );
+      }
 
-            logger.info("Clearing the store")
+      logger.info('Clearing the store');
 
-            store.clear()
+      store.clear();
 
-            logger.info("Extracting data from files then storing it")
+      logger.info('Extracting data from files then storing it');
 
-            const fileNameToSlugMap = new Map<string, string>()
+      const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
 
-            const fullFilePathRE = /(?<folder_path>.+\/)(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/
+      const fullFilePathRE =
+        /(?<folder_path>.+\/)(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/;
 
-            const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = [".adoc", ".asciidoc"]
+      const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
 
-            for (const path of paths) {
+      for (const path of paths) {
+        const fullFilePathMatch = path.match(fullFilePathRE);
 
-
-                const fullFilePathMatch = path.match(fullFilePathRE)
-
-                if (!fullFilePathMatch) {
-
-
-                    throw Error(`This path isn't correct.
+        if (!fullFilePathMatch) {
+          throw Error(`This path isn't correct.
                          A folder can use any set of characters but must end in a forward slash.
                          A filename must use word characters digits and whitespace no other characters.
-                        `)
+                        `);
+        }
 
-                }
+        const { filename } = fullFilePathMatch.groups!;
 
-                const { filename } = fullFilePathMatch.groups!
+        if (!filename) {
+          throw Error(
+            'There should be a word called filename in the word group',
+          );
+        }
 
-                if (!filename) {
+        const pathPrefixedWithFolderName = `${contentFolderName}/${path}`;
 
-                    throw Error("There should be a word called filename in the word group")
+        const document = loadFileWithRegistryAndAttributes(
+          `${resolvedRootRepo}${pathPrefixedWithFolderName}`,
+        );
 
-                }
+        const sluggedFilename = generateSlug(filename);
 
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        extension_registry: registry
-                    })
+        await setStoreUsingExtractedInfo(
+          pathPrefixedWithFolderName,
+          sluggedFilename,
+          document,
+        );
 
-                const title = document.getTitle();
+        fileNameToSlugMap.set(
+          filename,
+          new FilePathAndSlug(pathPrefixedWithFolderName, sluggedFilename),
+        );
+      }
 
+      watcher?.on('add', async (path) => {
+        const pathEndsWithOneOfTheSupportedAsciidocExtensions =
+          SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
 
-                if (!title) {
+        if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
+        const fullFilePathMatch = path.match(fullFilePathRE);
 
-                }
-
-                const attributes = document.getAttributes()
-
-
-                const data = await parseData({
-                    id: generateSlug(filename),
-                    data: attributes,
-                    filePath: path
-                })
-
-
-                const sluggedFilename = generateSlug(filename);
-
-                store.set({
-                    id: sluggedFilename,
-                    data,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
-
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
-
-                fileNameToSlugMap.set(filename, sluggedFilename)
-
-            }
-
-
-
-
-            watcher?.on("add", async (path) => {
-
-                const pathEndsWithOneOfTheSupportedAsciidocExtensions = SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some(ext => path.endsWith(ext));
-
-                if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return
-
-
-                const fullFilePathMatch = path.match(fullFilePathRE)
-
-                if (!fullFilePathMatch) {
-
-
-                    throw Error(`This path ${path} isn't correct.
+        if (!fullFilePathMatch) {
+          throw Error(`This path ${path} isn't correct.
                          A folder can use any set of characters but must end in a forward slash.
                          A filename must use word characters digits and whitespace no other characters.
-                        `)
+                        `);
+        }
 
-                }
+        logger.info(
+          `You added this file ${path} it's info will be now parsed an added to the store`,
+        );
 
-                logger.info(`You added this file ${path} it's info will be now parsed an added to the store`)
+        const { filename } = fullFilePathMatch.groups!;
 
-                const { filename } = fullFilePathMatch.groups!
+        if (!filename) {
+          throw Error(
+            'There should be a word called filename in the word group',
+          );
+        }
 
-                if (!filename) {
+        const extractPath = (filePath: string, targetPath: string) => {
+          const escapedTargetPath = targetPath.replace(
+            /[.*+?^${}()|[\]\\]/g,
+            '\\$&',
+          ); // Escape special regex characters
 
-                    throw Error("There should be a word called filename in the word group")
+          const regex = new RegExp(`${escapedTargetPath}.*`);
+          const match = filePath.match(regex);
 
-                }
+          if (!match) {
+            throw Error(
+              "Please place the values in the right place don't change any params",
+            );
+          }
 
+          return match[0];
+        };
 
+        const pathRelativeToProjectRoot = extractPath(path, contentFolderName);
 
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        extension_registry: registry
-                    })
-
-
-                const title = document.getTitle();
-
-                if (!title) {
-
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
-
-                }
-
-                const attributes = document.getAttributes()
-
-                const data = await parseData({
-                    id: generateSlug(filename),
-                    data: attributes,
-                    filePath: path
-                })
+        const document = loadFileWithRegistryAndAttributes(path);
 
 
-                const sluggedFilename = generateSlug(filename);
+        const sluggedFilename = generateSlug(filename);
 
-                store.set({
-                    id: sluggedFilename,
-                    data,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
+        await setStoreUsingExtractedInfo(
+          sluggedFilename,
+          pathRelativeToProjectRoot,
+          document,
+        );
 
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
+        fileNameToSlugMap.set(
+          filename,
+          new FilePathAndSlug(pathRelativeToProjectRoot, sluggedFilename),
+        );
 
-                fileNameToSlugMap.set(filename, sluggedFilename)
+        logger.info(
+          `Finished adding the file now you can go to /${sluggedFilename} depending on your route to access it.`,
+        );
+      });
 
-                logger.info(`Finished adding the file now you can go to /${sluggedFilename} depending on your route to access it.`)
+      watcher?.on('change', async (path) => {
+        const pathEndsWithOneOfTheSupportedAsciidocExtensions =
+          SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
 
+        if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-            })
+        const filename = path.match(fullFilePathRE)![2]!;
 
-            watcher?.on("change", async (path) => {
+        logger.info(
+          `You changed this file ${filename} the store is being updated`,
+        );
 
+        const filePathAndSlug = fileNameToSlugMap.get(filename);
 
-                const pathEndsWithOneOfTheSupportedAsciidocExtensions = SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some(ext => path.endsWith(ext));
+        if (!filePathAndSlug) {
+          throw Error(`A slug is supposed to exist using this file name ${filename}.
+                        Some thing is wrong with the loader please file a report
+                        `);
+        }
 
-                if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return
+        store.delete(filePathAndSlug.slug);
 
+        const document = loadFileWithRegistryAndAttributes(path);
 
-                const filename = path.match(fullFilePathRE)![2]!
+        await setStoreUsingExtractedInfo(
+          filePathAndSlug.pathRelativeToRoot,
+          filePathAndSlug.slug,
+          document,
+        );
 
-                logger.info(`You changed this file ${filename} the store is being updated`)
+        logger.info(`The store is updated`);
+      });
 
-                const slug = fileNameToSlugMap.get(filename);
+      watcher?.on('unlink', (path) => {
 
-                if (!slug) {
+        const pathEndsWithOneOfTheSupportedAsciidocExtensions =
+          SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
 
-                    throw Error(`A slug is supposed to exist using this file name ${slug}.
-                        Some thing is wrong with the loader please file a report 
-                        `)
-                }
+        if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-                store.delete(slug)
+        const fullFilePathMatch = path.match(fullFilePathRE);
 
-                const document = processor.loadFile(
-                    path,
-                    {
-                        attributes: config.attributes,
-                        catalog_assets: true,
-                        extension_registry: registry
-                    })
-
-
-                const title = document.getTitle();
-
-                if (!title) {
-
-                    throw Error(
-                        `Please supply a title for the file in this path ${path}`
-                    )
-
-                }
-
-                const attributes = document.getAttributes()
-
-                const data = await parseData({
-                    id: slug,
-                    data: attributes,
-                    filePath: path
-                })
-
-
-                store.set({
-                    id: slug,
-                    data,
-                    digest: generateDigest(data),
-                    rendered: {
-                        metadata: {
-                            frontmatter: data,
-                            imagePaths: document.getImages().map(image => image.getTarget()),
-                            headings: document.getSections()
-                                .map(section => ({
-                                    text: section.getTitle() ?? '',
-                                    depth: section.getLevel(),
-                                    slug: generateSlug(section.getTitle() ?? '')
-                                })),
-
-                        },
-                        html: document.getContent() ?? ""
-                    }
-                })
-
-                logger.info(`The store is updated`)
-
-            })
-
-
-            watcher?.on('unlink', (path) => {
-
-
-                const pathEndsWithOneOfTheSupportedAsciidocExtensions = SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some(ext => path.endsWith(ext));
-
-                if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return
-
-
-                const fullFilePathMatch = path.match(fullFilePathRE)
-
-                if (!fullFilePathMatch) {
-
-
-                    throw Error(`This path isn't correct.
+        if (!fullFilePathMatch) {
+          throw Error(`This path isn't correct.
                          A folder can use any set of characters but must end in a forward slash.
                          A filename must use word characters digits and whitespace no other characters.
-                        `)
+                        `);
+        }
 
-                }
+        const { filename } = fullFilePathMatch.groups!;
 
-                const { filename } = fullFilePathMatch.groups!
+        if (!filename) {
+          throw Error(
+            'There should be a word called filename in the word group',
+          );
+        }
 
-                if (!filename) {
+        logger.info(`You deleted this file ${filename}`);
 
-                    throw Error("There should be a word called filename in the word group")
+        const fileNameAndSlug = fileNameToSlugMap.get(filename);
 
-                }
-
-                logger.info(`You deleted this file ${filename}`)
-
-                const slug = fileNameToSlugMap.get(filename);
-
-                if (!slug) {
-
-                    throw Error(`A slug is supposed to exist using this file name ${slug}.
+        if (!fileNameAndSlug) {
+          throw Error(`A slug is supposed to exist using this file name ${filename}.
                         Some thing is wrong with the loader please file a report.
                         From unlink event using this path ${path}.
-                        `)
-                }
+                        `);
+        }
 
-                store.delete(slug)
+        store.delete(fileNameAndSlug.slug);
 
-                logger.info("The store has now been updated!")
+        logger.info('The store has now been updated!');
 
-            })
+        logger.info('Finished');
+      });
 
-            logger.info("Finished")
+      function loadFileWithRegistryAndAttributes(path: string) {
 
-        },
-    } satisfies Loader
+        return processor.loadFile(path, {
+          attributes:
+            config.attributes &&
+            transformObjectKeysIntoDashedCase(config.attributes),
+          safe: 10,
+          catalog_assets: true,
+        });
+      }
+
+      async function setStoreUsingExtractedInfo(
+        projectRelativePath: string,
+        slug: string,
+        document: Document,
+      ) {
+
+        const data = await parseData({
+          id: slug,
+          data: document.getAttributes(),
+          filePath: projectRelativePath,
+        });
 
 
+        store.set({
+          id: slug,
+          data,
+          filePath: projectRelativePath,
+          digest: generateDigest(data),
+          rendered: {
+            metadata: {
+              frontmatter: data,
+              imagePaths: document
+                .getImages()
+                .map((image) => image.getTarget()),
+              headings: document.getSections().map((section) => ({
+                text: section.getTitle() ?? '',
+                depth: section.getLevel(),
+                slug: generateSlug(section.getTitle() ?? ''),
+              })),
+            },
+            html: document.convert(),
+          },
+        });
+      }
+    },
+  } satisfies Loader;
 }
-
 
 export function asciidocLoader(folder_name: string) {
-
-    return createAsciidocLoader(".", folder_name,)
-
+  return createAsciidocLoader(folder_name);
 }
-
