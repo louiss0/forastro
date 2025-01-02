@@ -90,8 +90,8 @@
         "createRelease": "github"
       }
     },
-    "conventionalCommits": true,
     "version": {
+      "conventionalCommits": true,
       "preVersionCommand": "pnpm dlx nx run-many -t build --projects=nx:lib:ongoing"
     }
   }
