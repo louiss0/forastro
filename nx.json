@@ -84,6 +84,9 @@
   "useInferencePlugins": false,
   "useLegacyCache": true,
   "release": {
+    "projects": [
+      "packages/*"
+    ],
     "projectsRelationship": "independent",
     "changelog": {
       "projectChangelogs": {
@@ -92,7 +95,9 @@
     },
     "version": {
       "conventionalCommits": true,
-      "skipLockFileUpdate": true,
+      "generatorOptions": {
+        "skipLockFileUpdate": true
+      },
       "preVersionCommand": "pnpm dlx nx run-many -t build --projects=nx:lib:ongoing"
     }
   }
