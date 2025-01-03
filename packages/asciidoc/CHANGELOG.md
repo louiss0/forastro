@@ -1,3 +1,7 @@
+# 3.0.0 (2025-01-03)
+
+This was a version bump only for asciidoc to align it with other projects, there were no code changes.
+
 # 2.0.0 (2025-01-03)
 
 This was a version bump only for asciidoc to align it with other projects, there were no code changes.
