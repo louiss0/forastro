@@ -25,7 +25,8 @@
         "outputPath": "dist/packages/asciidoc",
         "main": "packages/asciidoc/src/index.ts",
         "additionalEntryPoints": [
-          "packages/asciidoc/src/lib/plugins.ts"
+          "packages/asciidoc/src/lib/unocss.ts",
+          "packages/asciidoc/src/lib/tailwind.ts"
         ],
         "tsConfig": "packages/asciidoc/tsconfig.lib.json",
         "format": [

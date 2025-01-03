@@ -1,4 +1,4 @@
-import { getCSSWithSelectorName } from "./plugins";
+import { getCSSWithSelectorName } from "./unocss";
 
 describe("Testing Unocss Plugin functions", () => {
 
