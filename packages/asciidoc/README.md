@@ -126,7 +126,7 @@ To use either use the `@forastro/asciidoc/plugins` module.
 Tailwind
 
 ```ts
-import { tailwindAsciidocTypography } from "@forastro/asciidoc/plugins"
+import { tailwindAsciidocTypography } from "@forastro/asciidoc/tailwind"
 
 export default {
     plugins:[
@@ -138,7 +138,7 @@ export default {
 Uno
 
 ```ts
-import { presetAsciidocTypography } from "@forastro/asciidoc/plugins"
+import { presetAsciidocTypography } from "@forastro/asciidoc/unocss"
 
 export default {
     plugins:[
