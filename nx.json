@@ -97,7 +97,7 @@
       "generatorOptions": {
         "skipLockFileUpdate": true
       },
-      "preVersionCommand": "pnpm dlx nx run-many -t build --projects=nx:lib:ongoing"
+      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'nx:lib:ongoing' && nu scripts.nu refine-publishable-package-json-files"
     }
   }
 }

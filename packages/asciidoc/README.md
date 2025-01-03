@@ -118,6 +118,47 @@ import { AsciidocConfigObject } from "@forastro/asciidoc"
  } satisfies AsciidocConfigObject 
 ```
 
+### Styling
+
+This plugin allows you to use Tailwind or UnoCSS to style your blog pages.
+To use either use the `@forastro/asciidoc/plugins` module.
+
+Tailwind
+
+```ts
+import { tailwindAsciidocTypography } from "@forastro/asciidoc/plugins"
+
+export default {
+    plugins:[
+        tailwindAsciidocTypography
+    ]
+}
+```
+
+Uno
+
+```ts
+import { presetAsciidocTypography } from "@forastro/asciidoc/plugins"
+
+export default {
+    plugins:[
+        presetAsciidocTypography()
+    ]
+}
+```
+
+When using For astro Asciidoc **only shiki and prisma are supported** for syntax highlighting.
+This is what Astro does so I decided to follow that.
+
+To configure a syntax highlighter you must. Create a `asciidoc.config.m{js,ts}` file.
+Inside of it use the `attributes.sourceHighlighter` prop to specify what highlighter you want to use.
+For **Shiki** the only thing you can do is customize the theme nothing else.
+When it comes to **Prism** you must use your own stylesheet for the theme there's nothing else that can be done.
+
+By default Shiki is used with the **light theme as github-dark** and the **dark theme being github-light**.
+This is made under the assumption that **under light pages the code can be seen clearly** but **under darkness
+light can shine through**.
+
 ## Contributions
 
 If you want to file issues or make a contribution go to the [For Astro Repo](https://github.com/louiss0/forastro).
