@@ -37,7 +37,10 @@ const contentFolderNameSchema = z.string().regex(
    `
 )
 
-export function createAsciidocLoader(contentFolderName: string) {
+
+export function createAsciidocLoader(
+  contentFolderName: string,
+  enforceAttributeKeyCasing: 'snake' | 'dash' = 'dash') {
   return {
     name: 'forastro/asciidoc-loader',
     async load({
@@ -305,15 +308,61 @@ export function createAsciidocLoader(contentFolderName: string) {
         });
       }
 
+      const dashedCaseRecordSchema = z.record(
+        z.string().regex(/^(?:[a-z0-9]+)(?:-[a-z0-9]+)*(?:[a-z0-9]+)$/),
+        z.union([z.string(), z.number(), z.boolean()])
+      )
+
+      const snakeCaseRecordSchema = z.record(
+        z.string().regex(/^(?:[a-z0-9]+)(?:_[a-z0-9]+)*(?:[a-z0-9]+)$/),
+        z.union([z.string(), z.number(), z.boolean()])
+      )
+
+
       async function setStoreUsingExtractedInfo(
         projectRelativePath: string,
         slug: string,
         document: Document,
       ) {
 
+
+        let attributes: Record<string, string | number | boolean>
+        switch (enforceAttributeKeyCasing) {
+
+          case 'snake':
+
+            attributes = snakeCaseRecordSchema.transform((attrs) =>
+              Object.fromEntries(Object.entries(attrs).map(
+                ([key, value]) => [
+                  key.replace(
+                    /_([a-z])/g,
+                    (_, letter) => letter.toUpperCase()),
+                  value!
+                ],
+              ))
+            ).parse(document.getAttributes())
+
+            break
+          case 'dash':
+            attributes = dashedCaseRecordSchema.transform((attrs) =>
+              Object.fromEntries(Object.entries(attrs).map(
+                ([key, value]) => [
+                  key.replace(
+                    /-([a-z])/g,
+                    (_, letter) => letter.toUpperCase()),
+                  value
+                ]
+              ))
+            ).parse(document.getAttributes())
+
+            break
+        }
+
+
+
         const data = await parseData({
           id: slug,
-          data: document.getAttributes(),
+          data: attributes,
           filePath: projectRelativePath,
         });
 
@@ -322,7 +371,7 @@ export function createAsciidocLoader(contentFolderName: string) {
           id: slug,
           data,
           filePath: projectRelativePath,
-          digest: generateDigest(data),
+          digest: generateDigest(attributes),
           rendered: {
             metadata: {
               frontmatter: data,
