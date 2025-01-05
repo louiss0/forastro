@@ -309,12 +309,17 @@ export function createAsciidocLoader(
       }
 
       const dashedCaseRecordSchema = z.record(
-        z.string().regex(/^(?:[a-z0-9]+)(?:-[a-z0-9]+)*(?:[a-z0-9]+)$/),
+        z.string().regex(
+          /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*(?:[a-z0-9]+)$/,
+          "You must write using dash case Ex: url-repo"
+        ),
         z.union([z.string(), z.number(), z.boolean()])
       )
 
       const snakeCaseRecordSchema = z.record(
-        z.string().regex(/^(?:[a-z0-9]+)(?:_[a-z0-9]+)*(?:[a-z0-9]+)$/),
+        z.string().regex(/^(?:[a-z0-9]+)(?:_[a-z0-9]+)*(?:[a-z0-9]+)$/,
+          "You must write using snake case Ex: source_highlighter"
+        ),
         z.union([z.string(), z.number(), z.boolean()])
       )
 
