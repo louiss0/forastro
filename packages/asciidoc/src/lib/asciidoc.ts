@@ -25,6 +25,17 @@ class FilePathAndSlug {
   ) { }
 }
 
+const contentFolderNameSchema = z.string().regex(
+  /\w+(?:\/\w+)*/,
+  `A content folder name must be a string with word characters at the front only.
+   Ex: content
+   When referring to deeply nested folders in the project make sure you place a forward slash  
+   before each folder name after the parent folder name.
+   Ex: src/content
+
+   No spaces or special characters.  
+   `
+)
 
 export function createAsciidocLoader(contentFolderName: string) {
   return {
@@ -39,6 +50,8 @@ export function createAsciidocLoader(contentFolderName: string) {
       watcher,
     }) {
 
+
+      contentFolderNameSchema.parse(contentFolderName)
 
       logger.info('Loading Asciidoc paths and config file');
       const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
