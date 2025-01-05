@@ -25,17 +25,7 @@ class FilePathAndSlug {
   ) { }
 }
 
-const contentFolderNameSchema = z.string().regex(
-  /\w+(?:\/\w+)*/,
-  `A content folder name must be a string with word characters at the front only.
-   Ex: content
-   When referring to deeply nested folders in the project make sure you place a forward slash  
-   before each folder name after the parent folder name.
-   Ex: src/content
 
-   No spaces or special characters.  
-   `
-)
 
 
 export function createAsciidocLoader(
@@ -43,20 +33,36 @@ export function createAsciidocLoader(
   enforceAttributeKeyCasing: 'snake' | 'dash' = 'dash') {
   return {
     name: 'forastro/asciidoc-loader',
-    async load({
-      store,
-      config: astroConfig,
-      generateDigest,
-      logger,
-      collection,
-      parseData,
-      watcher,
-    }) {
+    async load(context) {
 
+
+      const contentFolderNameSchema = z.string().regex(
+        /\w+(?:\/\w+)*/,
+        `A content folder name must be a string with word characters at the front only.
+   Ex: content
+   When referring to deeply nested folders in the project make sure you place a forward slash  
+   before each folder name after the parent folder name.
+   Ex: src/content
+
+   No spaces or special characters.  
+   `
+      )
 
       contentFolderNameSchema.parse(contentFolderName)
 
+      const {
+        store,
+        config: astroConfig,
+        generateDigest,
+        logger,
+        collection,
+        parseData,
+        watcher,
+      } = context
+
+
       logger.info('Loading Asciidoc paths and config file');
+
       const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
 
       const [config, paths] = await Promise.all([
@@ -310,14 +316,14 @@ export function createAsciidocLoader(
 
       const dashedCaseRecordSchema = z.record(
         z.string().regex(
-          /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*(?:[a-z0-9]+)$/,
+          /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
           "You must write using dash case Ex: url-repo"
         ),
         z.union([z.string(), z.number(), z.boolean()])
       )
 
       const snakeCaseRecordSchema = z.record(
-        z.string().regex(/^(?:[a-z0-9]+)(?:_[a-z0-9]+)*(?:[a-z0-9]+)$/,
+        z.string().regex(/^(?:[a-z0-9]+)(?:_[a-z0-9]+)*$/,
           "You must write using snake case Ex: source_highlighter"
         ),
         z.union([z.string(), z.number(), z.boolean()])
