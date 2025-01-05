@@ -10,7 +10,7 @@ import {
   registerShiki,
   transformObjectKeysIntoDashedCase,
 } from './internal';
-import type { z } from 'astro/zod';
+import { z } from 'astro/zod';
 
 import { resolve } from 'node:path';
 
@@ -24,30 +24,57 @@ class FilePathAndSlug {
     public readonly slug: string,
   ) { }
 }
-export function createAsciidocLoader(contentFolderName: string) {
+
+
+
+
+export function asciidocLoader(
+  contentFolderName: string) {
   return {
     name: 'forastro/asciidoc-loader',
-    async load({
-      store,
-      config: astroConfig,
-      generateDigest,
-      logger,
-      parseData,
-      watcher,
-    }) {
+    async load(context) {
+
+
+      const contentFolderNameSchema = z.string().regex(
+        /\w+(?:\/\w+)*/,
+        `A content folder name must be a string with word characters at the front only.
+   Ex: content
+   When referring to deeply nested folders in the project make sure you place a forward slash  
+   before each folder name after the parent folder name.
+   Ex: src/content
+
+   No spaces or special characters.  
+   `
+      )
+
+      contentFolderNameSchema.parse(contentFolderName)
+
+      const {
+        store,
+        config: astroConfig,
+        generateDigest,
+        logger,
+        collection,
+        parseData,
+        watcher,
+      } = context
+
+
       logger.info('Loading Asciidoc paths and config file');
 
-      const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}/`;
+      const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
 
       const [config, paths] = await Promise.all([
         loadAsciidocConfig(resolvedRootRepo),
-        getAsciidocPaths(`${resolvedRootRepo}${contentFolderName}`),
+        getAsciidocPaths(`${resolvedRootRepo}/${contentFolderName}/${collection}`),
       ]);
 
       if (paths.length === 0) {
-        throw Error(`There are no files in this folder ${contentFolderName}.
-                    Please use a different folder.
-                    `);
+        throw Error(
+          `There are no files in this folder ${contentFolderName}.
+            Please use a different folder.
+            `
+        );
       }
 
 
@@ -84,13 +111,13 @@ export function createAsciidocLoader(contentFolderName: string) {
 
       const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
 
-      const fullFilePathRE =
-        /(?<folder_path>.+\/)(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/;
+      const fileNameRE =
+        /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)$/;
 
-      const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
+
 
       for (const path of paths) {
-        const fullFilePathMatch = path.match(fullFilePathRE);
+        const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
           throw Error(`This path isn't correct.
@@ -107,10 +134,10 @@ export function createAsciidocLoader(contentFolderName: string) {
           );
         }
 
-        const pathPrefixedWithFolderName = `${contentFolderName}/${path}`;
+        const pathPrefixedWithFolderName = `${contentFolderName}/${collection}/${path}`;
 
         const document = loadFileWithRegistryAndAttributes(
-          `${resolvedRootRepo}${pathPrefixedWithFolderName}`,
+          `${resolvedRootRepo}/${pathPrefixedWithFolderName}`,
         );
 
         const sluggedFilename = generateSlug(filename);
@@ -125,7 +152,12 @@ export function createAsciidocLoader(contentFolderName: string) {
           filename,
           new FilePathAndSlug(pathPrefixedWithFolderName, sluggedFilename),
         );
+
       }
+
+
+      const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
+
 
       watcher?.on('add', async (path) => {
         const pathEndsWithOneOfTheSupportedAsciidocExtensions =
@@ -133,7 +165,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const fullFilePathMatch = path.match(fullFilePathRE);
+        const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
           throw Error(`This path ${path} isn't correct.
@@ -201,7 +233,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const filename = path.match(fullFilePathRE)![2]!;
+        const filename = path.match(fileNameRE)![2]!;
 
         logger.info(
           `You changed this file ${filename} the store is being updated`,
@@ -235,7 +267,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const fullFilePathMatch = path.match(fullFilePathRE);
+        const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
           throw Error(`This path isn't correct.
@@ -281,15 +313,61 @@ export function createAsciidocLoader(contentFolderName: string) {
         });
       }
 
+
+
+
       async function setStoreUsingExtractedInfo(
         projectRelativePath: string,
         slug: string,
         document: Document,
       ) {
 
+
+        const dashedCaseRecordSchema = z.record(
+          z.string().regex(
+            /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
+            "You must write using dash case Ex: url-repo"
+          ),
+          z.union([z.string(), z.number(), z.boolean()])
+        )
+
+        let attributes: z.infer<typeof dashedCaseRecordSchema>
+
+        try {
+
+          attributes = dashedCaseRecordSchema.transform((attrs) =>
+            Object.fromEntries(Object.entries(attrs).map(
+              ([key, value]) => [
+                key.replace(
+                  /-([a-z])/g,
+                  (_, letter) => letter.toUpperCase()),
+                value
+              ]
+            ))
+          ).parse(document.getAttributes())
+
+        } catch (error: unknown) {
+
+
+
+          if (error instanceof z.ZodError) {
+            logger.error("All attributes must be written in dashed case in files")
+            for (const issue of error.issues) {
+              logger.error(`In this file ${projectRelativePath} this attribute ${issue.path} has this problem ${issue.message}`)
+            }
+
+          }
+
+          return
+
+        }
+
+
+
+
         const data = await parseData({
           id: slug,
-          data: document.getAttributes(),
+          data: attributes,
           filePath: projectRelativePath,
         });
 
@@ -298,7 +376,7 @@ export function createAsciidocLoader(contentFolderName: string) {
           id: slug,
           data,
           filePath: projectRelativePath,
-          digest: generateDigest(data),
+          digest: generateDigest(attributes),
           rendered: {
             metadata: {
               frontmatter: data,
@@ -319,6 +397,3 @@ export function createAsciidocLoader(contentFolderName: string) {
   } satisfies Loader;
 }
 
-export function asciidocLoader(folder_name: string) {
-  return createAsciidocLoader(folder_name);
-}

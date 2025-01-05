@@ -32,6 +32,20 @@
       "import": "./src/lib/tailwind.ts"
     }
   },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
+  },
+  "bugs": {
+    "url": "https://github.com/louiss0/forastro/issues",
+    "email": "louisshelton0@gmail.com"
+  },
+  "homepage": "https://forastro-docs.onrender.com/libraries/asciidoc",
+  "repository": {
+    "directory": "packages/asciidoc",
+    "type": "git",
+    "url": "https://github.com/louiss0/forastro"
+  },
   "keywords": [
     "astro",
     "astro-loader",
