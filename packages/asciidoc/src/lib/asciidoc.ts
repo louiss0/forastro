@@ -103,13 +103,13 @@ export function createAsciidocLoader(contentFolderName: string) {
 
       const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
 
-      const fullFilePathRE =
-        /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/;
+      const fileNameRE =
+        /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)$/;
 
 
 
       for (const path of paths) {
-        const fullFilePathMatch = path.match(fullFilePathRE);
+        const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
           throw Error(`This path isn't correct.
@@ -157,7 +157,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const fullFilePathMatch = path.match(fullFilePathRE);
+        const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
           throw Error(`This path ${path} isn't correct.
@@ -225,7 +225,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const filename = path.match(fullFilePathRE)![2]!;
+        const filename = path.match(fileNameRE)![2]!;
 
         logger.info(
           `You changed this file ${filename} the store is being updated`,
@@ -259,7 +259,7 @@ export function createAsciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const fullFilePathMatch = path.match(fullFilePathRE);
+        const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
           throw Error(`This path isn't correct.
