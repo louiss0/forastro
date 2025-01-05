@@ -28,9 +28,8 @@ class FilePathAndSlug {
 
 
 
-export function createAsciidocLoader(
-  contentFolderName: string,
-  enforceAttributeKeyCasing: 'snake' | 'dash' = 'dash') {
+export function asciidocLoader(
+  contentFolderName: string) {
   return {
     name: 'forastro/asciidoc-loader',
     async load(context) {
@@ -314,20 +313,7 @@ export function createAsciidocLoader(
         });
       }
 
-      const dashedCaseRecordSchema = z.record(
-        z.string().regex(
-          /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
-          "You must write using dash case Ex: url-repo"
-        ),
-        z.union([z.string(), z.number(), z.boolean()])
-      )
 
-      const snakeCaseRecordSchema = z.record(
-        z.string().regex(/^(?:[a-z0-9]+)(?:_[a-z0-9]+)*$/,
-          "You must write using snake case Ex: source_highlighter"
-        ),
-        z.union([z.string(), z.number(), z.boolean()])
-      )
 
 
       async function setStoreUsingExtractedInfo(
@@ -337,37 +323,45 @@ export function createAsciidocLoader(
       ) {
 
 
-        let attributes: Record<string, string | number | boolean>
-        switch (enforceAttributeKeyCasing) {
+        const dashedCaseRecordSchema = z.record(
+          z.string().regex(
+            /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
+            "You must write using dash case Ex: url-repo"
+          ),
+          z.union([z.string(), z.number(), z.boolean()])
+        )
 
-          case 'snake':
+        let attributes: z.infer<typeof dashedCaseRecordSchema>
 
-            attributes = snakeCaseRecordSchema.transform((attrs) =>
-              Object.fromEntries(Object.entries(attrs).map(
-                ([key, value]) => [
-                  key.replace(
-                    /_([a-z])/g,
-                    (_, letter) => letter.toUpperCase()),
-                  value!
-                ],
-              ))
-            ).parse(document.getAttributes())
+        try {
 
-            break
-          case 'dash':
-            attributes = dashedCaseRecordSchema.transform((attrs) =>
-              Object.fromEntries(Object.entries(attrs).map(
-                ([key, value]) => [
-                  key.replace(
-                    /-([a-z])/g,
-                    (_, letter) => letter.toUpperCase()),
-                  value
-                ]
-              ))
-            ).parse(document.getAttributes())
+          attributes = dashedCaseRecordSchema.transform((attrs) =>
+            Object.fromEntries(Object.entries(attrs).map(
+              ([key, value]) => [
+                key.replace(
+                  /-([a-z])/g,
+                  (_, letter) => letter.toUpperCase()),
+                value
+              ]
+            ))
+          ).parse(document.getAttributes())
 
-            break
+        } catch (error: unknown) {
+
+
+
+          if (error instanceof z.ZodError) {
+            logger.error("All attributes must be written in dashed case in files")
+            for (const issue of error.issues) {
+              logger.error(`In this file ${projectRelativePath} this attribute ${issue.path} has this problem ${issue.message}`)
+            }
+
+          }
+
+          return
+
         }
+
 
 
 
@@ -403,6 +397,3 @@ export function createAsciidocLoader(
   } satisfies Loader;
 }
 
-export function asciidocLoader(folder_name: string) {
-  return createAsciidocLoader(folder_name);
-}
