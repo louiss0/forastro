@@ -106,7 +106,6 @@ export function createAsciidocLoader(contentFolderName: string) {
       const fullFilePathRE =
         /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/;
 
-      const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
 
 
       for (const path of paths) {
@@ -147,6 +146,10 @@ export function createAsciidocLoader(contentFolderName: string) {
         );
 
       }
+
+
+      const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
+
 
       watcher?.on('add', async (path) => {
         const pathEndsWithOneOfTheSupportedAsciidocExtensions =
