@@ -1,7 +1,7 @@
 # Syntax Display
 Shelton Louis
 :experimental:
-:hero_image: ../../assets/images/couple-9215839_640.jpg
+:hero-image: ../../assets/images/couple-9215839_640.jpg
 :toc: auto
 :standalone:
 [.title]#{doctitle}#
