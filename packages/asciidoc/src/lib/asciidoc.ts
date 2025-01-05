@@ -10,7 +10,7 @@ import {
   registerShiki,
   transformObjectKeysIntoDashedCase,
 } from './internal';
-import type { z } from 'astro/zod';
+import { z } from 'astro/zod';
 
 import { resolve } from 'node:path';
 
@@ -24,6 +24,8 @@ class FilePathAndSlug {
     public readonly slug: string,
   ) { }
 }
+
+
 export function createAsciidocLoader(contentFolderName: string) {
   return {
     name: 'forastro/asciidoc-loader',
@@ -32,22 +34,26 @@ export function createAsciidocLoader(contentFolderName: string) {
       config: astroConfig,
       generateDigest,
       logger,
+      collection,
       parseData,
       watcher,
     }) {
-      logger.info('Loading Asciidoc paths and config file');
 
-      const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}/`;
+
+      logger.info('Loading Asciidoc paths and config file');
+      const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
 
       const [config, paths] = await Promise.all([
         loadAsciidocConfig(resolvedRootRepo),
-        getAsciidocPaths(`${resolvedRootRepo}${contentFolderName}`),
+        getAsciidocPaths(`${resolvedRootRepo}/${contentFolderName}/${collection}`),
       ]);
 
       if (paths.length === 0) {
-        throw Error(`There are no files in this folder ${contentFolderName}.
-                    Please use a different folder.
-                    `);
+        throw Error(
+          `There are no files in this folder ${contentFolderName}.
+            Please use a different folder.
+            `
+        );
       }
 
 
@@ -85,9 +91,10 @@ export function createAsciidocLoader(contentFolderName: string) {
       const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
 
       const fullFilePathRE =
-        /(?<folder_path>.+\/)(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/;
+        /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)/;
 
       const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
+
 
       for (const path of paths) {
         const fullFilePathMatch = path.match(fullFilePathRE);
@@ -107,10 +114,10 @@ export function createAsciidocLoader(contentFolderName: string) {
           );
         }
 
-        const pathPrefixedWithFolderName = `${contentFolderName}/${path}`;
+        const pathPrefixedWithFolderName = `${contentFolderName}/${collection}/${path}`;
 
         const document = loadFileWithRegistryAndAttributes(
-          `${resolvedRootRepo}${pathPrefixedWithFolderName}`,
+          `${resolvedRootRepo}/${pathPrefixedWithFolderName}`,
         );
 
         const sluggedFilename = generateSlug(filename);
@@ -125,6 +132,7 @@ export function createAsciidocLoader(contentFolderName: string) {
           filename,
           new FilePathAndSlug(pathPrefixedWithFolderName, sluggedFilename),
         );
+
       }
 
       watcher?.on('add', async (path) => {
