@@ -1,3 +1,21 @@
+## 2.1.0 (2025-01-05)
+
+### 🚀 Features
+
+- add attribute validation based on snake or dash case keys ([62edfde](https://github.com/louiss0/forastro/commit/62edfde))
+- add content folder name validation ([c76d601](https://github.com/louiss0/forastro/commit/c76d601))
+
+### 🩹 Fixes
+
+- enforce dashed case validation and transform into camelCase before validation ([fe229d4](https://github.com/louiss0/forastro/commit/fe229d4))
+- remove last group from regex's related to case schemas ([66a998a](https://github.com/louiss0/forastro/commit/66a998a))
+- fetch files from the folder with the collection's name in it The loader would previously fetch all content from the folder regardless of collection Now it uses the collection name to determine the exact folder to get content from ([c153935](https://github.com/louiss0/forastro/commit/c153935))
+- split plugin file into two different files I ran into a bug where the tailwind plugin was supposed to be loaded but it couldn't due to the fact that it wasn't downloaded. If the user uses the tailwind plugin then they should only use the tailwind file The test file only tested the unocss logic so it's now changed to unocss.spec ([d73ed13](https://github.com/louiss0/forastro/commit/d73ed13))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 # 3.0.0 (2025-01-03)
 
 This was a version bump only for asciidoc to align it with other projects, there were no code changes.
