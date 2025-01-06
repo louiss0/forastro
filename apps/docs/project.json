@@ -3,25 +3,45 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/docs/src",
-  "tags": ["nx:docs"],
+  "tags": [
+    "nx:docs"
+  ],
   "targets": {
     "build": {
-      "executor": "@nxtensions/astro:build",
-      "options": {}
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/docs build"
+      }
+    },
+    "add": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/docs add"
+      }
+    },
+    "info": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/docs info"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/docs check"
+      }
     },
     "dev": {
-      "executor": "@nxtensions/astro:dev",
-      "options": {}
-    },
-    "preview": {
-      "executor": "@nxtensions/astro:preview",
-      "options": {}
-    },
-    "check": {
-      "executor": "@nxtensions/astro:check"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/docs dev"
+      }
     },
     "sync": {
-      "executor": "@nxtensions/astro:sync"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm exec astro --root apps/docs sync"
+      }
     }
   }
 }
