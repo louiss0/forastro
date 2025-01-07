@@ -1,15 +1,17 @@
 {
   "name": "docs",
-  "version": "1.0.0",
-  "description": "These are the docs for this repo",
-  "main": "index.js",
+  "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "@astrojs/starlight": "^0.30.5"
+    "@astrojs/starlight": "^0.30.5",
+    "astro": "^5.0.2",
+    "sharp": "^0.32.5"
   }
 }
