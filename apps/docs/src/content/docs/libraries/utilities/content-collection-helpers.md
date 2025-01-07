@@ -1,4 +1,7 @@
-# Content Collection Helpers
+---
+title: Content Collection Helpers
+description: ""
+---
 
 These functions are an API on top of the get collection from `"astro:content"`
 They are created to format the data that comes from Astro in a way where you

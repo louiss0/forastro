@@ -1,4 +1,7 @@
-# Range Generators
+---
+title: Range Generators
+description: ""
+---
 
 A range generator is a set of Generators that allow you to generate a set of numbers.
 They require three numbers a **start stop and step**. and a boolean called inclusive.

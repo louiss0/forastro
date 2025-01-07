@@ -7,7 +7,10 @@
 [Tags Page Headings Section]: /libraries/remark-html-directives/tags#headings
 [Astro Site]: https://astro.build
 
-# Remark HTML Directives Integration <Badge type="info" text="1.1.0" />
+---
+title: Remark HTML Directives Integration 
+description: ""
+---<Badge type="info" text="1.1.0" />
 
 The `@forastro/remark-html-directives-integration` integrates `remark-directive` into your [Astro][Astro Site] project.
 

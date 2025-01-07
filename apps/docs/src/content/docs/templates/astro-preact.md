@@ -1,4 +1,7 @@
-# For Astro Preact Template
+---
+title: For Astro Preact Template
+description: ""
+---
 
 This template is a template for creating sites built with Astro and Preact. It uses `@forastro/utilities` for Astro support.
 It uses a class library called `clsx`. The table below should tell you more.

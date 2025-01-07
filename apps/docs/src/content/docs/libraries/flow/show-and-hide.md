@@ -1,4 +1,7 @@
-# Show and Hide
+---
+title: Show and Hide
+description: ""
+---
 
 Show and Hide are components that make a decision on whether to display it's child based on a condition. Show is used to display it's child when a condition is true. Hide does the opposite. It hides when a condition is true.
 

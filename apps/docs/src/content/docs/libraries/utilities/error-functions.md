@@ -1,4 +1,7 @@
-# Error Functions
+---
+title: Error Functions
+description: ""
+---
 
 An error function is a function that is created to do something
 with errors. They allow the user to do something about errors.

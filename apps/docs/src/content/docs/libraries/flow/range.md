@@ -1,4 +1,7 @@
-# Range
+---
+title: Range
+description: ""
+---
 
 ```tsx
 <Range

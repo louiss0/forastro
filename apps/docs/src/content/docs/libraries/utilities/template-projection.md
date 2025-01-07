@@ -1,6 +1,9 @@
 <!-- markdownlint-disable MD024 -->
 
-# Template Projection
+---
+title: Template Projection
+description: ""
+---
 
 You can create templates in Astro SFC's by using a function called `useTemplaterAndProjector`.
 It's a function that returns two components in a tuple. `Templater` and `Projector`.
