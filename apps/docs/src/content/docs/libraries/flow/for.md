@@ -1,6 +1,6 @@
 ---
 title: For
-description: ""
+description: "This is the for component for astro"
 ---
 
 ```tsx
@@ -46,13 +46,11 @@ This function runs throughout every iteration of the loop inside of the componen
 ```jsx
 <For of={['Eren', 'Mikasa', 'Levi', 'Historia']}>
   {(value, info) =>
-    info.isFirst ? (
-      <div style={{ color: 'red' }}>{value}</div>
-    ) : info.isLast ? (
-      <div style={{ color: 'green' }}>{value}</div>
-    ) : (
-      <div>{value}</div>
-    )
+    info.isFirst 
+    ? (<div style={{ color: 'red' }}>{value}</div>) 
+    : info.isLast 
+    ? (<div style={{ color: 'green' }}>{value}</div>) 
+    : (<div>{value}</div>)
   }
 </For>
 ```
