@@ -1,4 +1,7 @@
-# Conditional Functions
+---
+title: Conditional Functions
+description: ""
+---
 
 Functions that take in two parameters. a boolean and a callback.
 When the condition is true or not it executes the function that was passed through.

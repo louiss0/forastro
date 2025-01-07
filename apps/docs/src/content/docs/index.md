@@ -1,6 +1,7 @@
 ---
-layout: home
-
+title: Index
+description: Welcome to the For Astro docs site this is a place where all.
+  The things created by me Shelton Louis live. 
 hero:
   name: For Astro
   tagline: A collection of essential Tools For Astro

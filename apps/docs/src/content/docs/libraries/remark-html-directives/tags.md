@@ -1,4 +1,7 @@
-# Tags
+---
+title: Tags
+description: ""
+---
 
 To make sure that Markdown is written well I have decided to restrict the way that tags are used. This library only supports HTML tags that are supposed to be written inside of the body and no form tags. There are a list of supported tags that are meant to be used.
 

@@ -6,7 +6,10 @@ next:
 
 <!-- markdownlint-disable-next-line MD033 -->
 
-# Flow <Badge type="info" text="2.5.3" />
+---
+title: Flow 
+description: ""
+---<Badge type="info" text="2.5.3" />
 
 The `@forastro/flow` library is a library of control flow components.
 It has all of the ones that you would typically use in an app.

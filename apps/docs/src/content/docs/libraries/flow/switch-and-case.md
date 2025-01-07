@@ -1,4 +1,7 @@
-# Switch and Case
+---
+title: Switch and Case
+description: ""
+---
 
 Switch and case are two components that are supposed to be used with each other. They both have an `of=` prop. If the of prop sent to case is equal to the on in a switch then it's child will be rendered. If not. then the one with a default case will be rendered.
 

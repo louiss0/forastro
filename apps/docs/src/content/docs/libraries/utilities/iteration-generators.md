@@ -1,4 +1,7 @@
-# Iteration Generator
+---
+title: Iteration Generator
+description: ""
+---
 
 An _iteration generator_ is a generator that iterates over an iterable and **passes through
 in a callback function** at least the current value and an object called the _iteration info_. Which is and object that

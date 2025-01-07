@@ -1,4 +1,7 @@
-# For Astro Vue Template
+---
+title: For Astro Vue Template
+description: ""
+---
 
 This template is a template that is useful for building simple websites.
 With bits of interactivity throughout each stage of development.

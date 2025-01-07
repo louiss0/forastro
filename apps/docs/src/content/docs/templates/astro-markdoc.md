@@ -1,4 +1,7 @@
-# For Astro Markdoc Template
+---
+title: For Astro Markdoc Template
+description: ""
+---
 
 [Astro Site]: https://astro.build
 

@@ -1,4 +1,7 @@
-# For Astro Minimal Template
+---
+title: For Astro Minimal Template
+description: ""
+---
 
 This template is a template that is created with purpose of creating simple sites with
 taliwind and Astro. You can create simple sites with this template by making good use of

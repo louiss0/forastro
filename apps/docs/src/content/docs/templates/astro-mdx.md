@@ -1,4 +1,7 @@
-# For Astro MDX Template
+---
+title: For Astro MDX Template
+description: ""
+---
 
 [Astro Site]: https://astro.build
 
