@@ -1,15 +1,8 @@
 ---
-next:
-  text: For
-  link: /libraries/flow/for
----
-
-<!-- markdownlint-disable-next-line MD033 -->
-
----
 title: Flow 
 description: ""
----<Badge type="info" text="2.5.3" />
+---
+<!-- <Badge type="info" text="2.5.3" /> -->
 
 The `@forastro/flow` library is a library of control flow components.
 It has all of the ones that you would typically use in an app.

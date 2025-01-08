@@ -1,15 +1,11 @@
 ---
-next:
-  text: Iteration Functions
-  link: /libraries/utilities/iteration-functions
+title: Utilities 
+description: ""
 ---
 
 <!-- markdownlint-disable-next-line MD033 -->
 
----
-title: Utilities 
-description: ""
----<Badge type="info" text="4.3.8"  />
+<!-- <Badge type="info" text="4.3.8"  /> -->
 
 The `@forastro/utilities` package is a package that has practical functions and components
 that are used for development with [Astro.js](https://astro.build).
