@@ -1,0 +1,15 @@
+[
+  {
+    "id": "my-docs",
+    "path": "src/content/docs",
+    "schema": {
+      "path": "markdoc.config.mjs",
+      "type": "node",
+      "property": "default",
+      "watch": true
+    },
+    "routing": {
+      "frontmatter": "route"
+    }
+  }
+]
