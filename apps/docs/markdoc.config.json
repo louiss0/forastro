@@ -1,9 +1,9 @@
 [
   {
     "id": "my-docs",
-    "path": "apps/docs/src/content/docs/",
+    "path": "src/content/docs/",
     "schema": {
-      "path": "apps/docs/markdoc.config.mjs",
+      "path": "markdoc.config.mjs",
       "type": "esm",
       "property": "default",
       "watch": true
