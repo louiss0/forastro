@@ -19,53 +19,60 @@ For icons `astro-icon` is useful for icons.
 | Font Library  | Fontsource |
 | Icon Library  | Astro Icon |
 
-:{% aside  type="note" title=" To use this template type."   %}
+{% aside  type="note" title=" To use this template type."   %}
 
-:::code-group
+{%tabs syncKey="package-manager" %}
 
-```[pnpm] shell
+{% tabitem label="pnpm" %}
+```shell
    pnpm dlx create-astro --template=louiss0/forastro/templates/astro-minimal
 ```
-
-```[yarn] shell
+{%/tabitem%}
+{% tabitem label="yarn" %}
+```shell
    yarn dlx create-astro --template=louiss0/forastro/templates/astro-minimal
 ```
-
-```[npm] shell
+{%/tabitem%}
+{% tabitem label="npm" %}
+```shell
    npx create-astro --template=louiss0/forastro/templates/astro-minimal
 ```
-
+{%/tabitem%}
+{% /tabs %}
 {% /aside %}
 
 ::::
 
-{% aside type="caution"  %} Install then upgrade the dependencies
+{% aside type="caution"  %} 
+Install then upgrade the dependencies
 
 ```shell
 cd my-project && npm i && npm update
 ```
-
 {% /aside %}
 
 ## Start Command
 
 **To start the app use:**
 
-:::code-group
+{%tabs syncKey="package-manager" %}
 
-```[pnpm] shell
+{% tabitem label="pnpm" %}
+```shell
 pnpm run start
 ```
-
-```[npm] shell
+{%/tabitem%}
+{% tabitem label="npm" %}
+```shell
 npm run start
 ```
-
-```[yarn] shell
+{%/tabitem%}
+{% tabitem label="yarn" %}
+```shell
 yarn run start
 ```
-
-{% /aside %}
+{%/tabitem%}
+{% /tabs %}
 
 ## Main Folders
 
