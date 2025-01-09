@@ -12,6 +12,15 @@
       "import": "./src/components/index.ts"
     }
   },
+  "repository": {
+    "directory": "packages/utilities",
+    "url": "https//:github.com/louiss0/forastro",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/louiss0/forastro/issues",
+    "email": "louisshelton0@gmail.com"
+  },
   "author": {
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
