@@ -1,6 +1,6 @@
 ---
 title: Remark HTML Directives Integration
-description: ""
+description: "The `@forastro/remark-html-directives-integration` integrates `remark-directive` into your project."
 ---
 
 [Tags Page]: /libraries/remark-html-directives/tags
@@ -20,6 +20,7 @@ It uses an internal library to allow you to use HTML tag names as directives.
 It also makes sure you write them in markdown the way you would write them in HTML.
 For this we use something called a tag system. It's there to make sure
 only HTML that is needed to write articles,docs and blog posts is allowed.
+
 
 ```shell
    astro add @forastro/remark-html-directives-integration
@@ -50,7 +51,7 @@ Without having to use tags. Any attribute that can be added to an html element c
 The syntax for them is `[=colon=][name][=content=][{key=value}]`.
 The name and colons are necessary so that they become to the proper HTML elements.
 
-{% /aside %}
+{% aside %}
 
 - The name is the name of the directive.
 - The content is for short written text
@@ -66,20 +67,25 @@ The name and colons are necessary so that they become to the proper HTML element
 
 {% /aside %}
 
-:{% aside  type="note" title=" The shorthands for class and id are supported as well."   %}
+{% aside  type="note" title=" The shorthands for class and id are supported as well."   %}
 
-{%tabs syncKey="package-manager" %}
+{%tabs %}
 
-```[class] markdown
+{%tabitem label="class" %}
+``` markdown
     :::div{.container} :::
 ```
+{%/tabitem%}
 
-```[id] markdown
+{%tabitem label="id" %}
+
+``` markdown
     ::button{#floating-button}
 ```
-
+ {%/tabitem%}
+{% /tabs %}
 {% /aside %}
-::::
+
 
 ### Container
 
@@ -90,9 +96,8 @@ A directive that must wrap around markdown content.
 ```md
 :::[name]{key=val}
 content here
-{% /aside %}
+:::
 ```
-
 {% /aside %}
 
 {% aside  type="note" title=" Usage"   %}
@@ -101,7 +106,8 @@ content here
 :::section
 ::h2[I'm a heading]
 This is a section
-{% /aside %}
+:::
+
 ```
 
 {% /aside %}
@@ -116,7 +122,8 @@ than it's children. This must happen the more containers are nested inside each 
 ```markdown
 ::::section
 :::div I'm a div inside of a section.
-{% /aside %}
+    Content
+:::
 ::::
 ```
 
@@ -230,10 +237,9 @@ Tags that specify regions are not allowed here.
 In article mode you can only alter the default behavior of tags.
 {% /aside %}
 
-::: info To alter the default behavior of tags
+{% aside type="note" title="To alter the default behavior of tags" %}
 
 ```ts
-
 {
  elements:{
     span:{
@@ -241,7 +247,6 @@ In article mode you can only alter the default behavior of tags.
     }
  }
 }
-
 ```
 
 {% /aside %}
