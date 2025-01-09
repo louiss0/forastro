@@ -1,20 +1,20 @@
 ---
 title: Range Generators
-description: ""
+description: "A range generator is a generator that allow you to generate a set of numbers.They require three numbers a start stop and step. And an optional bool called inclusive"
 ---
 
 A range generator is a set of Generators that allow you to generate a set of numbers.
-They require three numbers a **start stop and step**. and a boolean called inclusive.
-Start and stop are the first two parameters.
+They require **two parameters a start and stop**.
 Step and inclusive are passed as the third parameter as an object that uses there names.
 
 They generate numbers that are in-between the start and the stop based on the step.
-If the start is less than the stop the numbers in-between are ones increased by the step.  
-If the start is less than the stop the numbers in-between will ones decreased up by the step.
-By default the last number is not included by the calculation.
-To change this just set inclusive to `true`.
+If the **start is less than the stop** the **numbers in-between are ones increased** by the step.  
+If the **start is less than the stop** the **numbers in-between will ones decreased** up by the step.
 
-{% /aside %}
+By default the last number is not included by the calculation. \
+To change this just set `inclusive:` to `true`.
+
+{% aside type="caution" %}
 Astro transforms all values yielded from generators into Text.
 {% /aside %}
 
@@ -102,5 +102,5 @@ That specifies the **start,stop** and **,step**.
 
 {% aside type="caution"  %}  
  This function only works like this in Astro components like that.
-To make it work in other frameworks use a for loop.
+ To make it work in other frameworks use a for loop.
 {% /aside %}
