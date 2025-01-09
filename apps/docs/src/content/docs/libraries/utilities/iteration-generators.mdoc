@@ -8,22 +8,22 @@ in a callback function** at least the current value and an object called the _it
 gives away info about the current iteration of the object. How many iterations there are going to be.
 All of them are generators. Some async some not They are created to be well typed.
 
-:::warning
+{% aside type="caution"  %}
 Async generators are best used inside of Astro components
-:::
+{% /aside %}
 
-:::warning
+{% aside type="caution"  %}
 Some generators will only accept an iterable that has a `forEach()` on it.
 The method is used as a part of the process of iteration.  
-:::
+{% /aside %}
 
 ## Iteration Info
 
 The iteration info is an object that is created to pass on information about the current iteration.
 
-:::info
+{% /aside %}
 This table below is a decscription of all the properties of the IterationInfo.
-:::
+{% /aside %}
 
 | key       | type    | Definition                                  |
 | --------- | ------- | ------------------------------------------- |
@@ -34,7 +34,7 @@ This table below is a decscription of all the properties of the IterationInfo.
 | count     | number  | The total amount of iterations              |
 | remaining | number  | The total amount of iterations remaining    |
 
-<!-- :::info Iteration Info Props Table
+<!-- {% aside  type="note" title=" Iteration Info Props Table"   %}
 
 ::: -->
 
@@ -52,9 +52,9 @@ It iterates through the first parameter and passes through it's **value**,
 the [Iteration Info](#iteration-info).
 If the first parameter is a iterable with a `forEach()` the key as the last parameter.
 
-:::warning
+{% aside type="caution"  %}
 This function works for Astro components
-:::
+{% /aside %}
 
 ### Usage in Astro
 
@@ -80,10 +80,10 @@ It iterates through the first parameter and passes through it's **value**,
 the [Iteration Info](#iteration-info).
 If the first parameter is a iterable with a `forEach()` the key as the last parameter.
 
-:::warning
+{% aside type="caution"  %}
 This function works for Non components. When using React you'll get and error.
 In React use a method that generates arrays instead.
-:::
+{% /aside %}
 
 ### Usage in React
 
