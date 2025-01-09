@@ -1,6 +1,7 @@
 ---
 title: Template Projection
-description: ""
+description: "You can create templates in Astro SFC's by using a function called useTemplaterAndProjector.
+It's a function that returns two components in a tuple. Templater and `Projector."
 ---
 <!-- markdownlint-disable MD024 -->
 
@@ -170,7 +171,7 @@ When passed the projector will receive it as the first argument to it's function
 
 ### Usage
 
-{% /aside %}
+{% aside %}
 
 Activating templater.
 
@@ -194,7 +195,7 @@ Using the template
 
 {% /aside %}
 
-{% /aside %}
+{% aside %}
 
 Sending the context to the projector.
 
@@ -229,7 +230,7 @@ When activated it can pass it's context to the templater to use.
 
 ### Usage
 
-{% /aside %}
+{% aside %}
 
 Projector sending the context
 
@@ -252,7 +253,7 @@ Templater receiving the Context.
 
 {% /aside %}
 
-{% /aside %}
+{% aside %}
 
 Projector sending the context and a slot.
 
@@ -286,7 +287,10 @@ Templater receiving the content and slot.
 
 ## Limitations
 
-{% aside type="caution"  %} When using Templater and Projector you might find that Projector doesn't render.
+{% aside 
+  type="caution"  
+  title="When using Templater and Projector you might find that Projector doesn't render" 
+%} 
 This happens when you attempt to use the projector in the slot of a Client Component.
 Client Components render outside of the scope of define templater and projector.
 
