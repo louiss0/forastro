@@ -25,23 +25,31 @@ that are used for development with [Astro.js](https://astro.build).
 The components that are used by the package are Server Components.
 {% /aside %}
 
-:::code-group
+{%tabs syncKey="package-manager" %}
 
-```[pnpm] shell
+{% tabitem label="pnpm" %}
+```shell
    pnpm add @forastro/utilities
 ```
+{%/tabitem%}
 
-```[yarn] shell
+{% tabitem label="yarn" %}
+```shell
    yarn add @forastro/utilities
 ```
+{%/tabitem%}
 
-```[npm] shell
+{% tabitem label="npm" %}
+```shell
    npm i @forastro/utilities
 ```
+{%/tabitem%}
 
-{% /aside %}
+{% /tabs %}
 
-::: warning You must now set `vite.optimizeDeps.exclude` to `["astro:content"]` in astro config.
+{% aside type="caution" %} 
+
+You must now set `vite.optimizeDeps.exclude` to `["astro:content"]` in astro config.
 This library now uses `astro:content` to expand it's API's
 to give devs a much better experience when using `getCollections()`.
 Unfortunately this is the cost.
