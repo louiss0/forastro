@@ -10,7 +10,7 @@ description: ""
 The `@forastro/utilities` package is a package that has practical functions and components
 that are used for development with [Astro.js](https://astro.build).
 
-:::info This library gives you the following kinds of tools
+{% aside  type="note" title=" This library gives you the following kinds of tools"   %}
 
 - Range functions
 - Iteration functions
@@ -19,11 +19,11 @@ that are used for development with [Astro.js](https://astro.build).
 - Error Functions
 - Content Collection Helpers
 
-:::
+{% /aside %}
 
-:::danger
+{%aside type="danger"  %}
 The components that are used by the package are Server Components.
-:::
+{% /aside %}
 
 :::code-group
 
@@ -39,7 +39,7 @@ The components that are used by the package are Server Components.
    npm i @forastro/utilities
 ```
 
-:::
+{% /aside %}
 
 ::: warning You must now set `vite.optimizeDeps.exclude` to `["astro:content"]` in astro config.
 This library now uses `astro:content` to expand it's API's
@@ -59,7 +59,7 @@ export default {
 };
 ```
 
-:::
+{% /aside %}
 
 ## Recommendations
 

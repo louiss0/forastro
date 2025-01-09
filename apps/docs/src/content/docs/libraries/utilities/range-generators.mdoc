@@ -14,9 +14,9 @@ If the start is less than the stop the numbers in-between will ones decreased up
 By default the last number is not included by the calculation.
 To change this just set inclusive to `true`.
 
-:::info
+{% /aside %}
 Astro transforms all values yielded from generators into Text.
-:::
+{% /aside %}
 
 ## Range
 
@@ -29,7 +29,7 @@ This function automatically produces values in Astro.
 
 ### Uses cases In Astro
 
-:::info `range()` can be instantly used in astro like this.
+{% aside  type="note" title=" `range()` can be instantly used in astro like this."   %}
 
 ```jsx
 {
@@ -37,17 +37,17 @@ This function automatically produces values in Astro.
 }
 ```
 
-:::
+{% /aside %}
 
-:::info Resulting in this HTML
+{% aside  type="note" title=" Resulting in this HTML"   %}
 
 ```html
 2468
 ```
 
-:::
+{% /aside %}
 
-:::info In most cases you want to wrap the value in html. You can do this.
+{% aside  type="note" title=" In most cases you want to wrap the value in html. You can do this."   %}
 
 ```jsx
 {
@@ -59,7 +59,7 @@ This function automatically produces values in Astro.
 }
 ```
 
-:::
+{% /aside %}
 
 ## Iterate Range
 
@@ -100,7 +100,7 @@ That specifies the **start,stop** and **,step**.
 }
 ```
 
-:::warning  
+{% aside type="caution"  %}  
  This function only works like this in Astro components like that.
 To make it work in other frameworks use a for loop.
-:::
+{% /aside %}

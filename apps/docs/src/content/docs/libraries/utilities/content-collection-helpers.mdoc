@@ -155,13 +155,13 @@ The `by` parameter tells this function what params to map to the `params:` objec
 Each entry will be mapped to props. It uses a filter that searches for the posts that are not drafts.
 You can pass in a filter for even better filtering.
 
-:::info
+{% /aside %}
 The entry is the props in the props object.
-:::
+{% /aside %}
 
-:::warning
+{% aside type="caution"  %}
 `getCollectionPaths()` will always get the posts that are not drafts.
-:::
+{% /aside %}
 
 ## Get Collections
 
@@ -213,7 +213,7 @@ It queries them in order based on the list of collections you want.
 It' also allows you to pass in a filter based that filter will apply
 to all the queries for each collection.
 
-:::tip Create your own `getAllCollections()`
+{% aside type="tip"  %} Create your own `getAllCollections()`
 
 Since you can get as many collections as you want
 you can also get all collections by using this function.
@@ -263,7 +263,7 @@ getCollections(collectionNames, filter)
 
 ```
 
-:::
+{% /aside %}
 
 ## Get Entry Data
 
