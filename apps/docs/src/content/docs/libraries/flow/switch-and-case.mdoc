@@ -1,9 +1,9 @@
 ---
 title: Switch and Case
-description: ""
+description: Switch and case are two components that work together to provide conditional rendering. They both have an `of=` prop - if the case's `of` prop matches the switch's, that case's child will be rendered. Otherwise, a default case (if provided) will be rendered.
 ---
 
-Switch and case are two components that are supposed to be used with each other. They both have an `of=` prop. If the of prop sent to case is equal to the on in a switch then it's child will be rendered. If not. then the one with a default case will be rendered.
+{% $frontmatter.description %}
 
 ## Switch
 
@@ -18,19 +18,37 @@ If nothing is rendered by a case statement it will render a message telling you 
 
 ### Props
 
-These are the acceptable props.
+These are the props that are useable.
 
-#### Of
+#### Required
 
-A prop that takes in any value that Astro accepts.
+{% table %}
+* Prop
+* Type
+* Description
+---
+* of
+* `any`
+* Takes any value that Astro accepts. Used to determine which case to render.
+---
+* children
+* `Array<Case>`
+* One or more `<Case />` components whose children will be rendered if their `of` prop matches the switch.
+{% /table %}
 
-#### Children
+#### Optional
 
-The children are supposed to be `<Case />` that will have one of their children rendered if contains the same as `<Switch />`
-
-#### Cloak
-
-A prop that must be true or undefined. If the prop is true then instead the children from all cases not being able to be rendered when their `of=` are not the same as itself. Instead they will be rendered as `display: none` in the browser.
+{% table %}
+* Prop
+* Type
+* Default
+* Description
+---
+* cloak
+* `boolean\|undefined`
+* `undefined`
+* When true, cases that don't match will be rendered with `display: none` instead of being omitted from the output.
+{% /table %}
 
 ## Case
 
@@ -43,21 +61,39 @@ Of if none of it's other siblings were rendered But. A default prop was placed o
 </Case>
 ```
 
-### Props
+### Props 
 
-These are the acceptable props.
+These are the props that are useable.
 
-#### Of
+#### Required
 
-A prop that takes in any value that Astro accepts.
+{% table %}
+* Prop
+* Type
+* Description
+---
+* children
+* `Array<HTMLElement>`
+* One or more HTML elements to be rendered when this case matches or is the default.
+---
+* of
+* `any`
+* Takes any value that Astro accepts. Case will render when this matches the parent Switch's value.
+{% /table %}
 
-#### Children
+#### Optional
 
-The children must be one or more HTML Elements. They must be put inside of this component.
-
-#### Default
-
-The default prop is a prop that makes it so that if no other cases are true then the it's child will be the one that will be rendered.
+{% table %}
+* Prop
+* Type
+* Default
+* Description
+---
+* default
+* `boolean`
+* `false`
+* When true, this case's children will be rendered if no other case matches the switch value.
+{% /table %}
 
 {% aside type="danger"  %}
 If no cases render a component the **Switch** component will render a message that asks to place in a case component.
