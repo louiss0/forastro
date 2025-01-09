@@ -30,22 +30,37 @@ When created the remaining
 
 ### Required
 
-| name  | description               |
-| ----- | ------------------------- |
-| start | The number to start from. |
-| stop  | The number to stop on.    |
+{%table%}
+* name  
+* description               
+---
+* start 
+* The number to start from. 
+---
+* stop  
+* The number to stop on.
+---    
+* children
+* The children is a function that has will be passed two arguments.
+  The first is the `value` the second is the `IterationInfo`.
+{%/table%}
 
 ### Optional
+{%table %}
+* name      
+* description                                
+* default   
+--- 
+* step      
+* numbers to skip when generating numbers.   
+* 1
+---         
+* inclusive 
+* when defined makes the final number appear 
+* undefined 
+---
+{%/table %}
 
-| name      | description                                | default   |
-| --------- | ------------------------------------------ | --------- |
-| step      | numbers to skip when generating numbers.   | 1         |
-| inclusive | when defined makes the final number appear | undefined |
-
-### Children
-
-The children is a function that has will be passed two arguments.
-The first is the value the second is the Iteration Info.
 
 ## Usage
 
