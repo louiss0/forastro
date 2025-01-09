@@ -1,11 +1,13 @@
 ---
 title: Utilities 
-description: ""
+description: "The `@forastro/utilities` package is a package that has practical functions and components
+that are used for development with Astro"
+sidebar: 
+  badge: 
+    text: "v5.0.0"
+    variant: "note"
 ---
 
-<!-- markdownlint-disable-next-line MD033 -->
-
-<!-- <Badge type="info" text="4.3.8"  /> -->
 
 The `@forastro/utilities` package is a package that has practical functions and components
 that are used for development with [Astro.js](https://astro.build).
@@ -17,7 +19,6 @@ that are used for development with [Astro.js](https://astro.build).
 - Template projection
 - Condition evaluation functions
 - Error Functions
-- Content Collection Helpers
 
 {% /aside %}
 
@@ -46,28 +47,6 @@ The components that are used by the package are Server Components.
 {%/tabitem%}
 
 {% /tabs %}
-
-{% aside type="caution" %} 
-
-You must now set `vite.optimizeDeps.exclude` to `["astro:content"]` in astro config.
-This library now uses `astro:content` to expand it's API's
-to give devs a much better experience when using `getCollections()`.
-Unfortunately this is the cost.
-
-```ts
-// astro.config.mjs
-export default {
-  vite: {
-    //[!code ++]
-    optimizeDeps: {
-      //[!code ++]
-      exclude: ['astro:content'], //[!code ++]
-    }, //[!code ++]
-  }, //[!code ++]
-};
-```
-
-{% /aside %}
 
 ## Recommendations
 
