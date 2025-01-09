@@ -1,52 +1,82 @@
 ---
 title: Show and Hide
-description: ""
+description: "Show and Hide are components that make a decision on whether to display it's child based on a condition.  Show is used to display it's child when a condition is true. Hide does the opposite. It hides when a condition is true."
 ---
 
-Show and Hide are components that make a decision on whether to display it's child based on a condition. Show is used to display it's child when a condition is true. Hide does the opposite. It hides when a condition is true.
+{% $frontmatter.description %}
 
 ## Show
 
+```tsx
+<Show when={isPublished} >
+"Content"
+</Show>
+```
+
 ### Props
 
 These are the acceptable props.
 
-#### When
+#### Required
 
-If this prop is true the child will be rendered.
+{%table%}
 
-#### Children
+* name
+* description
+---
+* when
+* If this prop is true the child will be rendered.
+---
+* children 
+* An HTML Element or string to be rendered 
+{%/table%}
 
-An HTML Element or string to rendered.
 
-#### Cloak
+#### Optional
 
-A prop that is used to set the element that is not meant to be shown to.
-`display:none` instead of it not being rendered.
+{%table%}
 
-{% aside type="caution"  %}
-Will only work if when is `true`
-{% /aside %}
+* name
+* description
+---
+* cloak
+* A prop that is used to set the element that is not meant to be shown to
+  `display:none` instead of it not being rendered.
+{%/table%}
 
 ## Hide
 
+```tsx
+<Hide when={!isPublished} >
+"Content"
+</Hide>
+```
+
 ### Props
 
-These are the acceptable props.
+#### Required
 
-#### Children
+{%table%}
 
-An HTML Element or string to rendered.
+* name
+* description
+---
+* when
+* If this prop is true the child won't be rendered.
+---
+* children 
+* An HTML Element or string to be rendered 
+{%/table%}
 
-#### Of
 
-If this prop is true the child will not be rendered.
+#### Optional
 
-#### Cloak
+{%table%}
 
-A prop that is used to set the element that is not meant to be shown to.
-`display:none` instead of it not being rendered.
-
-{% aside type="caution"  %}
-Will only work if when is `true`
-{% /aside %}
+* name
+* description
+---
+* cloak
+* A prop that is used to set the element that is not meant to be shown to
+  `display:none` instead of it not being rendered.
+{%/table%}
