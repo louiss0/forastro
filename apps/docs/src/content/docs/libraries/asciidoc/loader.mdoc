@@ -2,3 +2,96 @@
 title: Loader
 description: Documentation for the Asciidoc loader functionality
 ---
+
+
+The main way to use this library is through the use of the Asciidoc Loader.
+The loader is a function that loads files from a folder using a path to a folder and the collection's name. This loader will always search for the file extensions `.adoc` or `.asciidoc`. It then uses both the folder path specified and the content collection name.
+To extract Asciidoc files and transform them into entries. 
+
+```ts
+    function asciidocLoader(contentFolderName:string):Loader
+```
+
+
+{% aside 
+    type="note" 
+    title="Parameters" 
+%}
+
+{%table%}
+* name  
+* description
+---
+
+* contentFolderName 
+* The folder to take files from. 
+  It expects the folder name to start with a word and end with a `/`.
+  You can place forward slashes in between. \
+  **Folder names are expected to be alpha numeric**
+  
+
+{%/table%}
+
+{% /aside %}
+
+## Usage 
+
+To use this package import it from the `@forastro/asciidoc` namespace.
+Then use it in the `content.config.ts` file.
+
+```ts
+import { z, defineCollection } from "astro:content"
+import { asciidocLoader } from "@forastro/asciidoc"
+
+export const collections = {
+
+    blog: defineCollection( 
+        {
+            loader: asciidocLoader("src/content/")
+            schema: z.object({
+                doctitle: z.string(), 
+            }) 
+        }
+    ),
+
+}
+
+```
+
+{% aside 
+    type="caution"
+    title="Schema and Attribute Restrictions" 
+%}
+The Asciidoc Loader expects all attributes to be written in dashed case.
+It takes the dashed cased attributes and transform's them to camel-case.
+After that it then validates the attributes. 
+
+This is done because in JavaScript the camel-case convention is used. 
+The convention is to use dashed-case in Asciidoc.
+The Asciidoc Processor will coerce uppercase letters into lowercase.
+{%/aside%}
+
+## Features
+
+
+{% aside title="Automatic Asciidoc File Searching" %}
+
+The Asciidoc Loader loads files from a folder that is in the `contentFolderName` plus the collection name. It will always look from the root where the astro config file is.
+{%/aside%}
+
+{% aside title="Automatic Config Loading" %}
+
+When you create a `asciidoc.config.m{ts,js}` in the same place as the Astro config one. 
+It takes that file Then it looks for attributes, blocks and macros from the default export.
+It registers them into it's Asciidoc Processor.
+{%/aside%}
+
+{% aside title="Syntax Highlighting" %}
+
+The Asciidoc Loader can use either [Shiki](https://shiki.style/) or [Prism](https://prismjs.com) Syntax Highlighting.
+All you need to do is create the config file. That's it. 
+{%/aside%}
+
+## Configuration
+
+ 
