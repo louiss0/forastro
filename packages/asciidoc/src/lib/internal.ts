@@ -400,16 +400,6 @@ export const asciidocConfigObjectSchema = z
   })
   .strict();
 
-export const transformObjectKeysIntoDashedCase = (
-  input: Record<string, any>,
-) => {
-  const toDashedCase = (str: string) =>
-    str.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
-
-  return Object.fromEntries(
-    Object.entries(input).map(([key, value]) => [toDashedCase(key), value]),
-  );
-};
 
 export const loadAsciidocConfig = async (cwd: string) => {
 
@@ -586,11 +576,19 @@ export class AsciidocProcessorController {
 
     return this.#processor.loadFile(path, {
       attributes:
-        attributes &&
-        transformObjectKeysIntoDashedCase(attributes),
+        attributes && Object.fromEntries(
+          Object.entries(attributes).map(
+            ([key, value]) =>
+              [toDashedCase(key), value]
+          ),
+        ),
       safe: 10,
       catalog_assets: true,
     });
+
+    function toDashedCase(key: string): string {
+      return key.replace(/[A-Z]/g, (letter) => `-${letter.toLowerCase()}`);
+    }
   }
 
 
