@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 const authorSchema = z
   .string()
   .regex(
-    /^(?:[A-Z][a-z]+\s)+[A-Z][a-z]+$/,
+    /^(?:[A-Z][a-z.]+\s)+[A-Z][a-z]+$/,
     'An author should have at least a first and last name both capitalized',
   );
 export const asciidocBaseSchema = z
@@ -16,14 +16,11 @@ export const asciidocBaseSchema = z
         'Please make sure your title is one with words letters and spaces',
       ),
     docdate: z.string().date(),
-    email: z.string().email().optional(),
+    email: z.string().email(),
     localdate: z.string().date(),
     author: authorSchema,
     authors: authorSchema.array(),
-    authorinitials: z.string().regex(/[A-Z]+/),
-    firstname: z.string().regex(/[A-Z][a-z]+/),
-    middlename: z.string().regex(/[A-Z][a-z]+/),
-    lastname: z.string().regex(/[A-Z][a-z]+/),
+    createdAt: z.string().date(),
     description: z
       .string()
       .min(35, "It's good for a description to at least be two sentences")
@@ -34,20 +31,11 @@ export const asciidocBaseSchema = z
       doctitle,
       docdate,
       localdate,
-      authorinitials,
-      firstname,
-      lastname,
-      middlename,
       ...rest
     } = parsedInput;
 
     return {
       title: doctitle,
-      authorInitials: authorinitials,
-      firstName: firstname,
-      middleName: middlename,
-      lastName: lastname,
-      createdAt: localdate,
       updatedAt: docdate,
       ...rest,
     };
