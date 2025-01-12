@@ -477,14 +477,11 @@ export class AsciidocProcessorController {
       dim?: BundledTheme;
     },
   ) {
-    const themes = [themeOptions.light, themeOptions.dark];
-
-    if (themeOptions.dim) {
-      themes.push(themeOptions.dim);
-    }
 
     const highlighter = await createHighlighter({
-      themes,
+      themes: themeOptions.dim
+        ? [themeOptions.light, themeOptions.dark, themeOptions.dim]
+        : [themeOptions.light, themeOptions.dark,],
       langs: Object.keys(bundledLanguages),
     });
 
