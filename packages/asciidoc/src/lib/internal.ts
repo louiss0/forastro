@@ -569,7 +569,7 @@ export class AsciidocProcessorController {
   };
 
 
-  loadFileWithRegistryAndAttributes(
+  loadFileWithAttributes(
     path: string,
     attributes: AsciidocConfigObjectSchema['attributes'] | undefined
   ) {
