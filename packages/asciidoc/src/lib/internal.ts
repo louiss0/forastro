@@ -282,7 +282,7 @@ const PrismLanguagesSchema = z.enum([
 
 const asciidocGlobalVariablesSchema = z
   .object({
-    sourceHighlighter: z.literal("prism"),
+    sourceHighlighter: z.literal("prism").optional(),
     prismLanguages: PrismLanguagesSchema
       .default(
         [
@@ -304,7 +304,7 @@ const asciidocGlobalVariablesSchema = z
   })
   .or(
     z.object({
-      sourceHighlighter: z.literal('shiki').default('shiki').optional(),
+      sourceHighlighter: z.literal('shiki').optional(),
       shikiTheme: z
         .object({
           light: BundledLanguageNamesSchema,
@@ -333,16 +333,26 @@ const asciidocGlobalVariablesSchema = z
             });
           }
         })
-        .default({ dark: "github-light", light: "github-dark", dim: 'github-dark-dimmed' })
         .optional()
       ,
     }),
   )
   .and(commonAttributes);
 
+
+
 export const asciidocConfigObjectSchema = z
   .object({
-    attributes: asciidocGlobalVariablesSchema.optional(),
+    attributes: asciidocGlobalVariablesSchema
+      .optional()
+      .default({
+        sourceHighlighter: "shiki",
+        shikiTheme: {
+          dark: "github-light",
+          light: "github-dark",
+          dim: 'github-dark-dimmed',
+        }
+      }),
     blocks: z
       .record(
         z.string(),
