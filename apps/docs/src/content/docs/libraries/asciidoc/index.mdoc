@@ -1,5 +1,5 @@
 ---
-title: Introduction
+title: Asciidoc
 sidebar:
     badge:
         text: '2.10'
@@ -48,7 +48,9 @@ export const collections = {
         schema: z.object({
             doctitle: z.string(),
             author: z.string()
-        })
+        }).transform(
+            ({ doctitle, ...rest })=> ({ title:doctitle,...rest })
+        )
     })
 
  }
