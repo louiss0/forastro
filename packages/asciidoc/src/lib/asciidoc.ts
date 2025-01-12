@@ -26,10 +26,9 @@ class FilePathAndSlug {
 }
 
 
+let asciidocConfig: AsciidocConfigObject | undefined
 
-
-export function asciidocLoader(
-  contentFolderName: string) {
+export function asciidocLoader(contentFolderName: string) {
   return {
     name: 'forastro/asciidoc-loader',
     async load(context) {
@@ -64,12 +63,14 @@ export function asciidocLoader(
 
       const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
 
-      const [config, paths] = await Promise.all([
-        loadAsciidocConfig(resolvedRootRepo),
-        getAsciidocPaths(`${resolvedRootRepo}/${contentFolderName}/${collection}`),
-      ]);
+      asciidocConfig = asciidocConfig ?? await loadAsciidocConfig(resolvedRootRepo)
 
-      if (paths.length === 0) {
+      const asciidocFilePaths = await getAsciidocPaths(
+        `${resolvedRootRepo}/${contentFolderName}/${collection}`
+      )
+
+
+      if (asciidocFilePaths.length === 0) {
         throw Error(
           `There are no files in this folder ${contentFolderName}.
             Please use a different folder.
@@ -78,28 +79,28 @@ export function asciidocLoader(
       }
 
 
-      switch (config.attributes?.sourceHighlighter) {
+      switch (asciidocConfig.attributes?.sourceHighlighter) {
 
 
         case 'shiki':
-          await registerShiki(processor, config.attributes.shikiTheme!);
+          await registerShiki(processor, asciidocConfig.attributes.shikiTheme!);
           break
 
         case 'prism':
-          registerPrism_JS(processor, config.attributes.prismLanguages!)
+          registerPrism_JS(processor, asciidocConfig.attributes.prismLanguages!)
           break
 
       }
 
 
 
-      if (Object.keys(config).length !== 0) {
+      if (Object.keys(asciidocConfig).length !== 0) {
         logger.info(`Creating Asciidoc Registry from using config file`);
 
         registerBlocksAndMacrosFromConfig(
           processor,
-          config.blocks,
-          config.macros,
+          asciidocConfig.blocks,
+          asciidocConfig.macros,
         );
       }
 
@@ -111,12 +112,11 @@ export function asciidocLoader(
 
       const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
 
-      const fileNameRE =
-        /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)$/;
+      const fileNameRE = /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)$/;
 
 
 
-      for (const path of paths) {
+      for (const path of asciidocFilePaths) {
         const fullFilePathMatch = path.match(fileNameRE);
 
         if (!fullFilePathMatch) {
@@ -306,8 +306,8 @@ export function asciidocLoader(
 
         return processor.loadFile(path, {
           attributes:
-            config.attributes &&
-            transformObjectKeysIntoDashedCase(config.attributes),
+            asciidocConfig?.attributes &&
+            transformObjectKeysIntoDashedCase(asciidocConfig?.attributes),
           safe: 10,
           catalog_assets: true,
         });
