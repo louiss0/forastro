@@ -137,7 +137,7 @@ export function asciidocLoader(contentFolderName: string) {
 
         const pathPrefixedWithFolderName = `${contentFolderName}/${collection}/${path}`;
 
-        const document = asciidocProcessorController.loadFileWithRegistryAndAttributes(
+        const document = asciidocProcessorController.loadFileWithAttributes(
           `${resolvedRootRepo}/${pathPrefixedWithFolderName}`,
           asciidocConfig.attributes
         );
@@ -209,7 +209,7 @@ export function asciidocLoader(contentFolderName: string) {
         const pathRelativeToProjectRoot = extractPath(path, contentFolderName);
 
         const document = asciidocProcessorController
-          .loadFileWithRegistryAndAttributes(path, asciidocConfig?.attributes);
+          .loadFileWithAttributes(path, asciidocConfig?.attributes);
 
 
         const sluggedFilename = generateSlug(filename);
@@ -253,7 +253,7 @@ export function asciidocLoader(contentFolderName: string) {
         store.delete(filePathAndSlug.slug);
 
         const document = asciidocProcessorController
-          .loadFileWithRegistryAndAttributes(path, asciidocConfig?.attributes);
+          .loadFileWithAttributes(path, asciidocConfig?.attributes);
 
         await setStoreUsingExtractedInfo(
           filePathAndSlug.pathRelativeToRoot,
