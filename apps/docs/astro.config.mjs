@@ -6,6 +6,8 @@ import markdoc from '@astrojs/markdoc';
 
 // https://astro.build/config
 export default defineConfig({
+  outDir: "../../dist/apps/docs",
+  site: "https://forastro-docs.onrender.com",
   integrations: [
     starlight({
       title: 'For Astro',
