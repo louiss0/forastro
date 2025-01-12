@@ -12,8 +12,7 @@ import prismjs from "prismjs"
 import loadLanguages from "prismjs/components/index.js"
 import asciidoctor from 'asciidoctor';
 
-
-const getAsciidocPathsSchema = z.function(
+export const getAsciidocPaths = z.function(
   z.tuple([
     z
       .string()
@@ -23,9 +22,7 @@ const getAsciidocPathsSchema = z.function(
       ),
   ]),
   z.promise(z.string().array()),
-);
-
-export const getAsciidocPaths = getAsciidocPathsSchema.implement(
+).implement(
   async (folderName: string) => {
     return await glob('**/*.{adoc,asciidoc}', {
       cwd: folderName,
@@ -49,71 +46,71 @@ const commonAttributes = z.object({
       "The author's name must be a name and last name both capitalized with a space in between",
     )
     .optional(),
-  email: z.string().email().optional(),
-  backend: z.string().optional(),
-  filetype: z.boolean().optional(),
-  localdir: z.string().optional(),
-  localdate: z.string().date().optional(),
-  localdatetime: z.string().datetime().optional(),
-  localtime: z.string().time().optional(),
-  localyear: z.number().int().optional(),
-  attributeMissing: z.enum(['drop', 'drop-line', 'skip', 'warn']).optional(),
-  attributeUndefined: z.enum(['drop', 'drop-line']).optional(),
-  experimental: z.boolean().optional(),
-  appendixCaption: z.string().optional(),
-  appendixNumber: z.string().optional(),
-  appendixRefsig: z.string().optional(),
-  cautionCaption: z.string().optional(),
-  cautionNumber: z.string().optional(),
-  cautionRefsig: z.string().optional(),
-  cautionSignifier: z.string().optional(),
-  exampleCaption: z.string().optional(),
-  exampleNumber: z.string().optional(),
-  figureCaption: z.string().optional(),
-  figureNumber: z.number().optional(),
-  footnoteNumber: z.number().optional(),
-  importantCaption: z.string().optional(),
-  lastUpdateLabel: z.string().optional(),
-  listingCaption: z.string().optional(),
-  listingNumber: z.number().optional(),
-  noteCaption: z.string().optional(),
-  partRefsig: z.string().optional(),
-  partSignifier: z.string().optional(),
-  prefaceTitle: z.string().optional(),
-  tableCaption: z.string().optional(),
-  tableNumber: z.string().optional(),
-  tipCaption: z.string().optional(),
-  tocTitle: z.string().optional(),
-  untitledLabel: z.string().optional(),
-  warningCaption: z.string().optional(),
-  appName: z.string().optional(),
-  idprefix: z.string().optional(),
-  idseparator: z.string().optional(),
+  email: z.string().email(),
+  backend: z.string(),
+  filetype: z.boolean(),
+  localdir: z.string(),
+  localdate: z.string().date(),
+  localdatetime: z.string().datetime(),
+  localtime: z.string().time(),
+  localyear: z.number().int(),
+  attributeMissing: z.enum(['drop', 'drop-line', 'skip', 'warn']),
+  attributeUndefined: z.enum(['drop', 'drop-line']),
+  experimental: z.boolean(),
+  appendixCaption: z.string(),
+  appendixNumber: z.string(),
+  appendixRefsig: z.string(),
+  cautionCaption: z.string(),
+  cautionNumber: z.string(),
+  cautionRefsig: z.string(),
+  cautionSignifier: z.string(),
+  exampleCaption: z.string(),
+  exampleNumber: z.string(),
+  figureCaption: z.string(),
+  figureNumber: z.number(),
+  footnoteNumber: z.number(),
+  importantCaption: z.string(),
+  lastUpdateLabel: z.string(),
+  listingCaption: z.string(),
+  listingNumber: z.number(),
+  noteCaption: z.string(),
+  partRefsig: z.string(),
+  partSignifier: z.string(),
+  prefaceTitle: z.string(),
+  tableCaption: z.string(),
+  tableNumber: z.string(),
+  tipCaption: z.string(),
+  tocTitle: z.string(),
+  untitledLabel: z.string(),
+  warningCaption: z.string(),
+  appName: z.string(),
+  idprefix: z.string(),
+  idseparator: z.string(),
   leveloffset: z
     .enum(['0', '1', '2', '3', '4', '5'])
     .transform((input) => parseInt(input))
-    .optional(),
-  partnums: z.boolean().optional(),
-  setanchors: z.boolean().optional(),
-  sectids: z.boolean().optional(),
-  sectlinks: z.boolean().optional(),
-  sectnums: z.boolean().optional(),
+  ,
+  partnums: z.boolean(),
+  setanchors: z.boolean(),
+  sectids: z.boolean(),
+  sectlinks: z.boolean(),
+  sectnums: z.boolean(),
   sectnumlevels: z
     .enum(['0', '1', '2', '3', '4', '5'])
     .transform((input) => parseInt(input))
-    .optional(),
-  titleSeparator: z.string().optional(),
+  ,
+  titleSeparator: z.string(),
   toc: z
     .enum(['auto', 'left', 'right', 'macro', 'preamble'])
     .or(z.literal(true))
-    .optional(),
+  ,
   toclevels: z
     .enum(['1', '2', '3', '4', '5'])
     .transform((input) => parseInt(input))
-    .optional(),
-  fragment: z.boolean().optional(),
-  stylesheet: z.string().optional(),
-});
+  ,
+  fragment: z.boolean(),
+  stylesheet: z.string(),
+}).partial();
 
 const bundledThemeNames = Object.keys(bundledThemes) as unknown as Array<
   keyof typeof bundledThemes
@@ -280,8 +277,6 @@ const PrismLanguagesSchema = z.enum([
   'yaml',
 ]).array();
 
-export type PrismLanguages = z.infer<typeof PrismLanguagesSchema>
-
 
 const sourceHighlighterPrismSchema = z.object({
   sourceHighlighter: z.literal("prism").optional(),
@@ -337,6 +332,7 @@ const sourceHighlighterShikiSchema = z.object({
     })
     .optional(),
 });
+
 export const asciidocConfigObjectSchema = z
   .object({
     attributes: z.union([
@@ -403,9 +399,7 @@ export const asciidocConfigObjectSchema = z
 
 export const loadAsciidocConfig = async (cwd: string) => {
 
-  const { config, configFile } = await loadConfig<
-    z.infer<typeof asciidocConfigObjectSchema>
-  >({
+  const { config, configFile } = await loadConfig<AsciidocConfigObjectSchema>({
     cwd,
     name: 'asciidoc',
     omit$Keys: true,
@@ -433,6 +427,8 @@ export class AsciidocProcessorController {
 
   static #instance: AsciidocProcessorController | undefined
 
+  #shikiHighlighter: Awaited<ReturnType<typeof createHighlighter>> | undefined
+
   constructor () {
 
     if (AsciidocProcessorController.#instance) {
@@ -445,7 +441,7 @@ export class AsciidocProcessorController {
 
   }
 
-  registerPrism_JS(languages: PrismLanguages) {
+  registerPrism_JS(languages: z.infer<typeof PrismLanguagesSchema>) {
 
     loadLanguages(languages)
 
@@ -478,13 +474,15 @@ export class AsciidocProcessorController {
     },
   ) {
 
-    const highlighter = await createHighlighter({
+    this.#shikiHighlighter = this.#shikiHighlighter && await createHighlighter({
       themes: themeOptions.dim
         ? [themeOptions.light, themeOptions.dark, themeOptions.dim]
         : [themeOptions.light, themeOptions.dark,],
       langs: Object.keys(bundledLanguages),
     });
 
+
+    const highlighter = this.#shikiHighlighter
 
     this.#processor.SyntaxHighlighter.register('shiki', {
       initialize(name, backend, opts) {
@@ -494,7 +492,7 @@ export class AsciidocProcessorController {
       handlesHighlighting: () => true,
       highlight(_, source, lang,) {
 
-        return highlighter.codeToHtml(source, {
+        return highlighter?.codeToHtml(source, {
           lang,
           cssVariablePrefix: '--faa-shiki-',
           defaultColor: 'light',
