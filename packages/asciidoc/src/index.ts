@@ -4,7 +4,7 @@ import { z } from 'astro/zod';
 const authorSchema = z
   .string()
   .regex(
-    /^(?<first_name>[A-Z][a-z.]+)(?<middle_names>(?:[A-Z][a-z.]+\s)*)(<last_name>[A-Z][a-z]+)$/,
+    /^(?<first_name>[A-Z][a-z.]+)\s+(?<middle_names>(?:[A-Z][a-z.]+\s)*)(<last_name>[A-Z][a-z]+)$/,
     'An author should have at least a first and last name both capitalized',
   );
 export const asciidocBaseSchema = z
