@@ -282,70 +282,68 @@ const PrismLanguagesSchema = z.enum([
 
 export type PrismLanguages = z.infer<typeof PrismLanguagesSchema>
 
-const asciidocGlobalVariablesSchema = z
-  .object({
-    sourceHighlighter: z.literal("prism").optional(),
-    prismLanguages: PrismLanguagesSchema
-      .default(
-        [
-          'markup',
-          'css',
-          'javascript',
-          'typescript',
-          'markdown',
-          'yaml',
-          'json',
-          'jsx',
-          'tsx',
-          'asciidoc',
-          'bash',
-          'php',
-          'git'
-        ]
-      ).optional()
-  })
-  .or(
-    z.object({
-      sourceHighlighter: z.literal('shiki').optional(),
-      shikiTheme: z
-        .object({
-          light: BundledLanguageNamesSchema,
-          dark: BundledLanguageNamesSchema,
-          dim: BundledLanguageNamesSchema.optional(),
-        })
 
-        .refine(({ light, dark }) => light !== dark, {
-          path: ['shikiTheme.dark', 'shikiTheme.light'],
-          message: `The light theme and dark theme must be different from each other`,
-        })
-        .superRefine(({ light, dark, dim }, ctx) => {
-          if (light === dim) {
-            ctx.addIssue({
-              path: ['shikiTheme.light', 'shikiTheme.dim'],
-              code: 'custom',
-              message: 'The light theme must not be equal to the light theme',
-            });
-          }
+const sourceHighlighterPrismSchema = z.object({
+  sourceHighlighter: z.literal("prism").optional(),
+  prismLanguages: PrismLanguagesSchema
+    .optional()
+    .default(
+      [
+        'markup',
+        'css',
+        'javascript',
+        'typescript',
+        'markdown',
+        'yaml',
+        'json',
+        'jsx',
+        'tsx',
+        'asciidoc',
+        'bash',
+        'php',
+        'git'
+      ]
+    )
+});
+const sourceHighlighterShikiSchema = z.object({
+  sourceHighlighter: z.literal('shiki').optional(),
+  shikiTheme: z
+    .object({
+      light: BundledLanguageNamesSchema,
+      dark: BundledLanguageNamesSchema,
+      dim: BundledLanguageNamesSchema.optional(),
+    })
 
-          if (dark === dim) {
-            ctx.addIssue({
-              path: ['shikiTheme.dark', 'shikiTheme.dim'],
-              code: 'custom',
-              message: 'The light theme must not be equal to the light theme',
-            });
-          }
-        })
-        .optional()
-      ,
-    }),
-  )
-  .and(commonAttributes);
+    .refine(({ light, dark }) => light !== dark, {
+      path: ['shikiTheme.dark', 'shikiTheme.light'],
+      message: `The light theme and dark theme must be different from each other`,
+    })
+    .superRefine(({ light, dark, dim }, ctx) => {
+      if (light === dim) {
+        ctx.addIssue({
+          path: ['shikiTheme.light', 'shikiTheme.dim'],
+          code: 'custom',
+          message: 'The light theme must not be equal to the light theme',
+        });
+      }
 
-
-
+      if (dark === dim) {
+        ctx.addIssue({
+          path: ['shikiTheme.dark', 'shikiTheme.dim'],
+          code: 'custom',
+          message: 'The light theme must not be equal to the light theme',
+        });
+      }
+    })
+    .optional(),
+});
 export const asciidocConfigObjectSchema = z
   .object({
-    attributes: asciidocGlobalVariablesSchema
+    attributes: z.union([
+      sourceHighlighterPrismSchema,
+      sourceHighlighterShikiSchema,
+    ])
+      .and(commonAttributes)
       .optional()
       .default({
         sourceHighlighter: "shiki",
@@ -355,50 +353,47 @@ export const asciidocConfigObjectSchema = z
           dim: 'github-dark-dimmed',
         }
       }),
-    blocks: z
-      .record(
-        z.string(),
-        z.object({
-          context: z.enum([
-            'example',
-            'listing',
-            'literal',
-            'pass',
-            'quote',
-            'sidebar',
-          ]),
-          render: renderSchema,
-        }),
-      )
+    blocks: z.record(
+      z.string(),
+      z.object({
+        context: z.enum([
+          'example',
+          'listing',
+          'literal',
+          'pass',
+          'quote',
+          'sidebar',
+        ]),
+        render: renderSchema,
+      }),
+    )
       .optional(),
 
     macros: z
       .object({
-        inline: z
-          .record(
-            z.string(),
-            z.object({
-              context: z.enum(['quoted', 'anchor']),
-              render: renderSchema,
-            }),
-          )
+        inline: z.record(
+          z.string(),
+          z.object({
+            context: z.enum(['quoted', 'anchor']),
+            render: renderSchema,
+          }),
+        )
           .optional(),
 
-        block: z
-          .record(
-            z.string(),
-            z.object({
-              context: z.enum([
-                'example',
-                'listing',
-                'literal',
-                'pass',
-                'quote',
-                'sidebar',
-              ]),
-              render: renderSchema,
-            }),
-          )
+        block: z.record(
+          z.string(),
+          z.object({
+            context: z.enum([
+              'example',
+              'listing',
+              'literal',
+              'pass',
+              'quote',
+              'sidebar',
+            ]),
+            render: renderSchema,
+          }),
+        )
           .optional(),
       })
       .optional(),
@@ -439,6 +434,8 @@ export const loadAsciidocConfig = async (cwd: string) => {
 
   return asciidocConfigObjectSchema.parse(config);
 };
+
+type AsciidocConfigObjectSchema = z.infer<typeof asciidocConfigObjectSchema>;
 
 export class AsciidocProcessorController {
 
@@ -523,8 +520,8 @@ export class AsciidocProcessorController {
   };
 
   registerBlocksAndMacrosFromConfig = (
-    blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
-    macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
+    blocks: AsciidocConfigObjectSchema['blocks'],
+    macros: AsciidocConfigObjectSchema['macros'],
   ) => {
 
     this.#processor.Extensions.register(function () {
@@ -584,7 +581,7 @@ export class AsciidocProcessorController {
 
   loadFileWithRegistryAndAttributes(
     path: string,
-    attributes: z.infer<typeof asciidocGlobalVariablesSchema> | undefined
+    attributes: AsciidocConfigObjectSchema['attributes'] | undefined
   ) {
 
     return this.#processor.loadFile(path, {
