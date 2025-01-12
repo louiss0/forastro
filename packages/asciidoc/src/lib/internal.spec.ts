@@ -2,7 +2,6 @@ import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
 import { loadAsciidocConfig, getAsciidocPaths, asciidocConfigObjectSchema, } from "./internal";
 import { z } from "astro/zod";
-import type { Document } from "asciidoctor";
 
 describe(
     "Testing internal tools",
