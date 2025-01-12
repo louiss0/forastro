@@ -1,22 +1,17 @@
-import asciidoctor, { type Document } from 'asciidoctor';
 import { type Loader } from 'astro/loaders';
 import {
   asciidocConfigObjectSchema,
-  registerBlocksAndMacrosFromConfig,
+  AsciidocProcessorController,
   generateSlug,
   getAsciidocPaths,
   loadAsciidocConfig,
-  registerPrism_JS,
-  registerShiki,
-  transformObjectKeysIntoDashedCase,
 } from './internal';
 import { z } from 'astro/zod';
 
 import { resolve } from 'node:path';
+import type { Document } from 'asciidoctor';
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
-
-const processor = asciidoctor();
 
 class FilePathAndSlug {
   constructor (
@@ -29,6 +24,9 @@ class FilePathAndSlug {
 let asciidocConfig: AsciidocConfigObject | undefined
 
 export function asciidocLoader(contentFolderName: string) {
+
+  const asciidocProcessorController = new AsciidocProcessorController()
+
   return {
     name: 'forastro/asciidoc-loader',
     async load(context) {
@@ -83,11 +81,15 @@ export function asciidocLoader(contentFolderName: string) {
 
 
         case 'shiki':
-          await registerShiki(processor, asciidocConfig.attributes.shikiTheme!);
+          await asciidocProcessorController.registerShiki(
+            asciidocConfig.attributes.shikiTheme!
+          );
           break
 
         case 'prism':
-          registerPrism_JS(processor, asciidocConfig.attributes.prismLanguages!)
+          asciidocProcessorController.registerPrism_JS(
+            asciidocConfig.attributes.prismLanguages!
+          )
           break
 
       }
@@ -97,8 +99,7 @@ export function asciidocLoader(contentFolderName: string) {
       if (Object.keys(asciidocConfig).length !== 0) {
         logger.info(`Creating Asciidoc Registry from using config file`);
 
-        registerBlocksAndMacrosFromConfig(
-          processor,
+        asciidocProcessorController.registerBlocksAndMacrosFromConfig(
           asciidocConfig.blocks,
           asciidocConfig.macros,
         );
@@ -136,8 +137,9 @@ export function asciidocLoader(contentFolderName: string) {
 
         const pathPrefixedWithFolderName = `${contentFolderName}/${collection}/${path}`;
 
-        const document = loadFileWithRegistryAndAttributes(
+        const document = asciidocProcessorController.loadFileWithRegistryAndAttributes(
           `${resolvedRootRepo}/${pathPrefixedWithFolderName}`,
+          asciidocConfig.attributes
         );
 
         const sluggedFilename = generateSlug(filename);
@@ -206,7 +208,8 @@ export function asciidocLoader(contentFolderName: string) {
 
         const pathRelativeToProjectRoot = extractPath(path, contentFolderName);
 
-        const document = loadFileWithRegistryAndAttributes(path);
+        const document = asciidocProcessorController
+          .loadFileWithRegistryAndAttributes(path, asciidocConfig?.attributes);
 
 
         const sluggedFilename = generateSlug(filename);
@@ -249,7 +252,8 @@ export function asciidocLoader(contentFolderName: string) {
 
         store.delete(filePathAndSlug.slug);
 
-        const document = loadFileWithRegistryAndAttributes(path);
+        const document = asciidocProcessorController
+          .loadFileWithRegistryAndAttributes(path, asciidocConfig?.attributes);
 
         await setStoreUsingExtractedInfo(
           filePathAndSlug.pathRelativeToRoot,
@@ -301,19 +305,6 @@ export function asciidocLoader(contentFolderName: string) {
 
         logger.info('Finished');
       });
-
-      function loadFileWithRegistryAndAttributes(path: string) {
-
-        return processor.loadFile(path, {
-          attributes:
-            asciidocConfig?.attributes &&
-            transformObjectKeysIntoDashedCase(asciidocConfig?.attributes),
-          safe: 10,
-          catalog_assets: true,
-        });
-      }
-
-
 
 
       async function setStoreUsingExtractedInfo(

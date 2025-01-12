@@ -1,16 +1,16 @@
-import asciidoctor from 'asciidoctor';
 import { z } from 'astro/zod';
 import { loadConfig } from 'c12';
 import glob from 'fast-glob';
 import {
   bundledLanguages,
-  bundledThemes,
   createHighlighter,
+  bundledThemes,
   type BundledTheme,
 } from 'shiki';
 import slugify from 'slugify';
 import prismjs from "prismjs"
 import loadLanguages from "prismjs/components/index.js"
+import asciidoctor from 'asciidoctor';
 
 
 const getAsciidocPathsSchema = z.function(
@@ -280,6 +280,8 @@ const PrismLanguagesSchema = z.enum([
   'yaml',
 ]).array();
 
+export type PrismLanguages = z.infer<typeof PrismLanguagesSchema>
+
 const asciidocGlobalVariablesSchema = z
   .object({
     sourceHighlighter: z.literal("prism").optional(),
@@ -438,157 +440,166 @@ export const loadAsciidocConfig = async (cwd: string) => {
   return asciidocConfigObjectSchema.parse(config);
 };
 
-const processor = asciidoctor();
+export class AsciidocProcessorController {
+
+  #processor = asciidoctor()
+
+  static #instance: AsciidocProcessorController | undefined
+
+  constructor () {
+
+    if (AsciidocProcessorController.#instance) {
+
+      return AsciidocProcessorController.#instance
+
+    }
+
+    AsciidocProcessorController.#instance = this
+
+  }
+
+  registerPrism_JS(languages: PrismLanguages) {
+
+    loadLanguages(languages)
+
+    this.#processor.SyntaxHighlighter.register("prism", {
+      initialize(name, backend, opts) {
+        this.$$name = "prism"
+        this.super(name, backend, opts)
+      },
+      format(parent, target) {
+
+        return `<pre class="${this.$$name} language-${target}">${parent.getContent()}</pre>`
+      },
+      handlesHighlighting: () => true,
+      highlight(_, source, lang = 'plaintext') {
+
+        return prismjs.highlight(source, prismjs.languages[lang]!, lang)
+
+      },
+    })
 
 
-export const registerPrism_JS = (
-  processor: ReturnType<typeof asciidoctor>,
-  languages: z.infer<typeof PrismLanguagesSchema>) => {
 
-  loadLanguages(languages)
+  }
 
-  processor.SyntaxHighlighter.register("prism", {
-    initialize(name, backend, opts) {
-      this.$$name = "prism"
-      this.super(name, backend, opts)
+  async registerShiki(
+    themeOptions: {
+      light: BundledTheme;
+      dark: BundledTheme;
+      dim?: BundledTheme;
     },
-    format(parent, target) {
+  ) {
+    const themes = [themeOptions.light, themeOptions.dark];
 
-      return `<pre class="${this.$$name} language-${target}">${parent.getContent()}</pre>`
-    },
-    handlesHighlighting: () => true,
-    highlight(_, source, lang = 'plaintext') {
+    if (themeOptions.dim) {
+      themes.push(themeOptions.dim);
+    }
 
-      return prismjs.highlight(source, prismjs.languages[lang]!, lang)
+    const highlighter = await createHighlighter({
+      themes,
+      langs: Object.keys(bundledLanguages),
+    });
 
-    },
-  })
+
+    this.#processor.SyntaxHighlighter.register('shiki', {
+      initialize(name, backend, opts) {
+        this.super(name, backend, opts)
+        this.$$name = "shiki"
+      },
+      handlesHighlighting: () => true,
+      highlight(_, source, lang,) {
+
+        return highlighter.codeToHtml(source, {
+          lang,
+          cssVariablePrefix: '--faa-shiki-',
+          defaultColor: 'light',
+          themes: themeOptions,
+        })
+
+
+      },
+    });
+  };
+
+  registerBlocksAndMacrosFromConfig = (
+    blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
+    macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
+  ) => {
+
+    this.#processor.Extensions.register(function () {
+
+      if (blocks) {
+        for (const [name, { context, render }] of Object.entries(blocks)) {
+
+          this.block(name, function () {
+            this.process(function (parent, reader, attributes) {
+              return this.createBlock(
+                parent,
+                context,
+                render(reader.getString(), attributes),
+                attributes,
+              );
+            });
+          });
+        }
+      }
+
+      if (macros?.inline) {
+        for (const [name, { context, render }] of Object.entries(macros.inline)) {
+          this.inlineMacro(name, function () {
+
+            this.process(function (parent, target, attributes) {
+              return this.createInline(parent, context, render(target, attributes));
+            });
+          });
+        }
+      }
+
+
+
+      if (macros?.block) {
+
+        for (const [name, { context, render }] of Object.entries(macros.block)) {
+          this.blockMacro(name, function () {
+
+            this.process(function (parent, target, attributes) {
+
+              return this.createBlock(
+                parent,
+                context,
+                render(target, attributes),
+                attributes,
+              );
+            });
+          });
+        }
+      }
+
+    })
+
+
+  };
+
+
+  loadFileWithRegistryAndAttributes(
+    path: string,
+    attributes: z.infer<typeof asciidocGlobalVariablesSchema> | undefined
+  ) {
+
+    return this.#processor.loadFile(path, {
+      attributes:
+        attributes &&
+        transformObjectKeysIntoDashedCase(attributes),
+      safe: 10,
+      catalog_assets: true,
+    });
+  }
 
 
 
 }
 
-export const registerShiki = async (
-  processor: ReturnType<typeof asciidoctor>,
-  themeOptions: {
-    light: BundledTheme;
-    dark: BundledTheme;
-    dim?: BundledTheme;
-  },
-) => {
-  const themes = [themeOptions.light, themeOptions.dark];
-
-  if (themeOptions.dim) {
-    themes.push(themeOptions.dim);
-  }
-
-  const highlighter = await createHighlighter({
-    themes,
-    langs: Object.keys(bundledLanguages),
-  });
-
-
-  processor.SyntaxHighlighter.register('shiki', {
-    initialize(name, backend, opts) {
-      this.super(name, backend, opts)
-      this.$$name = "shiki"
-    },
-    handlesHighlighting: () => true,
-    highlight(_, source, lang,) {
-
-      return highlighter.codeToHtml(source, {
-        lang,
-        cssVariablePrefix: '--faa-shiki-',
-        defaultColor: 'light',
-        themes: themeOptions,
-      })
-
-
-    },
-  });
-};
-
-export const registerBlocksAndMacrosFromConfig = (
-  processor: ReturnType<typeof asciidoctor>,
-  blocks: z.infer<typeof asciidocConfigObjectSchema>['blocks'],
-  macros: z.infer<typeof asciidocConfigObjectSchema>['macros'],
-) => {
-
-  processor.Extensions.register(function () {
-
-    if (blocks) {
-      for (const [name, { context, render }] of Object.entries(blocks)) {
-
-        this.block(name, function () {
-          this.process(function (parent, reader, attributes) {
-            return this.createBlock(
-              parent,
-              context,
-              render(reader.getString(), attributes),
-              attributes,
-            );
-          });
-        });
-      }
-    }
-
-    if (macros?.inline) {
-      for (const [name, { context, render }] of Object.entries(macros.inline)) {
-        this.inlineMacro(name, function () {
-
-          this.process(function (parent, target, attributes) {
-            return this.createInline(parent, context, render(target, attributes));
-          });
-        });
-      }
-    }
-
-
-
-    if (macros?.block) {
-
-      for (const [name, { context, render }] of Object.entries(macros.block)) {
-        this.blockMacro(name, function () {
-
-          this.process(function (parent, target, attributes) {
-
-            return this.createBlock(
-              parent,
-              context,
-              render(target, attributes),
-              attributes,
-            );
-          });
-        });
-      }
-    }
-
-  })
-
-
-};
-
-export const transformAsciidocFilesIntoAsciidocDocuments = async (
-  content_folder_path: string,
-  config_folder_path: string,
-) => {
-
-  const paths = await getAsciidocPaths(content_folder_path);
-
-  const { attributes, blocks, macros } = await loadAsciidocConfig(config_folder_path);
-
-  registerBlocksAndMacrosFromConfig(
-    processor,
-    blocks,
-    macros,
-  );
-
-  return paths.map((path) =>
-    processor.loadFile(`${content_folder_path}/${path}`, {
-      attributes,
-    }),
-  );
-};
 
 export const generateSlug = (string: string) =>
   slugify(string, {
