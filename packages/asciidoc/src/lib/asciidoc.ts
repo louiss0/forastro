@@ -306,12 +306,15 @@ export function asciidocLoader(contentFolderName: string) {
       ) {
 
 
+        const allowedAsciidocValuesSchema = z.union([z.string(), z.number(), z.boolean()]);
+
         const dashedCaseRecordSchema = z.record(
           z.string().regex(
             /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
             "You must write using dash case Ex: url-repo"
           ),
-          z.union([z.string(), z.number(), z.boolean()])
+          allowedAsciidocValuesSchema
+            .or(allowedAsciidocValuesSchema.array())
         )
 
         let attributes: z.infer<typeof dashedCaseRecordSchema>
