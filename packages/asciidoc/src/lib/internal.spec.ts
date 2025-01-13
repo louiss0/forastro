@@ -1,11 +1,26 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
-import { loadAsciidocConfig, getAsciidocPaths, asciidocConfigObjectSchema, } from "./internal";
+import { loadAsciidocConfig, getAsciidocPaths, asciidocConfigObjectSchema, AsciidocProcessorController, } from "./internal";
 import { z } from "astro/zod";
 
 describe(
     "Testing internal tools",
     () => {
+
+
+        test("AsciidocProcessorController is a singleton", () => {
+
+            const [controller1, controller2] = [
+                new AsciidocProcessorController(),
+                new AsciidocProcessorController()
+            ]
+
+
+            expect(controller1).toBe(controller2)
+            expect(controller2).toBe(controller1)
+
+
+        })
 
         test(
             `asciidocConfigObjectSchema returns an attributes.sourceHighlighter.
@@ -247,7 +262,6 @@ describe(
 
 
         })
-
 
 
     }) 
