@@ -68,14 +68,6 @@ export function asciidocLoader(contentFolderName: string) {
       )
 
 
-      if (asciidocFilePaths.length === 0) {
-        throw Error(
-          `There are no files in this folder ${contentFolderName}.
-            Please use a different folder.
-            `
-        );
-      }
-
 
       switch (asciidocConfig.attributes?.sourceHighlighter) {
 
