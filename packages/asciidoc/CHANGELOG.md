@@ -1,3 +1,14 @@
+## 2.1.1 (2025-01-13)
+
+### 🩹 Fixes
+
+- **asciidoc:** allow array values to be parsed when attribute values are being validated\n I tried to use the mock app to test the chages so far.\nBut discovered that prism languages weren't being processed properly\nit was because it returns an array ([3eb988e](https://github.com/louiss0/forastro/commit/3eb988e))
+- use proper document type ([b209c27](https://github.com/louiss0/forastro/commit/b209c27))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 2.1.0 (2025-01-05)
 
 ### 🚀 Features
