@@ -80,17 +80,22 @@ describe(
 
         })
 
+        const MOCK_FOLDER = `${import.meta.dirname}/mocks`
+
+
         describe("Testing getAsciidocPaths", () => {
 
 
             it("works", async () => {
 
-                const result = await getAsciidocPaths("packages/asciidoc/src/lib")
+
+                const result = await getAsciidocPaths(`${MOCK_FOLDER}/posts`)
 
                 expect(result).toBeDefined()
 
                 expectTypeOf(result).toBeArray()
 
+                expect(result.length).not.toBe(0)
 
 
             })
@@ -99,7 +104,7 @@ describe(
 
 
 
-                const result = await getAsciidocPaths("packages/asciidoc/src/lib")
+                const result = await getAsciidocPaths(`${MOCK_FOLDER}/posts`)
 
 
                 expect(result).toBeDefined()
@@ -118,7 +123,7 @@ describe(
 
             it("gets paths from the specified directory only", async () => {
 
-                const specifiedDirectory = "packages/asciidoc/src/lib";
+                const specifiedDirectory = `${MOCK_FOLDER}/posts`;
                 const result = await getAsciidocPaths(specifiedDirectory)
 
 
@@ -163,7 +168,6 @@ describe(
         })
 
 
-        const MOCK_FOLDER = `${import.meta.dirname}/mocks`
 
 
         describe("Testing loadAsciidocConfig", () => {
