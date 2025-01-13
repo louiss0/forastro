@@ -30,7 +30,6 @@ export const asciidocBaseSchema = z
     const {
       doctitle,
       docdate,
-      localdate,
       ...rest
     } = parsedInput;
 
