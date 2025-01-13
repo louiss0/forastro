@@ -21,7 +21,14 @@ export const getAsciidocPaths = z.function(
         "Don't pass in an empty string pass in a value with forward slashes and words instead",
       ),
   ]),
-  z.promise(z.string().array()),
+  z.promise(
+    z.string()
+      .array()
+      .refine(
+        arg => arg.length === 0,
+        "There are no files in the folder you specified"
+      )
+  ),
 ).implement(
   async (folderName: string) => {
     return await glob('**/*.{adoc,asciidoc}', {
