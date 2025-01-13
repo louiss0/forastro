@@ -8,8 +8,8 @@ import {
   type BundledTheme,
 } from 'shiki';
 import slugify from 'slugify';
-import prismjs from "prismjs"
-import loadLanguages from "prismjs/components/index.js"
+import prismjs from "prismjs";
+import loadLanguages from "prismjs/components/index.js";
 import asciidoctor from 'asciidoctor';
 
 export const getAsciidocPaths = z.function(
@@ -25,12 +25,13 @@ export const getAsciidocPaths = z.function(
     z.string()
       .array()
       .refine(
-        arg => arg.length === 0,
+        arg => arg.length > 0,
         "There are no files in the folder you specified"
       )
   ),
 ).implement(
   async (folderName: string) => {
+
     return await glob('**/*.{adoc,asciidoc}', {
       cwd: folderName,
     });
