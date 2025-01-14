@@ -41,6 +41,11 @@
     },
     "@nxtensions/astro:preview": {
       "dependsOn": ["build"]
+    },
+    "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "workspaceLayout": {
@@ -63,7 +68,7 @@
       "generatorOptions": {
         "skipLockFileUpdate": true
       },
-      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'tag:nx:lib:ongoing' && ./scripts refine-publishable-package-json-files"
+      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'tag:nx:lib:ongoing'"
     }
   }
 }
