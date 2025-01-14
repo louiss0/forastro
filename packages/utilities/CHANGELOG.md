@@ -1,3 +1,10 @@
+## 5.0.1 (2025-01-14)
+
+The main purpose of this release is to write a better Read me.
+This readme is important now because it leads to the docs.
+It also gives the user some examples of what the library provides.
+
+
 # 5.0.0 (2025-01-03)
 
 ### 🚀 Features
