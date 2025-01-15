@@ -3,6 +3,47 @@ const path = require("node:path");
 const fs = require("node:fs");
 
 
+const replaceDotTSWithDotJSInValuesOrEntryValues =
+    (data) =>
+        typeof data === "string"
+            ? data.replace(/\.ts$/, ".js")
+            : Object.fromEntries(
+                Object.entries(data)
+                    .map(
+                        ([key, value]) =>
+                            [
+                                key,
+                                typeof value === "string"
+                                    ? value.replace(
+                                        /\.ts$/,
+                                        ".js")
+                                    : value
+                            ]
+                    )
+            )
+
+
+const replaceDotSlashSrcSlashWithEmptyStringInValuesOrEntryValues =
+    (data) =>
+        typeof data === "string"
+            ? data.replace(/^src\//, "")
+            : Object.fromEntries(
+                Object.entries(data)
+                    .map(
+                        ([key, value]) =>
+                            [
+                                key,
+                                typeof value === "string"
+                                    ? value.replace(
+                                        /^src\//,
+                                        "")
+                                    : value
+                            ]
+                    )
+            )
+
+
+
 module.exports = {
     plugins: [
         {
@@ -21,6 +62,7 @@ module.exports = {
                         packageJsonPath = path.resolve(__dirname, "package.json")
 
                     }
+
                     packageJsonPath =
                         path.resolve(__dirname, outFolder, 'package.json');
 
@@ -46,35 +88,25 @@ module.exports = {
 
                                     if (typeof value === "object" && value !== null) {
 
-                                        const replaceDotTSWithDotJSInValuesOrEntryValues =
-                                            (data) =>
-                                                typeof data === "string"
-                                                    ? data.replace(/\.ts$/, ".js")
-                                                    : Object.fromEntries(
-                                                        Object.entries(data)
-                                                            .map(
-                                                                ([key, value]) =>
-                                                                    [
-                                                                        key,
-                                                                        typeof value === "string"
-                                                                            ? value.replace(
-                                                                                /\.ts$/,
-                                                                                ".js")
-                                                                            : value
-                                                                    ]
-                                                            )
-                                                    )
-
-
                                         return [
                                             key,
                                             Object.fromEntries(
                                                 Object.entries(value).map(
-                                                    ([key, value]) =>
-                                                        [
+                                                    ([key, value]) => {
+
+                                                        const valueOrEntriesWithValuesWithSrcReplacedWithEmptyString = replaceDotSlashSrcSlashWithEmptyStringInValuesOrEntryValues(value)
+
+                                                        const valueOrEntriesWithValuesWithDotJSReplacedWithDotTS =
+                                                            replaceDotTSWithDotJSInValuesOrEntryValues(
+                                                                valueOrEntriesWithValuesWithSrcReplacedWithEmptyString
+                                                            )
+
+                                                        return [
                                                             key,
-                                                            replaceDotTSWithDotJSInValuesOrEntryValues(value)
+                                                            valueOrEntriesWithValuesWithDotJSReplacedWithDotTS
                                                         ]
+
+                                                    }
 
 
                                                 )
