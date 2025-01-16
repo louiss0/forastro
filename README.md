@@ -40,16 +40,33 @@ If thing's don't work out then use.
 2. `nx release version`
 3. `nx release publish`
 
-I created an `esbuild.config.cts` file it's there to make sure all `.ts` files are changed into `.js`. files. This makes it so that deployment is simple. Don't touch it!
-Every project created from now until NX ESbuild does this for you.
-Should have this in the `project.json` file.
+In each package folder a `esbuild.config.cts` file is held which uses a plugin from the plugins/ folder called `replaceValuesInExportsPlugin`.
+That function is responsible for changing the `exports:` props's values after the build.
+Every package must be built with this plugin. It uses regex to replace values with the intended string. Nx will make esbuild output entries at the root.
+So `src/lib/internal.ts` would change into `lib/internal.js`.
+
+If for some reason you decide to use the another entry point.
+If it's used as an asset make sure it's ignored when building.
+
+The `replaceValuesInExportsPlugin` takes in two arguments:
+
+- The **first** is an array of objects that expect.
+  A target prop that is assigned a regex and a replacement prop that expects a string.
+  The *target* prop is used to **find the string that needs to be replaced**.
+  The *replacement* props is the thing that is **used to replace the target**.
+
+- The **second** is an array of keys to ignore.
+  Remember to always use `./` suffixed by a word then use that as one of the keys.
+
+Always refer to the `esbuild.config.ts` file that is in each package before building.
+Below is an example of how to do this properly notice the `packages/` folder.
 
 ```json
 {
     "targets": {
     "build": {
       "options": {
-        "esbuildConfig": "esbuild.config.cts"
+        "esbuildConfig": "packages/utilities/esbuild.config.cts"
       }
     }
   }
