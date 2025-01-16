@@ -36,7 +36,7 @@
           "packages/asciidoc/*.md"
         ],
         "minify": true,
-        "esbuildConfig": "esbuild.config.cts"
+        "esbuildConfig": "packages/asciidoc/esbuild.config.cts"
       }
     },
     "nx-release-publish": {

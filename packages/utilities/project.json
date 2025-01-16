@@ -33,7 +33,7 @@
           "packages/utilities/src/components/*"
         ],
         "minify": true,
-        "esbuildConfig": "esbuild.config.cts"
+        "esbuildConfig": "packages/utilities/esbuild.config.cts"
       }
     },
     "nx-release-publish": {
