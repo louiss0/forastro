@@ -1,5 +1,5 @@
 
-const replaceValuesInExportsPlugin = require("../../replaceValuesInExportsPlugin.cts")
+const replaceValuesInExportsPlugin = require("../../plugins/replaceValuesInExportsPlugin.cts")
 
 module.exports = {
     plugins: [
