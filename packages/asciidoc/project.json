@@ -35,7 +35,8 @@
         "assets": [
           "packages/asciidoc/*.md"
         ],
-        "minify": true
+        "minify": true,
+        "esbuildConfig": "packages/asciidoc/esbuild.config.cts"
       }
     },
     "nx-release-publish": {

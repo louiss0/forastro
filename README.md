@@ -1,57 +1,143 @@
-# @forastro Monorepo
+# For Astro Monorepo
 
-This repo is the repo for all of the packages that I will create for astro.
-The name of this monorepo is called `@forastro/monorepo`.
-This monorepo uses `nx` as it's monorepo manager.
-This kind of monorepo is called a _integrated monorepo_.
-Which means that all of the packages are installed in the root directory.
-There are two main folders for this monorepo. `demo` `packages`.
-The demo folder is for testing and demonstrating the power of each package.
-The packages folder is for all of my packages. It's the one where all of my packages are created.
+This monorepo is a repo that is dedicated creating projects under the `@forastro/` scope.
+All project's under this repo are made to make using Astro easier.
+This repo releases projects by using Nx release.
+Even though this repo is a pnpm repo this repo is now package based.
+Because too most Astro packages rely on being in the root.
 
-## Usage
+The packages that have been released so far under this repo are.
 
-To use this repo you need to know how `nx` works.
-The point of this library is to create packages then test them out so what you want to do is start the server.
-To do that use `nx run demo:dev`.
-<!-- TODO: Add more info about tools -->
-### Tooling
+- `@forastro/flow`
+- `@forastro/remark-html-directives`
+- `@forastro/utilities`
+- `@forastro/asciidoc`
 
-| Type       | Tool       |
-| ---------- | ---------- |
-| testing    | vitest     |
-| changelogs | changesets |
-| styling    | uno css    |
-| linter     | eslint     |
-| formatter  | prettier   |
+: Tools :
 
-## Repositories
-<!-- TODO: Add the Asciidoc entry -->
+| type            | name     |
+| --------------- | -------- |
+| monorepo manger | Nx       |
+| test runner     | vitest   |
+| bundler         | esbuild  |
+| linter          | eslint   |
+| formatter       | prettier |
 
-This section is about giving you an overview of all of the packages that I have created for this mono-repo.
-Each title is the name of a folder that exists in this monorepo.
-I don't know how to do **end-to-end testing** and it's not necessary so I will use the pages in demo as a testing ground.
-I will do basic testing for individual packages in each folder for the packages
+## Packages
 
-### Demo
+All packages that are meant to be released under this repo are in the `pacakages/` folder.
+I have decided to get rid of `@forastro/flow` and `@forastro/remark-html-directives`.
+I won't maintain them anymore and they got in the way of integrating to Nx Release.
+If I do release new packages I plan on using a tag system to decide which packages
+should be built. The tag `lib:ongoing` will be used to tell which project's will be maintained. The tag `lib:paused` means no more releases.
 
-The demo is the place where all of the packages are tested and where what they can do is shown.
-It uses Taliwind CSS for styling.
+When it comes to packages I use Nx Release's Conventional Commits to decide how they should be released.
 
-### Flow
+To release a package all you need to do is use `pnpm exec nx release`.
+If thing's don't work out then use.
 
-Flow is a package that is created to emulate control flow inside of components.
-the package is called `@forastro/flow`. It has a folder called the components folder and a file called helpers.
-Helpers are a set of functions that are designed to help the flow components work.
-The components file is where all of the components are. All of them are exported in a index.ts file.
+1. `nx release changelog`
+2. `nx release version`
+3. `nx release publish`
+
+In each package folder a `esbuild.config.cts` file is held which uses a plugin from the plugins/ folder called `replaceValuesInExportsPlugin`.
+That function is responsible for changing the `exports:` props's values after the build.
+Every package must be built with this plugin. It uses regex to replace values with the intended string. Nx will make esbuild output entries at the root.
+So `src/lib/internal.ts` would change into `lib/internal.js`.
+
+If for some reason you decide to use the another entry point.
+If it's used as an asset make sure it's ignored when building.
+
+The `replaceValuesInExportsPlugin` takes in two arguments:
+
+- The **first** is an array of objects that expect.
+  A target prop that is assigned a regex and a replacement prop that expects a string.
+  The *target* prop is used to **find the string that needs to be replaced**.
+  The *replacement* props is the thing that is **used to replace the target**.
+
+- The **second** is an array of keys to ignore.
+  Remember to always use `./` suffixed by a word then use that as one of the keys.
+
+Always refer to the `esbuild.config.ts` file that is in each package before building.
+Below is an example of how to do this properly notice the `packages/` folder.
+
+```json
+{
+    "targets": {
+    "build": {
+      "options": {
+        "esbuildConfig": "packages/utilities/esbuild.config.cts"
+      }
+    }
+  }
+}
+```
 
 ### Utilities
 
-Utilities is a package that is created to emulate control flow inside of components.
-the package is called `@forastro/utilities`. It has a folder called the components folder and a file called helpers.
-Helpers are a set of functions that are designed to help the flow components work.
-The components file is where all of the components are.
-All of them are exported in a index.ts file.
+This package is a set of tools that are created specifically to use with Astro.
+They are created to allow you make using and writing Astro Components easier.
+Some utilities are created to help with other tasks.
+
+There are two main folders in the `src/` folders:
+
+- `components/` The folder where all components are stored.
+- `lib/` The folder where functions are stored.
+
+The components folder must remain separate from the lib folder so that there
+is no bundling. All components are exported through an `index.ts` file.
+
+There are a few files in the lib folder but the most important one is the `useTemplaterAndProjector` `.dts` and `.js` files.
+They were created because the logic in the js file can't be used to express the types that the user need's.
+Those files must remain separate.
+
+### Asciidoc
+
+This package is created so that that people can use Asciidoc with Astro.
+It's hold's the `asciidocLoader` which is the function that is used to load and extract data and content from Asciidoc files.
+It also allows the user to use a few highlighter's from the JS ecosystem.
+It also has files that are created specifically to integrate with UnoCSS and Tailwind.
+
+It's a repo with the following files:
+
+- `unocss.ts` A file created to export a UnoCSS preset for Styling Asciidoc files.
+- `tailwind.ts` A file created to export a TailwindCSS plugin for Styling Asciidoc files.
+- `asciidoc.ts` A file created to hold the `asciidocLoader`.
+- `internal.ts` A file created to hold all functionality that the user isn't supposed to know about.
+
+It's important to know that the unocss and the tailwind files are separate.
+Because they can't be used otherwise.
+Each file's name is used as a key in the `exports:` field in the `package.json` file.
+With the link to the file being used as the value of the file.
+
+## Apps
+
+The apps in this repo are stored in the `apps/` folder.
+The apps here exist as apps that are created to support Astro.
+An app exists in this repo if it's a way to support Astro or this repo.
+
+### Astro Circle
+
+*Astro Circle* is an  app that was created for people to download images of the Astro Logo covered by a circle.
+The images in the app all use logo's for other front-end framework's.
+
+### Docs
+
+The docs app is the docs for the For Astro monorepo's packages and templates.
+It's there so that people can learn about the packages that are created using the `@forastro/` scope.
+The docs site is an **Astro Starlight based site that uses Markdoc to render Starlight components**.
+
+All information related to packages is stored in the `libraries/` folder.
+Each `index.mdoc` file is used to introduce the library and has the version written in the front matter.
+The title prop always contains the name of the package capitalized.
+
+All information about templates is stored in the `templates/` folder.
+
+Each template file is supposed to contain the following information:
+
+- How to create an app using the template.
+- What dependencies it relies on other than Astro.
+- What config files exist and how the files are configured.
 
 ## Templates
 

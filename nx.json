@@ -1,5 +1,5 @@
 {
-  "plugins": ["@nxtensions/astro", "@ahryman40k/nx-vitepress"],
+  "plugins": ["@nxtensions/astro"],
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -7,7 +7,8 @@
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
       "!{projectRoot}/tsconfig.spec.json",
       "!{projectRoot}/.eslintrc.json",
-      "!{projectRoot}/src/test-setup.[jt]s"
+      "!{projectRoot}/src/test-setup.[jt]s",
+      "!{projectRoot}/eslint.config.cjs"
     ],
     "sharedGlobals": []
   },
@@ -41,6 +42,11 @@
     },
     "@nxtensions/astro:preview": {
       "dependsOn": ["build"]
+    },
+    "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "workspaceLayout": {
@@ -63,7 +69,7 @@
       "generatorOptions": {
         "skipLockFileUpdate": true
       },
-      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'tag:nx:lib:ongoing' && ./scripts refine-publishable-package-json-files"
+      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'tag:nx:lib:ongoing'"
     }
   }
 }

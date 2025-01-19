@@ -60,7 +60,6 @@ export function executeUnless<T extends Callback>(condition: unknown, cb: T): as
 
 }
 
-
 export function throwIf(condition: unknown, message = "Condition is false") {
 
     executeIf(
