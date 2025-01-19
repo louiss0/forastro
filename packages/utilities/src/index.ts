@@ -2,8 +2,8 @@
 export { useTemplaterAndProjector } from "./lib/useTemplaterAndProjector.js"
 export * from "./lib/types"
 import type { Props, SSRResult } from "astro"
-import { isObject } from "./lib/internal.js"
-import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, wrapFunctionInAsyncGenerator } from "./lib/internal.js"
+import { isObject } from "./lib/internal"
+import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, wrapFunctionInAsyncGenerator } from "./lib/internal"
 import { IterationInfo, type Callback, type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, type HasForEachMethod, type IterateRangeCallback, type IterateRangeOptions } from "./lib/types"
 
 
