@@ -12,6 +12,7 @@
       "import": "./src/components/index.ts"
     }
   },
+  "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
   "repository": {
     "directory": "packages/utilities",
     "url": "https//:github.com/louiss0/forastro",
@@ -26,6 +27,7 @@
     "url": "https://github.com/louiss0"
   },
   "keywords": [
+    "withastro",
     "astro-component",
     "ui"
   ]
