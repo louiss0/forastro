@@ -482,7 +482,7 @@ const CSS_UtilitiesClasses = {
 };
 
 
-export const tailwindAsciidocTypography = plugin(({ addBase, addComponents, addUtilities, }) => {
+export const tailwindAsciidocTypography: ReturnType<typeof plugin> = plugin(({ addBase, addComponents, addUtilities, }) => {
 
 
     const TYPOGRAPHY_SELECTOR_NAME = 'prose';
@@ -529,7 +529,7 @@ export const tailwindAsciidocTypography = plugin(({ addBase, addComponents, addU
         const mapWithProseSelectorKeys = Object.entries(object).reduce(
             (classMap, [classSelector, classProperties]) => {
 
-                const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w\-]+(?:\s+\w+)+)(?<pseudoSelector>\:{1,2}[\w\-()]+)$/.exec(classSelector)?.groups;
+                const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w-]+(?:\s+\w+)+)(?<pseudoSelector>:{1,2}[\w\-()]+)$/.exec(classSelector)?.groups;
 
                 if (selectorWithPseudoSelectorGroups) {
 
@@ -563,97 +563,96 @@ export const tailwindAsciidocTypography = plugin(({ addBase, addComponents, addU
 
     }
 
+    const proseObject = {
+        [typographySelectorClassName]: {
+            '--faa-prose-step-neg-2':
+                'clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem)',
+            '--faa-prose-step-neg-1':
+                'clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem)',
+            '--faa-prose-step-0': 'clamp(1rem, 0.913rem + 0.4348vw, 1.25rem)',
+            '--faa-prose-step-1':
+                'clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem)',
+            '--faa-prose-step-2':
+                'clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem)',
+            '--faa-prose-step-3':
+                'clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem)',
+            '--faa-prose-step-4':
+                'clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem)',
+            '--faa-prose-step-5':
+                'clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem)',
+            "--faa-prose-max-width": "56rem",
+            '--faa-prose-space-1': '0.15em',
+            '--faa-prose-space-2': '0.3em',
+            '--faa-prose-space-3': '0.45em',
+            '--faa-prose-space-4': '0.6em',
+            '--faa-prose-space-5': '0.75em',
+            '--faa-prose-space-6': '0.9em',
+            '--faa-prose-space-7': '1.05em',
+            '--faa-prose-space-8': '1.2em',
+            '--faa-prose-space-9': '1.35em',
+            '--faa-prose-space-10': '1.5em',
+            '--faa-prose-space-11': '1.65em',
+            '--faa-prose-space-12': '1.8em',
+            '--faa-prose-space-13': '1.95em',
+            '--faa-prose-space-14': '2.1em',
+            '--faa-prose-space-15': '2.25em',
+            '--faa-prose-space-16': '2.40em',
+            display: 'flex',
+            'flex-direction': 'column',
+            'row-gap': 'var(--faa-prose-space-9)',
+            padding: 'var(--faa-prose-space-7) var(--faa-prose-space-14)',
+            'max-width': '56em',
+            'font-size': 'var(--faa-prose-step-0)',
+            'margin-inline': 'auto',
+        },
 
-    addBase([
-        CSS_abstracts_Classes,
-        {
-            [typographySelectorClassName]: {
-                '--faa-prose-step-neg-2':
-                    'clamp(0.6944rem, 0.6913rem + 0.0157vw, 0.7035rem)',
-                '--faa-prose-step-neg-1':
-                    'clamp(0.8333rem, 0.797rem + 0.1816vw, 0.9377rem)',
-                '--faa-prose-step-0': 'clamp(1rem, 0.913rem + 0.4348vw, 1.25rem)',
-                '--faa-prose-step-1':
-                    'clamp(1.2rem, 1.0378rem + 0.8109vw, 1.6663rem)',
-                '--faa-prose-step-2':
-                    'clamp(1.44rem, 1.1683rem + 1.3585vw, 2.2211rem)',
-                '--faa-prose-step-3':
-                    'clamp(1.728rem, 1.2992rem + 2.1439vw, 2.9607rem)',
-                '--faa-prose-step-4':
-                    'clamp(2.0736rem, 1.4221rem + 3.2575vw, 3.9467rem)',
-                '--faa-prose-step-5':
-                    'clamp(2.4883rem, 1.5239rem + 4.8219vw, 5.2609rem)',
-                "--faa-prose-max-width": "56rem",
-                '--faa-prose-space-1': '0.15em',
-                '--faa-prose-space-2': '0.3em',
-                '--faa-prose-space-3': '0.45em',
-                '--faa-prose-space-4': '0.6em',
-                '--faa-prose-space-5': '0.75em',
-                '--faa-prose-space-6': '0.9em',
-                '--faa-prose-space-7': '1.05em',
-                '--faa-prose-space-8': '1.2em',
-                '--faa-prose-space-9': '1.35em',
-                '--faa-prose-space-10': '1.5em',
-                '--faa-prose-space-11': '1.65em',
-                '--faa-prose-space-12': '1.8em',
-                '--faa-prose-space-13': '1.95em',
-                '--faa-prose-space-14': '2.1em',
-                '--faa-prose-space-15': '2.25em',
-                '--faa-prose-space-16': '2.40em',
-                display: 'flex',
-                'flex-direction': 'column',
-                'row-gap': 'var(--faa-prose-space-9)',
-                padding: 'var(--faa-prose-space-7) var(--faa-prose-space-14)',
-                'max-width': '56em',
-                'font-size': 'var(--faa-prose-step-0)',
-                'margin-inline': 'auto',
-            },
-
-            [`${typographySelectorClassName}-sm`]: {
-                'max-width': '48em',
-                'row-gap': 'var(--faa-prose-space-6)',
-                padding: 'var(--faa-prose-space-4) var(--faa-prose-space-8)'
-
-            },
-            [`${typographySelectorClassName}-lg`]: {
-                'max-width': '64em',
-                'row-gap': 'var(--faa-prose-space-7)',
-                padding: 'var(--faa-prose-space-5) var(--faa-prose-space-10)'
-
-            },
-            [`${typographySelectorClassName}-xl`]: {
-                'max-width': '72em',
-                'row-gap': 'var(--faa-prose-space-8)',
-                padding: 'var(--faa-prose-space-6) var(--faa-prose-space-12)'
-
-            },
-            [`${typographySelectorClassName}-2xl`]: {
-                'max-width': '80em',
-                'row-gap': 'var(--faa-prose-space-10)',
-                padding: 'var(--faa-prose-space-8) var(--faa-prose-space-16)'
-
-            },
+        [`${typographySelectorClassName}-sm`]: {
+            'max-width': '48em',
+            'row-gap': 'var(--faa-prose-space-6)',
+            padding: 'var(--faa-prose-space-4) var(--faa-prose-space-8)'
 
         },
-        proseColorSelectorsObject,
-        {
-            [`.${TYPOGRAPHY_SELECTOR_NAME}-invert`]: {
-                '--faa-prose-color-50': 'var(--faa-prose-color-invert-50)',
-                '--faa-prose-color-100': 'var(--faa-prose-color-invert-100)',
-                '--faa-prose-color-200': 'var(--faa-prose-color-invert-200)',
-                '--faa-prose-color-300': 'var(--faa-prose-color-invert-300)',
-                '--faa-prose-color-400': 'var(--faa-prose-color-invert-400)',
-                '--faa-prose-color-500': 'var(--faa-prose-color-invert-500)',
-                '--faa-prose-color-600': 'var(--faa-prose-color-invert-600)',
-                '--faa-prose-color-700': 'var(--faa-prose-color-invert-700)',
-                '--faa-prose-color-800': 'var(--faa-prose-color-invert-800)',
-                '--faa-prose-color-900': 'var(--faa-prose-color-invert-900)',
+        [`${typographySelectorClassName}-lg`]: {
+            'max-width': '64em',
+            'row-gap': 'var(--faa-prose-space-7)',
+            padding: 'var(--faa-prose-space-5) var(--faa-prose-space-10)'
 
-            }
         },
-        generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_BaseClasses),
+        [`${typographySelectorClassName}-xl`]: {
+            'max-width': '72em',
+            'row-gap': 'var(--faa-prose-space-8)',
+            padding: 'var(--faa-prose-space-6) var(--faa-prose-space-12)'
 
-    ])
+        },
+        [`${typographySelectorClassName}-2xl`]: {
+            'max-width': '80em',
+            'row-gap': 'var(--faa-prose-space-10)',
+            padding: 'var(--faa-prose-space-8) var(--faa-prose-space-16)'
+
+        },
+
+    }
+
+    addBase({
+        ...CSS_abstracts_Classes,
+        ...proseObject,
+        ...proseColorSelectorsObject,
+        // Invert must come after proseSelectorsObject: colors must exist before any inversion.
+        [`${typographySelectorClassName}-invert`]: {
+            '--faa-prose-color-50': 'var(--faa-prose-color-invert-50)',
+            '--faa-prose-color-100': 'var(--faa-prose-color-invert-100)',
+            '--faa-prose-color-200': 'var(--faa-prose-color-invert-200)',
+            '--faa-prose-color-300': 'var(--faa-prose-color-invert-300)',
+            '--faa-prose-color-400': 'var(--faa-prose-color-invert-400)',
+            '--faa-prose-color-500': 'var(--faa-prose-color-invert-500)',
+            '--faa-prose-color-600': 'var(--faa-prose-color-invert-600)',
+            '--faa-prose-color-700': 'var(--faa-prose-color-invert-700)',
+            '--faa-prose-color-800': 'var(--faa-prose-color-invert-800)',
+            '--faa-prose-color-900': 'var(--faa-prose-color-invert-900)',
+
+        },
+        ...generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_BaseClasses)
+    })
 
     addComponents([
         generateClassObjectWithProperProseSelectorNamesAsKeys(CSS_LayoutClasses),

@@ -125,6 +125,7 @@ const bundledThemeNames = Object.keys(bundledThemes) as unknown as Array<
 >;
 
 const BundledLanguageNamesSchema = z.enum([
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   bundledThemeNames[0]!,
   ...bundledThemeNames.slice(1),
 ]);
@@ -465,6 +466,7 @@ export class AsciidocProcessorController {
       handlesHighlighting: () => true,
       highlight(_, source, lang = 'plaintext') {
 
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         return prismjs.highlight(source, prismjs.languages[lang]!, lang)
 
       },

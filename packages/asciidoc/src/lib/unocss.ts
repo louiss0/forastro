@@ -626,7 +626,7 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
         ([selectorName, declarationBlock]) => {
 
             const refinedProperties = Object.entries(declarationBlock).map(([key, value]) =>
-                /^\<\w+>$/.test(value)
+                /^<\w+>$/.test(value)
                     ? `\t${key}:'${value}';`
                     : `\t${key}:${value};`
 
@@ -640,7 +640,8 @@ export function getCSSWithSelectorName(typographySelectorName: string) {
                 return `${selectorName} ${selectorBlockString}`
             }
 
-            const selectorWithPseudoSelectorGroups = /^(?<targetSelector>\.?[\w\-]+(?:\s+\w+)+)(?<pseudoSelector>\:{1,2}[\w\-()]+)$/.exec(selectorName)?.groups
+            const selectorWithPseudoSelectorGroups =
+                /^(?<targetSelector>\.?[\w-]+(?:\s+\w+)+)(?<pseudoSelector>:{1,2}[\w\-()]+)$/.exec(selectorName)?.groups
 
             if (selectorWithPseudoSelectorGroups) {
 
