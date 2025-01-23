@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import type { Props, SSRResult } from "astro";
+
 export type HasForEachMethod = {
     forEach<T>(callbackfn: (...args: Array<any>) => T, thisArg?: typeof globalThis): void;
 }
@@ -77,6 +79,7 @@ export class IterationInfo {
 
 
 }
+
 
 
 
@@ -169,4 +172,42 @@ export function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => 
 export function hasForEachMethod(value: unknown): value is HasForEachMethod {
     return isObject(value) && 'forEach' in value
 }
+
+interface TemplateStringsArray extends ReadonlyArray<string> {
+    readonly raw: readonly string[];
+}
+
+type RenderTemplateResult = Readonly<{
+    htmlParts: TemplateStringsArray
+    expressions: Array<unknown>
+    error: Error
+}>
+
+
+type SlotFunction = ((...args: Array<NonNullable<unknown>>) => RenderTemplateResult) | undefined
+
+
+type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>
+
+type AstroRenderFunction = (
+    props: Props,
+    slots: Record<string, SlotFunction>
+) => MaybePromise<string | number | RenderTemplateResult>
+
+
+export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
+    Object.assign((result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
+
+        return {
+            ...result,
+            [Symbol.toStringTag]: 'AstroComponent',
+            async *[Symbol.asyncIterator]() {
+
+                yield* wrapFunctionInAsyncGenerator(fn)(props, slots)
+
+            }
+        }
+    },
+        { isAstroComponentFactory: true }
+    )
 

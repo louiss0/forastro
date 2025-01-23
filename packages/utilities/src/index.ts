@@ -1,6 +1,5 @@
 
 export { useTemplaterAndProjector } from "./lib/useTemplaterAndProjector.js"
-import type { Props, SSRResult, } from "astro"
 import { isObject, IterationInfo, type Callback, type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed, type HasForEachMethod, type IterateRangeCallback, type IterateRangeOptions } from "./lib/internal"
 import { generateIterationInfoForIterablesThatAreNotGenerators, hasForEachMethod, isGenerator, isIterable, wrapFunctionInAsyncGenerator } from "./lib/internal"
 
@@ -82,16 +81,6 @@ export function throwUnless(condition: boolean, message = "Condition is true"): 
 
 }
 
-
-interface TemplateStringsArray extends ReadonlyArray<string> {
-    readonly raw: readonly string[];
-}
-
-type RenderTemplateResult = Readonly<{
-    htmlParts: TemplateStringsArray
-    expressions: Array<unknown>
-    error: Error
-}>
 
 export const createMarkdocFunction = (cb: Callback) => {
 
@@ -329,33 +318,6 @@ export async function* iterateRange<U>(callback: IterateRangeCallback<U>, option
 }
 
 
-
-type SlotFunction = ((...args: Array<NonNullable<unknown>>) => RenderTemplateResult) | undefined
-
-
-type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>
-
-type AstroRenderFunction = (
-    props: Props,
-    slots: Record<string, SlotFunction>
-) => MaybePromise<string | number | RenderTemplateResult>
-
-
-export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
-    Object.assign((result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
-
-        return {
-            ...result,
-            [Symbol.toStringTag]: 'AstroComponent',
-            async *[Symbol.asyncIterator]() {
-
-                yield* wrapFunctionInAsyncGenerator(fn)(props, slots)
-
-            }
-        }
-    },
-        { isAstroComponentFactory: true }
-    )
 
 
 export async function returnErrorAndResultFromPromise<T extends Promise<unknown>>(promise: T) {
