@@ -1,4 +1,4 @@
-const replaceValuesInExportsPlugin = require("../../plugins/replaceValuesInExportsPlugin.cjs")
+const replaceValuesInExportsPlugin = require("../../plugins/replaceValuesInExportsPlugin.cts")
 
 
 module.exports = {
