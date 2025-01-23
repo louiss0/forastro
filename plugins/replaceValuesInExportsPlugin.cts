@@ -58,10 +58,12 @@ module.exports = (
 
                     packageJsonPath = path.resolve(__dirname, "package.json");
 
+                } else {
+
+                    packageJsonPath =
+                        path.resolve(__dirname, outFolder, 'package.json');
                 }
 
-                packageJsonPath =
-                    path.resolve(__dirname, outFolder, 'package.json');
 
 
                 if (!fs.existsSync(packageJsonPath)) {
