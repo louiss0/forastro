@@ -1,3 +1,13 @@
+## 2.2.1 (2025-01-23)
+
+### 🩹 Fixes
+
+- **asciidoc:** add optional dependencies to the package.json file  Not having a optional dependencies was never intended.  This only happened because I placed the information in the wrong package file. ([8741ebd](https://github.com/louiss0/forastro/commit/8741ebd))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 2.2.0 (2025-01-23)
 
 ### 🚀 Features
