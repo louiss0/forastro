@@ -1,3 +1,22 @@
+## 2.2.0 (2025-01-23)
+
+### 🚀 Features
+
+- **forastro:** Add ESbuild plugin to transform ts extension into js ones I'm doing this because I realized that people should rely on nu shell to transform files. Tt should be a part of the system. Doing this ensures ease of use ([40c116f](https://github.com/louiss0/forastro/commit/40c116f))
+
+### 🩹 Fixes
+
+- **forastro:** make changes to files based on ts and eslint errors I found many eslint and ts based errors in these files But for the tailwind file I needed to place an object as the lat argument. So I took out the prose object and spread it out ([0002778](https://github.com/louiss0/forastro/commit/0002778))
+- add unocss and tailwindcss as devDependencies for building ([7eab921](https://github.com/louiss0/forastro/commit/7eab921))
+- **forastro:** fix paths to esbuild file in the projects config for utilities and asciidoc ([6b2183e](https://github.com/louiss0/forastro/commit/6b2183e))
+- remove used localdate variable ([b0f764e](https://github.com/louiss0/forastro/commit/b0f764e))
+- **asciidoc:** allow array values to be parsed when attribute values are being validated\n I tried to use the mock app to test the chages so far.\nBut discovered that prism languages weren't being processed properly\nit was because it returns an array ([c421e5a](https://github.com/louiss0/forastro/commit/c421e5a))
+- use proper document type ([f73f5a6](https://github.com/louiss0/forastro/commit/f73f5a6))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 2.1.1 (2025-01-13)
 
 ### 🩹 Fixes

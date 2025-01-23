@@ -1,3 +1,18 @@
+## 5.1.0 (2025-01-23)
+
+### 🚀 Features
+
+- **forastro:** Add ESbuild plugin to transform ts extension into js ones I'm doing this because I realized that people should rely on nu shell to transform files. Tt should be a part of the system. Doing this ensures ease of use ([40c116f](https://github.com/louiss0/forastro/commit/40c116f))
+
+### 🩹 Fixes
+
+- **utilities:** move createAstroFunctionalComponent to internal I ran into a bug where for astro utilites wouldn't build because the createAstroFunctional component was in the wrong file. ([ece95a7](https://github.com/louiss0/forastro/commit/ece95a7))
+- **forastro:** fix paths to esbuild file in the projects config for utilities and asciidoc ([6b2183e](https://github.com/louiss0/forastro/commit/6b2183e))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.0.1 (2025-01-14)
 
 The main purpose of this release is to write a better Read me.
