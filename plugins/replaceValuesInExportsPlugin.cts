@@ -48,28 +48,41 @@ module.exports = (
 
             build.onEnd(() => {
 
-                const outFolder = build.initialOptions.outfile
-                    .match(/^([\w/]+\/)/)?.[0];
 
+                const { outdir, outfile } = build.initialOptions
+
+
+                const outputDirectoryFromRoot = outdir ?? outfile.match(/^([a-z/]+\/).+/)[1]
+
+
+                if (!outputDirectoryFromRoot) {
+
+
+                    throw Error(
+                        "There is no output Directory make sure that esbuild has a outfile or a outdir property",
+                        { cause: "No Directory Path" }
+                    )
+                }
 
                 let packageJsonPath;
 
-                if (__dirname === outFolder) {
+                const currentWorkingDirectory = process.cwd()
 
-                    packageJsonPath = path.resolve(__dirname, "package.json");
+                if (currentWorkingDirectory === outputDirectoryFromRoot) {
+
+                    packageJsonPath = path.resolve(currentWorkingDirectory, "package.json");
 
                 } else {
 
                     packageJsonPath =
-                        path.resolve(__dirname, outFolder, 'package.json');
+                        path.resolve(currentWorkingDirectory, outputDirectoryFromRoot, 'package.json');
                 }
-
 
 
                 if (!fs.existsSync(packageJsonPath)) {
 
                     throw Error(
-                        `This file isn't in here ${outFolder}`,
+                        `This file isn't in here ${outputDirectoryFromRoot}`,
                         {
                             cause: "Invalid Path"
                         }
