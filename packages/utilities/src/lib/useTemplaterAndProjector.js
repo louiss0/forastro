@@ -1,91 +1,82 @@
+import { z } from 'astro/zod';
+import { createAstroFunctionalComponent } from './internal';
 
-import { createAstroFunctionalComponent, } from './helpers';
-import { executeIfElse, executeIf, throwUnless } from './helpers/conditional';
-import { isObject } from './internal';
+let callCount = 0;
 
+const createPropsSchemaWithDebugNameAndComponentName = (
+  debugName,
+  componentName,
+) =>
+  z
+    .record([
+      z.string().regex(/[a-z0-9]+(?:[A-Z][a-z0-9]+)+/, {
+        message: `Prop keys are supposed to in camel case for ${debugName}${componentName}`,
+      }),
+      z.any(),
+    ])
+    .transform((arg) => Object.freeze(arg));
 
-
-let callCount = 0
-
+const createTemplaterSlotsSchemaWithDebugName = (debugName) =>
+  z
+    .object(
+      {
+        default: z.function(), // "default" is required and must be a function.
+      },
+      { message: `${debugName}Templater slot's is supposed to have a child` },
+    )
+    .catchall(z.function().optional(), {
+      message: `${debugName}Templater slot's can only be functions`,
+    }) // All other keys, if present, must be functions.
+    .transform((arg) => Object.freeze(arg));
 
 export const useTemplaterAndProjector = (debugName) => {
+  let storedSlot;
 
+  let templaterProps;
 
-    let storedSlot
+  callCount++;
 
-    let templaterProps
+  const componentNamePrefix = debugName ?? `${callCount}`;
 
-    callCount++
+  const Templater = createAstroFunctionalComponent((props, slots) => {
+    storedSlot =
+      createTemplaterSlotsSchemaWithDebugName(componentNamePrefix).parse(
+        slots,
+      ).default;
 
-    const Templater = createAstroFunctionalComponent((props, slots) => {
+    templaterProps = createPropsSchemaWithDebugNameAndComponentName(
+      componentNamePrefix,
+      'Templater',
+    ).parse(props);
+  });
 
+  const Projector = createAstroFunctionalComponent((props, slots) => {
+    const storedSlotResult = storedSlot?.();
 
+    const storedSlotFirstExpression = storedSlotResult?.expressions.at(0);
 
-        throwUnless(
-            typeof slots.default === "function",
-            `Please pass a Child into this component
-            Templater${debugName?.toUpperCase() ?? callCount} Invalid Child`
-        )
+    const projectorPropsIsAnObjectWithItsOwnKeys =
+      Object.keys(
+        createPropsSchemaWithDebugNameAndComponentName(
+          componentNamePrefix,
+          'Projector',
+        ).parse(props),
+      ).length > 0;
 
+    if (typeof storedSlotFirstExpression === 'function') {
+      if (projectorPropsIsAnObjectWithItsOwnKeys) {
+        if (templaterProps) {
+          return () => slots?.default(templaterProps);
+        }
 
-        storedSlot = slots.default
+        return () => slots?.default;
+      }
 
+      return () => storedSlotFirstExpression(slots.default);
+    }
 
-        const propsFromTemplaterIsAnObjectWithItsOwnKeys = isObject(props) && Object.keys(props).length > 0;
+    return storedSlot;
+  });
 
-        //! Never return fom this function!
-
-        if (propsFromTemplaterIsAnObjectWithItsOwnKeys) {
-            templaterProps = Object.freeze(props)
-        };
-
-
-
-    })
-
-
-
-    const Projector = createAstroFunctionalComponent((props, slots) => {
-
-        const storedSlotResult = storedSlot?.()
-
-        const storedSlotFirstExpression = storedSlotResult?.expressions.at(0)
-
-
-        const projectorPropsIsAnObjectWithItsOwnKeys = isObject(props) && Object.keys(props).length > 0;
-
-
-        return executeIfElse(
-            typeof storedSlotFirstExpression === "function",
-
-            () => executeIfElse(
-                projectorPropsIsAnObjectWithItsOwnKeys,
-
-                () => storedSlotFirstExpression(
-                    Object.freeze(props),
-
-                    executeIfElse(
-                        templaterProps,
-                        () => () => slots?.default(templaterProps),
-
-                        () => slots?.default,
-                    )
-                ),
-                () => storedSlotFirstExpression(slots.default)
-            ),
-            storedSlot
-        )
-
-
-
-
-
-    })
-
-
-
-
-    return [Templater, Projector]
-
-
-}
+  return [Templater, Projector];
+};
