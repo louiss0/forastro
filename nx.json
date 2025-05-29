@@ -55,7 +55,6 @@
   },
   "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,
-  "useLegacyCache": true,
   "release": {
     "projects": ["packages/*"],
     "projectsRelationship": "independent",
@@ -66,10 +65,11 @@
     },
     "version": {
       "conventionalCommits": true,
-      "generatorOptions": {
+      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'tag:nx:lib:ongoing'",
+      "preserveLocalDependencyProtocols": false,
+      "versionActionsOptions": {
         "skipLockFileUpdate": true
-      },
-      "preVersionCommand": "pnpm exec nx run-many --target build --projects 'tag:nx:lib:ongoing'"
+      }
     }
   }
 }

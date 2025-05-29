@@ -5,22 +5,16 @@
   "projectType": "library",
   "release": {
     "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag"
-      }
+      "currentVersionResolver": "git-tag",
+      "preserveLocalDependencyProtocols": false,
+      "manifestRootsToUpdate": ["dist/{projectRoot}"]
     }
   },
-  "tags": [
-    "nx:lib",
-    "nx:lib:ongoing"
-  ],
+  "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/asciidoc",
         "main": "packages/asciidoc/src/index.ts",
@@ -29,12 +23,8 @@
           "packages/asciidoc/src/lib/tailwind.ts"
         ],
         "tsConfig": "packages/asciidoc/tsconfig.lib.json",
-        "format": [
-          "esm"
-        ],
-        "assets": [
-          "packages/asciidoc/*.md"
-        ],
+        "format": ["esm"],
+        "assets": ["packages/asciidoc/*.md"],
         "minify": true,
         "esbuildConfig": "packages/asciidoc/esbuild.config.cts"
       }
@@ -46,9 +36,7 @@
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/packages/asciidoc"
       }
