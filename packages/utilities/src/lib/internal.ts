@@ -196,7 +196,7 @@ type AstroRenderFunction = (
 
 
 export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
-    Object.assign((result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
+    Object.assign((props: Props, slots: Record<string, SlotFunction>, result: SSRResult,) => {
 
         return {
             ...result,

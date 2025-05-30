@@ -50,8 +50,12 @@ export const useTemplaterAndProjector = (debugName) => {
     ).parse(props);
   });
 
-  const Projector = createAstroFunctionalComponent((props, slots) => {
-    const storedSlotResult = storedSlot?.();
+  const Projector = createAstroFunctionalComponent(async (props, slots) => {
+    let storedSlotResult = storedSlot?.();
+
+    if (storedSlotResult instanceof Promise) {
+      storedSlotResult = await storedSlotResult;
+    }
 
     const storedSlotFirstExpression = storedSlotResult?.expressions.at(0);
 

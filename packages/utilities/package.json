@@ -1,8 +1,8 @@
 {
   "name": "@forastro/utilities",
-  "version": "4.3.8",
+  "version": "5.1.0",
   "peerDependencies": {
-    "astro": ">2.0.0"
+    "astro": ">5.0.0"
   },
   "dependencies": {},
   "type": "module",
