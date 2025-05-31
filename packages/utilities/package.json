@@ -6,9 +6,11 @@
   },
   "dependencies": {},
   "type": "module",
-  "types": "src/index.d.ts",
   "exports": {
-    ".": "./src/index.ts",
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.ts"
+    },
     "./components": {
       "import": "./src/components/index.ts"
     }
