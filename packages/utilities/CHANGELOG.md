@@ -1,3 +1,13 @@
+## 5.1.6 (2025-05-31)
+
+### 🩹 Fixes
+
+- **utilities:** add link to the bundled types file ([9b771e2](https://github.com/louiss0/forastro/commit/9b771e2))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.1.5 (2025-05-31)
 
 ### 🩹 Fixes
