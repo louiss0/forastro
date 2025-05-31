@@ -46,9 +46,7 @@ export const useTemplaterAndProjector = (debugName) => {
 
     const storedSlotFirstExpression = storedSlotResult?.expressions.at(0);
 
-    const projectorProps = propsSchema(componentNamePrefix, 'Projector').parse(
-      props,
-    );
+    const projectorProps = propsSchema.parse(props);
 
     if (typeof storedSlotFirstExpression !== 'function') {
       return storedSlot;
