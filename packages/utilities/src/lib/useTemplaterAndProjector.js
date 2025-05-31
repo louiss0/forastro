@@ -1,6 +1,5 @@
 import { z } from 'astro/zod';
 import { createAstroFunctionalComponent } from './internal';
-import { returnErrorAndResultFromPromise } from '../../../../dist/packages/utilities';
 
 let callCount = 0;
 
