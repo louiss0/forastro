@@ -3,8 +3,9 @@ import { createAstroFunctionalComponent } from './internal';
 
 let callCount = 0;
 
-const createPropsSchemaWithDebugNameAndComponentName = () =>
-  z.record(z.string(), z.any()).transform((arg) => Object.freeze(arg));
+const propsSchema = z
+  .record(z.string(), z.any())
+  .transform((arg) => Object.freeze(arg));
 
 const createTemplaterSlotsSchemaWithDebugName = (debugName) =>
   z
@@ -29,17 +30,15 @@ export const useTemplaterAndProjector = (debugName) => {
   const componentNamePrefix = debugName ?? `${callCount}`;
 
   const Templater = createAstroFunctionalComponent((props, slots) => {
-    storedSlot =
-      createTemplaterSlotsSchemaWithDebugName(componentNamePrefix).parse(
-        slots,
-      ).default;
+    const templaterSlotSchema =
+      createTemplaterSlotsSchemaWithDebugName(componentNamePrefix);
+    storedSlot = templaterSlotSchema.parse(slots).default;
 
-    templaterProps =
-      createPropsSchemaWithDebugNameAndComponentName().parse(props);
+    templaterProps = propsSchema.parse(props);
   });
 
   const Projector = createAstroFunctionalComponent(async (props, slots) => {
-    let storedSlotResult = storedSlot?.();
+    let storedSlotResult = storedSlot();
 
     if (storedSlotResult instanceof Promise) {
       storedSlotResult = await storedSlotResult;
@@ -47,31 +46,43 @@ export const useTemplaterAndProjector = (debugName) => {
 
     const storedSlotFirstExpression = storedSlotResult?.expressions.at(0);
 
-    const projectorPropsIsAnObjectWithItsOwnKeys =
-      Object.keys(
-        createPropsSchemaWithDebugNameAndComponentName(
-          componentNamePrefix,
-          'Projector',
-        ).parse(props),
-      ).length > 0;
+    const projectorProps = propsSchema(componentNamePrefix, 'Projector').parse(
+      props,
+    );
 
-    if (typeof storedSlotFirstExpression === 'function') {
-      if (!('default' in slots)) {
-        return storedSlotFirstExpression;
-      }
-
-      if (projectorPropsIsAnObjectWithItsOwnKeys) {
-        if (templaterProps) {
-          return () => slots?.default(templaterProps);
-        }
-
-        return () => slots?.default;
-      }
-
-      return () => storedSlotFirstExpression(slots.default);
+    if (typeof storedSlotFirstExpression !== 'function') {
+      return storedSlot;
     }
 
-    return storedSlot;
+    // Functions are returned in these statements to avoid bugs
+    // Astro will return an [Object, Object] if no function is returned
+    if (!('default' in slots)) {
+      return () => storedSlotFirstExpression(projectorProps);
+    }
+
+    //# Astro adds a default data property to all components
+    // This how how props need to be checked
+    const projectorPropsIsAnObjectWithItsOwnKeys =
+      Object.keys(projectorProps).length > 1;
+    const templaterPropsIsAnObjectWithItsOwnKeys =
+      Object.keys(templaterProps).length > 1;
+    //#
+
+    if (
+      projectorPropsIsAnObjectWithItsOwnKeys &&
+      templaterPropsIsAnObjectWithItsOwnKeys
+    ) {
+      return () =>
+        storedSlotFirstExpression(projectorProps, () =>
+          slots.default(templaterProps),
+        );
+    }
+
+    if (projectorPropsIsAnObjectWithItsOwnKeys) {
+      return () => storedSlotFirstExpression(projectorProps, slots.default);
+    }
+
+    return () => storedSlotFirstExpression(slots.default);
   });
 
   return [Templater, Projector];
