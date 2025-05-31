@@ -1,3 +1,13 @@
+## 5.1.4 (2025-05-31)
+
+### 🩹 Fixes
+
+- adjust conditionals in Projector to take into account all cases properly ([327e9bb](https://github.com/louiss0/forastro/commit/327e9bb))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.1.2 (2025-01-23)
 
 ### Fixes
