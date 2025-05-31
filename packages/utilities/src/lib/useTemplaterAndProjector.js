@@ -3,18 +3,8 @@ import { createAstroFunctionalComponent } from './internal';
 
 let callCount = 0;
 
-const createPropsSchemaWithDebugNameAndComponentName = (
-  debugName,
-  componentName,
-) =>
-  z
-    .record([
-      z.string().regex(/[a-z0-9]+(?:[A-Z][a-z0-9]+)+/, {
-        message: `Prop keys are supposed to in camel case for ${debugName}${componentName}`,
-      }),
-      z.any(),
-    ])
-    .transform((arg) => Object.freeze(arg));
+const createPropsSchemaWithDebugNameAndComponentName = () =>
+  z.record(z.string(), z.any()).transform((arg) => Object.freeze(arg));
 
 const createTemplaterSlotsSchemaWithDebugName = (debugName) =>
   z
@@ -44,10 +34,8 @@ export const useTemplaterAndProjector = (debugName) => {
         slots,
       ).default;
 
-    templaterProps = createPropsSchemaWithDebugNameAndComponentName(
-      componentNamePrefix,
-      'Templater',
-    ).parse(props);
+    templaterProps =
+      createPropsSchemaWithDebugNameAndComponentName().parse(props);
   });
 
   const Projector = createAstroFunctionalComponent(async (props, slots) => {

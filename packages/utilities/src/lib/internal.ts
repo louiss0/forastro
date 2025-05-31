@@ -1,213 +1,177 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import type { Props, SSRResult } from "astro";
+import type { Props, SSRResult } from 'astro';
 
 export type HasForEachMethod = {
-    forEach<T>(callbackfn: (...args: Array<any>) => T, thisArg?: typeof globalThis): void;
-}
+  forEach<T>(
+    callbackfn: (...args: Array<any>) => T,
+    thisArg?: typeof globalThis,
+  ): void;
+};
 
-export type Callback = (...args: Array<any>) => any
+export type Callback = (...args: Array<any>) => any;
 
+type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> =
+  Parameters<Parameters<T['forEach']>[0]>;
 
-type GetParametersFromIterableWithAForEachMethod<T extends HasForEachMethod> = Parameters<Parameters<T["forEach"]>[0]>
-
-export type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<T, U> =
-    T extends HasForEachMethod
-    ? (
-        value: GetParametersFromIterableWithAForEachMethod<T>[0],
-        info: IterationInfo,
-        key: GetParametersFromIterableWithAForEachMethod<T>[1]
+export type GetAppropriateFunctionBasedOnWhetherOrNotAGeneratorOfAnIterableWithTheForEachMethodIsPassed<
+  T,
+  U,
+> = T extends HasForEachMethod
+  ? (
+      value: GetParametersFromIterableWithAForEachMethod<T>[0],
+      info: IterationInfo,
+      key: GetParametersFromIterableWithAForEachMethod<T>[1],
     ) => U
-    : T extends Generator
-    ? (value: ReturnType<T["next"]>["value"]) => U
-    : never
+  : T extends Generator
+    ? (value: ReturnType<T['next']>['value']) => U
+    : never;
 
-export type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U
+export type IterateRangeCallback<U> = (value: number, info: IterationInfo) => U;
 
 export type IterateRangeOptions = {
-    start: number
-    stop: number
-    step?: number
-    inclusive?: true
-}
-
+  start: number;
+  stop: number;
+  step?: number;
+  inclusive?: true;
+};
 
 export class IterationInfo {
+  constructor(
+    private readonly firstIterationNum: number,
+    private readonly iterationNum: number,
+    private readonly lastIterationNum: number,
+  ) {}
 
-    constructor (
-        private readonly firstIterationNum: number,
-        private readonly iterationNum: number,
-        private readonly lastIterationNum: number,
+  get count() {
+    return this.lastIterationNum - this.firstIterationNum;
+  }
 
-    ) {
+  get iteration() {
+    return this.iterationNum + 1;
+  }
 
-    }
+  get isFirst() {
+    return this.firstIterationNum === this.iterationNum;
+  }
 
-    get count() {
+  get isLast() {
+    return this.lastIterationNum === this.iteration;
+  }
 
-        return this.lastIterationNum - this.firstIterationNum
+  get isEven() {
+    return this.iterationNum % 2 === 0;
+  }
 
-    }
-
-    get iteration() {
-
-        return this.iterationNum + 1
-    }
-
-    get isFirst() {
-        return this.firstIterationNum === this.iterationNum
-    }
-
-    get isLast() {
-        return this.lastIterationNum === this.iteration
-    }
-
-    get isEven() {
-        return this.iterationNum % 2 === 0
-
-    }
-
-    get isOdd() {
-        return this.iterationNum % 2 !== 0
-
-    }
-    get remaining() {
-
-        return this.lastIterationNum - this.iteration
-
-    }
-
-
+  get isOdd() {
+    return this.iterationNum % 2 !== 0;
+  }
+  get remaining() {
+    return this.lastIterationNum - this.iteration;
+  }
 }
 
+export function* generateIterationInfoForIterablesThatAreNotGenerators<
+  T extends Iterable<unknown> & HasForEachMethod,
+>(iterable: T) {
+  const firstIterationNumber = 0;
 
+  type ParametersOfIterable = Parameters<
+    Parameters<(typeof iterable)['forEach']>[0]
+  >;
 
+  const iterableEntriesMap: Map<
+    ParametersOfIterable[1],
+    ParametersOfIterable[0]
+  > = new Map();
 
+  let iteration = firstIterationNumber;
 
-export function* generateIterationInfoForIterablesThatAreNotGenerators<T extends Iterable<unknown> & HasForEachMethod>(iterable: T) {
+  iterable.forEach((value, key) => iterableEntriesMap.set(key, value));
 
+  const iterableEntriesMapLength = iterableEntriesMap.size;
 
-    const firstIterationNumber = 0
+  for (const [key, value] of iterableEntriesMap) {
+    yield {
+      value,
+      info: new IterationInfo(
+        firstIterationNumber,
+        iteration,
+        iterableEntriesMapLength,
+      ),
+      key,
+    };
 
-    type ParametersOfIterable = Parameters<Parameters<typeof iterable["forEach"]>[0]>
-
-    const iterableEntriesMap: Map<ParametersOfIterable[1], ParametersOfIterable[0]> = new Map()
-
-    let iteration = firstIterationNumber
-
-
-    iterable.forEach((value, key) => iterableEntriesMap.set(key, value))
-
-
-    const iterableEntriesMapLength = iterableEntriesMap.size
-
-    for (const [key, value] of iterableEntriesMap) {
-
-
-
-
-        yield {
-            value,
-            info: new IterationInfo(
-                firstIterationNumber,
-                iteration,
-                iterableEntriesMapLength
-            ),
-            key
-        }
-
-        iteration++
-
-
-    }
-
-
-
+    iteration++;
+  }
 }
 
 export const isIterable = (value: unknown): value is Iterable<unknown> =>
-    isObject(value) && (
-        typeof value[Symbol.iterator] === 'function'
-        || typeof value[Symbol.asyncIterator] === 'function'
-    )
+  isObject(value) &&
+  (typeof value[Symbol.iterator] === 'function' ||
+    typeof value[Symbol.asyncIterator] === 'function');
 
-
-export function isObject(value: unknown): value is Record<PropertyKey, unknown> {
-
-    return typeof value === "object" && value != null
+export function isObject(
+  value: unknown,
+): value is Record<PropertyKey, unknown> {
+  return typeof value === 'object' && value != null;
 }
 
 export function isGenerator(value: unknown): value is Generator {
-
-
-    return isIterable(value) && value.toString() === "[object Generator]"
-
+  return isIterable(value) && value.toString() === '[object Generator]';
 }
 
+export function wrapFunctionInAsyncGenerator<
+  T extends (...args: Array<any>) => ReturnType<T>,
+>(fn: T) {
+  return async function* (...args: Parameters<T>) {
+    const res = fn(...args);
 
+    if (res instanceof Promise) {
+      yield await res;
 
-export function wrapFunctionInAsyncGenerator<T extends (...args: Array<any>) => ReturnType<T>>(fn: T) {
-
-
-    return async function* (...args: Parameters<T>) {
-
-        const res = fn(...args)
-
-
-        if (res instanceof Promise) {
-
-            yield await res
-
-
-            return
-        }
-
-        yield res
-
-
+      return;
     }
 
+    yield res;
+  };
 }
 
 export function hasForEachMethod(value: unknown): value is HasForEachMethod {
-    return isObject(value) && 'forEach' in value
+  return isObject(value) && 'forEach' in value;
 }
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
-    readonly raw: readonly string[];
+  readonly raw: readonly string[];
 }
 
 type RenderTemplateResult = Readonly<{
-    htmlParts: TemplateStringsArray
-    expressions: Array<unknown>
-    error: Error
-}>
+  htmlParts: TemplateStringsArray;
+  expressions: Array<unknown>;
+  error: Error;
+}>;
 
+type SlotFunction =
+  | ((...args: Array<NonNullable<unknown>>) => RenderTemplateResult)
+  | undefined;
 
-type SlotFunction = ((...args: Array<NonNullable<unknown>>) => RenderTemplateResult) | undefined
-
-
-type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>
+type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>;
 
 type AstroRenderFunction = (
-    props: Props,
-    slots: Record<string, SlotFunction>
-) => MaybePromise<string | number | RenderTemplateResult>
-
+  props: Props,
+  slots: Record<string, SlotFunction>,
+) => MaybePromise<string | number | RenderTemplateResult>;
 
 export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
-    Object.assign((props: Props, slots: Record<string, SlotFunction>, result: SSRResult,) => {
-
-        return {
-            ...result,
-            [Symbol.toStringTag]: 'AstroComponent',
-            async *[Symbol.asyncIterator]() {
-
-                yield* wrapFunctionInAsyncGenerator(fn)(props, slots)
-
-            }
-        }
+  Object.assign(
+    (result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
+      return {
+        ...result,
+        [Symbol.toStringTag]: 'AstroComponent',
+        async *[Symbol.asyncIterator]() {
+          yield* wrapFunctionInAsyncGenerator(fn)(props, slots);
+        },
+      };
     },
-        { isAstroComponentFactory: true }
-    )
-
+    { isAstroComponentFactory: true },
+  );

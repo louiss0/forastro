@@ -1,3 +1,17 @@
+## 5.1.2 (2025-01-23)
+
+### Fixes
+- **utilities:** Change order or `createAstroFunctionalComponent` arguments **Astro went back to the original order**.
+- **utilites** remove string check **Astro adds props to components**
+- **utilites** remove string check **Astro adds props to components**
+
+## 5.1.1 (2025-01-23)
+
+### Fixes
+
+- **utilities:** Change order or `createAstroFunctionalComponent` arguments **Astro changed the order**.
+- **utilities** add check for if `slots.default` is a Promise in `Projector` **Astro adds props to components**
+
 ## 5.1.0 (2025-01-23)
 
 ### 🚀 Features
