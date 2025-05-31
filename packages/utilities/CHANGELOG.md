@@ -1,3 +1,13 @@
+## 5.1.5 (2025-05-31)
+
+### 🩹 Fixes
+
+- remove wrong fuction call in propsSchema ([92eb695](https://github.com/louiss0/forastro/commit/92eb695))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.1.4 (2025-05-31)
 
 ### 🩹 Fixes
