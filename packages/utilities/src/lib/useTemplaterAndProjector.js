@@ -1,5 +1,6 @@
 import { z } from 'astro/zod';
 import { createAstroFunctionalComponent } from './internal';
+import { returnErrorAndResultFromPromise } from '../../../../dist/packages/utilities';
 
 let callCount = 0;
 
@@ -56,6 +57,10 @@ export const useTemplaterAndProjector = (debugName) => {
       ).length > 0;
 
     if (typeof storedSlotFirstExpression === 'function') {
+      if (!('default' in slots)) {
+        return storedSlotFirstExpression;
+      }
+
       if (projectorPropsIsAnObjectWithItsOwnKeys) {
         if (templaterProps) {
           return () => slots?.default(templaterProps);
