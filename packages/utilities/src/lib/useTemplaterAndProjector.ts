@@ -1,23 +1,6 @@
 import { z } from 'astro/zod';
 import { createAstroFunctionalComponent, type SlotFunction } from './internal';
 
-let callCount = 0;
-
-const propsSchema = z
-  .record(z.string(), z.any())
-  .transform((arg) => Object.freeze(arg));
-
-const createTemplaterSlotsSchemaWithDebugName = (debugName: string) =>
-  z
-    .object(
-      {
-        default: z.function(), // "default" is required and must be a function.
-      },
-      { message: `${debugName}Templater slot's is supposed to have a child` },
-    )
-    .catchall(z.function().optional()) // All other keys, if present, must be functions.
-    .transform((arg) => Object.freeze(arg));
-
 type StringKeyedObjectLiteralWithUnknownValues = Record<string, unknown>;
 
 type ReturnUndefinedIfTypeIsNotAStringKeyedObjectLiteralWithUnknownValues<T> =
@@ -81,6 +64,25 @@ export declare function Projector<
   U extends StringKeyedObjectLiteralWithUnknownValues | null,
 >(props: ProjectorProps<T, U>): unknown;
 
+// This is where the logic for useTemplaterAndProjector is implemented
+// This variable is used to track the number of times the function is called.
+let callCount = 0;
+
+const templaterAndProjectorPropsSchema = z
+  .record(z.string(), z.any())
+  .transform((arg) => Object.freeze(arg));
+
+const createTemplaterSlotsSchemaWithDebugName = (debugName: string) =>
+  z
+    .object(
+      {
+        default: z.function(), // "default" is required and must be a function.
+      },
+      { message: `${debugName}Templater slot's is supposed to have a child` },
+    )
+    .catchall(z.function().optional()) // All other keys, if present, must be functions.
+    .transform((arg) => Object.freeze(arg));
+
 export function useTemplaterAndProjector<
   ProjectorProps extends StringKeyedObjectLiteralWithUnknownValues | null,
   TemplaterProps extends
@@ -104,7 +106,7 @@ export function useTemplaterAndProjector<
       createTemplaterSlotsSchemaWithDebugName(componentNamePrefix);
     storedSlot = templaterSlotSchema.parse(slots).default as SlotFunction;
 
-    templaterProps = propsSchema.parse(props);
+    templaterProps = templaterAndProjectorPropsSchema.parse(props);
 
     return '';
   });
@@ -124,7 +126,7 @@ export function useTemplaterAndProjector<
 
     const storedSlotFirstExpression = storedSlotResult?.expressions.at(0);
 
-    const projectorProps = propsSchema.parse(props);
+    const projectorProps = templaterAndProjectorPropsSchema.parse(props);
 
     if (typeof storedSlotFirstExpression !== 'function') {
       return storedSlot;
