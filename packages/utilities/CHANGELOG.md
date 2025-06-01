@@ -1,3 +1,13 @@
+## 5.1.7 (2025-06-01)
+
+### 🩹 Fixes
+
+- **utilities:** move link to the bundled types file into exports area ([25dad25](https://github.com/louiss0/forastro/commit/25dad25))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.1.6 (2025-05-31)
 
 ### 🩹 Fixes
