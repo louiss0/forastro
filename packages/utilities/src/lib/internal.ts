@@ -141,17 +141,13 @@ export function hasForEachMethod(value: unknown): value is HasForEachMethod {
   return isObject(value) && 'forEach' in value;
 }
 
-interface TemplateStringsArray extends ReadonlyArray<string> {
-  readonly raw: readonly string[];
-}
-
 type RenderTemplateResult = Readonly<{
   htmlParts: TemplateStringsArray;
   expressions: Array<unknown>;
   error: Error;
 }>;
 
-type SlotFunction =
+export type SlotFunction =
   | ((...args: Array<NonNullable<unknown>>) => RenderTemplateResult)
   | undefined;
 
@@ -160,18 +156,39 @@ type MaybePromise<T extends NonNullable<unknown>> = T | Promise<T>;
 type AstroRenderFunction = (
   props: Props,
   slots: Record<string, SlotFunction>,
-) => MaybePromise<string | number | RenderTemplateResult>;
+) => MaybePromise<string | number | RenderTemplateResult | (() => any)>;
 
-export const createAstroFunctionalComponent = (fn: AstroRenderFunction) =>
-  Object.assign(
-    (result: SSRResult, props: Props, slots: Record<string, SlotFunction>) => {
-      return {
-        ...result,
-        [Symbol.toStringTag]: 'AstroComponent',
-        async *[Symbol.asyncIterator]() {
-          yield* wrapFunctionInAsyncGenerator(fn)(props, slots);
-        },
-      };
-    },
-    { isAstroComponentFactory: true },
-  );
+export type AstroFunctionalComponent = SSRResult &
+  ((
+    result: SSRResult,
+    props: Props,
+    slots: Record<string, SlotFunction>,
+  ) => {
+    isAstroComponentFactory: true;
+    [Symbol.toStringTag]: string;
+    [Symbol.asyncIterator](): AsyncGenerator<
+      string | number | RenderTemplateResult | (() => any)
+    >;
+  });
+
+export const createAstroFunctionalComponent = (
+  fn: AstroRenderFunction,
+): AstroFunctionalComponent => {
+  const component = (
+    result: SSRResult,
+    props: Props,
+    slots: Record<string, SlotFunction>,
+  ) => {
+    return {
+      ...result,
+      [Symbol.toStringTag]: 'AstroComponent',
+      async *[Symbol.asyncIterator]() {
+        yield* wrapFunctionInAsyncGenerator(fn)(props, slots);
+      },
+    };
+  };
+
+  return Object.assign(component, {
+    isAstroComponentFactory: true,
+  }) as unknown as AstroFunctionalComponent;
+};
