@@ -1,3 +1,13 @@
+## 5.2.1 (2025-06-01)
+
+### 🩹 Fixes
+
+- merge js and d.ts files into single ts file  Types were broken after using the latest versions Typescript now only looks for specific files for bundling Esbuild can only make one ([d962523](https://github.com/louiss0/forastro/commit/d962523))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.2.0 (2025-06-01)
 
 This was a version bump only for utilities to align it with other projects, there were no code changes.
