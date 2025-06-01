@@ -1,3 +1,7 @@
+## 5.2.0 (2025-06-01)
+
+This was a version bump only for utilities to align it with other projects, there were no code changes.
+
 ## 5.1.7 (2025-06-01)
 
 ### 🩹 Fixes

@@ -1,3 +1,7 @@
+## 2.3.0 (2025-06-01)
+
+This was a version bump only for asciidoc to align it with other projects, there were no code changes.
+
 ## 2.2.1 (2025-01-23)
 
 ### 🩹 Fixes
