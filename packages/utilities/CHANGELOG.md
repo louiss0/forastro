@@ -1,3 +1,13 @@
+## 5.2.2 (2025-06-07)
+
+### 🩹 Fixes
+
+- remove make the debug name optional ([8675421](https://github.com/louiss0/forastro/commit/8675421))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 5.2.1 (2025-06-01)
 
 ### 🩹 Fixes
