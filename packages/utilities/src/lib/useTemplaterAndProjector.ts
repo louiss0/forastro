@@ -88,7 +88,7 @@ export function useTemplaterAndProjector<
   TemplaterProps extends
     StringKeyedObjectLiteralWithUnknownValues | null = null,
 >(
-  debugName: string,
+  debugName?: string,
 ): [
   typeof Templater<ProjectorProps, TemplaterProps>,
   typeof Projector<TemplaterProps, ProjectorProps>,
