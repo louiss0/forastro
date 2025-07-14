@@ -4,9 +4,10 @@ import { z } from 'astro/zod';
 const authorSchema = z
   .string()
   .regex(
-    /^(?<first_name>[A-Z][a-z.]+)\s+(?<middle_names>(?:[A-Z][a-z.]+\s)*)(<last_name>[A-Z][a-z]+)$/,
+    /^(?<first_name>[A-Z][a-z.]+)\s+(?<middle_names>(?:[A-Z][a-z.]+\s)*)?(?<last_name>[A-Z][a-z]+)$/,
     'An author should have at least a first and last name both capitalized',
   );
+
 export const asciidocBaseSchema = z
   .object({
     doctitle: z
@@ -19,7 +20,7 @@ export const asciidocBaseSchema = z
     email: z.string().email(),
     localdate: z.string().date(),
     author: authorSchema,
-    authors: authorSchema.array(),
+    authors: z.union([authorSchema, authorSchema.array()]),
     createdAt: z.string().date(),
     description: z
       .string()
@@ -27,11 +28,7 @@ export const asciidocBaseSchema = z
       .max(160, 'A title needs to be at least 160 characters max'),
   })
   .transform((parsedInput) => {
-    const {
-      doctitle,
-      docdate,
-      ...rest
-    } = parsedInput;
+    const { doctitle, docdate, ...rest } = parsedInput;
 
     return {
       title: doctitle,
