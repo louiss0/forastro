@@ -65,15 +65,27 @@ export function asciidocLoader(contentFolderName: string) {
 
       switch (asciidocConfig.attributes?.sourceHighlighter) {
         case 'shiki':
-          await asciidocProcessorController.registerShiki(
-            asciidocConfig.attributes.shikiTheme!,
-          );
+          if (asciidocConfig.attributes?.shikiTheme) {
+            await asciidocProcessorController.registerShiki(
+              asciidocConfig.attributes.shikiTheme,
+            );
+          } else {
+            logger.error(
+              'Shiki theme not configured when sourceHighlighter is "shiki".',
+            );
+          }
           break;
 
         case 'prism':
-          asciidocProcessorController.registerPrism_JS(
-            asciidocConfig.attributes.prismLanguages!,
-          );
+          if ('prismLanguages' in asciidocConfig.attributes) {
+            asciidocProcessorController.registerPrism_JS(
+              asciidocConfig.attributes.prismLanguages,
+            );
+          } else {
+            logger.error(
+              'Prism languages not configured when sourceHighlighter is "prism".',
+            );
+          }
           break;
       }
 
@@ -106,7 +118,7 @@ export function asciidocLoader(contentFolderName: string) {
                         `);
         }
 
-        const { filename } = fullFilePathMatch.groups!;
+        const filename = fullFilePathMatch.groups?.['filename'] ?? '';
 
         if (!filename) {
           throw Error(
@@ -156,7 +168,7 @@ export function asciidocLoader(contentFolderName: string) {
           `You added this file ${path} it's info will be now parsed an added to the store`,
         );
 
-        const { filename } = fullFilePathMatch.groups!;
+        const filename = fullFilePathMatch.groups?.['filename'] ?? '';
 
         if (!filename) {
           throw Error(
@@ -213,7 +225,7 @@ export function asciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const filename = path.match(fileNameRE)![1]!;
+        const filename = path.match(fileNameRE)?.[1] ?? '';
 
         logger.info(
           `You changed this file ${filename} the store is being updated`,
@@ -258,7 +270,7 @@ export function asciidocLoader(contentFolderName: string) {
                         `);
         }
 
-        const { filename } = fullFilePathMatch.groups!;
+        const filename = fullFilePathMatch.groups?.['filename'] ?? '';
 
         if (!filename) {
           throw Error(
