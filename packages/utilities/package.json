@@ -29,6 +29,10 @@
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
   },
+  "files": [
+    "src/",
+    "index.js"
+  ],
   "keywords": [
     "withastro",
     "astro-component",
