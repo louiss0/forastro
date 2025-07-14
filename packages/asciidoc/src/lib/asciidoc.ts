@@ -295,24 +295,26 @@ export function asciidocLoader(contentFolderName: string) {
           z.boolean(),
         ]);
 
-        const dashedCaseRecordSchema = z.record(
+        const dashedOrSnakeCaseKeysRecordSchema = z.record(
           z
             .string()
             .regex(
-              /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
+              /^(?<first_word>(?:[a-z0-9]+))(?<other_words_in_snake_or_dash_case>(?:-[a-z0-9]+|_[a-z0-9]+)*)$/,
               'You must write using dash case Ex: url-repo',
             ),
           allowedAsciidocValuesSchema.or(allowedAsciidocValuesSchema.array()),
         );
 
-        let attributes: z.infer<typeof dashedCaseRecordSchema>;
+        let attributes: z.infer<typeof dashedOrSnakeCaseKeysRecordSchema>;
 
         try {
-          attributes = dashedCaseRecordSchema
+          attributes = dashedOrSnakeCaseKeysRecordSchema
             .transform((attrs) =>
               Object.fromEntries(
                 Object.entries(attrs).map(([key, value]) => [
-                  key.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()),
+                  key.replace(/(-[a-z]|_[a-z])/g, (_, letter) =>
+                    letter.toUpperCase(),
+                  ),
                   value,
                 ]),
               ),
@@ -321,7 +323,7 @@ export function asciidocLoader(contentFolderName: string) {
         } catch (error: unknown) {
           if (error instanceof z.ZodError) {
             logger.error(
-              'All attributes must be written in dashed case in files',
+              'All attributes must be written in dashed or snake case in files',
             );
             for (const issue of error.issues) {
               logger.error(
