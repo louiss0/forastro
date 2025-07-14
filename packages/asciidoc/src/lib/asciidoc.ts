@@ -213,7 +213,7 @@ export function asciidocLoader(contentFolderName: string) {
 
         if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
 
-        const filename = path.match(fileNameRE)![2]!;
+        const filename = path.match(fileNameRE)![1]!;
 
         logger.info(
           `You changed this file ${filename} the store is being updated`,
