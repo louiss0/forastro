@@ -1,9 +1,9 @@
 = Markdown Style Guide
 Shelton Louis <testlouis@example.com>
-:description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
+:description: Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.
 :pub-date: 2023-01-01
 :created-at: 2023-01-01
-:hero-image: '../../assets/blog-placeholder-1.jpg'
+:hero-image: ../../assets/blog-placeholder-1.jpg
 
 
 Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.
