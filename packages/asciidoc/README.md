@@ -14,7 +14,7 @@ To install the library all you have to do is use your favorite package manager.
 To use this library all you have to do is import `asciidocLoader` from `@forastro/asciidoc`.
 
 ```ts
-import { asciidocLoader } from "@forastro/asciidoc" 
+import { asciidocLoader } from "@forastro/asciidoc"
 ```
 
 Then go to the content collection file in Astro's file and type this.
@@ -117,7 +117,7 @@ import { AsciidocConfigObject } from "@forastro/asciidoc"
         inline:{},
         block:{}
     }
- } satisfies AsciidocConfigObject 
+ } satisfies AsciidocConfigObject
 ```
 
 ### Styling
