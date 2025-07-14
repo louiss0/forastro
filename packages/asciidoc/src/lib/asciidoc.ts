@@ -8,43 +8,39 @@ import {
 } from './internal';
 import { z } from 'astro/zod';
 
-import { resolve } from 'node:path';
+import { resolve } from 'pathe';
 import type { Document } from 'asciidoctor';
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
 
 class FilePathAndSlug {
-  constructor (
+  constructor(
     public readonly pathRelativeToRoot: string,
     public readonly slug: string,
-  ) { }
+  ) {}
 }
 
-
-let asciidocConfig: AsciidocConfigObject | undefined
+let asciidocConfig: AsciidocConfigObject | undefined;
 
 export function asciidocLoader(contentFolderName: string) {
-
-  const asciidocProcessorController = new AsciidocProcessorController()
+  const asciidocProcessorController = new AsciidocProcessorController();
 
   return {
     name: 'forastro/asciidoc-loader',
     async load(context) {
-
-
       const contentFolderNameSchema = z.string().regex(
         /\w+(?:\/\w+)*/,
         `A content folder name must be a string with word characters at the front only.
    Ex: content
-   When referring to deeply nested folders in the project make sure you place a forward slash  
+   When referring to deeply nested folders in the project make sure you place a forward slash
    before each folder name after the parent folder name.
    Ex: src/content
 
-   No spaces or special characters.  
-   `
-      )
+   No spaces or special characters.
+   `,
+      );
 
-      contentFolderNameSchema.parse(contentFolderName)
+      contentFolderNameSchema.parse(contentFolderName);
 
       const {
         store,
@@ -54,39 +50,32 @@ export function asciidocLoader(contentFolderName: string) {
         collection,
         parseData,
         watcher,
-      } = context
-
+      } = context;
 
       logger.info('Loading Asciidoc paths and config file');
 
       const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
 
-      asciidocConfig = asciidocConfig ?? await loadAsciidocConfig(resolvedRootRepo)
+      asciidocConfig =
+        asciidocConfig ?? (await loadAsciidocConfig(resolvedRootRepo));
 
       const asciidocFilePaths = await getAsciidocPaths(
-        `${resolvedRootRepo}/${contentFolderName}/${collection}`
-      )
-
-
+        `${resolvedRootRepo}/${contentFolderName}/${collection}`,
+      );
 
       switch (asciidocConfig.attributes?.sourceHighlighter) {
-
-
         case 'shiki':
           await asciidocProcessorController.registerShiki(
-            asciidocConfig.attributes.shikiTheme!
+            asciidocConfig.attributes.shikiTheme!,
           );
-          break
+          break;
 
         case 'prism':
           asciidocProcessorController.registerPrism_JS(
-            asciidocConfig.attributes.prismLanguages!
-          )
-          break
-
+            asciidocConfig.attributes.prismLanguages!,
+          );
+          break;
       }
-
-
 
       if (Object.keys(asciidocConfig).length !== 0) {
         logger.info(`Creating Asciidoc Registry from using config file`);
@@ -106,8 +95,6 @@ export function asciidocLoader(contentFolderName: string) {
       const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
 
       const fileNameRE = /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)$/;
-
-
 
       for (const path of asciidocFilePaths) {
         const fullFilePathMatch = path.match(fileNameRE);
@@ -131,7 +118,7 @@ export function asciidocLoader(contentFolderName: string) {
 
         const document = asciidocProcessorController.loadFileWithAttributes(
           `${resolvedRootRepo}/${pathPrefixedWithFolderName}`,
-          asciidocConfig.attributes
+          asciidocConfig.attributes,
         );
 
         const sluggedFilename = generateSlug(filename);
@@ -146,12 +133,9 @@ export function asciidocLoader(contentFolderName: string) {
           filename,
           new FilePathAndSlug(pathPrefixedWithFolderName, sluggedFilename),
         );
-
       }
 
-
       const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
-
 
       watcher?.on('add', async (path) => {
         const pathEndsWithOneOfTheSupportedAsciidocExtensions =
@@ -200,9 +184,10 @@ export function asciidocLoader(contentFolderName: string) {
 
         const pathRelativeToProjectRoot = extractPath(path, contentFolderName);
 
-        const document = asciidocProcessorController
-          .loadFileWithAttributes(path, asciidocConfig?.attributes);
-
+        const document = asciidocProcessorController.loadFileWithAttributes(
+          path,
+          asciidocConfig?.attributes,
+        );
 
         const sluggedFilename = generateSlug(filename);
 
@@ -244,8 +229,10 @@ export function asciidocLoader(contentFolderName: string) {
 
         store.delete(filePathAndSlug.slug);
 
-        const document = asciidocProcessorController
-          .loadFileWithAttributes(path, asciidocConfig?.attributes);
+        const document = asciidocProcessorController.loadFileWithAttributes(
+          path,
+          asciidocConfig?.attributes,
+        );
 
         await setStoreUsingExtractedInfo(
           filePathAndSlug.pathRelativeToRoot,
@@ -257,7 +244,6 @@ export function asciidocLoader(contentFolderName: string) {
       });
 
       watcher?.on('unlink', (path) => {
-
         const pathEndsWithOneOfTheSupportedAsciidocExtensions =
           SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
 
@@ -298,65 +284,60 @@ export function asciidocLoader(contentFolderName: string) {
         logger.info('Finished');
       });
 
-
       async function setStoreUsingExtractedInfo(
         projectRelativePath: string,
         slug: string,
         document: Document,
       ) {
-
-
-        const allowedAsciidocValuesSchema = z.union([z.string(), z.number(), z.boolean()]);
+        const allowedAsciidocValuesSchema = z.union([
+          z.string(),
+          z.number(),
+          z.boolean(),
+        ]);
 
         const dashedCaseRecordSchema = z.record(
-          z.string().regex(
-            /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
-            "You must write using dash case Ex: url-repo"
-          ),
-          allowedAsciidocValuesSchema
-            .or(allowedAsciidocValuesSchema.array())
-        )
+          z
+            .string()
+            .regex(
+              /^(?:[a-z0-9]+)(?:-[a-z0-9]+)*$/,
+              'You must write using dash case Ex: url-repo',
+            ),
+          allowedAsciidocValuesSchema.or(allowedAsciidocValuesSchema.array()),
+        );
 
-        let attributes: z.infer<typeof dashedCaseRecordSchema>
+        let attributes: z.infer<typeof dashedCaseRecordSchema>;
 
         try {
-
-          attributes = dashedCaseRecordSchema.transform((attrs) =>
-            Object.fromEntries(Object.entries(attrs).map(
-              ([key, value]) => [
-                key.replace(
-                  /-([a-z])/g,
-                  (_, letter) => letter.toUpperCase()),
-                value
-              ]
-            ))
-          ).parse(document.getAttributes())
-
+          attributes = dashedCaseRecordSchema
+            .transform((attrs) =>
+              Object.fromEntries(
+                Object.entries(attrs).map(([key, value]) => [
+                  key.replace(/-([a-z])/g, (_, letter) => letter.toUpperCase()),
+                  value,
+                ]),
+              ),
+            )
+            .parse(document.getAttributes());
         } catch (error: unknown) {
-
-
-
           if (error instanceof z.ZodError) {
-            logger.error("All attributes must be written in dashed case in files")
+            logger.error(
+              'All attributes must be written in dashed case in files',
+            );
             for (const issue of error.issues) {
-              logger.error(`In this file ${projectRelativePath} this attribute ${issue.path} has this problem ${issue.message}`)
+              logger.error(
+                `In this file ${projectRelativePath} this attribute ${issue.path} has this problem ${issue.message}`,
+              );
             }
-
           }
 
-          return
-
+          return;
         }
-
-
-
 
         const data = await parseData({
           id: slug,
           data: attributes,
           filePath: projectRelativePath,
         });
-
 
         store.set({
           id: slug,
@@ -382,4 +363,3 @@ export function asciidocLoader(contentFolderName: string) {
     },
   } satisfies Loader;
 }
-
