@@ -17,8 +17,9 @@ const PackageJsonSchema = z.object({
         "The 'build' script must be in the format 'tsup --outDir <path>', where <path> must contain at least two lowercase letter segments (e.g., 'dist/esm' or './lib/bundle'), and can optionally start with a relative path prefix (like './' or '../') or a root slash.",
       ),
   }),
-  dependencies: z.record(z.string(), z.string()),
-  optionalDependencies: z.record(z.string(), z.string()),
+  dependencies: z.record(z.string(), z.string()).optional(),
+  optionalDependencies: z.record(z.string(), z.string()).optional(),
+  devDependencies: z.record(z.string(), z.string()),
   type: z.literal('module'),
   main: z.string(),
   exports: z.record(
@@ -47,7 +48,6 @@ const PackageJsonSchema = z.object({
   }),
   keywords: z.array(z.string()),
   files: z.array(z.string()),
-  devDependencies: z.record(z.string(), z.string()),
 });
 
 export default defineConfig((ctx) => ({
