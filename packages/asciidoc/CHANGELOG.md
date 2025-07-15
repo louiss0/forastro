@@ -1,3 +1,19 @@
+## 2.3.1 (2025-07-15)
+
+### 🩹 Fixes
+
+- change code according to eslint errors ([5dbc23a](https://github.com/louiss0/forastro/commit/5dbc23a))
+- change attribute key transformation to handle snake case ([e656982](https://github.com/louiss0/forastro/commit/e656982))
+- change match index to capture change correctly I decided to use the right index to capture the file name according to the regex. There is no two anymore! ([959619d](https://github.com/louiss0/forastro/commit/959619d))
+- Update hero image path and description ([fd71b8c](https://github.com/louiss0/forastro/commit/fd71b8c))
+- author regex and schema ([4381286](https://github.com/louiss0/forastro/commit/4381286))
+- change methods used to create zod function I ran into a bug where I found out that the tuple syntax doesn't allow return types to be Promises! ([dc42d5d](https://github.com/louiss0/forastro/commit/dc42d5d))
+- Use pathe package for path resolution I found a bug related to `node:os` being a `.cjs` library! It's used by `node:path` so it needed to go! ([afa1ccb](https://github.com/louiss0/forastro/commit/afa1ccb))
+
+### ❤️ Thank You
+
+- Shelton Louis @louiss0
+
 ## 2.3.0 (2025-06-01)
 
 This was a version bump only for asciidoc to align it with other projects, there were no code changes.
