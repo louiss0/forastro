@@ -24,6 +24,7 @@
   "main": "./src/index.ts",
   "exports": {
     ".": {
+      "types": "./src/index.d.ts",
       "import": "./src/index.ts"
     },
     "./unocss": {
