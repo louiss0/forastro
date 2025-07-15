@@ -12,22 +12,6 @@
   },
   "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
-    "build": {
-      "executor": "@nx/js:package",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/utilities",
-        "tsConfig": "packages/utilities/tsconfig.lib.json",
-        "main": "packages/utilities/src/index.ts",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "assets": ["packages/utilities/*.md", "packages/utilities/components/*"]
-      }
-    },
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
-      }
-    },
     "test": {
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],

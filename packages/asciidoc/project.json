@@ -11,30 +11,11 @@
     }
   },
   "tags": ["nx:lib", "nx:lib:ongoing"],
-  "targets": {
-    "build": {
-      "executor": "@nx/js:package",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/asciidoc",
-        "tsConfig": "tsconfig.lib.json",
-        "main": "src/index.ts",
-        "buildableProjectDepsInPackageJsonType": "dependencies",
-        "assets": ["./*.md"]
-      }
-    },
-
-    "nx-release-publish": {
-      "options": {
-        "packageRoot": "dist/{projectRoot}"
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../coverage/packages/asciidoc"
-      }
+  "test": {
+    "executor": "@nx/vite:test",
+    "outputs": ["{options.reportsDirectory}"],
+    "options": {
+      "reportsDirectory": "../../coverage/packages/asciidoc"
     }
   }
 }

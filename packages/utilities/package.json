@@ -4,15 +4,17 @@
   "peerDependencies": {
     "astro": ">5.0.0"
   },
-  "dependencies": {},
   "type": "module",
+  "scripts": {
+    "build": "tsup --outDir ../../dist/packages/utilities"
+  },
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
       "import": "./src/index.ts"
     },
     "./components": {
-      "import": "./src/components/index.ts"
+      "import": "./components/index.ts"
     }
   },
   "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
@@ -37,5 +39,8 @@
     "withastro",
     "astro-component",
     "ui"
-  ]
+  ],
+  "devDependencies": {
+    "tsup": "^8.5.0"
+  }
 }
