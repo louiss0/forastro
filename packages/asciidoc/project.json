@@ -13,22 +13,17 @@
   "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx/js:package",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/asciidoc",
-        "main": "packages/asciidoc/src/index.ts",
-        "additionalEntryPoints": [
-          "packages/asciidoc/src/lib/unocss.ts",
-          "packages/asciidoc/src/lib/tailwind.ts"
-        ],
-        "tsConfig": "packages/asciidoc/tsconfig.lib.json",
-        "format": ["esm"],
-        "assets": ["packages/asciidoc/*.md"],
-        "minify": true,
-        "esbuildConfig": "packages/asciidoc/esbuild.config.cts"
+        "tsConfig": "tsconfig.lib.json",
+        "main": "src/index.ts",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "assets": ["./*.md"]
       }
     },
+
     "nx-release-publish": {
       "options": {
         "packageRoot": "dist/{projectRoot}"

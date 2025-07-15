@@ -13,19 +13,14 @@
   "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
     "build": {
-      "executor": "@nx/esbuild:esbuild",
+      "executor": "@nx/js:package",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/utilities",
-        "main": "packages/utilities/src/index.ts",
         "tsConfig": "packages/utilities/tsconfig.lib.json",
-        "format": ["esm"],
-        "assets": [
-          "packages/utilities/*.md",
-          "packages/utilities/src/components/*"
-        ],
-        "minify": true,
-        "esbuildConfig": "packages/utilities/esbuild.config.cts"
+        "main": "packages/utilities/src/index.ts",
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "assets": ["packages/utilities/*.md", "packages/utilities/components/*"]
       }
     },
     "nx-release-publish": {
