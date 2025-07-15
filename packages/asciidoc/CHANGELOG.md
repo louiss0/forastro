@@ -1,3 +1,13 @@
+## 2.3.2 (2025-07-15)
+
+### 🩹 Fixes
+
+- Add types export The types need to be where the export's are for paths to be acknowledged! ([68ec6b9](https://github.com/louiss0/forastro/commit/68ec6b9))
+
+### ❤️ Thank You
+
+- Shelton Louis @louiss0
+
 ## 2.3.1 (2025-07-15)
 
 ### 🩹 Fixes
