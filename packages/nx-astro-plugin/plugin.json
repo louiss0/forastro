@@ -1,0 +1,33 @@
+{
+  "name": "astro-nx",
+  "version": "0.0.0",
+  "generators": {
+    "init": {
+      "factory": "./src/generators/init/generator",
+      "schema": "./src/generators/init/schema.json",
+      "description": "Initialize an Astro project with Nx"
+    }
+  },
+  "executors": {
+    "dev": {
+      "factory": "./src/executors/dev/executor",
+      "schema": "./src/executors/dev/schema.json",
+      "description": "Start the Astro development server"
+    },
+    "build": {
+      "factory": "./src/executors/build/executor",
+      "schema": "./src/executors/build/schema.json",
+      "description": "Build the Astro project for production"
+    },
+    "preview": {
+      "factory": "./src/executors/preview/executor",
+      "schema": "./src/executors/preview/schema.json",
+      "description": "Preview the built Astro project"
+    },
+    "check": {
+      "factory": "./src/executors/check/executor",
+      "schema": "./src/executors/check/schema.json",
+      "description": "Run Astro check for TypeScript and other issues"
+    }
+  }
+}

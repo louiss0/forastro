@@ -1,0 +1,15 @@
+import { defineConfig } from 'astro/config';
+
+// https://astro.build/config
+export default defineConfig({
+  // Enable server-side rendering
+  output: 'server',
+  
+  // Configure integrations
+  integrations: [],
+  
+  // Configure Vite
+  vite: {
+    // Vite configuration options
+  }
+});

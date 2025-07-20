@@ -1,0 +1,28 @@
+{
+  "name": "nx-astro-plugin-e2e",
+  "root": "packages/nx-astro-plugin/e2e",
+  "sourceRoot": "packages/nx-astro-plugin/e2e/src",
+  "projectType": "application",
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "packages/nx-astro-plugin/e2e/cypress.config.ts",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "nx-astro-plugin:preview"
+        }
+      }
+    },
+    "e2e-ci": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "packages/nx-astro-plugin/e2e/cypress.config.ts",
+        "testingType": "e2e",
+        "devServerTarget": "nx-astro-plugin:preview"
+      }
+    }
+  }
+}

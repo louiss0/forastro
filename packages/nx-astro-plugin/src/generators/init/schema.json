@@ -1,0 +1,36 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "properties": {
+    "packageManager": {
+      "type": "string",
+      "description": "The package manager to use",
+      "enum": ["npm", "yarn", "pnpm"],
+      "default": "pnpm"
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the project",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      }
+    },
+    "directory": {
+      "type": "string",
+      "description": "The directory where the project will be created",
+      "alias": "dir"
+    },
+    "tags": {
+      "type": "string",
+      "description": "Add tags to the project (used for linting)"
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip formatting files",
+      "default": false
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

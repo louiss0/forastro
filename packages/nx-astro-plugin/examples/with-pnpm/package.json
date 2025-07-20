@@ -1,0 +1,16 @@
+{
+  "name": "astro-pnpm-example",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nx dev my-astro-app",
+    "build": "nx build my-astro-app",
+    "preview": "nx preview my-astro-app",
+    "check": "nx check my-astro-app",
+    "graph": "nx graph"
+  },
+  "devDependencies": {
+    "astro-nx": "^1.0.0",
+    "nx": "^21.2.4"
+  }
+}

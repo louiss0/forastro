@@ -1,0 +1,73 @@
+{
+  "name": "@forastro/nx-astro-plugin",
+  "version": "0.0.0",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/index.ts",
+  "generators": "./plugin.json",
+  "executors": "./plugin.json",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "nx build",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "test:e2e": "vitest run e2e/src/**/*.spec.ts --config vitest.e2e.config.ts",
+    "test:e2e:watch": "vitest e2e/src/**/*.spec.ts --config vitest.e2e.config.ts",
+    "lint": "nx lint"
+  },
+  "dependencies": {
+    "@nx/devkit": "21.2.3",
+    "execa": "^9.6.0",
+    "tslib": "^2.8.1"
+  },
+  "devDependencies": {
+    "@nx/cypress": "^21.2.3",
+    "@nx/eslint": "^21.2.3",
+    "@nx/js": "21.2.3",
+    "@nx/plugin": "21.2.3",
+    "@nx/vite": "^21.2.3",
+    "@nx/workspace": "21.2.3",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.3.5",
+    "@semantic-release/npm": "^11.0.3",
+    "@types/node": "24.0.13",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
+    "@vitest/ui": "^3.2.4",
+    "cypress": "^14.5.2",
+    "eslint": "9.31.0",
+    "nx": "21.2.3",
+    "semantic-release": "^22.0.12",
+    "typescript": "5.8.3",
+    "vitest": "^3.2.4"
+  },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
+  },
+  "bugs": {
+    "url": "https://github.com/louiss0/forastro/issues",
+    "email": "louisshelton0@gmail.com"
+  },
+  "homepage": "https://forastro-docs.onrender.com/libraries/nx-astro-plugin",
+  "repository": {
+    "directory": "packages/nx-astro-plugin",
+    "type": "git",
+    "url": "https://github.com/louiss0/forastro"
+  },
+  "keywords": [
+    "nx",
+    "nx-plugin",
+    "astro",
+    "monorepo"
+  ],
+  "files": [
+    "src/",
+    "plugin.json",
+    "executors.json"
+  ]
+}
