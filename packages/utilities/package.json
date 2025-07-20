@@ -1,6 +1,9 @@
 {
   "name": "@forastro/utilities",
   "version": "5.1.3",
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "astro": ">5.0.0"
   },
@@ -20,7 +23,7 @@
   "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
   "repository": {
     "directory": "packages/utilities",
-    "url": "https//:github.com/louiss0/forastro",
+    "url": "https://github.com/louiss0/forastro",
     "type": "git"
   },
   "bugs": {
