@@ -13,8 +13,12 @@ import { join } from 'path';
 describe('JPD Integration E2E Tests', () => {
   let tmpDir: string;
   let workspaceDir: string;
+  let originalCwd: string;
 
   beforeAll(async () => {
+    // Save the original working directory
+    originalCwd = process.cwd();
+    
     tmpDir = tmpProjPath();
     workspaceDir = join(tmpDir, 'test-workspace');
     
@@ -30,6 +34,11 @@ describe('JPD Integration E2E Tests', () => {
   }, 300000);
 
   afterAll(() => {
+    // Restore original working directory before cleanup
+    if (originalCwd) {
+      process.chdir(originalCwd);
+    }
+    
     // Clean up the test workspace
     if (tmpDir) {
       rmSync(tmpDir, { recursive: true, force: true });

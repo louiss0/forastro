@@ -11,8 +11,12 @@ import { rmSync } from 'fs';
 describe('astro-nx plugin e2e', () => {
   let projectName: string;
   let workspaceDir: string;
+  let originalCwd: string;
 
   beforeAll(async () => {
+    // Save the original working directory
+    originalCwd = process.cwd();
+    
     projectName = uniq('astro-nx');
     workspaceDir = tmpProjPath();
     
@@ -21,6 +25,11 @@ describe('astro-nx plugin e2e', () => {
   }, 120000);
 
   afterAll(() => {
+    // Restore original working directory if it was changed
+    if (originalCwd && process.cwd() !== originalCwd) {
+      process.chdir(originalCwd);
+    }
+    
     // Clean up the test workspace
     if (workspaceDir) {
       rmSync(workspaceDir, { recursive: true, force: true });
