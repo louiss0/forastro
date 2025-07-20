@@ -1,14 +1,25 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
     "declaration": true,
     "types": ["node"],
     "verbatimModuleSyntax": false,
-    "moduleResolution": "bundler",
     "noUnusedLocals": false,
     "noUnusedParameters": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
+  "include": ["src/**/*.ts"],
+  "exclude": [
+    "vitest.config.ts",
+    "vitest.config.mts",
+    "vitest.e2e.config.ts",
+    "src/**/*.test.ts",
+    "src/**/*.spec.ts",
+    "src/**/*.test.tsx",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.js",
+    "src/**/*.spec.js",
+    "src/**/*.test.jsx",
+    "src/**/*.spec.jsx"
+  ]
 }

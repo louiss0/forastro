@@ -8,25 +8,25 @@
       "executor": "@nx/js:tsc",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/packages/nx-astro-plugin",
-        "main": "packages/nx-astro-plugin/src/index.ts",
-        "tsConfig": "packages/nx-astro-plugin/tsconfig.lib.json",
+        "outputPath": "../../dist/packages/nx-astro-plugin",
+        "main": "src/index.ts",
+        "tsConfig": "tsconfig.lib.json",
         "assets": [
-          "packages/nx-astro-plugin/plugin.json",
-          "packages/nx-astro-plugin/README.md"
+          "plugin.json",
+          "README.md"
         ]
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["packages/nx-astro-plugin/src/**/*.ts"]
+        "lintFilePatterns": ["src/**/*.ts"]
       }
     },
     "e2e": {
       "executor": "@nx/cypress:cypress",
       "options": {
-        "cypressConfig": "packages/nx-astro-plugin/e2e/cypress.config.ts",
+        "cypressConfig": "e2e/cypress.config.ts",
         "testingType": "e2e"
       }
     }
