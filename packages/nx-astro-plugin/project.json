@@ -17,12 +17,6 @@
         ]
       }
     },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["src/**/*.ts"]
-      }
-    },
     "e2e": {
       "executor": "@nx/cypress:cypress",
       "options": {
