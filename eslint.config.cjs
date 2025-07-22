@@ -23,7 +23,7 @@ module.exports = [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: [],
+          allow: ['shared'],
           depConstraints: [
             {
               sourceTag: '*',
