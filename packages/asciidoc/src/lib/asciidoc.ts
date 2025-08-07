@@ -7,8 +7,6 @@ import {
   loadAsciidocConfig,
 } from './internal';
 import { z } from 'astro/zod';
-
-import { resolve } from 'pathe';
 import type { Document } from 'asciidoctor';
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
@@ -54,7 +52,9 @@ export function asciidocLoader(contentFolderName: string) {
 
       logger.info('Loading Asciidoc paths and config file');
 
-      const resolvedRootRepo = `${resolve(astroConfig.root.pathname)}`;
+      // Get the absolute path from astroConfig.root.pathname
+      // This works in both Node.js and Deno environments
+      const resolvedRootRepo = astroConfig.root.pathname;
 
       asciidocConfig =
         asciidocConfig ?? (await loadAsciidocConfig(resolvedRootRepo));
@@ -88,7 +88,6 @@ export function asciidocLoader(contentFolderName: string) {
           }
           break;
       }
-
       if (Object.keys(asciidocConfig).length !== 0) {
         logger.info(`Creating Asciidoc Registry from using config file`);
 
@@ -324,7 +323,7 @@ export function asciidocLoader(contentFolderName: string) {
             .transform((attrs) =>
               Object.fromEntries(
                 Object.entries(attrs).map(([key, value]) => [
-                  key.replace(/(-[a-z]|_[a-z])/g, (_, letter) =>
+                  key.replace(/[-_]([a-z])/g, (_, letter) =>
                     letter.toUpperCase(),
                   ),
                   value,
