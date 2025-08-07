@@ -20,9 +20,11 @@ export function createPackageJsonSchema(
     publishConfig: z.object({
       access: z.literal('public'),
     }),
-    build: z.string().regex(buildRegex, buildRegexMessage),
+    scripts: z.object({
+      build: z.string().regex(buildRegex, buildRegexMessage),
+    }),
     dependencies: z.record(z.string(), z.string()),
-    optionalDependencies: z.record(z.string(), z.string()),
+    optionalDependencies: z.record(z.string(), z.string()).optional(),
     type: z.literal('module'),
     main: z.string(),
     exports: z.record(
@@ -51,7 +53,7 @@ export function createPackageJsonSchema(
     }),
     keywords: z.array(z.string()),
     files: z.array(z.string()),
-    devDependencies: z.record(z.string(), z.string()),
+    devDependencies: z.record(z.string(), z.string()).optional(),
   });
 }
 

@@ -65,6 +65,7 @@
   "devDependencies": {
     "@types/prismjs": "^1.26.5",
     "tailwindcss": "^4.0.0",
+    "tsup": "^8.5.0",
     "unocss": "^65.4.3"
   }
 }
