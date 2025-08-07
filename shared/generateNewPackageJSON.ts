@@ -23,10 +23,10 @@ export function createPackageJsonSchema(
     scripts: z.object({
       build: z.string().regex(buildRegex, buildRegexMessage),
     }),
-    dependencies: z.record(z.string(), z.string()),
+    dependencies: z.record(z.string(), z.string()).optional(),
     optionalDependencies: z.record(z.string(), z.string()).optional(),
     type: z.literal('module'),
-    main: z.string(),
+    main: z.string().optional(),
     exports: z.record(
       z.string(),
       z.union([
