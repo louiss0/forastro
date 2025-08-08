@@ -1,6 +1,10 @@
-import { tags, nodes } from '@forastro/starlight-asciidoc/markdoc';
+import { defineMarkdocConfig } from '@astrojs/markdoc/config';
+import starlightMarkdoc from '@astrojs/starlight-markdoc';
 
-export default {
-  tags,
+const { nodes, tags } = starlightMarkdoc();
+
+export default defineMarkdocConfig({
   nodes,
-};
+  tags,
+  extends: [],
+});
