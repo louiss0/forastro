@@ -29,5 +29,10 @@
       "@forastro/utilities": ["packages/utilities/src/index.ts"]
     }
   },
+  "references": [
+    { "path": "packages/asciidoc" },
+    { "path": "packages/nx-astro-plugin" },
+    { "path": "packages/utilities" }
+  ],
   "exclude": ["node_modules", "tmp"]
 }
