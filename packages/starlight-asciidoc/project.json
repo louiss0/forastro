@@ -1,0 +1,22 @@
+{
+  "name": "starlight-asciidoc",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/starlight-asciidoc/src",
+  "projectType": "library",
+  "tags": ["scope:docs", "type:lib"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/starlight-asciidoc",
+        "main": "packages/starlight-asciidoc/src/index.ts",
+        "tsConfig": "packages/starlight-asciidoc/tsconfig.lib.json",
+        "assets": ["packages/starlight-asciidoc/*.md"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}
