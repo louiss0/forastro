@@ -1,0 +1,9 @@
+---
+const { variant = 'note', title } = Astro.props as { variant?: string; title?: string };
+---
+<div class={`admonition admonition-${variant}`}>
+  {title && <div class="admonition-title">{title}</div>}
+  <div class="admonition-content">
+    <slot />
+  </div>
+</div>
