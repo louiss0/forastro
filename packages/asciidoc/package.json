@@ -8,7 +8,8 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup --outDir ../../dist/packages/asciidoc"
+    "build": "tsup --outDir ../../dist/packages/asciidoc",
+    "prepack": "npm run build"
   },
   "dependencies": {
     "asciidoctor": "^3.0.4",
@@ -58,9 +59,11 @@
     "tailwindcss"
   ],
   "files": [
-    "src/",
-    "index.js",
-    "lib/"
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ],
   "devDependencies": {
     "@types/prismjs": "^1.26.5",
