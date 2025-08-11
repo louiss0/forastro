@@ -3,14 +3,22 @@
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
-  "main": "src/index.ts",
+  "peerDependencies": {
+    "@nx/devkit": "^21.0.0"
+  },
+  "main": "./index.js",
   "generators": "./plugin.json",
   "executors": "./plugin.json",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
+    }
+  },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "nx build",
+    "build": "tsup --outDir ../../dist/packages/nx-astro-plugin",
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:coverage": "vitest --coverage",
@@ -43,7 +51,8 @@
     "nx": "21.2.3",
     "semantic-release": "^22.0.12",
     "typescript": "5.8.3",
-    "vitest": "^3.2.4"
+    "vitest": "^3.2.4",
+    "tsup": "^8.5.0"
   },
   "author": {
     "name": "Shelton Louis",
@@ -66,8 +75,12 @@
     "monorepo"
   ],
   "files": [
-    "src/",
+    "*.js",
+    "*.d.ts",
     "plugin.json",
-    "executors.json"
+    "executors.json",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
   ]
 }

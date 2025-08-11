@@ -17,27 +17,28 @@ const PackageJsonSchemaResult = createPackageJsonSchema(
 );
 
 if (PackageJsonSchemaResult instanceof Error) {
-  throw new Error(
-    `Failed to initialize PackageJsonSchema: ${PackageJsonSchemaResult.message}`,
-  );
+  throw PackageJsonSchemaResult;
 }
 
 const PackageJsonSchema = PackageJsonSchemaResult;
 
 export default defineConfig((ctx) => ({
-  entry: {
-    'index': './src/index.ts',
-    'lib/unocss': './src/lib/unocss.ts',
-    'lib/tailwind': './src/lib/tailwind.ts'
-  },
+  entry: ['./src/index.ts'],
   format: ['esm'],
-  dts: true, // Generate .d.ts files
+  dts: false, // TODO: Fix type import issues with verbatimModuleSyntax
   minify: true,
   clean: true, // Clean output directory before building
-  external: ['asciidoctor'],
   publicDir: true,
   splitting: false, // Disable code splitting to prevent chunking
   async onSuccess() {
+    // Copy plugin.json and README.md assets
+    const assets = ['plugin.json', 'README.md'];
+    for (const asset of assets) {
+      if (fs.existsSync(asset)) {
+        fs.copyFileSync(asset, `${ctx.outDir}/${asset}`);
+      }
+    }
+
     fs.readFile(
       'package.json',
       { encoding: 'utf-8', flag: 'r' },
@@ -48,13 +49,8 @@ export default defineConfig((ctx) => ({
           JSON.parse(data),
         );
 
-        const valuesToIgnoreInExports: string[] = []; // This remains empty as per original code
-
-        // Use the shared transformation function
-        const newPackageJSON = transformPackageJSON_ExportsForBuild(
-          packageJSON,
-          valuesToIgnoreInExports,
-        );
+        const newPackageJSON: PackageJSON =
+          transformPackageJSON_ExportsForBuild(packageJSON, []);
 
         fs.writeFile(
           `${ctx.outDir}/package.json`,
