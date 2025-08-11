@@ -37,7 +37,6 @@ export default defineConfig((ctx) => ({
   external: ['asciidoctor'],
   publicDir: true,
   splitting: false, // Disable code splitting to prevent chunking
-  bundle: false, // Keep files separate
   async onSuccess() {
     fs.readFile(
       'package.json',
@@ -49,7 +48,7 @@ export default defineConfig((ctx) => ({
           JSON.parse(data),
         );
 
-        const valuesToIgnoreInExports: string[] = ['unocss', 'tailwind']; // This remains empty as per original code
+        const valuesToIgnoreInExports: string[] = []; // This remains empty as per original code
 
         // Use the shared transformation function
         const newPackageJSON = transformPackageJSON_ExportsForBuild(
