@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": 2,
+  "title": "Astro Build Executor",
+  "description": "Build an Astro project for production deployment with optimization",
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "string",
+      "description": "Path to Astro configuration file (relative to project root)",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*\\.(mjs|js|ts)$",
+      "examples": ["astro.config.mjs", "config/astro.config.ts"],
+      "x-prompt": "Path to Astro config file (leave empty for default):"
+    },
+    "outDir": {
+      "type": "string",
+      "description": "Output directory where the built project files will be placed",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*$",
+      "default": "dist",
+      "examples": ["dist", "build", "public"]
+    },
+    "site": {
+      "type": "string",
+      "description": "The full URL where your site will be deployed (used for canonical URLs and sitemap generation)",
+      "format": "uri",
+      "pattern": "^https?://[a-zA-Z0-9][a-zA-Z0-9.-]*[a-zA-Z0-9](?:/.*)?$",
+      "examples": ["https://example.com", "https://mysite.github.io", "https://www.mydomain.org"]
+    },
+    "base": {
+      "type": "string",
+      "description": "Base path where your site is served from (useful for subdirectory deployments)",
+      "pattern": "^/[a-zA-Z0-9][a-zA-Z0-9._/-]*/?$",
+      "examples": ["/docs", "/blog", "/app"]
+    },
+    "draft": {
+      "type": "boolean",
+      "description": "Include draft content pages in the production build",
+      "default": false
+    },
+    "mode": {
+      "type": "string",
+      "description": "Build environment mode affecting optimizations and output",
+      "enum": ["development", "production"],
+      "default": "production",
+      "x-prompt": {
+        "message": "Which build mode?",
+        "type": "list",
+        "items": [
+          { "value": "production", "label": "production - Optimized build for deployment" },
+          { "value": "development", "label": "development - Faster build with debug info" }
+        ]
+      }
+    },
+    "sourcemap": {
+      "type": "boolean",
+      "description": "Generate source maps for client-side JavaScript debugging",
+      "default": false
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Enable detailed logging output during the build process",
+      "default": false
+    }
+  },
+  "additionalProperties": false
+}

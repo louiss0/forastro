@@ -1,0 +1,29 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": 2,
+  "title": "Astro Check Executor",
+  "description": "Run type checking and validation for Astro projects to catch errors",
+  "type": "object",
+  "properties": {
+    "config": {
+      "type": "string",
+      "description": "Path to Astro configuration file (relative to project root)",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*\\.(mjs|js|ts)$",
+      "examples": ["astro.config.mjs", "config/astro.config.ts"],
+      "x-prompt": "Path to Astro config file (leave empty for default):"
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Enable detailed logging and generate comprehensive report file for CI/CD pipelines",
+      "default": false
+    },
+    "tsconfig": {
+      "type": "string",
+      "description": "Path to TypeScript configuration file for type checking customization",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*\\.json$",
+      "examples": ["tsconfig.json", "config/tsconfig.build.json"],
+      "x-prompt": "Path to TypeScript config file (leave empty for default):"
+    }
+  },
+  "additionalProperties": false
+}

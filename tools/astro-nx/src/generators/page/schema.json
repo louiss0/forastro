@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": 2,
+  "title": "Astro Page Generator",
+  "description": "Generate a new Astro page with routing and layout support",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The page name or route path (supports dynamic routes like [slug] or [...path])",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\[\\]\\._/-]*$",
+      "minLength": 1,
+      "maxLength": 100,
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the page?",
+      "examples": ["about", "contact", "blog/[slug]", "products/[...path]", "index"]
+    },
+    "project": {
+      "type": "string",
+      "description": "The target project where the page will be created",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "Which project should contain this page?",
+      "x-dropdown": "projects"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Custom subdirectory within src/pages for nested routing structure",
+      "pattern": "^[a-zA-Z0-9/_-]*$",
+      "examples": ["blog", "admin", "api", "docs"]
+    },
+    "ext": {
+      "type": "string",
+      "description": "File extension format for the page",
+      "enum": ["astro", "md", "adoc", "mdx", "mdoc"],
+      "default": "astro",
+      "x-prompt": {
+        "message": "Which page format would you prefer?",
+        "type": "list",
+        "items": [
+          { "value": "astro", "label": "astro - Standard Astro page with full features" },
+          { "value": "mdx", "label": "mdx - Markdown with JSX components" },
+          { "value": "md", "label": "md - Plain Markdown content" },
+          { "value": "mdoc", "label": "mdoc - Markdoc structured content" },
+          { "value": "adoc", "label": "adoc - AsciiDoc format" }
+        ]
+      }
+    },
+    "layout": {
+      "type": "string",
+      "description": "Path to layout component (relative to src/layouts) for consistent page structure",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*$",
+      "examples": ["BaseLayout.astro", "BlogLayout.astro", "../components/Layout.astro"]
+    },
+    "frontmatter": {
+      "type": "object",
+      "description": "Custom frontmatter metadata for page SEO, routing, and content management",
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "string" },
+          { "type": "number" },
+          { "type": "boolean" },
+          { "type": "array" },
+          { "type": "object" }
+        ]
+      },
+      "properties": {
+        "title": {
+          "type": "string",
+          "description": "Page title for SEO and display"
+        },
+        "description": {
+          "type": "string",
+          "description": "Page description for SEO meta tags"
+        },
+        "layout": {
+          "type": "string",
+          "description": "Layout component path"
+        },
+        "publishDate": {
+          "type": "string",
+          "format": "date",
+          "description": "Page publication date"
+        },
+        "draft": {
+          "type": "boolean",
+          "description": "Whether page is in draft mode",
+          "default": false
+        }
+      },
+      "examples": [
+        { "title": "About Us", "description": "Learn more about our company and mission" },
+        { "title": "Blog Post", "layout": "BlogLayout.astro", "publishDate": "2024-01-15" }
+      ]
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip automatic code formatting after page generation",
+      "default": false
+    }
+  },
+  "required": ["name", "project"],
+  "additionalProperties": false
+}

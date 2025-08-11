@@ -1,0 +1,59 @@
+---
+layout: '../layouts/MarkdownLayout.astro'
+title: 'Sample AsciiDoc Page'
+description: 'This is a sample AsciiDoc page template'
+---
+
+= Sample AsciiDoc Page
+:author: Astro Team
+:description: This is a sample AsciiDoc page template
+
+This is a sample AsciiDoc page that demonstrates how to create content using AsciiDoc in Astro.
+
+== Features
+
+* Rich text formatting capabilities
+* Professional documentation structure  
+* Layout integration
+* Powerful markup syntax
+
+== Getting Started
+
+. Edit the frontmatter to customize page metadata
+. Write your content using AsciiDoc syntax
+. Add layouts for consistent styling
+. Deploy with Astro's build system
+
+== Content Structure
+
+You can organize your content with:
+
+[horizontal]
+Headers:: For section organization
+Lists:: For structured information  
+Links:: To connect related content
+Images:: For visual enhancement
+
+NOTE: This is an important note that stands out from regular content.
+
+== Code Examples
+
+[source,javascript]
+----
+// Example JavaScript code
+function greetUser(name) {
+  return `Hello, ${name}! Welcome to Astro.`;
+}
+----
+
+== Admonitions
+
+TIP: AsciiDoc provides powerful admonition blocks for highlighting different types of information.
+
+WARNING: Always test your content before deploying to production.
+
+IMPORTANT: AsciiDoc offers more sophisticated formatting than standard Markdown.
+
+== Conclusion
+
+This template provides a professional foundation for creating AsciiDoc-based pages in your Astro project.
