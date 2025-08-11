@@ -8,15 +8,27 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup --outDir ../../dist/packages/nx-astro-plugin"
+    "build": "tsup",
+    "clean": "rimraf dist",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@nx/devkit": "21.2.3",
-    "execa": "^9.6.0",
+    "fs-extra": "^11.2.0",
     "tslib": "^2.8.1"
   },
-  "type": "commonjs",
-  "main": "./index.cjs",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    },
+    "./plugin.json": "./plugin.json",
+    "./package.json": "./package.json",
+    "./dist/*": "./dist/*",
+    "./generators/*": "./generators/*"
+  },
   "author": {
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
@@ -38,16 +50,13 @@
     "monorepo"
   ],
   "files": [
-    "*.js",
-    "*.d.ts",
+    "dist",
     "plugin.json",
-    "executors.json",
-    "README.md",
-    "LICENSE",
-    "CHANGELOG.md"
+    "generators"
   ],
   "devDependencies": {
     "@nx/cypress": "^21.2.3",
+    "@nx/devkit": "21.2.3",
     "@nx/eslint": "^21.2.3",
     "@nx/js": "21.2.3",
     "@nx/plugin": "21.2.3",
@@ -64,9 +73,10 @@
     "cypress": "^14.5.2",
     "eslint": "9.31.0",
     "nx": "21.2.3",
+    "rimraf": "^6.0.1",
     "semantic-release": "^22.0.12",
+    "tsup": "^8.5.0",
     "typescript": "5.8.3",
-    "vitest": "^3.2.4",
-    "tsup": "^8.5.0"
+    "vitest": "^3.2.4"
   }
 }
