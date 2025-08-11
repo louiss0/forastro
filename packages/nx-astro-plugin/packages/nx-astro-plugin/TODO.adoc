@@ -1,0 +1,55 @@
+= TODO
+
+== Bugs
+
+== Refactors
+
+== Features
+
+[IMPORTANT]
+.TemplatePathValidator
+====
+
+File: src/executors/build/executor.ts
+Function: buildExecutor
+Description:
+• Confirm template path resolution is working correctly
+• Add validation for template existence before build
+• Ensure proper error handling for missing templates
+====
+
+[IMPORTANT]
+.ExecutorSchemaEnrichment
+====
+
+File: src/executors/build/schema.json
+Schema: buildExecutorSchema
+Description:
+• Add richer schema validation for build options
+• Include template path validation rules
+• Add support for additional Astro configuration options
+====
+
+[IMPORTANT]
+.DevExecutorSchemaEnrichment
+====
+
+File: src/executors/dev/schema.json
+Schema: devExecutorSchema
+Description:
+• Enhance schema with development-specific options
+• Add hot reload configuration options
+• Include port and host validation rules
+====
+
+[IMPORTANT]
+.GeneratorSchemaValidation
+====
+
+File: src/generators/astro-project/schema.json
+Schema: astroProjectGeneratorSchema
+Description:
+• Add comprehensive validation for project generation
+• Include template selection validation
+• Add support for additional Astro project options
+====
