@@ -1,0 +1,20 @@
+{
+  "name": "my-site",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/my-site/src",
+  "targets": {
+    "dev": {
+      "executor": "astro-nx:dev"
+    },
+    "build": {
+      "executor": "astro-nx:build"
+    },
+    "preview": {
+      "executor": "astro-nx:preview"
+    },
+    "check": {
+      "executor": "astro-nx:check"
+    }
+  }
+}
