@@ -30,5 +30,5 @@
       "options": {}
     }
   },
-  "tags": []
+  "tags": ["type:app", "scope:blog"]
 }
