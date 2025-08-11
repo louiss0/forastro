@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "executors": {
     "dev": {
-      "implementation": "./index.cjs#dev",
+      "implementation": "./index.js#dev",
       "schema": {
         "type": "object",
         "properties": {},
@@ -12,7 +12,7 @@
       "description": "Start the Astro development server"
     },
     "build": {
-      "implementation": "./index.cjs#build",
+      "implementation": "./index.js#build",
       "schema": {
         "type": "object",
         "properties": {},
@@ -21,7 +21,7 @@
       "description": "Build the Astro project for production"
     },
     "preview": {
-      "implementation": "./index.cjs#preview",
+      "implementation": "./index.js#preview",
       "schema": {
         "type": "object",
         "properties": {},
@@ -30,13 +30,20 @@
       "description": "Preview the built Astro project"
     },
     "check": {
-      "implementation": "./index.cjs#check",
+      "implementation": "./index.js#check",
       "schema": {
         "type": "object",
         "properties": {},
         "additionalProperties": true
       },
       "description": "Run Astro check for TypeScript and other issues"
+    }
+  },
+  "generators": {
+    "init": {
+      "implementation": "./src/generators/init/impl.js",
+      "schema": "./generators/init/schema.json",
+      "description": "Generate an Astro project from ForAstro templates"
     }
   }
 }
