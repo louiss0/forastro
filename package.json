@@ -3,8 +3,9 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "postinstall": "node ./tools/scripts/patch-nx-cli.js",
-    "preversion": "pnpm -w -r run build"
+    "postinstall": "node ./tools/scripts/patch-nx-cli.js && node ./tools/scripts/setup-git-hooks.js",
+    "preversion": "pnpm -w -r run build",
+    "setup-hooks": "node ./tools/scripts/setup-git-hooks.js"
   },
   "private": true,
   "devDependencies": {
