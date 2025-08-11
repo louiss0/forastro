@@ -5,17 +5,17 @@
   "sourceRoot": "apps/blog/src",
   "targets": {
     "dev": {
-      "executor": "@astro-nx/astro:dev",
+      "executor": "astro-nx:dev",
       "options": {}
     },
     "build": {
-      "executor": "@astro-nx/astro:build",
+      "executor": "astro-nx:build",
       "options": {
         "outputPath": "dist/apps/blog"
       }
     },
     "preview": {
-      "executor": "@astro-nx/astro:preview",
+      "executor": "astro-nx:preview",
       "options": {}
     },
     "lint": {
@@ -26,7 +26,7 @@
       }
     },
     "check": {
-      "executor": "@astro-nx/astro:check",
+      "executor": "astro-nx:check",
       "options": {}
     }
   },

@@ -2,8 +2,8 @@ import { defineConfig } from 'astro/config';
 
 // https://astro.build/config
 export default defineConfig({
-  // Enable server-side rendering
-  output: 'server',
+  // Static site generation (default)
+  output: 'static',
 
   // Configure integrations
   integrations: [],
