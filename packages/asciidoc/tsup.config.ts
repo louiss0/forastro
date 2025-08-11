@@ -25,13 +25,19 @@ if (PackageJsonSchemaResult instanceof Error) {
 const PackageJsonSchema = PackageJsonSchemaResult;
 
 export default defineConfig((ctx) => ({
-  entry: ['./src/index.ts'],
+  entry: {
+    'index': './src/index.ts',
+    'lib/unocss': './src/lib/unocss.ts',
+    'lib/tailwind': './src/lib/tailwind.ts'
+  },
   format: ['esm'],
   dts: true, // Generate .d.ts files
   minify: true,
   clean: true, // Clean output directory before building
   external: ['asciidoctor'],
   publicDir: true,
+  splitting: false, // Disable code splitting to prevent chunking
+  bundle: false, // Keep files separate
   async onSuccess() {
     fs.readFile(
       'package.json',

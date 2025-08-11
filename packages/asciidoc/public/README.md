@@ -123,7 +123,7 @@ import { AsciidocConfigObject } from "@forastro/asciidoc"
 ### Styling
 
 This plugin allows you to use Tailwind or UnoCSS to style your blog pages.
-To use either use the `@forastro/asciidoc/plugins` module.
+To use either use the appropriate module from `@forastro/asciidoc`.
 
 Tailwind
 

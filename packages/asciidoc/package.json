@@ -8,8 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup --outDir ../../dist/packages/asciidoc",
-    "prepack": "npm run build"
+    "build": "tsup --outDir ../../dist/packages/asciidoc"
   },
   "dependencies": {
     "asciidoctor": "^3.0.4",
@@ -24,17 +23,19 @@
     "unocss": "^66.3.3"
   },
   "type": "module",
-  "main": "./src/index.ts",
+  "main": "./index.js",
   "exports": {
     ".": {
-      "types": "./src/index.d.ts",
-      "import": "./src/index.ts"
+      "types": "./index.d.ts",
+      "import": "./index.js"
     },
     "./unocss": {
-      "import": "./src/lib/unocss.ts"
+      "types": "./lib/unocss.d.ts",
+      "import": "./lib/unocss.js"
     },
     "./tailwind": {
-      "import": "./src/lib/tailwind.ts"
+      "types": "./lib/tailwind.d.ts",
+      "import": "./lib/tailwind.js"
     }
   },
   "author": {
@@ -59,8 +60,9 @@
     "tailwindcss"
   ],
   "files": [
-    "dist",
-    "src",
+    "*.js",
+    "*.d.ts",
+    "lib/",
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
