@@ -6,8 +6,7 @@
   "release": {
     "version": {
       "currentVersionResolver": "git-tag",
-      "preserveLocalDependencyProtocols": false,
-      "manifestRootsToUpdate": ["dist/{projectRoot}"]
+      "preserveLocalDependencyProtocols": false
     }
   },
   "tags": ["nx:lib", "nx:lib:ongoing"],
