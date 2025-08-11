@@ -1,59 +1,22 @@
 {
   "name": "astro-nx",
   "version": "0.0.0",
-  "license": "MIT",
-  "type": "module",
   "peerDependencies": {
     "@nx/devkit": "^21.0.0"
-  },
-  "main": "./index.js",
-  "generators": "./plugin.json",
-  "executors": "./plugin.json",
-  "exports": {
-    ".": {
-      "import": "./src/index.ts"
-    }
   },
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "tsup --outDir ../../dist/packages/nx-astro-plugin",
-    "test": "vitest",
-    "test:watch": "vitest --watch",
-    "test:coverage": "vitest --coverage",
-    "test:e2e": "vitest run e2e/src/**/*.spec.ts --config vitest.e2e.config.ts",
-    "test:e2e:watch": "vitest e2e/src/**/*.spec.ts --config vitest.e2e.config.ts",
-    "lint": "nx lint"
+    "build": "tsup --outDir ../../dist/packages/nx-astro-plugin"
   },
   "dependencies": {
     "@nx/devkit": "21.2.3",
     "execa": "^9.6.0",
     "tslib": "^2.8.1"
   },
-  "devDependencies": {
-    "@nx/cypress": "^21.2.3",
-    "@nx/eslint": "^21.2.3",
-    "@nx/js": "21.2.3",
-    "@nx/plugin": "21.2.3",
-    "@nx/vite": "^21.2.3",
-    "@nx/workspace": "21.2.3",
-    "@semantic-release/changelog": "^6.0.3",
-    "@semantic-release/git": "^10.0.1",
-    "@semantic-release/github": "^10.3.5",
-    "@semantic-release/npm": "^11.0.3",
-    "@types/node": "24.0.13",
-    "@typescript-eslint/eslint-plugin": "^8.37.0",
-    "@typescript-eslint/parser": "^8.37.0",
-    "@vitest/ui": "^3.2.4",
-    "cypress": "^14.5.2",
-    "eslint": "9.31.0",
-    "nx": "21.2.3",
-    "semantic-release": "^22.0.12",
-    "typescript": "5.8.3",
-    "vitest": "^3.2.4",
-    "tsup": "^8.5.0"
-  },
+  "type": "commonjs",
+  "main": "./index.cjs",
   "author": {
     "name": "Shelton Louis",
     "url": "https://github.com/louiss0"
@@ -82,5 +45,28 @@
     "README.md",
     "LICENSE",
     "CHANGELOG.md"
-  ]
+  ],
+  "devDependencies": {
+    "@nx/cypress": "^21.2.3",
+    "@nx/eslint": "^21.2.3",
+    "@nx/js": "21.2.3",
+    "@nx/plugin": "21.2.3",
+    "@nx/vite": "^21.2.3",
+    "@nx/workspace": "21.2.3",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.3.5",
+    "@semantic-release/npm": "^11.0.3",
+    "@types/node": "24.0.13",
+    "@typescript-eslint/eslint-plugin": "^8.37.0",
+    "@typescript-eslint/parser": "^8.37.0",
+    "@vitest/ui": "^3.2.4",
+    "cypress": "^14.5.2",
+    "eslint": "9.31.0",
+    "nx": "21.2.3",
+    "semantic-release": "^22.0.12",
+    "typescript": "5.8.3",
+    "vitest": "^3.2.4",
+    "tsup": "^8.5.0"
+  }
 }
