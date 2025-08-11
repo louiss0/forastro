@@ -1,0 +1,34 @@
+{
+  "name": "blog",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/blog/src",
+  "targets": {
+    "dev": {
+      "executor": "@astro-nx/astro:dev",
+      "options": {}
+    },
+    "build": {
+      "executor": "@astro-nx/astro:build",
+      "options": {
+        "outputPath": "dist/apps/blog"
+      }
+    },
+    "preview": {
+      "executor": "@astro-nx/astro:preview",
+      "options": {}
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/blog/**/*.{js,ts,astro}"]
+      }
+    },
+    "check": {
+      "executor": "@astro-nx/astro:check",
+      "options": {}
+    }
+  },
+  "tags": []
+}

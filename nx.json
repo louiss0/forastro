@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "plugins": [],
+  "plugins": ["astro-nx"],
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -47,6 +47,14 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"],
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"]
+    },
+    "dev": {
+      "executor": "@astro-nx/astro:dev",
+      "options": {}
+    },
+    "preview": {
+      "executor": "@astro-nx/astro:preview",
+      "options": {}
     }
   },
   "workspaceLayout": {

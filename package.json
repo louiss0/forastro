@@ -25,12 +25,16 @@
     "@swc/core": "~1.12.14",
     "@swc/helpers": "~0.5.17",
     "@types/node": "24.0.13",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
     "@vitest/coverage-v8": "^3.2.4",
     "@vitest/ui": "^3.0.0",
     "astro": "^5.11.1",
+    "astro-nx": "workspace:*",
     "esbuild": "^0.19.2",
     "eslint": "9.31.0",
     "eslint-config-prettier": "10.1.5",
+    "eslint-plugin-astro": "^0.29.0",
     "execa": "^9.6.0",
     "jiti": "2.4.2",
     "jsdom": "~26.1.0",
@@ -46,5 +50,6 @@
     "vite": "7.0.4",
     "vite-tsconfig-paths": "5.1.4",
     "vitest": "^3.2.4"
-  }
+  },
+  "dependencies": {}
 }
