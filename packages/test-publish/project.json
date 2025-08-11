@@ -1,7 +1,7 @@
 {
-  "name": "nx-astro-plugin",
-  "root": "packages/nx-astro-plugin",
-  "sourceRoot": "packages/nx-astro-plugin/src",
+  "name": "test-publish",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/test-publish/src",
   "projectType": "library",
   "release": {
     "version": {
@@ -12,11 +12,11 @@
   },
   "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
-    "e2e": {
-      "executor": "@nx/cypress:cypress",
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "cypressConfig": "e2e/cypress.config.ts",
-        "testingType": "e2e"
+        "reportsDirectory": "../../coverage/packages/test-publish"
       }
     }
   }

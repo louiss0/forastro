@@ -40,6 +40,56 @@ If thing's don't work out then use.
 2. `nx release version`
 3. `nx release publish`
 
+## Development Workflow - Git Flow
+
+This repository follows the Git Flow branching model for organized development and release management.
+
+### Branch Structure
+
+- **`main`** - Production releases only. This branch contains stable, released code.
+- **`develop`** - Integration branch where features are merged for testing before release.
+- **`feature/*`** - Feature branches for developing new functionality (e.g., `feature/new-component`).
+- **`release/*`** - Release preparation branches (e.g., `release/1.2.0`).
+- **`hotfix/*`** - Critical bug fixes for production (e.g., `hotfix/security-patch`).
+
+### Workflow Guidelines
+
+1. **Feature Development**: Create feature branches from `develop`
+   ```bash
+   git checkout develop
+   git checkout -b feature/your-feature-name
+   ```
+
+2. **Completing Features**: Merge feature branches back to `develop`
+   ```bash
+   git checkout develop
+   git merge feature/your-feature-name
+   git branch -d feature/your-feature-name
+   ```
+
+3. **Release Preparation**: Create release branches from `develop`
+   ```bash
+   git checkout develop
+   git checkout -b release/1.2.0
+   ```
+
+4. **Completing Releases**: Merge release branches to both `main` and `develop`
+   ```bash
+   git checkout main
+   git merge release/1.2.0
+   git tag -a v1.2.0 -m "Release version 1.2.0"
+   git checkout develop
+   git merge release/1.2.0
+   git branch -d release/1.2.0
+   ```
+
+5. **Hotfixes**: Create hotfix branches from `main`
+   ```bash
+   git checkout main
+   git checkout -b hotfix/critical-bug
+   # Fix and merge to both main and develop
+   ```
+
 In each package folder a `esbuild.config.cts` file is held which uses a plugin from the plugins/ folder called `replaceValuesInExportsPlugin`.
 That function is responsible for changing the `exports:` props's values after the build.
 Every package must be built with this plugin. It uses regex to replace values with the intended string. Nx will make esbuild output entries at the root.

@@ -1,0 +1,48 @@
+{
+  "name": "@forastro/test-publish",
+  "version": "0.0.1",
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "typescript": ">5.0.0"
+  },
+  "type": "module",
+  "scripts": {
+    "build": "tsup --outDir ../../dist/packages/test-publish"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "import": "./src/index.ts"
+    }
+  },
+  "homepage": "https://forastro-docs.onrender.com/libraries/test-publish",
+  "repository": {
+    "directory": "packages/test-publish",
+    "url": "https://github.com/louiss0/forastro",
+    "type": "git"
+  },
+  "bugs": {
+    "url": "https://github.com/louiss0/forastro/issues",
+    "email": "louisshelton0@gmail.com"
+  },
+  "author": {
+    "name": "Shelton Louis",
+    "url": "https://github.com/louiss0"
+  },
+  "files": [
+    "src/",
+    "index.js"
+  ],
+  "keywords": [
+    "forastro",
+    "test",
+    "publish",
+    "demo"
+  ],
+  "devDependencies": {
+    "tsup": "^8.5.0"
+  },
+  "dependencies": {}
+}

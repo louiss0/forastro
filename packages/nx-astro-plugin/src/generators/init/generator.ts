@@ -2,17 +2,17 @@ import {
   addProjectConfiguration,
   formatFiles,
   generateFiles,
-  Tree,
   updateJson,
   readJson,
   logger,
   addDependenciesToPackageJson,
   names,
 } from '@nx/devkit';
+import type { Tree } from '@nx/devkit';
 import { join } from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
-import { InitGeneratorSchema } from './schema';
+import type { InitGeneratorSchema } from './schema';
 import { getPackageManagerAddCommand } from '../../utils/package-manager';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -26,7 +26,7 @@ interface NormalizedSchema extends InitGeneratorSchema {
 }
 
 function normalizeOptions(
-  tree: Tree,
+  _tree: Tree,
   options: InitGeneratorSchema
 ): NormalizedSchema {
   const name = names(options.name).fileName;
@@ -100,7 +100,7 @@ function updateNxJson(tree: Tree) {
 }
 
 
-function addDependencies(tree: Tree, options: NormalizedSchema) {
+function addDependencies(tree: Tree, _options: NormalizedSchema) {
   const dependencies = {
     'astro': '^4.0.0',
   };

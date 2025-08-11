@@ -3,20 +3,21 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/starlight-asciidoc/src",
   "projectType": "library",
-  "tags": ["scope:docs", "type:lib"],
+  "release": {
+    "version": {
+      "currentVersionResolver": "git-tag",
+      "preserveLocalDependencyProtocols": false,
+      "manifestRootsToUpdate": ["dist/{projectRoot}"]
+    }
+  },
+  "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "outputPath": "dist/packages/starlight-asciidoc",
-        "main": "packages/starlight-asciidoc/src/index.ts",
-        "tsConfig": "packages/starlight-asciidoc/tsconfig.lib.json",
-        "assets": ["packages/starlight-asciidoc/*.md"]
+        "reportsDirectory": "../../coverage/packages/starlight-asciidoc"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     }
   }
 }
