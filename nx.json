@@ -53,6 +53,12 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "tsup": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"],
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"]
     }
   },
   "workspaceLayout": {
@@ -70,8 +76,8 @@
       }
     },
     "version": {
-      "conventionalCommits": true,
       "preVersionCommand": "pnpm exec nx run-many --target 'build' --projects 'tag:nx:lib:ongoing'",
+      "conventionalCommits": true,
       "preserveLocalDependencyProtocols": false,
       "versionActionsOptions": {
         "skipLockFileUpdate": true

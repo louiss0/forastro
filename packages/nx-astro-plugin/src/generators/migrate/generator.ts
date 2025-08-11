@@ -1,14 +1,13 @@
 import {
-  Tree,
   formatFiles,
   readJson,
-  updateJson,
   joinPathFragments,
   logger,
   writeJson,
   names,
 } from '@nx/devkit';
-import { MigrateGeneratorSchema } from './schema';
+import type { Tree } from '@nx/devkit';
+import type { MigrateGeneratorSchema } from './schema';
 
 interface NormalizedSchema extends MigrateGeneratorSchema {
   projectName: string;
@@ -17,7 +16,7 @@ interface NormalizedSchema extends MigrateGeneratorSchema {
 }
 
 function normalizeOptions(
-  tree: Tree,
+  _tree: Tree,
   options: MigrateGeneratorSchema
 ): NormalizedSchema {
   const name = names(options.name).fileName;
@@ -100,9 +99,9 @@ function createProjectJson(tree: Tree, options: NormalizedSchema, packageJson: a
 
   // Convert existing scripts to Nx targets if requested
   if (options.convertScripts && packageJson.scripts) {
-    const convertedTargets = Object.keys(packageJson.scripts).reduce((acc, scriptName) => {
+    const convertedTargets = Object.keys(packageJson.scripts).reduce((acc: Record<string, any>, scriptName) => {
       // Skip scripts that are already defined as Nx targets
-      if (!projectConfig.targets[scriptName]) {
+      if (!(scriptName in projectConfig.targets)) {
         const command = packageJson.scripts[scriptName];
         
         // Use default Nx executor for run-commands

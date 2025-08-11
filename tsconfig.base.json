@@ -27,7 +27,10 @@
       "@forastro/remark-html-directives-integration": [
         "packages/remark-html-directives-integration"
       ],
-      "@forastro/starlight-asciidoc": ["packages/starlight-asciidoc/src/index.ts"],
+      "@forastro/starlight-asciidoc": [
+        "packages/starlight-asciidoc/src/index.ts"
+      ],
+      "@forastro/test-publish": ["packages/test-publish/src/index.ts"],
       "@forastro/utilities": ["packages/utilities/src/index.ts"]
     }
   },
