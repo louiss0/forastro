@@ -1,6 +1,0 @@
-= AsciiDoc Post
-:pubDate: 2025-01-11
-:author: ForAstro
-:tags: asciidoc, content
-
-This is an AsciiDoc-powered blog post.

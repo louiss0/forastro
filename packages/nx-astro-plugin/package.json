@@ -1,5 +1,5 @@
 {
-  "name": "@forastro/nx-astro-plugin",
+  "name": "astro-nx",
   "version": "0.0.0",
   "license": "MIT",
   "type": "module",
