@@ -1,3 +1,13 @@
+## 2.3.4 (2025-08-11)
+
+### 🩹 Fixes
+
+- **asciidoc:** update build config to use lib folder and fix TypeScript exports without chunking ([705cb54](https://github.com/louiss0/forastro/commit/705cb54))
+
+### ❤️ Thank You
+
+- Shelton Louis @louiss0
+
 ## 2.3.3 (2025-08-07)
 
 ### 🩹 Fixes
