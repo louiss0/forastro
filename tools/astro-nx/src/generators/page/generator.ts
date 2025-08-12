@@ -10,6 +10,7 @@ import {
 import { join } from 'path';
 import { getDefaultContentExt } from '../../internal/detect/project-type.js';
 import { readAstroConfig } from '../../internal/detect/config';
+import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
 
 export interface PageGeneratorSchema {
   name: string;
@@ -17,6 +18,8 @@ export interface PageGeneratorSchema {
   directory?: string;
   ext?: 'astro' | 'md' | 'adoc' | 'mdx' | 'mdoc';
   layout?: string;
+  title?: string;
+  description?: string;
   frontmatter?: Record<string, any>;
   skipFormat?: boolean;
 }
@@ -101,8 +104,8 @@ function normalizeOptions(options: PageGeneratorSchema) {
     fullFileName
   );
   
-  // Generate basic title from name if not in frontmatter
-  const title = options.frontmatter?.['title'] || names(fileName).className;
+  // Generate title - priority: provided title > frontmatter title > derived from name (PascalCase to spaced words)
+  const title = options.title || options.frontmatter?.['title'] || convertPascalCaseToSpaced(names(fileName).className);
   
   return {
     ...options,
@@ -138,11 +141,27 @@ function addFiles(tree: Tree, options: ReturnType<typeof normalizeOptions>) {
       throw new Error(`Unsupported extension: ${options.ext}`);
   }
   
+  // Ensure target directory exists using helper
+  const pagesBase = join(options.projectRoot, 'src', 'pages');
+  const targetDir = options.directory ? join(pagesBase, options.directory) : pagesBase;
+  
+  
+  ensureTreeDirs(tree, targetDir);
+  
   // Create the target file path
-  const targetPath = join(options.projectRoot, 'src', 'pages', options.directory, options.fileName);
+  const targetPath = join(targetDir, options.fileName);
   
   // Write the processed content to the tree
   tree.write(targetPath, content);
+}
+
+function convertPascalCaseToSpaced(pascalCase: string): string {
+  return pascalCase
+    // Insert space before uppercase letters (except at the start)
+    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+    // Handle consecutive capitals like "XMLHttp" -> "XML Http"
+    .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2')
+    .trim();
 }
 
 function generateFrontmatter(options: ReturnType<typeof normalizeOptions>): string {
@@ -156,9 +175,14 @@ function generateFrontmatter(options: ReturnType<typeof normalizeOptions>): stri
   // Add title
   lines.push(`title: '${options.title}'`);
   
+  // Add description if provided
+  if (options.description) {
+    lines.push(`description: '${options.description}'`);
+  }
+  
   // Add additional frontmatter properties
   Object.entries(options.frontmatter).forEach(([key, value]) => {
-    if (key !== 'title') { // Avoid duplicate title
+    if (key !== 'title' && key !== 'description') { // Avoid duplicates
       lines.push(`${key}: ${JSON.stringify(value)}`);
     }
   });
