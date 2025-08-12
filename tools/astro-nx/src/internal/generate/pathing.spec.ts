@@ -308,7 +308,7 @@ describe('Path Generation Utilities', () => {
     });
 
     test('should handle already PascalCase', () => {
-      expect(toPascalCase('MyComponent')).toBe('Mycomponent');
+      expect(toPascalCase('MyComponent')).toBe('MyComponent');
     });
 
     test('should handle mixed separators', () => {
@@ -317,6 +317,15 @@ describe('Path Generation Utilities', () => {
 
     test('should handle empty string', () => {
       expect(toPascalCase('')).toBe('');
+    });
+
+    test('should convert camelCase to PascalCase by uppercasing first letter', () => {
+      expect(toPascalCase('myComponent')).toBe('MyComponent');
+    });
+
+    test('should preserve internal capitals in already PascalCase/camelCase without separators', () => {
+      expect(toPascalCase('MyComplexComponent')).toBe('MyComplexComponent');
+      expect(toPascalCase('myComplexComponent')).toBe('MyComplexComponent');
     });
   });
 
@@ -334,7 +343,11 @@ describe('Path Generation Utilities', () => {
     });
 
     test('should handle already camelCase', () => {
-      expect(toCamelCase('myComponent')).toBe('mycomponent');
+      expect(toCamelCase('myComponent')).toBe('myComponent');
+    });
+
+    test('should convert PascalCase to camelCase', () => {
+      expect(toCamelCase('MyComponent')).toBe('myComponent');
     });
   });
 
@@ -365,6 +378,14 @@ describe('Path Generation Utilities', () => {
 
     test('should handle single words', () => {
       expect(toKebabCase('Component')).toBe('component');
+    });
+
+    test('should normalize multiple dashes to single dash', () => {
+      expect(toKebabCase('my---component--name')).toBe('my-component-name');
+    });
+
+    test('should remove leading and trailing dashes', () => {
+      expect(toKebabCase('-my-component-')).toBe('my-component');
     });
   });
 
