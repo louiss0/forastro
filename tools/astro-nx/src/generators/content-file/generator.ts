@@ -9,13 +9,16 @@ import {
   readProjectConfiguration,
 } from '@nx/devkit';
 import { join } from 'path';
+import { existsSync, readFileSync } from 'fs';
 import { hasContentCollections, readAstroConfig } from '../../internal/detect/config';
+import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
 
 export interface ContentFileGeneratorSchema {
   name: string;
   project: string;
   collection?: string;
   directory?: string;
+  title?: string;
   ext?: 'md' | 'mdx' | 'mdoc' | 'adoc';
   frontmatter?: Record<string, any>;
   skipFormat?: boolean;
@@ -49,20 +52,10 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
   // Detect if project has content collections
   const hasContentColls = hasContentCollections(projectRoot);
   
-  // Determine the extension - default by detected integrations or use provided
+  // Determine the extension - check package.json dependencies first, then fallback to config
   let ext = options.ext;
   if (!ext) {
-    // Prefer detected integrations for default extension
-    if (detectedConfig.integrations?.includes('mdx')) {
-      ext = 'mdx';
-    } else if (detectedConfig.integrations?.includes('markdoc')) {
-      ext = 'mdoc';
-    } else if (detectedConfig.integrations?.includes('asciidoc')) {
-      ext = 'adoc';
-    } else {
-      // Default to markdown
-      ext = 'md';
-    }
+    ext = detectExtensionFromPackageJson(projectRoot, detectedConfig);
   }
   
   // Determine file path based on content collections vs directory
@@ -79,14 +72,16 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
     filePath = join(projectRoot, targetDir, `${name}.${ext}`);
   } else {
     // Default fallback - use detected content directory or create under src/content
-    const fallbackCollection = options.collection || 'content';
     const contentBase = detectedConfig.contentDir || 'src/content';
-    targetDir = join(contentBase, fallbackCollection);
+    targetDir = contentBase;
     filePath = join(projectRoot, targetDir, `${name}.${ext}`);
   }
   
+  // Determine title from provided title or derive from name
+  const title = options.title || names(options.name).className.replace(/([A-Z])/g, ' $1').trim();
+  
   // Create frontmatter presets based on file extension and detected config
-  const frontmatterPreset = getFrontmatterPreset(ext, options.frontmatter, detectedConfig);
+  const frontmatterPreset = getFrontmatterPreset(ext, { title, ...options.frontmatter }, detectedConfig);
   
   return {
     ...options,
@@ -104,11 +99,57 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
   };
 }
 
+/**
+ * Detects the appropriate file extension by reading package.json dependencies
+ * @param projectRoot - The root path of the project
+ * @param detectedConfig - The detected Astro config as fallback
+ * @returns The appropriate file extension
+ */
+function detectExtensionFromPackageJson(projectRoot: string, detectedConfig: any): 'md' | 'mdx' | 'mdoc' | 'adoc' {
+  const packageJsonPath = join(projectRoot, 'package.json');
+  
+  if (existsSync(packageJsonPath)) {
+    try {
+      const packageJsonContent = readFileSync(packageJsonPath, 'utf-8');
+      const packageJson = JSON.parse(packageJsonContent);
+      
+      const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
+      
+      // Check for MDX integration
+      if (dependencies['@astrojs/mdx'] || dependencies['mdx']) {
+        return 'mdx';
+      }
+      
+      // Check for other integrations
+      if (dependencies['@astrojs/markdoc']) {
+        return 'mdoc';
+      }
+      
+      if (dependencies['@astrojs/asciidoc']) {
+        return 'adoc';
+      }
+    } catch (error) {
+      // If we can't read package.json, fall back to config detection
+    }
+  }
+  
+  // Fallback to detected config integrations
+  if (detectedConfig.integrations?.includes('mdx')) {
+    return 'mdx';
+  } else if (detectedConfig.integrations?.includes('markdoc')) {
+    return 'mdoc';
+  } else if (detectedConfig.integrations?.includes('asciidoc')) {
+    return 'adoc';
+  }
+  
+  // Default to markdown
+  return 'md';
+}
+
 function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, any>, _detectedConfig?: any): Record<string, any> {
+  // Always include at least a title - this is the minimum requirement
   const basePreset: Record<string, any> = {
-    title: '',
-    description: '',
-    pubDate: new Date().toISOString().split('T')[0],
+    title: customFrontmatter?.['title'] || 'Untitled',
   };
   
   let extendedPreset: Record<string, any> = { ...basePreset };
@@ -118,6 +159,8 @@ function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, an
     case 'mdx':
       extendedPreset = {
         ...basePreset,
+        description: '',
+        pubDate: new Date().toISOString().split('T')[0],
         author: '',
         tags: [],
         draft: false,
@@ -126,23 +169,29 @@ function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, an
     case 'adoc':
       extendedPreset = {
         ...basePreset,
+        description: '',
+        pubDate: new Date().toISOString().split('T')[0],
         author: '',
         keywords: [],
-        doctitle: '',
+        doctitle: customFrontmatter?.['title'] || 'Untitled',
       };
       break;
     case 'mdoc':
       extendedPreset = {
         ...basePreset,
+        description: '',
+        pubDate: new Date().toISOString().split('T')[0],
         author: '',
         tags: [],
       };
       break;
     default:
+      // For any other extension, ensure we have at least a title
+      extendedPreset = { ...basePreset };
       break;
   }
   
-  // Merge with custom frontmatter if provided
+  // Merge with custom frontmatter if provided, but always preserve title
   if (customFrontmatter) {
     extendedPreset = { ...extendedPreset, ...customFrontmatter };
   }
@@ -153,6 +202,10 @@ function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, an
 function addFiles(tree: Tree, options: ReturnType<typeof normalizeOptions>) {
   const content = generateContentByExtension(options.ext, options);
   const targetPath = join(options.projectRoot, options.targetDir, `${options.name}.${options.ext}`);
+  
+  // Ensure the target directory exists using helper
+  const targetDirPath = join(options.projectRoot, options.targetDir);
+  ensureTreeDirs(tree, targetDirPath);
   
   // Create the content file
   tree.write(targetPath, content);
@@ -177,13 +230,18 @@ function generateContentByExtension(ext: string, options: ReturnType<typeof norm
 function generateMarkdownContent(frontmatter: Record<string, any>, className: string, isMdx: boolean): string {
   let content = '---\n';
   
-  // Generate frontmatter
+  // Always include title first
+  content += `title: ${frontmatter['title'] || className}\n`;
+  
+  // Generate other frontmatter (excluding title since we already handled it)
   Object.entries(frontmatter).forEach(([key, value]) => {
-    if (value !== '') {
+    if (key === 'title') return; // Skip title as we already handled it
+    
+    if (value !== '' && value != null) {
       if (typeof value === 'string') {
-        content += `${key}: '${value}'\n`;
+        content += `${key}: ${value}\n`;
       } else if (Array.isArray(value) && value.length > 0) {
-        const arrayItems = value.map(item => `'${item}'`).join(', ');
+        const arrayItems = value.map(item => typeof item === 'string' ? item : String(item)).join(', ');
         content += `${key}: [${arrayItems}]\n`;
       } else if (typeof value === 'boolean' || typeof value === 'number') {
         content += `${key}: ${value}\n`;
@@ -209,9 +267,14 @@ function generateMarkdownContent(frontmatter: Record<string, any>, className: st
 function generateAsciidocContent(frontmatter: Record<string, any>, className: string): string {
   let content = '';
   
-  // Generate AsciiDoc attributes
+  // Always include title first as AsciiDoc attribute
+  content += `:title: ${frontmatter['title'] || className}\n`;
+  
+  // Generate other AsciiDoc attributes (excluding title since we already handled it)
   Object.entries(frontmatter).forEach(([key, value]) => {
-    if (value !== '') {
+    if (key === 'title') return; // Skip title as we already handled it
+    
+    if (value !== '' && value != null) {
       if (Array.isArray(value) && value.length > 0) {
         content += `:${key}: ${value.join(', ')}\n`;
       } else {
@@ -233,13 +296,18 @@ function generateAsciidocContent(frontmatter: Record<string, any>, className: st
 function generateMarkdocContent(frontmatter: Record<string, any>, className: string): string {
   let content = '---\n';
   
-  // Generate frontmatter (same as Markdown)
+  // Always include title first
+  content += `title: ${frontmatter['title'] || className}\n`;
+  
+  // Generate other frontmatter (excluding title since we already handled it)
   Object.entries(frontmatter).forEach(([key, value]) => {
-    if (value !== '') {
+    if (key === 'title') return; // Skip title as we already handled it
+    
+    if (value !== '' && value != null) {
       if (typeof value === 'string') {
-        content += `${key}: '${value}'\n`;
+        content += `${key}: ${value}\n`;
       } else if (Array.isArray(value) && value.length > 0) {
-        const arrayItems = value.map(item => `'${item}'`).join(', ');
+        const arrayItems = value.map(item => typeof item === 'string' ? item : String(item)).join(', ');
         content += `${key}: [${arrayItems}]\n`;
       } else if (typeof value === 'boolean' || typeof value === 'number') {
         content += `${key}: ${value}\n`;

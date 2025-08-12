@@ -42,6 +42,13 @@
       "description": "Custom directory path when not using standard content collections structure",
       "pattern": "^[a-zA-Z0-9/_-]*$"
     },
+    "title": {
+      "type": "string",
+      "description": "Title for the content file (used in frontmatter, derived from name if not provided)",
+      "minLength": 1,
+      "maxLength": 200,
+      "x-prompt": "What title would you like for this content?"
+    },
     "ext": {
       "type": "string",
       "description": "File extension format for the content file",
