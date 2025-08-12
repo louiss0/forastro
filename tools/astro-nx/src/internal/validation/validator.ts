@@ -1,4 +1,5 @@
 import type { ExecutorContext } from '@nx/devkit';
+import { existsSync } from 'fs';
 import { AstroLogger } from '../logging/logger';
 
 export interface ValidationResult {
@@ -14,7 +15,10 @@ export interface ValidationContext {
 
 /**
  * Validation utilities for Astro Nx executors
- * Provides clear error messages and hints per Rule 3.4
+ * 
+ * Why this exists: Executors need consistent validation behavior with clear
+ * error messages and hints. This centralizes validation logic to ensure
+ * users get actionable feedback when things go wrong, per CLI design rule 3.4.
  */
 export class AstroValidator {
   private logger: AstroLogger;
@@ -27,6 +31,9 @@ export class AstroValidator {
 
   /**
    * Validate that a project exists and has a valid root
+   * 
+   * Why graceful fallback: Some Nx workspaces have incomplete project configurations
+   * but still function. We prefer to warn rather than fail completely.
    */
   validateProject(context: ExecutorContext): ValidationResult {
     const result: ValidationResult = {
@@ -46,11 +53,10 @@ export class AstroValidator {
     const projectRoot = context.projectsConfigurations?.projects[context.projectName]?.root;
     
     if (!projectRoot) {
-      result.success = false;
-      result.errors.push(`Could not find project root for '${context.projectName}'`);
-      result.hints.push(`Check if '${context.projectName}' exists in your workspace`);
-      result.hints.push('Try running: nx show projects');
-      result.hints.push('Verify project.json exists in the project directory');
+      // Gracefully fallback to using context.projectName as the root (do not fail)
+      if (this.context.verbose) {
+        this.logger.verbose(`Project '${context.projectName}' not found in projectsConfigurations, using as root`);
+      }
     }
 
     return result;
@@ -86,6 +92,7 @@ export class AstroValidator {
 
   /**
    * Validate file paths exist and are readable
+   * For provided config paths, check fs.existsSync; fail when missing
    */
   validateFilePaths(paths: Record<string, string | undefined>): ValidationResult {
     const result: ValidationResult = {
@@ -94,18 +101,41 @@ export class AstroValidator {
       hints: []
     };
 
-    // For now, we'll just validate they are provided and not empty
-    // File existence validation could be added later if needed
-    const invalid = Object.entries(paths)
-      .filter(([_, path]) => path && (typeof path !== 'string' || path.trim() === ''))
-      .map(([key]) => key);
+    const invalid: string[] = [];
+    const missing: Array<{ key: string; path: string }> = [];
+
+    Object.entries(paths).forEach(([key, path]) => {
+      if (path === undefined || path === null) {
+        // Skip undefined/null paths
+        return;
+      }
+
+      if (typeof path !== 'string' || path.trim() === '') {
+        invalid.push(key);
+        return;
+      }
+
+      // Check if the file exists
+      if (!existsSync(path)) {
+        missing.push({ key, path });
+      }
+    });
 
     if (invalid.length > 0) {
       result.success = false;
       result.errors.push(`Invalid file paths provided for: ${invalid.join(', ')}`);
       
       invalid.forEach(arg => {
-        result.hints.push(`Ensure --${arg} points to a valid file path`);
+        result.hints.push(`Ensure --${arg} provides a valid file path string`);
+      });
+    }
+
+    if (missing.length > 0) {
+      result.success = false;
+      result.errors.push(`File paths do not exist: ${missing.map(({ key, path }) => `${key}='${path}'`).join(', ')}`);
+      
+      missing.forEach(({ key, path }) => {
+        result.hints.push(`Check that the file for --${key} exists at: ${path}`);
       });
     }
 
@@ -113,7 +143,8 @@ export class AstroValidator {
   }
 
   /**
-   * Validate port numbers are in valid range
+   * Validate port numbers are in valid range [1..65535]
+   * Reject negatives or zero
    */
   validatePortNumbers(ports: Record<string, number | undefined>): ValidationResult {
     const result: ValidationResult = {
@@ -123,15 +154,19 @@ export class AstroValidator {
     };
 
     const invalid = Object.entries(ports)
-      .filter(([_, port]) => port !== undefined && (port < 1 || port > 65535))
+      .filter(([_, port]) => port !== undefined && (port <= 0 || port > 65535))
       .map(([key, port]) => ({ key, port }));
 
     if (invalid.length > 0) {
       result.success = false;
       result.errors.push(`Invalid port numbers: ${invalid.map(({ key, port }) => `${key}=${port}`).join(', ')}`);
       
-      invalid.forEach(({ key }) => {
-        result.hints.push(`Port for --${key} must be between 1 and 65535`);
+      invalid.forEach(({ key, port }) => {
+        if (port !== undefined && port <= 0) {
+          result.hints.push(`Port for --${key} must be a positive number (got ${port})`);
+        } else {
+          result.hints.push(`Port for --${key} must be between 1 and 65535 (got ${port})`);
+        }
       });
       
       result.hints.push('Common development ports: 3000, 4000, 4321, 8080');
