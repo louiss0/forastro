@@ -71,6 +71,43 @@ describe('CLI Binary Resolution', () => {
       expect(mockExistsSync).toHaveBeenCalledTimes(2);
     });
 
+    test('should prefer astro.cmd in PATH on Windows when available', () => {
+      Object.defineProperty(process, 'platform', {
+        value: 'win32',
+        configurable: true
+      });
+      
+      mockExistsSync.mockReturnValue(false); // No local binaries
+      mockExecSync.mockImplementation((command) => {
+        if (command === 'where astro.cmd') {
+          return Buffer.from('C:\\Program Files\\nodejs\\astro.cmd');
+        }
+        throw new Error('Command not found');
+      });
+
+      const result = resolveAstroBin(workspaceRoot, projectRoot);
+      
+      expect(result).toBe('astro.cmd');
+      expect(mockExecSync).toHaveBeenCalledWith('where astro.cmd', { stdio: 'ignore' });
+    });
+
+    test('should fallback to astro on Windows when astro.cmd not in PATH', () => {
+      Object.defineProperty(process, 'platform', {
+        value: 'win32',
+        configurable: true
+      });
+      
+      mockExistsSync.mockReturnValue(false); // No local binaries
+      mockExecSync.mockImplementation(() => {
+        throw new Error('Command not found');
+      });
+
+      const result = resolveAstroBin(workspaceRoot, projectRoot);
+      
+      expect(result).toBe('astro');
+      expect(mockExecSync).toHaveBeenCalledWith('where astro.cmd', { stdio: 'ignore' });
+    });
+
     test('should handle different project structures', () => {
       const nestedProjectRoot = '/workspace/packages/frontend/app';
       

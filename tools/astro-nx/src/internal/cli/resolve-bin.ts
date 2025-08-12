@@ -7,6 +7,10 @@ import { execSync } from 'child_process';
  * 1) projectRoot/node_modules/.bin/astro
  * 2) workspaceRoot/node_modules/.bin/astro  
  * 3) "astro" in PATH
+ * 
+ * Why this hierarchy: Monorepos often have project-specific Astro versions.
+ * We prioritize local installations to avoid version mismatches and respect
+ * project-specific configurations.
  */
 export function resolveAstroBin(workspaceRoot: string, projectRoot: string): string {
   const astroBinName = process.platform === 'win32' ? 'astro.cmd' : 'astro';
@@ -23,7 +27,16 @@ export function resolveAstroBin(workspaceRoot: string, projectRoot: string): str
     return workspaceBin;
   }
   
-  // 3) Fallback to "astro" in PATH
+  // 3) Fallback to PATH - on Windows, prefer astro.cmd if available, otherwise astro
+  if (process.platform === 'win32') {
+    try {
+      execSync('where astro.cmd', { stdio: 'ignore' });
+      return 'astro.cmd';
+    } catch {
+      return 'astro';
+    }
+  }
+  
   return 'astro';
 }
 
@@ -32,6 +45,10 @@ export function resolveAstroBin(workspaceRoot: string, projectRoot: string): str
  * 1) JPD if found in PATH (jpd)
  * 2) pnpm if found in PATH
  * 3) npm (default fallback)
+ * 
+ * Why this order: Respects user's preferred package manager as configured in
+ * their environment. JPD is a custom CLI, pnpm offers better performance,
+ * npm is the universal fallback.
  */
 export function resolvePackageManager(): string {
   try {
