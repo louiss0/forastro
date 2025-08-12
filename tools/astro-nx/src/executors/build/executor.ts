@@ -2,6 +2,7 @@ import type { ExecutorContext } from '@nx/devkit';
 import { spawn } from 'child_process';
 import { join } from 'path';
 import { resolveAstroBin } from '../../internal/cli/resolve-bin';
+import { buildArgs } from '../../internal/cli/args';
 import { createLogger } from '../../internal/logging/logger';
 import { createValidator } from '../../internal/validation/validator';
 
@@ -14,12 +15,13 @@ export interface BuildExecutorSchema {
   mode?: 'development' | 'production';
   sourcemap?: boolean;
   verbose?: boolean;
+  silent?: boolean;
 }
 
 export default async function runExecutor(
   options: BuildExecutorSchema,
   context: ExecutorContext
-): Promise<{ success: boolean }> {
+): Promise<{ success: boolean; outputPath?: string }> {
   const logger = createLogger({
     verbose: options.verbose,
     projectName: context.projectName
@@ -70,25 +72,15 @@ export default async function runExecutor(
     const astroBin = resolveAstroBin(workspaceRoot, fullProjectRoot);
     logger.logResolvedPath('Astro binary', astroBin);
     
-    // Build command arguments
-    const args: string[] = ['build'];
-    
-    // Map schema options to Astro build flags
-    if (options.config) {
-      args.push('--config', options.config);
-    }
-    
-    if (options.site) {
-      args.push('--site', options.site);
-    }
-    
-    if (options.base) {
-      args.push('--base', options.base);
-    }
-    
-    if (options.verbose) {
-      args.push('--verbose');
-    }
+    // Build command arguments with strict flag order to match test expectations: ['build', '--config', config, '--verbose', '--silent', '--outDir', outDir]
+    const args = buildArgs(['build'], [
+      ['--config', options.config],
+      ['--site', options.site],
+      ['--base', options.base],
+      ['--verbose', options.verbose],
+      ['--silent', options.silent],
+      ['--outDir', options.outDir]
+    ]);
     
     // Set environment variables
     const env = { ...process.env };
@@ -96,11 +88,6 @@ export default async function runExecutor(
     if (options.mode) {
       env['NODE_ENV'] = options.mode;
       logger.verbose(`Set NODE_ENV to '${options.mode}'`);
-    }
-    
-    if (options.outDir) {
-      env['ASTRO_BUILD_OUTDIR'] = options.outDir;
-      logger.verbose(`Set ASTRO_BUILD_OUTDIR to '${options.outDir}'`);
     }
     
     if (options.draft) {
@@ -111,6 +98,11 @@ export default async function runExecutor(
     if (options.sourcemap) {
       env['ASTRO_BUILD_SOURCEMAP'] = 'true';
       logger.verbose('Enabled sourcemap generation');
+    }
+    
+    // Log flag usage for silent mode
+    if (options.silent) {
+      logger.verbose('Enabled silent mode');
     }
     
     // Log the command to be executed
@@ -129,7 +121,8 @@ export default async function runExecutor(
       child.on('close', (code) => {
         if (code === 0) {
           logger.info('✅ Build completed successfully');
-          resolve({ success: true });
+          const outputPath = join(workspaceRoot, projectRoot, options.outDir || 'dist');
+          resolve({ success: true, outputPath });
         } else {
           logger.error(`Build failed with exit code ${code}`);
           resolve({ success: false });
