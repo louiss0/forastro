@@ -5,18 +5,25 @@
   "sourceRoot": "apps/blog/src",
   "targets": {
     "dev": {
-      "executor": "astro-nx:dev",
-      "options": {}
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro dev",
+        "cwd": "apps/blog"
+      }
     },
     "build": {
-      "executor": "astro-nx:build",
+      "executor": "nx:run-commands",
       "options": {
-        "outputPath": "dist/apps/blog"
+        "command": "astro build",
+        "cwd": "apps/blog"
       }
     },
     "preview": {
-      "executor": "astro-nx:preview",
-      "options": {}
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro preview",
+        "cwd": "apps/blog"
+      }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
@@ -26,8 +33,11 @@
       }
     },
     "check": {
-      "executor": "astro-nx:check",
-      "options": {}
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro check",
+        "cwd": "apps/blog"
+      }
     }
   },
   "tags": ["type:app", "scope:blog"]

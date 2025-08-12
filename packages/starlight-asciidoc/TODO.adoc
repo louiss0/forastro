@@ -1,7 +1,0 @@
-= TODO
-
-== Bugs
-
-== Refactors
-
-== Features

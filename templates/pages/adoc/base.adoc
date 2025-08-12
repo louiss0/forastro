@@ -1,0 +1,14 @@
+= Page Title
+
+Welcome to your AsciiDoc page.
+
+This is a minimal page template for AsciiDoc content.
+
+== Section
+
+Add your content here.
+
+[NOTE]
+====
+This is an example note block in AsciiDoc.
+====

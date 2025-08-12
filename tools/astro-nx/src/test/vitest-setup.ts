@@ -1,4 +1,5 @@
 // Global setup for vitest
+import { vi, afterEach } from 'vitest';
 
 // Mock process.platform if needed in tests
 // This allows tests to simulate different platforms

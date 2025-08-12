@@ -5,16 +5,34 @@
   "sourceRoot": "apps/my-site/src",
   "targets": {
     "dev": {
-      "executor": "astro-nx:dev"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro dev",
+        "cwd": "apps/my-site"
+      }
     },
     "build": {
-      "executor": "astro-nx:build"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro build",
+        "cwd": "apps/my-site"
+      }
     },
     "preview": {
-      "executor": "astro-nx:preview"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro preview",
+        "cwd": "apps/my-site"
+      }
     },
     "check": {
-      "executor": "astro-nx:check"
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro check",
+        "cwd": "apps/my-site"
+      },
+      "cache": true,
+      "outputs": ["{projectRoot}/.astro-check"]
     }
   }
 }
