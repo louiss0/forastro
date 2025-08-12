@@ -9,6 +9,7 @@ import {
 import { join } from 'path';
 import { toKebabCase, toPascalCase } from '../../internal/generate/pathing.js';
 import { parseProps, emitAstroPropsInterface } from '../../internal/generate/props.js';
+import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
 import { readFileSync } from 'fs';
 
 export interface ComponentGeneratorSchema {
@@ -42,6 +43,7 @@ function normalizeOptions(options: ComponentGeneratorSchema) {
   
   // Format names - kebab-case for filename, PascalCase for component
   const kebabName = toKebabCase(options.name);
+  // Use toPascalCase which now preserves intended casing correctly
   const pascalName = toPascalCase(options.name);
   
   // Determine extension
@@ -96,19 +98,8 @@ function generateComponent(tree: Tree, options: ReturnType<typeof normalizeOptio
   // Generate component content using template
   const componentContent = processTemplate(templateContent, options);
   
-  // Ensure target directory exists
-  if (!tree.exists(options.targetDir)) {
-    // Create directory structure if it doesn't exist
-    const pathSegments = options.targetDir.split('/');
-    let currentPath = '';
-    for (const segment of pathSegments) {
-      currentPath = currentPath ? join(currentPath, segment) : segment;
-      if (!tree.exists(currentPath)) {
-        tree.write(join(currentPath, '.gitkeep'), '');
-        tree.delete(join(currentPath, '.gitkeep'));
-      }
-    }
-  }
+  // Ensure target directory exists using helper
+  ensureTreeDirs(tree, options.targetDir);
   
   // Write the component file
   tree.write(options.targetPath, componentContent);
@@ -146,10 +137,16 @@ function processTemplate(template: string, options: ReturnType<typeof normalizeO
   content = content.replace(/This is a sample Astro component that you can use as a template\./g, 
     `This is the ${options.pascalName} component.`);
   
+  // Class attribute normalization - use robust regexes to handle all cases
+  // Replace class={`component ${className || ''}`} or class={`component ${className ?? ''}`}
+  content = content.replace(/class=\{\s*`component[^`]*`\}/g, `class="${options.kebabName}"`);
+  // Replace class="component"
+  content = content.replace(/class="component"/g, `class="${options.kebabName}"`);
+  
   // Handle style block based on style option
   if (options.style === 'none') {
-    // Remove style block
-    content = content.replace(/<style>[\s\S]*?<\/style>/g, '');
+    // Remove the entire style block
+    content = content.replace(/<style[^>]*>[\s\S]*?<\/style>/g, '');
   } else if (options.style === 'scoped') {
     // Keep existing style block (it's scoped by default in Astro)
     // Just update class name to match component
@@ -159,10 +156,6 @@ function processTemplate(template: string, options: ReturnType<typeof normalizeO
     content = content.replace(/<style>/g, '<style is:global>');
     content = content.replace(/\.component/g, `.${options.kebabName}`);
   }
-  
-  // Update class names in template
-  content = content.replace(/class="component/g, `class="${options.kebabName}`);
-  content = content.replace(/\$\{className/g, '${className');
   
   return content;
 }
@@ -179,3 +172,4 @@ function generateFallbackTemplate(): string {
 </div>
 `;
 }
+
