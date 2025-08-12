@@ -2,6 +2,7 @@ import type { ExecutorContext } from '@nx/devkit';
 import { spawn } from 'child_process';
 import { join } from 'path';
 import { resolveAstroBin } from '../../internal/cli/resolve-bin';
+import { buildArgs } from '../../internal/cli/args';
 import { createLogger } from '../../internal/logging/logger';
 import { createValidator } from '../../internal/validation/validator';
 
@@ -65,31 +66,27 @@ export default async function runExecutor(
     const astroBin = resolveAstroBin(workspaceRoot, fullProjectRoot);
     logger.logResolvedPath('Astro binary', astroBin);
     
-    // Build command arguments
-    const args: string[] = ['dev'];
+    // Build command arguments with strict flag order: ['dev', '--port', port, '--host', host, '--open', '--verbose', '--config', config]
+    const args = buildArgs(['dev'], [
+      ['--port', options.port],
+      ['--host', options.host],
+      ['--open', options.open],
+      ['--verbose', options.verbose],
+      ['--config', options.config]
+    ]);
     
-    if (options.port) {
-      args.push('--port', options.port.toString());
+    // Log verbose information about configured options
+    if (options.port && options.verbose) {
       logger.verbose(`Using port ${options.port}`);
     }
-    
-    if (options.host) {
-      args.push('--host', options.host);
+    if (options.host && options.verbose) {
       logger.verbose(`Using host ${options.host}`);
     }
-    
-    if (options.open) {
-      args.push('--open');
+    if (options.open && options.verbose) {
       logger.verbose('Will open browser after server starts');
     }
-    
-    if (options.config) {
-      args.push('--config', options.config);
+    if (options.config && options.verbose) {
       logger.verbose(`Using config file: ${options.config}`);
-    }
-    
-    if (options.verbose) {
-      args.push('--verbose');
     }
     
     // Log the command to be executed
@@ -119,10 +116,16 @@ export default async function runExecutor(
         resolve({ success: false });
       });
       
-      // Handle Ctrl+C gracefully
-      const gracefulShutdown = (signal: string) => {
+      // Handle SIGINT gracefully by forwarding to child and resolving after close
+      const gracefulShutdown = (signal: NodeJS.Signals) => {
         logger.verbose(`Received ${signal}, shutting down development server...`);
-        child.kill(signal as NodeJS.Signals);
+        
+        // Forward signal to child process
+        if (!child.killed) {
+          child.kill(signal);
+        }
+        
+        // The promise will resolve when the 'close' event fires above
       };
       
       process.on('SIGINT', () => gracefulShutdown('SIGINT'));
