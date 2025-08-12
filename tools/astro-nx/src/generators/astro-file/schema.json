@@ -8,14 +8,14 @@
     "kind": {
       "type": "string",
       "description": "The specific type of Astro file to generate (What you want to create)",
-      "enum": ["page", "component"],
-      "default": "component",
+      "enum": ["page", "component", "file"],
       "x-prompt": {
         "message": "What kind of file would you like to generate?",
         "type": "list",
         "items": [
           { "value": "component", "label": "Component - Reusable Astro component" },
-          { "value": "page", "label": "Page - Route-based Astro page" }
+          { "value": "page", "label": "Page - Route-based Astro page" },
+          { "value": "file", "label": "File - Arbitrary Astro file" }
         ]
       }
     },
@@ -43,6 +43,11 @@
     "directory": {
       "type": "string",
       "description": "Custom subdirectory path where the file will be created (relative to default location)",
+      "pattern": "^[a-zA-Z0-9/_-]*$"
+    },
+    "destination": {
+      "type": "string",
+      "description": "Target directory relative to src/ (e.g., 'layouts', 'components/ui'). Default: 'pages' for pages, current behavior for components",
       "pattern": "^[a-zA-Z0-9/_-]*$"
     },
     "ext": {
@@ -86,9 +91,14 @@
       "type": "boolean",
       "description": "Skip automatic code formatting after file generation",
       "default": false
+    },
+    "minimalFrontmatter": {
+      "type": "boolean",
+      "description": "Include only minimal frontmatter when needed; otherwise no frontmatter for plain markup files",
+      "default": true
     }
   },
-  "required": ["kind", "name", "project"],
+  "required": ["name", "project"],
   "allOf": [
     {
       "if": {
@@ -116,7 +126,7 @@
         }
       },
       "then": {
-        "required": ["kind", "name", "projects"],
+        "required": ["name", "projects"],
         "properties": {
           "project": false
         }
