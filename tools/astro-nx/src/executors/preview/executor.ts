@@ -2,6 +2,7 @@ import type { ExecutorContext } from '@nx/devkit';
 import { spawn } from 'child_process';
 import { join } from 'path';
 import { resolveAstroBin } from '../../internal/cli/resolve-bin';
+import { buildArgs } from '../../internal/cli/args';
 import { createLogger } from '../../internal/logging/logger';
 import { createValidator } from '../../internal/validation/validator';
 
@@ -9,6 +10,7 @@ export interface PreviewExecutorSchema {
   port?: number;
   host?: string;
   open?: boolean;
+  outDir?: string;
   config?: string;
   verbose?: boolean;
 }
@@ -38,7 +40,8 @@ export default async function runExecutor(
     
     // Validate file paths if provided
     const pathValidation = validator.validateFilePaths({
-      config: options.config
+      config: options.config,
+      outDir: options.outDir
     });
     
     // Report validation results
@@ -56,6 +59,7 @@ export default async function runExecutor(
     const projectRoot = context.projectsConfigurations?.projects[context.projectName!]?.root 
       || context.projectName!;
     const workspaceRoot = context.root;
+    // Ensure cwd points to the project root (workspaceRoot/apps/<project>)
     const fullProjectRoot = join(workspaceRoot, projectRoot);
     
     // Log execution context
@@ -65,31 +69,31 @@ export default async function runExecutor(
     const astroBin = resolveAstroBin(workspaceRoot, fullProjectRoot);
     logger.logResolvedPath('Astro binary', astroBin);
     
-    // Build command arguments
-    const args: string[] = ['preview'];
+    // Build command arguments with strict flag order using buildArgs helper
+    const args = buildArgs(['preview'], [
+      ['--port', options.port],
+      ['--host', options.host],
+      ['--open', options.open],
+      ['--outDir', options.outDir],
+      ['--config', options.config],
+      ['--verbose', options.verbose]
+    ]);
     
-    if (options.port) {
-      args.push('--port', options.port.toString());
+    // Log verbose information about configured options
+    if (options.port && options.verbose) {
       logger.verbose(`Using port ${options.port}`);
     }
-    
-    if (options.host) {
-      args.push('--host', options.host);
+    if (options.host && options.verbose) {
       logger.verbose(`Using host ${options.host}`);
     }
-    
-    if (options.open) {
-      args.push('--open');
+    if (options.open && options.verbose) {
       logger.verbose('Will open browser after server starts');
     }
-    
-    if (options.config) {
-      args.push('--config', options.config);
-      logger.verbose(`Using config file: ${options.config}`);
+    if (options.outDir && options.verbose) {
+      logger.verbose(`Using output directory: ${options.outDir}`);
     }
-    
-    if (options.verbose) {
-      args.push('--verbose');
+    if (options.config && options.verbose) {
+      logger.verbose(`Using config file: ${options.config}`);
     }
     
     // Log the command to be executed
