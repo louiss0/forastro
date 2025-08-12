@@ -23,6 +23,11 @@
       "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*\\.json$",
       "examples": ["tsconfig.json", "config/tsconfig.build.json"],
       "x-prompt": "Path to TypeScript config file (leave empty for default):"
+    },
+    "watch": {
+      "type": "boolean",
+      "description": "Enable watch mode to continuously monitor files for changes and re-run type checking",
+      "default": false
     }
   },
   "additionalProperties": false

@@ -4,6 +4,7 @@ import { join } from 'path';
 import { writeFileSync, existsSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
 import { resolveAstroBin } from '../../internal/cli/resolve-bin';
+import { buildArgs } from '../../internal/cli/args';
 import { createLogger } from '../../internal/logging/logger';
 import { createValidator } from '../../internal/validation/validator';
 
@@ -11,6 +12,7 @@ export interface CheckExecutorSchema {
   config?: string;
   verbose?: boolean;
   tsconfig?: string;
+  watch?: boolean;
 }
 
 export default async function runExecutor(
@@ -60,21 +62,23 @@ export default async function runExecutor(
     const astroBin = resolveAstroBin(workspaceRoot, fullProjectRoot);
     logger.logResolvedPath('Astro binary', astroBin);
     
-    // Build command arguments
-    const args: string[] = ['check'];
+    // Build command arguments with strict flag order: ['check', '--tsconfig', tsconfig, '--watch', '--verbose']
+    const args = buildArgs(['check'], [
+      ['--tsconfig', options.tsconfig],
+      ['--config', options.config],
+      ['--watch', options.watch],
+      ['--verbose', options.verbose]
+    ]);
     
-    if (options.config) {
-      args.push('--config', options.config);
+    // Log verbose information about configured options
+    if (options.tsconfig && options.verbose) {
+      logger.verbose(`Using TypeScript config: ${options.tsconfig}`);
+    }
+    if (options.config && options.verbose) {
       logger.verbose(`Using config file: ${options.config}`);
     }
-    
-    if (options.verbose) {
-      args.push('--verbose');
-    }
-    
-    if (options.tsconfig) {
-      args.push('--tsconfig', options.tsconfig);
-      logger.verbose(`Using TypeScript config: ${options.tsconfig}`);
+    if (options.watch && options.verbose) {
+      logger.verbose('Watch mode enabled');
     }
     
     // Log the command to be executed
