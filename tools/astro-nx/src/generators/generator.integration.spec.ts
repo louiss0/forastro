@@ -534,6 +534,23 @@ describe('Generator Integration Tests', () => {
       expect(content).toContain('class="my-awesome-component"');
     });
 
+    test('should preserve PascalCase names exactly', async () => {
+      const componentOptions: ComponentGeneratorSchema = {
+        name: 'MyAwesomeComponent',
+        project: 'test-app',
+        skipFormat: true,
+      };
+
+      await componentGenerator(tree, componentOptions);
+
+      const componentPath = 'apps/test-app/src/components/my-awesome-component.astro';
+      expect(tree.exists(componentPath)).toBe(true);
+
+      const content = tree.read(componentPath, 'utf-8');
+      expect(content).toContain('MyAwesomeComponent');
+      expect(content).toContain('class="my-awesome-component"');
+    });
+
     test('should handle deep directory structures', async () => {
       const options: ComponentGeneratorSchema = {
         name: 'deep-component',
