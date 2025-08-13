@@ -146,7 +146,7 @@ describe('Path Generation Utilities', () => {
     test('should throw error for unknown path type', () => {
       const options = {
         projectRoot,
-        type: 'unknown' as any,
+        type: 'unknown' as 'component',
         name: 'test',
       };
 

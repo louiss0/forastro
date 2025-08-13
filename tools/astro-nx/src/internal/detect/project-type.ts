@@ -43,7 +43,7 @@ export function getProjectType(projectRoot: string): ProjectType {
     // Default to markdown
     return 'markdown';
     
-  } catch (error) {
+  } catch {
     // If we can't parse package.json, default to markdown
     return 'markdown';
   }

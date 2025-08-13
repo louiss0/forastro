@@ -8,7 +8,6 @@ import {
   runTasksInSerial,
 } from '@nx/devkit';
 import { join } from 'path';
-import { getDefaultContentExt } from '../../internal/detect/project-type.js';
 import { readAstroConfig } from '../../internal/detect/config';
 import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
 
@@ -20,7 +19,7 @@ export interface PageGeneratorSchema {
   layout?: string;
   title?: string;
   description?: string;
-  frontmatter?: Record<string, any>;
+  frontmatter?: Record<string, unknown>;
   skipFormat?: boolean;
 }
 
@@ -44,44 +43,8 @@ function normalizeOptions(options: PageGeneratorSchema) {
   // Read Astro configuration for defaults
   const detectedConfig = readAstroConfig(projectRoot);
   
-  // Detect default ext via detected integrations first, then fallback to getDefaultContentExt
-  let ext = options.ext;
-  if (!ext) {
-    // Prefer detected integrations for default extension
-    if (detectedConfig.integrations?.includes('mdx')) {
-      ext = 'mdx';
-    } else if (detectedConfig.integrations?.includes('markdoc')) {
-      ext = 'mdoc';
-    } else if (detectedConfig.integrations?.includes('asciidoc')) {
-      ext = 'adoc';
-    } else {
-      // Fallback to project type detection
-      try {
-        const defaultExt = getDefaultContentExt(projectRoot);
-        // Map ContentExtension to our supported formats
-        switch (defaultExt) {
-          case '.adoc':
-            ext = 'adoc';
-            break;
-          case '.mdx':
-            ext = 'mdx';
-            break;
-          case '.mdoc':
-            ext = 'mdoc';
-            break;
-          case '.md':
-            ext = 'md';
-            break;
-          default:
-            ext = 'astro';
-            break;
-        }
-      } catch {
-        // Default to astro if detection fails
-        ext = 'astro';
-      }
-    }
-  }
+  // Use simple extension detection - default to astro for page generator
+  const ext = options.ext || 'astro';
   
   // Handle nested route names like "blog/[slug]" 
   const nameParts = options.name.split('/');
@@ -144,7 +107,6 @@ function addFiles(tree: Tree, options: ReturnType<typeof normalizeOptions>) {
   // Ensure target directory exists using helper
   const pagesBase = join(options.projectRoot, 'src', 'pages');
   const targetDir = options.directory ? join(pagesBase, options.directory) : pagesBase;
-  
   
   ensureTreeDirs(tree, targetDir);
   

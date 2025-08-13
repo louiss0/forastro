@@ -94,7 +94,7 @@ describe('buildArgs', () => {
   it('should handle null values by skipping them', () => {
     const result = buildArgs(['dev'], [
       ['--port', 3000],
-      ['--host', null as any], // Type assertion for testing
+      ['--host', null as string | null], // Type assertion for testing
       ['--open', true]
     ]);
     expect(result).toEqual(['dev', '--port', '3000', '--open']);

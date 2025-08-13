@@ -1,6 +1,5 @@
 import { getProjectType, getDefaultContentExt } from './project-type';
 import { existsSync, readFileSync } from 'fs';
-import { join } from 'path';
 
 // Mock fs module
 vi.mock('fs');

@@ -90,7 +90,7 @@ function generateComponent(tree: Tree, options: ReturnType<typeof normalizeOptio
   
   try {
     templateContent = readFileSync(templatePath, 'utf-8');
-  } catch (error) {
+  } catch {
     // Fallback template if base.astro doesn't exist
     templateContent = generateFallbackTemplate();
   }

@@ -6,11 +6,8 @@ import {
   formatFiles,
   names,
   runTasksInSerial,
-  readProjectConfiguration,
 } from '@nx/devkit';
 import { join } from 'path';
-import { existsSync, readFileSync } from 'fs';
-import { hasContentCollections, readAstroConfig } from '../../internal/detect/config';
 import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
 
 export interface ContentFileGeneratorSchema {
@@ -20,8 +17,10 @@ export interface ContentFileGeneratorSchema {
   directory?: string;
   title?: string;
   ext?: 'md' | 'mdx' | 'mdoc' | 'adoc';
-  frontmatter?: Record<string, any>;
+  frontmatter?: Record<string, unknown>;
   skipFormat?: boolean;
+  // Allow additional properties for direct frontmatter assignment
+  [key: string]: unknown;
 }
 
 export default async function (tree: Tree, options: ContentFileGeneratorSchema) {
@@ -42,46 +41,42 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
   const className = names(options.name).className;
   const projectName = options.project;
   
-  // Read project configuration to get the actual project root
-  const projectConfig = readProjectConfiguration(tree, projectName);
-  const projectRoot = projectConfig.root;
+  // Use hardcoded project root pattern (following component generator pattern)
+  const projectRoot = `apps/${projectName}`;
   
-  // Read Astro configuration for defaults
-  const detectedConfig = readAstroConfig(projectRoot);
+  // Use extension detection based on package.json or default to md
+  const ext = options.ext || detectExtensionFromDependencies(tree, projectRoot);
   
-  // Detect if project has content collections
-  const hasContentColls = hasContentCollections(projectRoot);
-  
-  // Determine the extension - check package.json dependencies first, then fallback to config
-  let ext = options.ext;
-  if (!ext) {
-    ext = detectExtensionFromPackageJson(projectRoot, detectedConfig);
-  }
-  
-  // Determine file path based on content collections vs directory
-  let filePath: string;
+  // Determine file path - simplified logic
   let targetDir: string;
   
-  if (hasContentColls && options.collection) {
+  if (options.collection) {
     // Use content collections structure
-    targetDir = join(detectedConfig.contentDir || 'src/content', options.collection);
-    filePath = join(projectRoot, targetDir, `${name}.${ext}`);
+    targetDir = join('src/content', options.collection);
   } else if (options.directory) {
     // Use custom directory
     targetDir = options.directory;
-    filePath = join(projectRoot, targetDir, `${name}.${ext}`);
   } else {
-    // Default fallback - use detected content directory or create under src/content
-    const contentBase = detectedConfig.contentDir || 'src/content';
-    targetDir = contentBase;
-    filePath = join(projectRoot, targetDir, `${name}.${ext}`);
+    // Default fallback - use src/content
+    targetDir = 'src/content';
   }
   
   // Determine title from provided title or derive from name
   const title = options.title || names(options.name).className.replace(/([A-Z])/g, ' $1').trim();
   
-  // Create frontmatter presets based on file extension and detected config
-  const frontmatterPreset = getFrontmatterPreset(ext, { title, ...options.frontmatter }, detectedConfig);
+  // Extract custom frontmatter from options (excluding the known generator options)
+  const knownOptions = ['name', 'project', 'collection', 'directory', 'title', 'ext', 'frontmatter', 'skipFormat'];
+  const customFrontmatter: Record<string, unknown> = {};
+  
+  // Extract any additional properties as frontmatter
+  Object.keys(options).forEach(key => {
+    if (!knownOptions.includes(key)) {
+      customFrontmatter[key] = options[key];
+    }
+  });
+  
+  // Create frontmatter presets based on file extension
+  const frontmatterPreset = getFrontmatterPreset(ext, { title, ...customFrontmatter, ...options.frontmatter });
   
   return {
     ...options,
@@ -91,26 +86,17 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
     projectRoot,
     ext,
     targetDir,
-    filePath,
-    hasContentCollections: hasContentColls,
-    detectedConfig,
     frontmatter: frontmatterPreset,
     tmpl: '',
   };
 }
 
-/**
- * Detects the appropriate file extension by reading package.json dependencies
- * @param projectRoot - The root path of the project
- * @param detectedConfig - The detected Astro config as fallback
- * @returns The appropriate file extension
- */
-function detectExtensionFromPackageJson(projectRoot: string, detectedConfig: any): 'md' | 'mdx' | 'mdoc' | 'adoc' {
+function detectExtensionFromDependencies(tree: Tree, projectRoot: string): 'md' | 'mdx' | 'mdoc' | 'adoc' {
   const packageJsonPath = join(projectRoot, 'package.json');
   
-  if (existsSync(packageJsonPath)) {
+  if (tree.exists(packageJsonPath)) {
     try {
-      const packageJsonContent = readFileSync(packageJsonPath, 'utf-8');
+      const packageJsonContent = tree.read(packageJsonPath, 'utf-8');
       const packageJson = JSON.parse(packageJsonContent);
       
       const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
@@ -125,34 +111,25 @@ function detectExtensionFromPackageJson(projectRoot: string, detectedConfig: any
         return 'mdoc';
       }
       
-      if (dependencies['@astrojs/asciidoc']) {
+      if (dependencies['@astrojs/asciidoc'] || dependencies['astro-asciidoc']) {
         return 'adoc';
       }
-    } catch (error) {
-      // If we can't read package.json, fall back to config detection
+    } catch {
+      // If we can't read package.json, fall back to markdown
     }
-  }
-  
-  // Fallback to detected config integrations
-  if (detectedConfig.integrations?.includes('mdx')) {
-    return 'mdx';
-  } else if (detectedConfig.integrations?.includes('markdoc')) {
-    return 'mdoc';
-  } else if (detectedConfig.integrations?.includes('asciidoc')) {
-    return 'adoc';
   }
   
   // Default to markdown
   return 'md';
 }
 
-function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, any>, _detectedConfig?: any): Record<string, any> {
+function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, unknown>): Record<string, unknown> {
   // Always include at least a title - this is the minimum requirement
-  const basePreset: Record<string, any> = {
+  const basePreset: Record<string, unknown> = {
     title: customFrontmatter?.['title'] || 'Untitled',
   };
   
-  let extendedPreset: Record<string, any> = { ...basePreset };
+  let extendedPreset: Record<string, unknown> = { ...basePreset };
   
   switch (ext) {
     case 'md':
@@ -227,7 +204,7 @@ function generateContentByExtension(ext: string, options: ReturnType<typeof norm
   }
 }
 
-function generateMarkdownContent(frontmatter: Record<string, any>, className: string, isMdx: boolean): string {
+function generateMarkdownContent(frontmatter: Record<string, unknown>, className: string, isMdx: boolean): string {
   let content = '---\n';
   
   // Always include title first
@@ -237,7 +214,8 @@ function generateMarkdownContent(frontmatter: Record<string, any>, className: st
   Object.entries(frontmatter).forEach(([key, value]) => {
     if (key === 'title') return; // Skip title as we already handled it
     
-    if (value !== '' && value != null) {
+    // Include all values except null and undefined
+    if (value !== null && value !== undefined) {
       if (typeof value === 'string') {
         content += `${key}: ${value}\n`;
       } else if (Array.isArray(value) && value.length > 0) {
@@ -245,6 +223,9 @@ function generateMarkdownContent(frontmatter: Record<string, any>, className: st
         content += `${key}: [${arrayItems}]\n`;
       } else if (typeof value === 'boolean' || typeof value === 'number') {
         content += `${key}: ${value}\n`;
+      } else if (Array.isArray(value)) {
+        // Handle empty arrays
+        content += `${key}: []\n`;
       } else {
         content += `${key}: ${value}\n`;
       }
@@ -264,7 +245,7 @@ function generateMarkdownContent(frontmatter: Record<string, any>, className: st
   return content;
 }
 
-function generateAsciidocContent(frontmatter: Record<string, any>, className: string): string {
+function generateAsciidocContent(frontmatter: Record<string, unknown>, className: string): string {
   let content = '';
   
   // Always include title first as AsciiDoc attribute
@@ -274,9 +255,13 @@ function generateAsciidocContent(frontmatter: Record<string, any>, className: st
   Object.entries(frontmatter).forEach(([key, value]) => {
     if (key === 'title') return; // Skip title as we already handled it
     
-    if (value !== '' && value != null) {
+    // Include all values except null and undefined
+    if (value !== null && value !== undefined) {
       if (Array.isArray(value) && value.length > 0) {
         content += `:${key}: ${value.join(', ')}\n`;
+      } else if (Array.isArray(value)) {
+        // Handle empty arrays
+        content += `:${key}:\n`;
       } else {
         content += `:${key}: ${value}\n`;
       }
@@ -293,7 +278,7 @@ function generateAsciidocContent(frontmatter: Record<string, any>, className: st
   return content;
 }
 
-function generateMarkdocContent(frontmatter: Record<string, any>, className: string): string {
+function generateMarkdocContent(frontmatter: Record<string, unknown>, className: string): string {
   let content = '---\n';
   
   // Always include title first
@@ -303,7 +288,8 @@ function generateMarkdocContent(frontmatter: Record<string, any>, className: str
   Object.entries(frontmatter).forEach(([key, value]) => {
     if (key === 'title') return; // Skip title as we already handled it
     
-    if (value !== '' && value != null) {
+    // Include all values except null and undefined
+    if (value !== null && value !== undefined) {
       if (typeof value === 'string') {
         content += `${key}: ${value}\n`;
       } else if (Array.isArray(value) && value.length > 0) {
@@ -311,6 +297,9 @@ function generateMarkdocContent(frontmatter: Record<string, any>, className: str
         content += `${key}: [${arrayItems}]\n`;
       } else if (typeof value === 'boolean' || typeof value === 'number') {
         content += `${key}: ${value}\n`;
+      } else if (Array.isArray(value)) {
+        // Handle empty arrays
+        content += `${key}: []\n`;
       } else {
         content += `${key}: ${value}\n`;
       }

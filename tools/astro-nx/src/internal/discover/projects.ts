@@ -31,7 +31,7 @@ export function discoverAstroProjects(options: DiscoverProjectsOptions = {}): Di
   const projects: DiscoveredAstroProject[] = [];
   const visited = new Set<string>();
   
-  function searchDirectory(dirPath: string, depth: number = 0): void {
+  function searchDirectory(dirPath: string, depth = 0): void {
     if (depth > maxDepth || visited.has(dirPath)) {
       return;
     }
@@ -79,7 +79,7 @@ export function discoverAstroProjects(options: DiscoverProjectsOptions = {}): Di
           searchDirectory(fullPath, depth + 1);
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore directories we can't read
     }
   }
@@ -99,7 +99,7 @@ export function isAstroProject(projectPath: string): boolean {
       if (deps.astro) {
         return true;
       }
-    } catch (error) {
+    } catch {
       // Ignore parsing errors
     }
   }
@@ -189,7 +189,7 @@ function listAstroProjectsFromFilesystem(workspaceRoot: string): string[] {
         astroProjects.push(projectName);
       }
     }
-  } catch (error) {
+  } catch {
     // Fallback to the existing discovery method
     return findAstroProjectsInWorkspace(workspaceRoot);
   }
@@ -239,7 +239,7 @@ function isAstroProjectByHeuristics(
 /**
  * Filesystem-based heuristics for detecting Astro projects
  */
-function isAstroProjectByFilesystemHeuristics(projectPath: string, _workspaceRoot: string): boolean {
+function isAstroProjectByFilesystemHeuristics(projectPath: string): boolean {
   // Heuristic 1: Check project.json for @forastro/astro-nx executors
   const projectJsonPath = join(projectPath, 'project.json');
   if (existsSync(projectJsonPath)) {
@@ -248,7 +248,7 @@ function isAstroProjectByFilesystemHeuristics(projectPath: string, _workspaceRoo
       if (hasForAstroNxExecutors(projectJson)) {
         return true;
       }
-    } catch (error) {
+    } catch {
       // Ignore parsing errors
     }
   }
@@ -306,7 +306,7 @@ function hasForAstroNxExecutors(projectConfig: ProjectConfiguration): boolean {
 function findProjectJsonFiles(workspaceRoot: string): string[] {
   const projectJsonFiles: string[] = [];
   
-  function searchDirectory(dirPath: string, depth: number = 0): void {
+  function searchDirectory(dirPath: string, depth = 0): void {
     if (depth > 5) { // Limit recursion depth
       return;
     }
@@ -327,7 +327,7 @@ function findProjectJsonFiles(workspaceRoot: string): string[] {
           searchDirectory(fullPath, depth + 1);
         }
       }
-    } catch (error) {
+    } catch {
       // Ignore directories we can't read
     }
   }
@@ -397,14 +397,14 @@ export function resolveProjectsForBulkOperation(
   // Filter by includeOnlyProjects if specified
   if (options.includeOnlyProjects && options.includeOnlyProjects.length > 0) {
     targetProjects = targetProjects.filter(project => 
-      options.includeOnlyProjects!.includes(project)
+      (options.includeOnlyProjects ?? []).includes(project)
     );
   }
   
   // Exclude projects if specified
   if (options.excludeProjects && options.excludeProjects.length > 0) {
     targetProjects = targetProjects.filter(project => 
-      !options.excludeProjects!.includes(project)
+      !(options.excludeProjects ?? []).includes(project)
     );
   }
   
@@ -454,7 +454,7 @@ export function expandBulkGeneratorOptions<T extends BulkGeneratorSchemaMixin>(
 ): Array<Omit<T, keyof BulkGeneratorSchemaMixin> & { project: string }> {
   // If not in bulk mode, return single operation
   if (!options.bulk) {
-    const { bulk, projects, applyToAllAstroProjects, excludeProjects, includeOnlyProjects, ...restOptions } = options;
+    const { ...restOptions } = options;
     return [restOptions as Omit<T, keyof BulkGeneratorSchemaMixin> & { project: string }];
   }
   
@@ -475,7 +475,7 @@ export function expandBulkGeneratorOptions<T extends BulkGeneratorSchemaMixin>(
   }
   
   // Create individual operations for each target project
-  const { bulk, projects, applyToAllAstroProjects, excludeProjects, includeOnlyProjects, ...baseOptions } = options;
+  const { ...baseOptions } = options;
   
   return targetProjects.map(projectName => ({
     ...baseOptions,

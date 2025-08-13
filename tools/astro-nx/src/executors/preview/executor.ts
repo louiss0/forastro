@@ -56,8 +56,9 @@ export default async function runExecutor(
     }
 
     // Get project details
-    const projectRoot = context.projectsConfigurations?.projects[context.projectName!]?.root 
-      || context.projectName!;
+    const projectName = context.projectName || '';
+    const projectRoot = context.projectsConfigurations?.projects[projectName]?.root 
+      || projectName;
     const workspaceRoot = context.root;
     // Ensure cwd points to the project root (workspaceRoot/apps/<project>)
     const fullProjectRoot = join(workspaceRoot, projectRoot);
@@ -108,7 +109,22 @@ export default async function runExecutor(
         shell: process.platform === 'win32',
       });
       
+      // Handle Ctrl+C gracefully
+      const gracefulShutdown = (signal: string) => {
+        logger.verbose(`Received ${signal}, shutting down preview server...`);
+        child.kill(signal as NodeJS.Signals);
+      };
+      
+      const cleanup = () => {
+        process.off('SIGINT', sigintHandler);
+        process.off('SIGTERM', sigtermHandler);
+      };
+      
+      const sigintHandler = () => gracefulShutdown('SIGINT');
+      const sigtermHandler = () => gracefulShutdown('SIGTERM');
+      
       child.on('close', (code) => {
+        cleanup();
         if (code === 0) {
           logger.info('✅ Preview server stopped cleanly');
           resolve({ success: true });
@@ -119,18 +135,13 @@ export default async function runExecutor(
       });
       
       child.on('error', (error) => {
+        cleanup();
         logger.error('Failed to start Astro preview server', error);
         resolve({ success: false });
       });
       
-      // Handle Ctrl+C gracefully
-      const gracefulShutdown = (signal: string) => {
-        logger.verbose(`Received ${signal}, shutting down preview server...`);
-        child.kill(signal as NodeJS.Signals);
-      };
-      
-      process.on('SIGINT', () => gracefulShutdown('SIGINT'));
-      process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+      process.on('SIGINT', sigintHandler);
+      process.on('SIGTERM', sigtermHandler);
     });
   } catch (error) {
     logger.error('Unexpected error during preview server execution', error as Error);

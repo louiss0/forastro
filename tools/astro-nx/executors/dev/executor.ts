@@ -58,7 +58,7 @@ export default async function runExecutor(
     }
 
     // Get project details
-    const projectName = context.projectName!;
+    const projectName = context.projectName || '';
     const baseProjectRoot = context.projectsConfigurations?.projects[projectName]?.root || projectName;
     const workspaceRoot = context.root;
     const projectRoot = options.root || join(workspaceRoot, baseProjectRoot);

@@ -11,10 +11,10 @@ vi.mock('process', () => {
 });
 
 // Mock console methods to prevent noise during tests
-vi.spyOn(console, 'log').mockImplementation(() => {});
-vi.spyOn(console, 'info').mockImplementation(() => {});
-vi.spyOn(console, 'warn').mockImplementation(() => {});
-vi.spyOn(console, 'error').mockImplementation(() => {});
+vi.spyOn(console, 'log').mockImplementation(() => void 0);
+vi.spyOn(console, 'info').mockImplementation(() => void 0);
+vi.spyOn(console, 'warn').mockImplementation(() => void 0);
+vi.spyOn(console, 'error').mockImplementation(() => void 0);
 
 // Clean up mocks after tests
 afterEach(() => {

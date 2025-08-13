@@ -64,7 +64,7 @@ export function getContentCollections(projectRoot: string): string[] {
       .filter(entry => entry.isDirectory())
       .map(entry => entry.name)
       .filter(name => !name.startsWith('.'));
-  } catch (error) {
+  } catch {
     return [];
   }
 }
@@ -159,8 +159,9 @@ export function readAstroConfig(projectRoot: string): AstroConfig {
     // Pattern 4: Look for specific content-related integrations (markdoc, mdx)
     const contentIntegrations = ['markdoc', 'mdx', 'asciidoc'];
     contentIntegrations.forEach(integration => {
-      const importPattern = new RegExp(`import\s+\w+\s+from\s+['"](.*${integration}.*)['"],[\n\r]`, 'i');
-      const requirePattern = new RegExp(`require\s*\(\s*['"](.*${integration}.*)['"]\s*\)`, 'i');
+      const importPattern = new RegExp(`import +\\w+ +from +['"](.*${integration}.*)['"],[
+]`, 'i');
+      const requirePattern = new RegExp(`require *\\( *['"](.*${integration}.*)['"] *\\)`, 'i');
       
       if (importPattern.test(configContent) || requirePattern.test(configContent)) {
         if (!integrations.includes(integration)) {
@@ -179,7 +180,7 @@ export function readAstroConfig(projectRoot: string): AstroConfig {
     
     return config;
     
-  } catch (error) {
+  } catch {
     // If we can't read or parse the config, return empty config
     return {};
   }

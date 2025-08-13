@@ -29,7 +29,7 @@ export interface PageProps extends GeneratorProps {
 export interface ContentProps extends GeneratorProps {
   collection: string;
   schema?: string;
-  frontmatterFields: Record<string, any>;
+  frontmatterFields: Record<string, unknown>;
   contentFormat: 'md' | 'mdx' | 'markdoc' | 'adoc';
 }
 
@@ -112,7 +112,7 @@ export function generateContentProps(options: {
   projectRoot: string;
   collection: string;
   schema?: string;
-  frontmatterFields?: Record<string, any>;
+  frontmatterFields?: Record<string, unknown>;
   contentFormat?: 'md' | 'mdx' | 'markdoc' | 'adoc';
 }): ContentProps {
   const { 
@@ -179,7 +179,7 @@ function calculateOffsetFromRoot(directory: string, projectRoot: string): string
   return '../'.repeat(depth);
 }
 
-export function createFrontmatterObject(fields: Record<string, any>): string {
+export function createFrontmatterObject(fields: Record<string, unknown>): string {
   const entries = Object.entries(fields).map(([key, value]) => {
     if (typeof value === 'string') {
       return `${key}: '${value}'`;

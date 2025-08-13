@@ -70,9 +70,9 @@ function validateOptions(options: AstroFileGeneratorSchema): void {
   if (!options.kind) {
     // Default to 'page' if destination indicates pages, otherwise 'file'
     if (options.destination && options.destination.includes('pages')) {
-      (options as any).kind = 'page';
+      (options as { kind: string }).kind = 'page';
     } else {
-      (options as any).kind = 'file';
+      (options as { kind: string }).kind = 'file';
     }
   }
   
@@ -101,7 +101,7 @@ async function delegateToGenerator(tree: Tree, options: AstroFileGeneratorSchema
   if (options.kind === 'component') {
     const componentOptions: ComponentGeneratorSchema = {
       name: options.name,
-      project: options.project!,
+      project: options.project || '',
       directory: options.directory,
       props: options.props,
       ext: options.ext as 'astro' | 'mdx' | undefined,
@@ -112,7 +112,7 @@ async function delegateToGenerator(tree: Tree, options: AstroFileGeneratorSchema
   } else if (options.kind === 'page') {
     const pageOptions: PageGeneratorSchema = {
       name: options.name,
-      project: options.project!,
+      project: options.project || '',
       directory: options.directory,
       ext: options.ext,
       skipFormat: true, // We'll format at the end

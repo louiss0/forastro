@@ -1,4 +1,4 @@
-import { Tree } from '@nx/devkit';
+import { type Tree } from '@nx/devkit';
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import componentGenerator from './component/generator';
 import pageGenerator from './page/generator';
@@ -9,44 +9,113 @@ import type { PageGeneratorSchema } from './page/generator';
 import type { ContentFileGeneratorSchema } from './content-file/generator';
 import type { AstroFileGeneratorSchema } from './astro-file/generator';
 
+// Mock fs functions used by generators
+vi.mock('fs', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('fs')>();
+  let currentTree: Tree | null = null;
+
+  const mockExistsSync = vi.fn((path: string) => {
+    if (!currentTree) return true; // Fallback to true when no tree is available
+    return currentTree.exists(path);
+  });
+
+  const mockReadFileSync = vi.fn((path: string) => {
+    if (!currentTree) {
+      // Return sensible defaults based on file type
+      if (path.endsWith('package.json')) {
+        return JSON.stringify({
+          name: 'test',
+          dependencies: { astro: '^4.0.0' },
+        });
+      }
+      return 'export default {};';
+    }
+
+    try {
+      const content = currentTree.read(path, 'utf-8');
+      return content;
+    } catch {
+      // If file doesn't exist in tree, return sensible defaults
+      if (path.endsWith('package.json')) {
+        return JSON.stringify({
+          name: 'test',
+          dependencies: { astro: '^4.0.0' },
+        });
+      }
+      return 'export default {};';
+    }
+  });
+
+  // Export function to set current tree for testing
+  (globalThis as Record<string, unknown>)['setMockTree'] = (tree: Tree) => {
+    currentTree = tree;
+  };
+
+  return {
+    ...actual,
+    existsSync: mockExistsSync,
+    readFileSync: mockReadFileSync,
+    readdirSync: vi.fn(() => []),
+    mkdirSync: vi.fn(),
+    writeFileSync: vi.fn(),
+  };
+});
+
+// Mock internal modules that use file system
+vi.mock('../internal/detect/config', () => ({
+  readAstroConfig: () => ({ integrations: [], contentDir: 'src/content' }),
+  hasContentCollections: () => false,
+  getContentCollections: () => [],
+  readIntegrations: () => [],
+  findAstroConfig: () => null,
+}));
+
+vi.mock('../internal/detect/project-type', () => ({
+  getDefaultContentExt: () => '.md',
+  detectProjectType: () => 'astro-content',
+}));
+
 describe('Generator Integration Tests', () => {
   let tree: Tree;
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
-    
-    // Add project configuration to workspace
-    tree.write('project.json', JSON.stringify({
-      version: 2,
-      projects: {
-        'test-app': {
-          root: 'apps/test-app',
-          projectType: 'application',
-          sourceRoot: 'apps/test-app/src',
-          targets: {}
-        }
-      }
-    }));
-    
+
     // Setup basic Astro project structure
-    tree.write('apps/test-app/package.json', JSON.stringify({
-      name: 'test-app',
-      dependencies: {
-        'astro': '^4.0.0'
-      }
-    }));
-    
+    tree.write(
+      'apps/test-app/package.json',
+      JSON.stringify({
+        name: 'test-app',
+        dependencies: {
+          astro: '^4.0.0',
+        },
+      }),
+    );
+
+    // Add project configuration file for the test-app project
+    tree.write(
+      'apps/test-app/project.json',
+      JSON.stringify({
+        name: 'test-app',
+        root: 'apps/test-app',
+        projectType: 'application',
+        sourceRoot: 'apps/test-app/src',
+        targets: {},
+      }),
+    );
+
+    // Create necessary directories by creating and removing .gitkeep files
     tree.write('apps/test-app/src/.gitkeep', '');
+    tree.write('apps/test-app/src/pages/.gitkeep', '');
+    tree.write('apps/test-app/src/components/.gitkeep', '');
+    tree.write('apps/test-app/src/content/.gitkeep', '');
     tree.write('apps/test-app/astro.config.mjs', 'export default {};');
-    
-    // Add project configuration file
-    tree.write('apps/test-app/project.json', JSON.stringify({
-      name: 'test-app',
-      root: 'apps/test-app',
-      projectType: 'application',
-      sourceRoot: 'apps/test-app/src',
-      targets: {}
-    }));
+
+    // Set the current tree for fs mocks
+    const globalThis_ = globalThis as Record<string, unknown> & {
+      setMockTree?: (tree: Tree) => void;
+    };
+    globalThis_.setMockTree?.(tree);
   });
 
   describe('Component Generator', () => {
@@ -147,7 +216,8 @@ describe('Generator Integration Tests', () => {
 
       await componentGenerator(tree, options);
 
-      const componentPath = 'apps/test-app/src/components/global-component.astro';
+      const componentPath =
+        'apps/test-app/src/components/global-component.astro';
       const content = tree.read(componentPath, 'utf-8');
 
       expect(content).toContain('is:global');
@@ -164,7 +234,8 @@ describe('Generator Integration Tests', () => {
 
       await componentGenerator(tree, options);
 
-      const componentPath = 'apps/test-app/src/components/plain-component.astro';
+      const componentPath =
+        'apps/test-app/src/components/plain-component.astro';
       const content = tree.read(componentPath, 'utf-8');
 
       expect(content).not.toContain('<style>');
@@ -201,8 +272,9 @@ describe('Generator Integration Tests', () => {
       await pageGenerator(tree, options);
 
       const pagePath = 'apps/test-app/src/pages/contact.astro';
-      const content = tree.read(pagePath, 'utf-8');
+      expect(tree.exists(pagePath)).toBe(true);
 
+      const content = tree.read(pagePath, 'utf-8');
       expect(content).toContain('Contact Us');
       expect(content).toContain('Get in touch with our team');
     });
@@ -225,7 +297,7 @@ describe('Generator Integration Tests', () => {
       const options: PageGeneratorSchema = {
         name: 'readme',
         project: 'test-app',
-        contentType: 'md',
+        ext: 'md',
         skipFormat: true,
       };
 
@@ -242,7 +314,7 @@ describe('Generator Integration Tests', () => {
       const options: PageGeneratorSchema = {
         name: 'interactive',
         project: 'test-app',
-        contentType: 'mdx',
+        ext: 'mdx',
         skipFormat: true,
       };
 
@@ -266,8 +338,9 @@ describe('Generator Integration Tests', () => {
       await pageGenerator(tree, options);
 
       const pagePath = 'apps/test-app/src/pages/home.astro';
-      const content = tree.read(pagePath, 'utf-8');
+      expect(tree.exists(pagePath)).toBe(true);
 
+      const content = tree.read(pagePath, 'utf-8');
       expect(content).toContain('BaseLayout');
     });
   });
@@ -306,8 +379,9 @@ describe('Generator Integration Tests', () => {
       await contentFileGenerator(tree, options);
 
       const contentPath = 'apps/test-app/src/content/docs/tutorial.md';
-      const content = tree.read(contentPath, 'utf-8');
+      expect(tree.exists(contentPath)).toBe(true);
 
+      const content = tree.read(contentPath, 'utf-8');
       expect(content).toContain('title: Getting Started');
       expect(content).toContain('description: Learn the basics');
       expect(content).toContain('author: John Doe');
@@ -319,13 +393,14 @@ describe('Generator Integration Tests', () => {
         name: 'interactive-guide',
         project: 'test-app',
         collection: 'guides',
-        contentFormat: 'mdx',
+        ext: 'mdx',
         skipFormat: true,
       };
 
       await contentFileGenerator(tree, options);
 
-      const contentPath = 'apps/test-app/src/content/guides/interactive-guide.mdx';
+      const contentPath =
+        'apps/test-app/src/content/guides/interactive-guide.mdx';
       expect(tree.exists(contentPath)).toBe(true);
 
       const content = tree.read(contentPath, 'utf-8');
@@ -334,13 +409,16 @@ describe('Generator Integration Tests', () => {
 
     test('should detect project type for content extension', async () => {
       // Update package.json to include MDX integration
-      tree.write('apps/test-app/package.json', JSON.stringify({
-        name: 'test-app',
-        dependencies: {
-          'astro': '^4.0.0',
-          '@astrojs/mdx': '^1.0.0'
-        }
-      }));
+      tree.write(
+        'apps/test-app/package.json',
+        JSON.stringify({
+          name: 'test-app',
+          dependencies: {
+            astro: '^4.0.0',
+            '@astrojs/mdx': '^1.0.0',
+          },
+        }),
+      );
 
       const options: ContentFileGeneratorSchema = {
         name: 'auto-format',
@@ -360,7 +438,7 @@ describe('Generator Integration Tests', () => {
         name: 'docs',
         project: 'test-app',
         collection: 'documentation',
-        contentFormat: 'adoc',
+        ext: 'adoc',
         skipFormat: true,
       };
 
@@ -416,7 +494,7 @@ describe('Generator Integration Tests', () => {
 
       const componentPath = 'apps/test-app/src/components/prop-component.astro';
       expect(tree.exists(componentPath)).toBe(true);
-      
+
       const content = tree.read(componentPath, 'utf-8');
       expect(content).toContain('title: string');
       expect(content).toContain('count: number');
@@ -433,20 +511,24 @@ describe('Generator Integration Tests', () => {
 
       await astroFileGenerator(tree, options);
 
-      const componentPath = 'apps/test-app/src/components/ui/forms/nested-component.astro';
+      const componentPath =
+        'apps/test-app/src/components/ui/forms/nested-component.astro';
       expect(tree.exists(componentPath)).toBe(true);
     });
   });
 
   describe('Extension Decision Logic', () => {
     test('should use correct extension based on project dependencies - MDX', async () => {
-      tree.write('apps/test-app/package.json', JSON.stringify({
-        name: 'test-app',
-        dependencies: {
-          'astro': '^4.0.0',
-          '@astrojs/mdx': '^1.0.0'
-        }
-      }));
+      tree.write(
+        'apps/test-app/package.json',
+        JSON.stringify({
+          name: 'test-app',
+          dependencies: {
+            astro: '^4.0.0',
+            '@astrojs/mdx': '^1.0.0',
+          },
+        }),
+      );
 
       const options: ContentFileGeneratorSchema = {
         name: 'auto-mdx',
@@ -457,17 +539,22 @@ describe('Generator Integration Tests', () => {
 
       await contentFileGenerator(tree, options);
 
-      expect(tree.exists('apps/test-app/src/content/posts/auto-mdx.mdx')).toBe(true);
+      expect(tree.exists('apps/test-app/src/content/posts/auto-mdx.mdx')).toBe(
+        true,
+      );
     });
 
     test('should use correct extension based on project dependencies - Markdoc', async () => {
-      tree.write('apps/test-app/package.json', JSON.stringify({
-        name: 'test-app',
-        dependencies: {
-          'astro': '^4.0.0',
-          '@astrojs/markdoc': '^1.0.0'
-        }
-      }));
+      tree.write(
+        'apps/test-app/package.json',
+        JSON.stringify({
+          name: 'test-app',
+          dependencies: {
+            astro: '^4.0.0',
+            '@astrojs/markdoc': '^1.0.0',
+          },
+        }),
+      );
 
       const options: ContentFileGeneratorSchema = {
         name: 'auto-markdoc',
@@ -478,17 +565,22 @@ describe('Generator Integration Tests', () => {
 
       await contentFileGenerator(tree, options);
 
-      expect(tree.exists('apps/test-app/src/content/posts/auto-markdoc.mdoc')).toBe(true);
+      expect(
+        tree.exists('apps/test-app/src/content/posts/auto-markdoc.mdoc'),
+      ).toBe(true);
     });
 
     test('should use correct extension based on project dependencies - AsciiDoc', async () => {
-      tree.write('apps/test-app/package.json', JSON.stringify({
-        name: 'test-app',
-        dependencies: {
-          'astro': '^4.0.0',
-          'astro-asciidoc': '^1.0.0'
-        }
-      }));
+      tree.write(
+        'apps/test-app/package.json',
+        JSON.stringify({
+          name: 'test-app',
+          dependencies: {
+            astro: '^4.0.0',
+            'astro-asciidoc': '^1.0.0',
+          },
+        }),
+      );
 
       const options: ContentFileGeneratorSchema = {
         name: 'auto-asciidoc',
@@ -499,7 +591,9 @@ describe('Generator Integration Tests', () => {
 
       await contentFileGenerator(tree, options);
 
-      expect(tree.exists('apps/test-app/src/content/docs/auto-asciidoc.adoc')).toBe(true);
+      expect(
+        tree.exists('apps/test-app/src/content/docs/auto-asciidoc.adoc'),
+      ).toBe(true);
     });
 
     test('should default to markdown when no content integrations are found', async () => {
@@ -512,7 +606,9 @@ describe('Generator Integration Tests', () => {
 
       await contentFileGenerator(tree, options);
 
-      expect(tree.exists('apps/test-app/src/content/posts/default-md.md')).toBe(true);
+      expect(tree.exists('apps/test-app/src/content/posts/default-md.md')).toBe(
+        true,
+      );
     });
   });
 
@@ -526,11 +622,12 @@ describe('Generator Integration Tests', () => {
 
       await componentGenerator(tree, componentOptions);
 
-      const componentPath = 'apps/test-app/src/components/my-awesome-component.astro';
+      const componentPath =
+        'apps/test-app/src/components/my-awesome-component.astro';
       expect(tree.exists(componentPath)).toBe(true);
 
       const content = tree.read(componentPath, 'utf-8');
-      expect(content).toContain('MyAwesomeComponent');
+      expect(content).toContain('MyAwesomeComponent'); // toPascalCase removes spaces
       expect(content).toContain('class="my-awesome-component"');
     });
 
@@ -543,7 +640,8 @@ describe('Generator Integration Tests', () => {
 
       await componentGenerator(tree, componentOptions);
 
-      const componentPath = 'apps/test-app/src/components/my-awesome-component.astro';
+      const componentPath =
+        'apps/test-app/src/components/my-awesome-component.astro';
       expect(tree.exists(componentPath)).toBe(true);
 
       const content = tree.read(componentPath, 'utf-8');
@@ -561,7 +659,8 @@ describe('Generator Integration Tests', () => {
 
       await componentGenerator(tree, options);
 
-      const componentPath = 'apps/test-app/src/components/ui/forms/inputs/deep-component.astro';
+      const componentPath =
+        'apps/test-app/src/components/ui/forms/inputs/deep-component.astro';
       expect(tree.exists(componentPath)).toBe(true);
     });
 

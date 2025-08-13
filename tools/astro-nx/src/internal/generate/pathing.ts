@@ -154,9 +154,10 @@ export function toPascalCase(str: string): string {
   }
   
   // For dashed/underscored/space-separated names, capitalize each segment and join.
+  // Preserve internal capitalization in each word segment
   return str
     .split(/[-_\s]+/)
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join('');
 }
 

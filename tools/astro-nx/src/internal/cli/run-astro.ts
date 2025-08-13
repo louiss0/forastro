@@ -57,14 +57,17 @@ export async function runAstro(
     }
     
     return { success: true };
-  } catch (error: any) {
-    const errorMessage = error.message || 'Unknown error occurred';
+  } catch (error: unknown) {
+    const err = error as { message?: string; exitCode?: number; stderr?: string };
+    const errorMessage = err.message || 'Unknown error occurred';
     
     if (args.includes('--verbose')) {
       logger.error(`Astro command failed: ${errorMessage}`);
-      logger.error(`Exit code: ${error.exitCode}`);
-      if (error.stderr) {
-        logger.error(`Error output: ${error.stderr}`);
+      if (err.exitCode !== undefined) {
+        logger.error(`Exit code: ${err.exitCode}`);
+      }
+      if (err.stderr) {
+        logger.error(`Error output: ${err.stderr}`);
       }
     }
     

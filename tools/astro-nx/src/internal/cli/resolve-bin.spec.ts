@@ -169,12 +169,12 @@ describe('CLI Binary Resolution', () => {
     test('should handle execSync errors gracefully', () => {
       mockExecSync.mockImplementation((command) => {
         if (command === 'which jpd') {
-          const error: any = new Error('ENOENT');
+          const error = new Error('ENOENT') as Error & { code?: string | number };
           error.code = 'ENOENT';
           throw error;
         }
         if (command === 'which pnpm') {
-          const error: any = new Error('Command failed');
+          const error = new Error('Command failed') as Error & { code?: string | number };
           error.code = 127;
           throw error;
         }

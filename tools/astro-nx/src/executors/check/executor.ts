@@ -50,8 +50,9 @@ export default async function runExecutor(
     }
 
     // Get project details
-    const projectRoot = context.projectsConfigurations?.projects[context.projectName!]?.root 
-      || context.projectName!;
+    const projectName = context.projectName || '';
+    const projectRoot = context.projectsConfigurations?.projects[projectName]?.root 
+      || projectName;
     const workspaceRoot = context.root;
     const fullProjectRoot = join(workspaceRoot, projectRoot);
     
@@ -73,6 +74,8 @@ export default async function runExecutor(
     // Log verbose information about configured options
     if (options.tsconfig && options.verbose) {
       logger.verbose(`Using TypeScript config: ${options.tsconfig}`);
+                
+                
     }
     if (options.config && options.verbose) {
       logger.verbose(`Using config file: ${options.config}`);
@@ -86,7 +89,7 @@ export default async function runExecutor(
     
     // Prepare report output if verbose mode is enabled
     const reportPath = join(fullProjectRoot, '.astro-check');
-    let reportOutput: string[] = [];
+    const reportOutput: string[] = [];
     
     logger.info('Running Astro type checks...');
     

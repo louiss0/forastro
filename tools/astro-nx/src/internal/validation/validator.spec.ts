@@ -11,7 +11,7 @@ const mockedExistsSync = vi.mocked(existsSync);
 
 describe('AstroValidator', () => {
   let validator: AstroValidator;
-  let logger: any;
+  let logger: ReturnType<typeof createLogger>;
 
   beforeEach(() => {
     logger = createLogger({ verbose: false, projectName: 'test-project' });
@@ -137,6 +137,10 @@ describe('AstroValidator', () => {
 
   describe('validateFilePaths', () => {
     it('should fail when provided file paths do not exist', () => {
+      // Temporarily disable test environment bypass for this test
+      const originalEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'production';
+      
       mockedExistsSync.mockReturnValue(false);
       
       const result = validator.validateFilePaths({
@@ -147,9 +151,16 @@ describe('AstroValidator', () => {
       expect(result.errors[0]).toContain('File paths do not exist');
       expect(result.hints.some(hint => hint.includes('nonexistent.config.mjs'))).toBe(true);
       expect(mockedExistsSync).toHaveBeenCalledWith('nonexistent.config.mjs');
+      
+      // Restore original environment
+      process.env.NODE_ENV = originalEnv;
     });
 
     it('should pass when provided file paths exist', () => {
+      // Temporarily disable test environment bypass for this test
+      const originalEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'production';
+      
       mockedExistsSync.mockReturnValue(true);
       
       const result = validator.validateFilePaths({
@@ -159,14 +170,16 @@ describe('AstroValidator', () => {
       expect(result.success).toBe(true);
       expect(result.errors.length).toBe(0);
       expect(mockedExistsSync).toHaveBeenCalledWith('astro.config.mjs');
+      
+      // Restore original environment
+      process.env.NODE_ENV = originalEnv;
     });
 
     it('should skip undefined file paths', () => {
-      const result = validator.validateFilePaths({
-        config: undefined,
-        outDir: 'dist'
-      });
-
+      // Temporarily disable test environment bypass for this test
+      const originalEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'production';
+      
       // Since we're skipping undefined, we won't call existsSync for config
       // but we will for outDir, so let's mock it
       mockedExistsSync.mockReturnValue(true);
@@ -179,6 +192,9 @@ describe('AstroValidator', () => {
       expect(validationResult.success).toBe(true);
       expect(mockedExistsSync).toHaveBeenCalledWith('dist');
       expect(mockedExistsSync).not.toHaveBeenCalledWith(undefined);
+      
+      // Restore original environment
+      process.env.NODE_ENV = originalEnv;
     });
 
     it('should handle invalid file path strings', () => {
@@ -192,6 +208,10 @@ describe('AstroValidator', () => {
     });
 
     it('should handle mixed valid and invalid paths', () => {
+      // Temporarily disable test environment bypass for this test
+      const originalEnv = process.env.NODE_ENV;
+      process.env.NODE_ENV = 'production';
+      
       mockedExistsSync.mockImplementation((path) => {
         return path === 'existing.config.mjs';
       });
@@ -205,6 +225,9 @@ describe('AstroValidator', () => {
       expect(result.errors.some(error => error.includes('File paths do not exist'))).toBe(true);
       expect(mockedExistsSync).toHaveBeenCalledWith('existing.config.mjs');
       expect(mockedExistsSync).toHaveBeenCalledWith('missing.file.mjs');
+      
+      // Restore original environment
+      process.env.NODE_ENV = originalEnv;
     });
   });
 
@@ -222,8 +245,8 @@ describe('AstroValidator', () => {
 
     it('should return false when any validation fails', () => {
       // Mock logger methods
-      const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => {});
-      const loggerInfoSpy = vi.spyOn(logger, 'info').mockImplementation(() => {});
+      const loggerErrorSpy = vi.spyOn(logger, 'error').mockImplementation(() => void 0);
+      const loggerInfoSpy = vi.spyOn(logger, 'info').mockImplementation(() => void 0);
 
       const results = [
         { success: true, errors: [], hints: [] },
