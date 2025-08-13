@@ -185,7 +185,7 @@ function listAstroProjectsFromFilesystem(workspaceRoot: string): string[] {
       const projectDir = projectJsonPath.replace('/project.json', '');
       const projectName = projectDir.split('/').pop() || '';
       
-      if (isAstroProjectByFilesystemHeuristics(projectDir, workspaceRoot)) {
+      if (isAstroProjectByFilesystemHeuristics(projectDir)) {
         astroProjects.push(projectName);
       }
     }
@@ -454,8 +454,8 @@ export function expandBulkGeneratorOptions<T extends BulkGeneratorSchemaMixin>(
 ): Array<Omit<T, keyof BulkGeneratorSchemaMixin> & { project: string }> {
   // If not in bulk mode, return single operation
   if (!options.bulk) {
-    const { ...restOptions } = options;
-    return [restOptions as Omit<T, keyof BulkGeneratorSchemaMixin> & { project: string }];
+    const { bulk, applyToAllAstroProjects, excludeProjects, includeOnlyProjects, projects, ...restOptions } = options;
+    return [{ ...restOptions, project: (options as any).project || '' } as Omit<T, keyof BulkGeneratorSchemaMixin> & { project: string }];
   }
   
   // Determine target projects for bulk operation
@@ -475,7 +475,7 @@ export function expandBulkGeneratorOptions<T extends BulkGeneratorSchemaMixin>(
   }
   
   // Create individual operations for each target project
-  const { ...baseOptions } = options;
+  const { bulk, applyToAllAstroProjects, excludeProjects, includeOnlyProjects, projects, ...baseOptions } = options;
   
   return targetProjects.map(projectName => ({
     ...baseOptions,
