@@ -92,6 +92,11 @@
       "type": "boolean",
       "description": "Skip automatic code formatting after component generation",
       "default": false
+    },
+    "overwrite": {
+      "type": "boolean",
+      "description": "Allow overwriting existing files",
+      "default": false
     }
   },
   "required": ["name", "project"],

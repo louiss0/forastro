@@ -1,5 +1,9 @@
-import { join, parse } from 'path';
+import { posix, parse } from 'path';
 import { mkdirSync, existsSync } from 'fs';
+import { slugify } from '../strings/slug.js';
+
+// Re-export case utilities for backward compatibility
+export { toPascalCase, toCamelCase, toKebabCase } from '../strings/case.js';
 
 export interface PathGenerationOptions {
   projectRoot: string;
@@ -26,23 +30,23 @@ export function generateAstroPath(options: PathGenerationOptions): GeneratedPath
   
   switch (type) {
     case 'page':
-      directory = join(projectRoot, srcDir, 'pages');
+      directory = posix.join(projectRoot, srcDir, 'pages');
       defaultExtension = '.astro';
       break;
     case 'component':
-      directory = join(projectRoot, srcDir, 'components');
+      directory = posix.join(projectRoot, srcDir, 'components');
       defaultExtension = '.astro';
       break;
     case 'layout':
-      directory = join(projectRoot, srcDir, 'layouts');
+      directory = posix.join(projectRoot, srcDir, 'layouts');
       defaultExtension = '.astro';
       break;
     case 'content':
-      directory = join(projectRoot, srcDir, 'content');
+      directory = posix.join(projectRoot, srcDir, 'content');
       defaultExtension = '.md';
       break;
     case 'astro-file':
-      directory = join(projectRoot, srcDir);
+      directory = posix.join(projectRoot, srcDir);
       defaultExtension = '.astro';
       break;
     default:
@@ -51,12 +55,12 @@ export function generateAstroPath(options: PathGenerationOptions): GeneratedPath
   
   // Add subdirectory if specified
   if (subdir) {
-    directory = join(directory, subdir);
+    directory = posix.join(directory, subdir);
   }
   
   const fileExtension = extension || defaultExtension;
   const filename = ensureExtension(name, fileExtension);
-  const fullPath = join(directory, filename);
+  const fullPath = posix.join(directory, filename);
   const relativePath = fullPath.replace(projectRoot + '/', '');
   
   return {
@@ -69,8 +73,8 @@ export function generateAstroPath(options: PathGenerationOptions): GeneratedPath
 }
 
 export function generateContentPath(projectRoot: string, collectionName: string, filename: string): GeneratedPath {
-  const directory = join(projectRoot, 'src', 'content', collectionName);
-  const fullPath = join(directory, ensureExtension(filename, '.md'));
+  const directory = posix.join(projectRoot, 'src', 'content', collectionName);
+  const fullPath = posix.join(directory, ensureExtension(filename, '.md'));
   const relativePath = fullPath.replace(projectRoot + '/', '');
   
   return {
@@ -83,14 +87,14 @@ export function generateContentPath(projectRoot: string, collectionName: string,
 }
 
 export function generatePagePath(projectRoot: string, pageName: string, nested?: string): GeneratedPath {
-  let directory = join(projectRoot, 'src', 'pages');
+  let directory = posix.join(projectRoot, 'src', 'pages');
   
   if (nested) {
-    directory = join(directory, nested);
+    directory = posix.join(directory, nested);
   }
   
   const filename = ensureExtension(pageName, '.astro');
-  const fullPath = join(directory, filename);
+  const fullPath = posix.join(directory, filename);
   const relativePath = fullPath.replace(projectRoot + '/', '');
   
   return {
@@ -103,14 +107,14 @@ export function generatePagePath(projectRoot: string, pageName: string, nested?:
 }
 
 export function generateComponentPath(projectRoot: string, componentName: string, subdir?: string): GeneratedPath {
-  let directory = join(projectRoot, 'src', 'components');
+  let directory = posix.join(projectRoot, 'src', 'components');
   
   if (subdir) {
-    directory = join(directory, subdir);
+    directory = posix.join(directory, subdir);
   }
   
   const filename = ensureExtension(componentName, '.astro');
-  const fullPath = join(directory, filename);
+  const fullPath = posix.join(directory, filename);
   const relativePath = fullPath.replace(projectRoot + '/', '');
   
   return {
@@ -133,50 +137,22 @@ export function ensureExtension(filename: string, defaultExtension: string): str
 }
 
 export function createDirectoryPath(basePath: string, ...segments: string[]): string {
-  return join(basePath, ...segments);
+  return posix.join(basePath, ...segments);
 }
 
 export function normalizeFileName(name: string): string {
+  // Use custom logic to preserve valid filename characters like dots and underscores
+  // while still making it filesystem-safe
   return name
-    .replace(/[^a-zA-Z0-9-_.]/g, '-') // Replace invalid characters with hyphens
-    .replace(/-+/g, '-') // Replace multiple hyphens with single hyphen
-    .replace(/^-|-$/g, ''); // Remove leading/trailing hyphens
-}
-
-export function toPascalCase(str: string): string {
-  // Handle empty string
-  if (!str) return str;
-  
-  // If input is already PascalCase or camelCase without separators, convert camelCase to PascalCase by uppercasing the first letter and keep internal capitals intact.
-  // Why preserve existing case: Avoid breaking intentionally formatted names like "XMLHttp" or "iOS"
-  if (!/[-_\s]/.test(str)) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
-  
-  // For dashed/underscored/space-separated names, capitalize each segment and join.
-  // Preserve internal capitalization in each word segment
-  return str
-    .split(/[-_\s]+/)
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-    .join('');
-}
-
-export function toCamelCase(str: string): string {
-  const pascal = toPascalCase(str);
-  return pascal.charAt(0).toLowerCase() + pascal.slice(1);
-}
-
-export function toKebabCase(str: string): string {
-  return str
-    // For PascalCase/camelCase inputs, split on capitals and join with '-' in lowercase.
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    // Convert spaces and underscores to dashes
-    .replace(/[\s_]+/g, '-')
-    // For already dashed inputs, normalize multiple dashes to single
+    .trim()
+    // Replace problematic characters with dashes (more comprehensive)
+    .replace(/[<>:"/\\|?*!@#$%^&()+={}\[\],`~]/g, '-')
+    // Replace whitespace with dashes
+    .replace(/\s+/g, '-')
+    // Normalize multiple dashes to single
     .replace(/-+/g, '-')
-    // Remove leading/trailing dashes and convert to lowercase
-    .replace(/^-|-$/g, '')
-    .toLowerCase();
+    // Remove leading and trailing dashes
+    .replace(/^-+|-+$/g, '');
 }
 
 /**
@@ -185,7 +161,7 @@ export function toKebabCase(str: string): string {
  * @returns The pages directory path (src/pages)
  */
 export function getPagesDir(projectRoot: string): string {
-  return join(projectRoot, 'src', 'pages');
+  return posix.join(projectRoot, 'src', 'pages');
 }
 
 /**
@@ -194,7 +170,7 @@ export function getPagesDir(projectRoot: string): string {
  * @returns The components directory path (src/components)
  */
 export function getComponentsDir(projectRoot: string): string {
-  return join(projectRoot, 'src', 'components');
+  return posix.join(projectRoot, 'src', 'components');
 }
 
 /**
@@ -208,8 +184,8 @@ export function getComponentsDir(projectRoot: string): string {
  * @returns The content directory path (src/content or content)
  */
 export function getContentDir(projectRoot: string): string {
-  const srcContentDir = join(projectRoot, 'src', 'content');
-  const contentDir = join(projectRoot, 'content');
+  const srcContentDir = posix.join(projectRoot, 'src', 'content');
+  const contentDir = posix.join(projectRoot, 'content');
   
   // Prefer src/content if it exists, otherwise use content
   if (existsSync(srcContentDir)) {

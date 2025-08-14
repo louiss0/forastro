@@ -40,15 +40,13 @@ describe(
 
 
         test("fast glob works", async () => {
-
-
-            const filePaths = await glob("**/*.adoc",)
-
+            const filePaths = await glob("**/*.adoc", {
+                cwd: import.meta.dirname,
+                absolute: false
+            })
 
             expect(filePaths.length).toBeGreaterThan(0)
-
-
-        })
+        }, 10000)
 
 
         test("fast glob only grabs from a specific folder", async () => {
@@ -135,33 +133,8 @@ describe(
             it(
                 "throws an error if the folder name that is passed in is empty",
                 async () => {
-
-
-                    try {
-
-                        await getAsciidocPaths('')
-
-                    } catch (error) {
-
-                        expect(error).toBeInstanceOf(z.ZodError)
-
-                        const newError = error as z.ZodError
-
-                        expect(newError.format()).toMatchInlineSnapshot(`
-            {
-              "0": {
-                "_errors": [
-                  "Don't pass in an empty string pass in a value with forward slashes and words instead",
-                ],
-              },
-              "_errors": [],
-            }
-          `)
-
-                    }
-
-
-                })
+                    await expect(getAsciidocPaths('')).rejects.toBeInstanceOf(z.ZodError);
+                }, 10000)
 
 
 

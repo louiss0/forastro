@@ -2,119 +2,176 @@ import type {
   Tree,
   GeneratorCallback,
 } from '@nx/devkit';
-import {
-  formatFiles,
-  names,
-  runTasksInSerial,
-} from '@nx/devkit';
-import { join } from 'path';
+import { names } from '@nx/devkit';
 import { readAstroConfig } from '../../internal/detect/config';
 import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
+import { safeWriteFile } from '../../internal/fs/tree-ops.js';
+import { getTemplateByExtension } from '../../internal/templates/index.js';
+import { buildPath, getProjectPaths } from '../../internal/generate/paths.js';
+import {
+  runGeneratorWorkflow,
+  type BaseGeneratorOptions,
+  type GeneratorWorkflowConfig,
+  type NormalizedBaseOptions,
+  parseNestedName,
+  combineDirectories,
+} from '../../internal/generate/workflow.js';
 
-export interface PageGeneratorSchema {
-  name: string;
-  project: string;
-  directory?: string;
+export interface PageGeneratorSchema extends BaseGeneratorOptions {
   ext?: 'astro' | 'md' | 'adoc' | 'mdx' | 'mdoc';
   layout?: string;
   title?: string;
   description?: string;
   frontmatter?: Record<string, unknown>;
-  skipFormat?: boolean;
 }
 
-export default async function (tree: Tree, options: PageGeneratorSchema) {
-  const tasks: GeneratorCallback[] = [];
-  
-  const normalizedOptions = normalizeOptions(options);
-  addFiles(tree, normalizedOptions);
-  
-  if (!options.skipFormat) {
-    await formatFiles(tree);
-  }
-  
-  return runTasksInSerial(...tasks);
+export default async function (tree: Tree, options: PageGeneratorSchema): Promise<GeneratorCallback> {
+  const config: GeneratorWorkflowConfig<PageGeneratorSchema> = {
+    validation: {
+      enumFields: [
+        { field: 'ext', allowedValues: ['astro', 'md', 'adoc', 'mdx', 'mdoc'] },
+      ],
+    },
+    pathResolution: {
+      targetType: 'pages',
+      extension: options.ext || 'astro',
+      customPathResolver: (opts, normalizedBase) => {
+        // Handle nested route names like "blog/[slug]"
+        const { fileName, nameDirectory } = parseNestedName(opts.name);
+        const combinedDirectory = combineDirectories(opts.directory, nameDirectory);
+        
+        const baseDir = normalizedBase.projectPaths.pagesDir;
+        const targetDir = combinedDirectory ? buildPath(baseDir, combinedDirectory) : baseDir;
+        const fullFileName = `${fileName}.${opts.ext || 'astro'}`;
+        
+        return buildPath(targetDir, fullFileName);
+      },
+    },
+    generate: generatePage,
+  };
+
+  return runGeneratorWorkflow(tree, options, config);
 }
 
-function normalizeOptions(options: PageGeneratorSchema) {
-  const projectName = options.project;
-  const projectRoot = `apps/${projectName}`;
+function generatePage(
+  tree: Tree,
+  options: PageGeneratorSchema & NormalizedBaseOptions,
+  targetPath: string
+): void {
+  // Parse the name to get the actual filename
+  const { fileName } = parseNestedName(options.name);
+  
+  // Check if this is a dynamic page based on filename containing brackets
+  const isDynamic = fileName.includes('[') && fileName.includes(']');
   
   // Read Astro configuration for defaults
-  const detectedConfig = readAstroConfig(projectRoot);
+  const detectedConfig = readAstroConfig(options.projectPaths.root);
   
-  // Use simple extension detection - default to astro for page generator
-  const ext = options.ext || 'astro';
+  // Resolve layout import path if layout is specified
+  let layoutImportPath: string | undefined;
+  if (options.layout) {
+    const pathSegments = targetPath.split('/');
+    const targetDir = pathSegments.slice(0, -1).join('/');
+    const layoutResolution = resolveLayoutImport(tree, options.projectName, options.layout, targetDir);
+    layoutImportPath = layoutResolution?.importPath;
+  }
   
-  // Handle nested route names like "blog/[slug]" 
-  const nameParts = options.name.split('/');
-  const fileName = nameParts[nameParts.length - 1];
-  const nameDirectory = nameParts.length > 1 ? nameParts.slice(0, -1).join('/') : '';
-  
-  // Combine directory option with name-based directory
-  const combinedDirectory = options.directory
-    ? nameDirectory
-      ? join(options.directory, nameDirectory)
-      : options.directory
-    : nameDirectory;
-  
-  const fullFileName = `${fileName}.${ext}`;
-  const filePath = join(
-    projectRoot, 
-    'src', 
-    'pages', 
-    combinedDirectory, 
-    fullFileName
-  );
-  
-  // Generate title - priority: provided title > frontmatter title > derived from name (PascalCase to spaced words)
+  // Generate title - priority: provided title > frontmatter title > derived from name
   const title = options.title || options.frontmatter?.['title'] || convertPascalCaseToSpaced(names(fileName).className);
   
-  return {
-    ...options,
-    name: fileName,
-    projectName,
-    projectRoot,
-    directory: combinedDirectory,
-    ext,
-    fileName: fullFileName,
-    filePath,
+  // Prepare template options
+  const templateOptions = {
     title,
-    detectedConfig,
+    description: options.description,
+    layout: options.layout,
+    layoutImportPath,
     frontmatter: options.frontmatter || {},
-    tmpl: '',
+    isPage: true,
+    isDynamic
+  };
+  
+  // Generate content using in-memory templates
+  const content = getTemplateByExtension(options.ext || 'astro', templateOptions);
+  
+  // Extract target directory from path
+  const pathSegments = targetPath.split('/');
+  const targetDir = pathSegments.slice(0, -1).join('/');
+  
+  // Ensure target directory exists
+  ensureTreeDirs(tree, targetDir);
+  
+  // Write the processed content to the tree
+  safeWriteFile(tree, targetPath, content);
+}
+
+/**
+ * Resolve layout import path by probing existing files
+ * Priority: layouts/ directory, then components/ directory
+ */
+function resolveLayoutImport(tree: Tree, projectName: string, layoutName: string, currentDir: string): { importPath: string; resolvedPath: string } | null {
+  if (!layoutName) {
+    return null;
+  }
+
+  const projectPaths = getProjectPaths(tree, projectName);
+  
+  // Try layouts directory first
+  const layoutsPath = buildPath(projectPaths.layoutsDir, `${layoutName}.astro`);
+  if (tree.exists(layoutsPath)) {
+    // Calculate relative path from current directory to layouts directory
+    const relativePath = calculateRelativePath(currentDir, projectPaths.layoutsDir);
+    return {
+      importPath: buildPath(relativePath, `${layoutName}.astro`),
+      resolvedPath: layoutsPath
+    };
+  }
+  
+  // Try components directory as fallback
+  const componentsPath = buildPath(projectPaths.componentsDir, `${layoutName}.astro`);
+  if (tree.exists(componentsPath)) {
+    // Calculate relative path from current directory to components directory
+    const relativePath = calculateRelativePath(currentDir, projectPaths.componentsDir);
+    return {
+      importPath: buildPath(relativePath, `${layoutName}.astro`),
+      resolvedPath: componentsPath
+    };
+  }
+  
+  // If layout doesn't exist, return default path (layouts directory)
+  const relativePath = calculateRelativePath(currentDir, projectPaths.layoutsDir);
+  return {
+    importPath: buildPath(relativePath, `${layoutName}.astro`),
+    resolvedPath: layoutsPath
   };
 }
 
-function addFiles(tree: Tree, options: ReturnType<typeof normalizeOptions>) {
-  let content: string;
+/**
+ * Calculate relative path from source directory to target directory
+ */
+function calculateRelativePath(from: string, to: string): string {
+  // Simple relative path calculation
+  const fromParts = from.split('/');
+  const toParts = to.split('/');
   
-  // Generate content based on extension
-  switch (options.ext) {
-    case 'astro':
-      content = generateAstroPageContent(options);
-      break;
-    case 'md':
-    case 'mdx':
-    case 'adoc':
-    case 'mdoc':
-      content = generateContentPageContent(options);
-      break;
-    default:
-      throw new Error(`Unsupported extension: ${options.ext}`);
+  // Find common base
+  let commonLength = 0;
+  while (commonLength < fromParts.length && commonLength < toParts.length && fromParts[commonLength] === toParts[commonLength]) {
+    commonLength++;
   }
   
-  // Ensure target directory exists using helper
-  const pagesBase = join(options.projectRoot, 'src', 'pages');
-  const targetDir = options.directory ? join(pagesBase, options.directory) : pagesBase;
+  // Calculate path
+  const upDirs = fromParts.length - commonLength;
+  const relativeParts = [];
   
-  ensureTreeDirs(tree, targetDir);
+  // Go up directories
+  for (let i = 0; i < upDirs; i++) {
+    relativeParts.push('..');
+  }
   
-  // Create the target file path
-  const targetPath = join(targetDir, options.fileName);
+  // Add remaining target path parts
+  relativeParts.push(...toParts.slice(commonLength));
   
-  // Write the processed content to the tree
-  tree.write(targetPath, content);
+  return relativeParts.join('/');
 }
 
 function convertPascalCaseToSpaced(pascalCase: string): string {
@@ -126,96 +183,5 @@ function convertPascalCaseToSpaced(pascalCase: string): string {
     .trim();
 }
 
-function generateFrontmatter(options: ReturnType<typeof normalizeOptions>): string {
-  const lines = ['---'];
-  
-  // Add layout if specified
-  if (options.layout) {
-    lines.push(`layout: '${options.layout}'`);
-  }
-  
-  // Add title
-  lines.push(`title: '${options.title}'`);
-  
-  // Add description if provided
-  if (options.description) {
-    lines.push(`description: '${options.description}'`);
-  }
-  
-  // Add additional frontmatter properties
-  Object.entries(options.frontmatter).forEach(([key, value]) => {
-    if (key !== 'title' && key !== 'description') { // Avoid duplicates
-      lines.push(`${key}: ${JSON.stringify(value)}`);
-    }
-  });
-  
-  lines.push('---');
-  return lines.join('\n');
-}
 
-function generateAstroPageContent(options: ReturnType<typeof normalizeOptions>): string {
-  const frontmatter = generateFrontmatter(options);
-  
-  if (options.layout) {
-    return `${frontmatter}
 
-<main>
-  <h1>${options.title}</h1>
-  <p>Welcome to your new Astro page!</p>
-</main>
-`;
-  } else {
-    return `${frontmatter}
-
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>${options.title}</title>
-  </head>
-  <body>
-    <main>
-      <h1>${options.title}</h1>
-      <p>Welcome to your new Astro page!</p>
-    </main>
-  </body>
-</html>
-`;
-  }
-}
-
-function generateContentPageContent(options: ReturnType<typeof normalizeOptions>): string {
-  const frontmatter = generateFrontmatter(options);
-  
-  let contentHeader: string;
-  let contentFooter: string;
-  
-  switch (options.ext) {
-    case 'adoc':
-      contentHeader = `= ${options.title}`;
-      contentFooter = 'Write your AsciiDoc content here...';
-      break;
-    case 'mdx':
-      contentHeader = `# ${options.title}`;
-      contentFooter = 'Write your MDX content here...\n\nYou can use JSX components in this file!';
-      break;
-    case 'mdoc':
-      contentHeader = `# ${options.title}`;
-      contentFooter = 'Write your Markdoc content here...\n\nYou can use Markdoc tags and components!';
-      break;
-    case 'md':
-    default:
-      contentHeader = `# ${options.title}`;
-      contentFooter = 'Write your content here...';
-      break;
-  }
-  
-  return `${frontmatter}
-
-${contentHeader}
-
-${contentFooter}
-`;
-}

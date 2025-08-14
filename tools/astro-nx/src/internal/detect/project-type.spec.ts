@@ -1,4 +1,4 @@
-import { getProjectType, getDefaultContentExt } from './project-type';
+import { getProjectType, getDefaultContentExt, clearDetectionCache } from './project-type';
 import { existsSync, readFileSync } from 'fs';
 
 // Mock fs module
@@ -10,6 +10,7 @@ const mockReadFileSync = vi.mocked(readFileSync);
 describe('Project Type Detection', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    clearDetectionCache(); // Clear detection cache between tests
   });
 
   describe('getProjectType', () => {

@@ -9,7 +9,10 @@
   },
   "type": "module",
   "scripts": {
-    "build": "tsup --outDir ../../dist/packages/utilities"
+    "build": "tsup --outDir ../../dist/packages/utilities",
+    "test": "vitest",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage"
   },
   "exports": {
     ".": {

@@ -25,37 +25,21 @@ Description:
 • Replace '+' with proper path.sep usage
 ====
 
-[CAUTION]
-.TemplateFileSystemDependency
-====
-
-File: src/generators/component/generator.ts
-Function: generateComponent
-Description:
-• Uses readFileSync to read template files during generation
-• Template path resolution may fail in different build contexts
-• Should embed templates or use more robust path resolution
-====
 
 == Refactors
 
 [WARNING]
 .ValidationLogicScattering
 ====
+✅ COMPLETED: Refactored generators to use shared workflow helper
 
-File: src/executors/build/executor.ts
-Function: runExecutor
+File: src/internal/generate/workflow.ts
+Function: runGeneratorWorkflow, normalizeBaseOptions, resolveTargetPath
 Description:
-• Validation logic scattered across multiple executor files
-• Each executor implements similar validation patterns
-• Create shared validation orchestrator utility
-====
-
-File: src/executors/dev/executor.ts
-Function: runExecutor
-Description:
-• Duplicate validation patterns from build executor
-• Should use common validation workflow
+• Created shared generator workflow with standardized validation
+• Consolidated path resolution logic across generators
+• Added idempotent behavior with overwrite flag support
+• Component and page generators now use shared workflow
 ====
 
 [WARNING]

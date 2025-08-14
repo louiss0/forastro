@@ -1,6 +1,6 @@
 import { join } from 'path';
 import { writeFileSync, mkdirSync, rmSync, existsSync } from 'fs';
-import { findAstroConfig, readAstroConfig, readIntegrations } from './config';
+import { findAstroConfig, readAstroConfig, readIntegrations, clearConfigCache } from './config';
 
 describe('Astro Config Detection', () => {
   const tempDir = join(__dirname, 'temp-test');
@@ -10,6 +10,7 @@ describe('Astro Config Detection', () => {
       rmSync(tempDir, { recursive: true, force: true });
     }
     mkdirSync(tempDir, { recursive: true });
+    clearConfigCache(); // Clear config cache between tests
   });
   
   afterEach(() => {
@@ -111,9 +112,15 @@ export default defineConfig({
       expect(result.contentDir).toBe('src/content');
     });
     
-    test('should return empty config when no file exists', () => {
+    test('should return default config when no file exists', () => {
       const result = readAstroConfig(tempDir);
-      expect(result).toEqual({});
+      expect(result).toEqual({
+        integrations: [],
+        contentDir: 'src/content',
+        site: undefined,
+        base: undefined,
+        outDir: undefined,
+      });
     });
   });
   

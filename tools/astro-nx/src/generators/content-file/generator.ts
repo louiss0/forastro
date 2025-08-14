@@ -2,13 +2,24 @@ import type {
   Tree,
   GeneratorCallback,
 } from '@nx/devkit';
-import {
-  formatFiles,
-  names,
-  runTasksInSerial,
-} from '@nx/devkit';
-import { join } from 'path';
+import { names, formatFiles, runTasksInSerial } from '@nx/devkit';
 import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
+import { safeWriteFile } from '../../internal/fs/tree-ops.js';
+import { getTemplateByExtension } from '../../internal/templates/index.js';
+import { buildPath } from '../../internal/generate/paths.js';
+import { getDefaultContentExt } from '../../internal/detect/project-type.js';
+import { getProjectPaths } from '../../internal/detect/config.js';
+import {
+  validateNonEmptyString,
+  validateProjectExists,
+  validateEnum,
+} from '../../internal/validate/options.js';
+import {
+  runGeneratorWorkflow,
+  type BaseGeneratorOptions,
+  type GeneratorWorkflowConfig,
+  type NormalizedBaseOptions,
+} from '../../internal/generate/workflow.js';
 
 export interface ContentFileGeneratorSchema {
   name: string;
@@ -16,6 +27,11 @@ export interface ContentFileGeneratorSchema {
   collection?: string;
   directory?: string;
   title?: string;
+  description?: string;
+  author?: string;
+  tags?: string[];
+  date?: string;
+  draft?: boolean;
   ext?: 'md' | 'mdx' | 'mdoc' | 'adoc';
   frontmatter?: Record<string, unknown>;
   skipFormat?: boolean;
@@ -25,6 +41,12 @@ export interface ContentFileGeneratorSchema {
 
 export default async function (tree: Tree, options: ContentFileGeneratorSchema) {
   const tasks: GeneratorCallback[] = [];
+  
+  // Apply standardized validations first
+  validateNonEmptyString(options.name, 'name');
+  validateNonEmptyString(options.project, 'project');
+  validateProjectExists(tree, options.project);
+  validateEnum(options.ext, ['md', 'mdx', 'mdoc', 'adoc'] as const, 'ext');
   
   const normalizedOptions = normalizeOptions(tree, options);
   addFiles(tree, normalizedOptions);
@@ -41,49 +63,56 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
   const className = names(options.name).className;
   const projectName = options.project;
   
-  // Use hardcoded project root pattern (following component generator pattern)
-  const projectRoot = `apps/${projectName}`;
+  // Get project paths using Nx configuration - eliminates hardcoded 'apps/' assumption
+  const projectPaths = getProjectPaths(tree, projectName);
   
   // Use extension detection based on package.json or default to md
-  const ext = options.ext || detectExtensionFromDependencies(tree, projectRoot);
+  let ext: string;
+  if (options.ext) {
+    ext = options.ext;
+  } else {
+    const defaultExt = getDefaultContentExt(projectPaths.root);
+    // Remove the dot from the extension returned by getDefaultContentExt
+    ext = defaultExt.startsWith('.') ? defaultExt.slice(1) : defaultExt;
+  }
   
   // Determine file path - simplified logic
   let targetDir: string;
   
   if (options.collection) {
     // Use content collections structure
-    targetDir = join('src/content', options.collection);
+    targetDir = buildPath(projectPaths.contentDir, options.collection);
   } else if (options.directory) {
-    // Use custom directory
-    targetDir = options.directory;
+    // Use custom directory - build relative to project root
+    targetDir = buildPath(projectPaths.root, options.directory);
   } else {
     // Default fallback - use src/content
-    targetDir = 'src/content';
+    targetDir = projectPaths.contentDir;
   }
   
   // Determine title from provided title or derive from name
   const title = options.title || names(options.name).className.replace(/([A-Z])/g, ' $1').trim();
   
-  // Extract custom frontmatter from options (excluding the known generator options)
-  const knownOptions = ['name', 'project', 'collection', 'directory', 'title', 'ext', 'frontmatter', 'skipFormat'];
-  const customFrontmatter: Record<string, unknown> = {};
-  
-  // Extract any additional properties as frontmatter
-  Object.keys(options).forEach(key => {
-    if (!knownOptions.includes(key)) {
-      customFrontmatter[key] = options[key];
-    }
-  });
+  // Extract frontmatter fields from schema and options
+  const frontmatterData: Record<string, unknown> = {
+    title,
+    ...(options.description && { description: options.description }),
+    ...(options.author && { author: options.author }),
+    ...(options.tags && { tags: options.tags }),
+    ...(options.date && { date: options.date }),
+    ...(options.draft !== undefined && { draft: options.draft }),
+    ...options.frontmatter
+  };
   
   // Create frontmatter presets based on file extension
-  const frontmatterPreset = getFrontmatterPreset(ext, { title, ...customFrontmatter, ...options.frontmatter });
+  const frontmatterPreset = getFrontmatterPreset(ext, frontmatterData);
   
   return {
     ...options,
     name,
     className,
     projectName,
-    projectRoot,
+    projectRoot: projectPaths.root,
     ext,
     targetDir,
     frontmatter: frontmatterPreset,
@@ -91,37 +120,6 @@ function normalizeOptions(tree: Tree, options: ContentFileGeneratorSchema) {
   };
 }
 
-function detectExtensionFromDependencies(tree: Tree, projectRoot: string): 'md' | 'mdx' | 'mdoc' | 'adoc' {
-  const packageJsonPath = join(projectRoot, 'package.json');
-  
-  if (tree.exists(packageJsonPath)) {
-    try {
-      const packageJsonContent = tree.read(packageJsonPath, 'utf-8');
-      const packageJson = JSON.parse(packageJsonContent);
-      
-      const dependencies = { ...packageJson.dependencies, ...packageJson.devDependencies };
-      
-      // Check for MDX integration
-      if (dependencies['@astrojs/mdx'] || dependencies['mdx']) {
-        return 'mdx';
-      }
-      
-      // Check for other integrations
-      if (dependencies['@astrojs/markdoc']) {
-        return 'mdoc';
-      }
-      
-      if (dependencies['@astrojs/asciidoc'] || dependencies['astro-asciidoc']) {
-        return 'adoc';
-      }
-    } catch {
-      // If we can't read package.json, fall back to markdown
-    }
-  }
-  
-  // Default to markdown
-  return 'md';
-}
 
 function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, unknown>): Record<string, unknown> {
   // Always include at least a title - this is the minimum requirement
@@ -177,142 +175,28 @@ function getFrontmatterPreset(ext: string, customFrontmatter?: Record<string, un
 }
 
 function addFiles(tree: Tree, options: ReturnType<typeof normalizeOptions>) {
-  const content = generateContentByExtension(options.ext, options);
-  const targetPath = join(options.projectRoot, options.targetDir, `${options.name}.${options.ext}`);
+  // Prepare template options
+  const templateOptions = {
+    title: options.frontmatter['title'] as string,
+    description: options.frontmatter['description'] as string,
+    author: options.frontmatter['author'] as string,
+    tags: options.frontmatter['tags'] as string[],
+    pubDate: options.frontmatter['pubDate'] as string,
+    frontmatter: options.frontmatter,
+    className: options.className
+  };
+  
+  // Generate content using in-memory templates
+  const content = getTemplateByExtension(options.ext, templateOptions);
+  const targetPath = buildPath(options.targetDir, `${options.name}.${options.ext}`);
   
   // Ensure the target directory exists using helper
-  const targetDirPath = join(options.projectRoot, options.targetDir);
-  ensureTreeDirs(tree, targetDirPath);
+  ensureTreeDirs(tree, options.targetDir);
   
   // Create the content file
-  tree.write(targetPath, content);
+  safeWriteFile(tree, targetPath, content);
 }
 
-function generateContentByExtension(ext: string, options: ReturnType<typeof normalizeOptions>): string {
-  const { frontmatter, className } = options;
-  
-  switch (ext) {
-    case 'md':
-    case 'mdx':
-      return generateMarkdownContent(frontmatter, className, ext === 'mdx');
-    case 'adoc':
-      return generateAsciidocContent(frontmatter, className);
-    case 'mdoc':
-      return generateMarkdocContent(frontmatter, className);
-    default:
-      return generateMarkdownContent(frontmatter, className, false);
-  }
-}
 
-function generateMarkdownContent(frontmatter: Record<string, unknown>, className: string, isMdx: boolean): string {
-  let content = '---\n';
-  
-  // Always include title first
-  content += `title: ${frontmatter['title'] || className}\n`;
-  
-  // Generate other frontmatter (excluding title since we already handled it)
-  Object.entries(frontmatter).forEach(([key, value]) => {
-    if (key === 'title') return; // Skip title as we already handled it
-    
-    // Include all values except null and undefined
-    if (value !== null && value !== undefined) {
-      if (typeof value === 'string') {
-        content += `${key}: ${value}\n`;
-      } else if (Array.isArray(value) && value.length > 0) {
-        const arrayItems = value.map(item => typeof item === 'string' ? item : String(item)).join(', ');
-        content += `${key}: [${arrayItems}]\n`;
-      } else if (typeof value === 'boolean' || typeof value === 'number') {
-        content += `${key}: ${value}\n`;
-      } else if (Array.isArray(value)) {
-        // Handle empty arrays
-        content += `${key}: []\n`;
-      } else {
-        content += `${key}: ${value}\n`;
-      }
-    }
-  });
-  
-  content += '---\n\n';
-  content += `# ${frontmatter['title'] || className}\n\n`;
-  content += `${frontmatter['description'] || `Content for ${className}`}\n\n`;
-  content += 'Write your content here...\n';
-  
-  if (isMdx) {
-    content += '\n{/* Example JSX component usage */}\n';
-    content += '{/* <CustomComponent prop="value" /> */}\n';
-  }
-  
-  return content;
-}
 
-function generateAsciidocContent(frontmatter: Record<string, unknown>, className: string): string {
-  let content = '';
-  
-  // Always include title first as AsciiDoc attribute
-  content += `:title: ${frontmatter['title'] || className}\n`;
-  
-  // Generate other AsciiDoc attributes (excluding title since we already handled it)
-  Object.entries(frontmatter).forEach(([key, value]) => {
-    if (key === 'title') return; // Skip title as we already handled it
-    
-    // Include all values except null and undefined
-    if (value !== null && value !== undefined) {
-      if (Array.isArray(value) && value.length > 0) {
-        content += `:${key}: ${value.join(', ')}\n`;
-      } else if (Array.isArray(value)) {
-        // Handle empty arrays
-        content += `:${key}:\n`;
-      } else {
-        content += `:${key}: ${value}\n`;
-      }
-    }
-  });
-  
-  content += '\n';
-  content += `= ${frontmatter['title'] || frontmatter['doctitle'] || className}\n\n`;
-  content += `${frontmatter['description'] || `Content for ${className}`}\n\n`;
-  content += 'Write your AsciiDoc content here...\n\n';
-  content += '== Section Example\n\n';
-  content += 'This is an example section in AsciiDoc format.\n';
-  
-  return content;
-}
 
-function generateMarkdocContent(frontmatter: Record<string, unknown>, className: string): string {
-  let content = '---\n';
-  
-  // Always include title first
-  content += `title: ${frontmatter['title'] || className}\n`;
-  
-  // Generate other frontmatter (excluding title since we already handled it)
-  Object.entries(frontmatter).forEach(([key, value]) => {
-    if (key === 'title') return; // Skip title as we already handled it
-    
-    // Include all values except null and undefined
-    if (value !== null && value !== undefined) {
-      if (typeof value === 'string') {
-        content += `${key}: ${value}\n`;
-      } else if (Array.isArray(value) && value.length > 0) {
-        const arrayItems = value.map(item => typeof item === 'string' ? item : String(item)).join(', ');
-        content += `${key}: [${arrayItems}]\n`;
-      } else if (typeof value === 'boolean' || typeof value === 'number') {
-        content += `${key}: ${value}\n`;
-      } else if (Array.isArray(value)) {
-        // Handle empty arrays
-        content += `${key}: []\n`;
-      } else {
-        content += `${key}: ${value}\n`;
-      }
-    }
-  });
-  
-  content += '---\n\n';
-  content += `# ${frontmatter['title'] || className}\n\n`;
-  content += `${frontmatter['description'] || `Content for ${className}`}\n\n`;
-  content += 'Write your Markdoc content here...\n\n';
-  content += '{% callout type="note" %}\n';
-  content += 'This is an example Markdoc callout.\n';
-  content += '{% /callout %}\n';
-  
-  return content;
-}

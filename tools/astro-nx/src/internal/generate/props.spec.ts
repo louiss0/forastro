@@ -1,6 +1,10 @@
 import {
   parseProps,
+  parsePropsString,
   emitAstroPropsInterface,
+  generatePropsInterface,
+  formatPropsInterface,
+  extractPropsFromInterface,
   createFrontmatterObject,
   generateComponentImport,
   generateLayoutImport,
@@ -16,8 +20,8 @@ describe('Props Generation', () => {
       const result = parseProps('title:string,count:number');
 
       expect(result).toEqual([
-        { name: 'title', type: 'string' },
-        { name: 'count', type: 'number' }
+        { name: 'title', type: 'string', optional: false },
+        { name: 'count', type: 'number', optional: false }
       ]);
     });
 
@@ -25,7 +29,7 @@ describe('Props Generation', () => {
       const result = parseProps('isVisible:boolean');
 
       expect(result).toEqual([
-        { name: 'isVisible', type: 'boolean' }
+        { name: 'isVisible', type: 'boolean', optional: false }
       ]);
     });
 
@@ -33,8 +37,8 @@ describe('Props Generation', () => {
       const result = parseProps('data:string[],callback:Function');
 
       expect(result).toEqual([
-        { name: 'data', type: 'string[]' },
-        { name: 'callback', type: 'Function' }
+        { name: 'data', type: 'string[]', optional: false },
+        { name: 'callback', type: 'Function', optional: false }
       ]);
     });
 
@@ -42,8 +46,8 @@ describe('Props Generation', () => {
       const result = parseProps(' title : string , count : number ');
 
       expect(result).toEqual([
-        { name: 'title', type: 'string' },
-        { name: 'count', type: 'number' }
+        { name: 'title', type: 'string', optional: false },
+        { name: 'count', type: 'number', optional: false }
       ]);
     });
 
@@ -56,8 +60,8 @@ describe('Props Generation', () => {
       const result = parseProps('title:string,,count:number,');
 
       expect(result).toEqual([
-        { name: 'title', type: 'string' },
-        { name: 'count', type: 'number' }
+        { name: 'title', type: 'string', optional: false },
+        { name: 'count', type: 'number', optional: false }
       ]);
     });
 
@@ -77,7 +81,7 @@ describe('Props Generation', () => {
       const result = parseProps('title:string');
 
       expect(result).toEqual([
-        { name: 'title', type: 'string' }
+        { name: 'title', type: 'string', optional: false }
       ]);
     });
 
@@ -85,7 +89,7 @@ describe('Props Generation', () => {
       const result = parseProps('status:success|error|loading');
 
       expect(result).toEqual([
-        { name: 'status', type: 'success|error|loading' }
+        { name: 'status', type: 'success|error|loading', optional: false }
       ]);
     });
   });
@@ -397,6 +401,244 @@ describe('Props Generation', () => {
       expect(result.directory).toBe('/project/src/utils');
       expect(result.projectName).toBe('my-app');
       expect(result.projectRoot).toBe('/project');
+    });
+  });
+
+  describe('parsePropsString (Enhanced Props Parsing)', () => {
+    test('should handle optional markers', () => {
+      const result = parsePropsString('title:string,description?:string,variant:\'a\'|\'b\'');
+
+      expect(result).toEqual([
+        { name: 'title', type: 'string', optional: false },
+        { name: 'description', type: 'string', optional: true },
+        { name: 'variant', type: '\'a\'|\'b\'', optional: false }
+      ]);
+    });
+
+    test('should handle union types with quotes', () => {
+      const result = parsePropsString('status:\'active\'|\'inactive\',theme:\'light\'|\'dark\'|\'auto\'');
+
+      expect(result).toEqual([
+        { name: 'status', type: '\'active\'|\'inactive\'', optional: false },
+        { name: 'theme', type: '\'light\'|\'dark\'|\'auto\'', optional: false }
+      ]);
+    });
+
+    test('should handle array types', () => {
+      const result = parsePropsString('items:string[],numbers:number[],objects:Array<{id:number}>?');
+
+      expect(result).toEqual([
+        { name: 'items', type: 'string[]', optional: false },
+        { name: 'numbers', type: 'number[]', optional: false },
+        { name: 'objects', type: 'Array<{id:number}>', optional: true }
+      ]);
+    });
+
+    test('should handle complex nested types', () => {
+      const result = parsePropsString('user:{id:number;name:string;profile:{avatar:string;bio?:string}},settings:{theme:"light"|"dark";notifications:boolean}?');
+
+      expect(result).toEqual([
+        { name: 'user', type: '{id:number;name:string;profile:{avatar:string;bio?:string}}', optional: false },
+        { name: 'settings', type: '{theme:"light"|"dark";notifications:boolean}', optional: true }
+      ]);
+    });
+
+    test('should handle simple function types', () => {
+      const result = parsePropsString('callback:Function,onClick?:()=>void');
+
+      expect(result).toEqual([
+        { name: 'callback', type: 'Function', optional: false },
+        { name: 'onClick', type: '()=>void', optional: true }
+      ]);
+    });
+
+    test('should handle generics without internal commas', () => {
+      const result = parsePropsString('data:Array<T>,items:T[],callback?:(item:T)=>void');
+
+      expect(result).toEqual([
+        { name: 'data', type: 'Array<T>', optional: false },
+        { name: 'items', type: 'T[]', optional: false },
+        { name: 'callback', type: '(item:T)=>void', optional: true }
+      ]);
+    });
+
+    test('should handle mixed complex case from task description', () => {
+      const result = parsePropsString('title:string,description?:string,variant:\'a\'|\'b\'');
+
+      expect(result).toEqual([
+        { name: 'title', type: 'string', optional: false },
+        { name: 'description', type: 'string', optional: true },
+        { name: 'variant', type: '\'a\'|\'b\'', optional: false }
+      ]);
+    });
+
+    test('should throw error for invalid syntax', () => {
+      expect(() => parsePropsString('name:')).toThrow();
+      expect(() => parsePropsString(':type')).toThrow();
+    });
+
+    test('should handle edge cases', () => {
+      // Should not throw for this case as it's technically valid (name with '::' as type)
+      const result = parsePropsString('name:::');
+      expect(result).toEqual([
+        { name: 'name', type: '::', optional: false }
+      ]);
+    });
+  });
+
+  describe('generatePropsInterface', () => {
+    test('should generate interface with default name', () => {
+      const props = [
+        { name: 'title', type: 'string', optional: false },
+        { name: 'count', type: 'number', optional: true }
+      ];
+      const result = generatePropsInterface('Props', props);
+
+      expect(result).toBe(`export interface Props {
+  title: string;
+  count?: number;
+}`);
+    });
+
+    test('should generate interface with custom name', () => {
+      const props = [
+        { name: 'label', type: 'string', optional: false }
+      ];
+      const result = generatePropsInterface('ButtonProps', props);
+
+      expect(result).toBe(`export interface ButtonProps {
+  label: string;
+}`);
+    });
+
+    test('should return empty string for no props', () => {
+      const result = generatePropsInterface('Props', []);
+      expect(result).toBe('');
+    });
+
+    test('should handle complex optional props', () => {
+      const props = [
+        { name: 'data', type: 'Array<{id:string;title:string}>', optional: false },
+        { name: 'onSelect', type: '(item:T)=>Promise<void>', optional: true },
+        { name: 'config', type: '{theme:"light"|"dark";debug:boolean}', optional: true }
+      ];
+      const result = generatePropsInterface('ComplexProps', props);
+
+      expect(result).toBe(`export interface ComplexProps {
+  data: Array<{id:string;title:string}>;
+  onSelect?: (item:T)=>Promise<void>;
+  config?: {theme:"light"|"dark";debug:boolean};
+}`);
+    });
+  });
+
+  describe('formatPropsInterface', () => {
+    test('should format basic interface', () => {
+      const input = `interface Props {title: string;count?: number;}`;
+      const result = formatPropsInterface(input);
+
+      expect(result).toBe(`interface Props {
+  title: string;
+  count?: number;
+}`);
+    });
+
+    test('should handle export interface', () => {
+      const input = `export interface ButtonProps {label: string;disabled?: boolean;}`;
+      const result = formatPropsInterface(input);
+
+      expect(result).toBe(`export interface ButtonProps {
+  label: string;
+  disabled?: boolean;
+}`);
+    });
+
+    test('should return empty for empty input', () => {
+      expect(formatPropsInterface('')).toBe('');
+      expect(formatPropsInterface('   ')).toBe('');
+    });
+  });
+
+  describe('extractPropsFromInterface', () => {
+    test('should extract props from basic interface', () => {
+      const interfaceString = `interface Props {
+  title: string;
+  count?: number;
+}`;
+      const result = extractPropsFromInterface(interfaceString);
+
+      expect(result).toEqual([
+        { name: 'title', type: 'string', optional: false },
+        { name: 'count', type: 'number', optional: true }
+      ]);
+    });
+
+    test('should extract props from export interface', () => {
+      const interfaceString = `export interface ButtonProps {
+  label: string;
+  disabled?: boolean;
+  onClick?: () => void;
+}`;
+      const result = extractPropsFromInterface(interfaceString);
+
+      expect(result).toEqual([
+        { name: 'label', type: 'string', optional: false },
+        { name: 'disabled', type: 'boolean', optional: true },
+        { name: 'onClick', type: '() => void', optional: true }
+      ]);
+    });
+
+    test('should return empty array for invalid interface', () => {
+      expect(extractPropsFromInterface('')).toEqual([]);
+      expect(extractPropsFromInterface('not an interface')).toEqual([]);
+      expect(extractPropsFromInterface('interface Props')).toEqual([]);
+    });
+
+    test('should handle complex types', () => {
+      const interfaceString = `interface ComplexProps {
+  data: Array<{id: string; title: string}>;
+  callback?: (item: T) => Promise<void>;
+}`;
+      const result = extractPropsFromInterface(interfaceString);
+
+      expect(result).toEqual([
+        { name: 'data', type: 'Array<{id: string; title: string}>', optional: false },
+        { name: 'callback', type: '(item: T) => Promise<void>', optional: true }
+      ]);
+    });
+  });
+
+  describe('emitAstroPropsInterface with optional props', () => {
+    test('should generate interface with optional markers', () => {
+      const props = [
+        { name: 'title', type: 'string', optional: false },
+        { name: 'subtitle', type: 'string', optional: true },
+        { name: 'count', type: 'number', optional: true }
+      ];
+      const result = emitAstroPropsInterface(props);
+
+      expect(result.interface).toBe(`interface Props {
+  title: string;
+  subtitle?: string;
+  count?: number;
+}`);
+      expect(result.propsExtraction).toBe('const { title, subtitle, count } = Astro.props;');
+    });
+
+    test('should handle mix of required and optional complex types', () => {
+      const props = [
+        { name: 'user', type: '{id:number;name:string}', optional: false },
+        { name: 'onUpdate', type: '(user:User)=>void', optional: true },
+        { name: 'config', type: 'Record<string,unknown>', optional: true }
+      ];
+      const result = emitAstroPropsInterface(props);
+
+      expect(result.interface).toBe(`interface Props {
+  user: {id:number;name:string};
+  onUpdate?: (user:User)=>void;
+  config?: Record<string,unknown>;
+}`);
+      expect(result.propsExtraction).toBe('const { user, onUpdate, config } = Astro.props;');
     });
   });
 });

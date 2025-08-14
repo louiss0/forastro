@@ -28,6 +28,7 @@ export type { PageGeneratorSchema } from './generators/page/generator';
 export type { ComponentGeneratorSchema } from './generators/component/generator';
 export type { ContentFileGeneratorSchema } from './generators/content-file/generator';
 export type { AstroFileGeneratorSchema } from './generators/astro-file/generator';
+export type { AppGeneratorSchema } from './generators/app/generator';
 
 /**
  * Type definitions for executor schemas - useful for programmatic usage

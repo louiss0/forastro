@@ -5,6 +5,7 @@ import { resolveAstroBin } from '../../internal/cli/resolve-bin';
 import { buildArgs } from '../../internal/cli/args';
 import { createLogger } from '../../internal/logging/logger';
 import { createValidator } from '../../internal/validation/validator';
+import { validateNonEmptyString } from '../../internal/validate/options';
 
 export interface DevExecutorSchema {
   port?: number;
@@ -32,6 +33,11 @@ export default async function runExecutor(
   );
 
   try {
+    // Apply standardized validations first
+    if (context.projectName) {
+      validateNonEmptyString(context.projectName, 'project name');
+    }
+    
     // Validate project context
     const projectValidation = validator.validateProject(context);
 

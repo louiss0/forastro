@@ -49,6 +49,27 @@
       "maxLength": 200,
       "x-prompt": "What title would you like for this content?"
     },
+    "description": {
+      "type": "string",
+      "description": "Description for the content file"
+    },
+    "author": {
+      "type": "string",
+      "description": "Author of the content"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Tags for the content"
+    },
+    "date": {
+      "type": "string",
+      "description": "Publication date (optional)"
+    },
+    "draft": {
+      "type": "boolean",
+      "description": "Whether this content is a draft (optional)"
+    },
     "ext": {
       "type": "string",
       "description": "File extension format for the content file",

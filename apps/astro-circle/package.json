@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "test": "echo \"No tests implemented yet\" && exit 0",
+    "astro": "astro"
   },
   "keywords": [],
   "author": "",

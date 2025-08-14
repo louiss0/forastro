@@ -7,12 +7,15 @@ import {
   runTasksInSerial,
   names,
 } from '@nx/devkit';
-import { join } from 'path';
 import componentGenerator from '../component/generator.js';
 import pageGenerator from '../page/generator.js';
 import type { ComponentGeneratorSchema } from '../component/generator.js';
 import type { PageGeneratorSchema } from '../page/generator.js';
 import { ensureTreeDirs } from '../../internal/fs/tree-io.js';
+import { safeWriteFile } from '../../internal/fs/tree-ops.js';
+import { astroFileTemplate } from '../../internal/templates/index.js';
+import { getProjectPaths, buildPath } from '../../internal/generate/paths.js';
+import { validateNonEmptyString, validateProjectExists, validateEnum } from '../../internal/validate/options.js';
 
 export interface AstroFileGeneratorSchema {
   kind?: 'page' | 'component' | 'file';
@@ -31,7 +34,16 @@ export interface AstroFileGeneratorSchema {
 export default async function (tree: Tree, options: AstroFileGeneratorSchema) {
   const tasks: GeneratorCallback[] = [];
   
-  // Validate options first
+  // Apply standardized validations first
+  validateNonEmptyString(options.name, 'name');
+  if (!options.bulk) {
+    validateNonEmptyString(options.project, 'project');
+    validateProjectExists(tree, options.project);
+  }
+  validateEnum(options.kind, ['page', 'component', 'file'] as const, 'kind');
+  validateEnum(options.ext, ['astro', 'md', 'adoc', 'mdx', 'mdoc'] as const, 'ext');
+  
+  // Validate options
   validateOptions(options);
   
   if (options.bulk && options.projects) {
@@ -74,13 +86,6 @@ function validateOptions(options: AstroFileGeneratorSchema): void {
     } else {
       (options as { kind: string }).kind = 'file';
     }
-  }
-  
-  if (!options.name) {
-    throw new Error('name is required');
-  }
-  if (!options.project && !options.bulk) {
-    throw new Error('project is required when not in bulk mode');
   }
   
   // Validate bulk mode requirements
@@ -128,13 +133,15 @@ async function delegateToGenerator(tree: Tree, options: AstroFileGeneratorSchema
 }
 
 function generateAstroFile(tree: Tree, options: AstroFileGeneratorSchema): void {
-  const normalizedOptions = normalizeFileOptions(options);
+  const normalizedOptions = normalizeFileOptions(tree, options);
   createAstroFile(tree, normalizedOptions);
 }
 
-function normalizeFileOptions(options: AstroFileGeneratorSchema) {
+function normalizeFileOptions(tree: Tree, options: AstroFileGeneratorSchema) {
   const projectName = options.project;
-  const projectRoot = `apps/${projectName}`;
+  
+  // Get project paths using Nx configuration - eliminates hardcoded 'apps/' assumption
+  const projectPaths = getProjectPaths(tree, projectName);
   
   // Determine the extension (default to .astro)
   const ext = options.ext || 'astro';
@@ -148,22 +155,22 @@ function normalizeFileOptions(options: AstroFileGeneratorSchema) {
   let targetDirectory: string;
   if (options.destination) {
     // Use provided destination relative to src
-    targetDirectory = join(projectRoot, 'src', options.destination);
+    targetDirectory = buildPath(projectPaths.srcRoot, options.destination);
   } else if (options.directory) {
     // Use directory option, default to pages if not specified
-    targetDirectory = join(projectRoot, 'src', 'pages', options.directory);
+    targetDirectory = buildPath(projectPaths.pagesDir, options.directory);
   } else {
     // Default to pages directory
-    targetDirectory = join(projectRoot, 'src', 'pages');
+    targetDirectory = projectPaths.pagesDir;
   }
   
   // Combine with name-based directory if present
   if (nameDirectory) {
-    targetDirectory = join(targetDirectory, nameDirectory);
+    targetDirectory = buildPath(targetDirectory, nameDirectory);
   }
   
   const fullFileName = `${fileName}.${ext}`;
-  const filePath = join(targetDirectory, fullFileName);
+  const filePath = buildPath(targetDirectory, fullFileName);
   
   // Generate a readable title from the filename
   const title = convertPascalCaseToSpaced(names(fileName).className);
@@ -171,7 +178,7 @@ function normalizeFileOptions(options: AstroFileGeneratorSchema) {
   return {
     ...options,
     projectName,
-    projectRoot,
+    projectRoot: projectPaths.root,
     targetDirectory,
     fileName,
     fullFileName,
@@ -189,89 +196,23 @@ function createAstroFile(tree: Tree, options: ReturnType<typeof normalizeFileOpt
   const content = generateFileContent(options);
   
   // Write the file
-  tree.write(options.filePath, content);
+  safeWriteFile(tree, options.filePath, content);
 }
 
 function generateFileContent(options: ReturnType<typeof normalizeFileOptions>): string {
-  const needsFrontmatter = options.ext === 'astro' || shouldIncludeFrontmatter(options);
+  const templateOptions = {
+    title: options.title,
+    ext: options.ext,
+    isPage: false,
+    minimalFrontmatter: options.minimalFrontmatter !== false
+  };
   
-  if (options.ext === 'astro') {
-    return generateAstroContent(options, needsFrontmatter);
-  } else {
-    return generateMarkupContent(options, needsFrontmatter);
-  }
+  return astroFileTemplate(templateOptions);
 }
 
-function shouldIncludeFrontmatter(options: ReturnType<typeof normalizeFileOptions>): boolean {
-  // Include frontmatter only when needed and not explicitly disabled
-  if (options.minimalFrontmatter === false) {
-    return false;
-  }
-  
-  // For markup files, include frontmatter only if it adds value
-  return ['md', 'mdx', 'adoc', 'mdoc'].includes(options.ext);
-}
 
-function generateAstroContent(options: ReturnType<typeof normalizeFileOptions>, includeFrontmatter: boolean): string {
-  const frontmatter = includeFrontmatter ? generateMinimalFrontmatter(options) : '';
-  
-  const content = `${frontmatter ? frontmatter + '\n\n' : ''}<!-- ${options.title} -->
-<div>
-  <h1>${options.title}</h1>
-  <p>Your Astro content goes here.</p>
-</div>
-`;
-  
-  return content;
-}
 
-function generateMarkupContent(options: ReturnType<typeof normalizeFileOptions>, includeFrontmatter: boolean): string {
-  const frontmatter = includeFrontmatter ? generateMinimalFrontmatter(options) : '';
-  
-  let contentHeader: string;
-  let contentBody: string;
-  
-  switch (options.ext) {
-    case 'adoc':
-      contentHeader = `= ${options.title}`;
-      contentBody = 'Your AsciiDoc content goes here.';
-      break;
-    case 'mdx':
-      contentHeader = `# ${options.title}`;
-      contentBody = 'Your MDX content goes here.\n\nYou can use JSX components in this file!';
-      break;
-    case 'mdoc':
-      contentHeader = `# ${options.title}`;
-      contentBody = 'Your Markdoc content goes here.\n\nYou can use Markdoc tags and components!';
-      break;
-    case 'md':
-    default:
-      contentHeader = `# ${options.title}`;
-      contentBody = 'Your content goes here.';
-      break;
-  }
-  
-  return `${frontmatter ? frontmatter + '\n\n' : ''}${contentHeader}\n\n${contentBody}\n`;
-}
 
-function generateMinimalFrontmatter(options: ReturnType<typeof normalizeFileOptions>): string {
-  // Only include frontmatter when it adds meaningful value
-  if (options.minimalFrontmatter === false) {
-    return '';
-  }
-  
-  const lines = ['---'];
-  
-  // Only add title if it's meaningful (not just a converted filename)
-  if (options.title && options.title !== names(options.fileName).className) {
-    lines.push(`title: '${options.title}'`);
-  }
-  
-  lines.push('---');
-  
-  // Only return frontmatter if it contains more than just the delimiters
-  return lines.length > 2 ? lines.join('\n') : '';
-}
 
 function convertPascalCaseToSpaced(pascalCase: string): string {
   return pascalCase
