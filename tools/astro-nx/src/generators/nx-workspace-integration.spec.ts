@@ -368,8 +368,8 @@ describe('Nx Workspace Integration Tests', () => {
       expect(tree.exists('apps/workspace-test-app/src/content/blog/first-post.md')).toBe(true);
       
       const contentFile = tree.read('apps/workspace-test-app/src/content/blog/first-post.md', 'utf-8');
-      expect(contentFile).toContain('title: My First Post');
-      expect(contentFile).toContain('description: Welcome to my blog');
+      expect(contentFile).toContain("title: 'My First Post'");
+      expect(contentFile).toContain("description: 'Welcome to my blog'");
     });
   });
 

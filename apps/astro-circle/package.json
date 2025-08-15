@@ -17,6 +17,9 @@
   "dependencies": {
     "astro": "^5.8.1",
     "astro-icon": "^1.1.5",
-    "unocss": "^66.1.2"
+    "unocss": "^66.1.2",
+    "@unocss/reset": "^66.1.2",
+    "@fontsource/palanquin": "^5.0.0",
+    "@fontsource/raleway": "^5.0.0"
   }
 }

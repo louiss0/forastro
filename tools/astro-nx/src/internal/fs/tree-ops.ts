@@ -59,7 +59,8 @@ export function safeWriteFile(
 
   // Check if file already exists
   if (tree.exists(filePath) && !overwrite) {
-    throw new Error(`File "${filePath}" already exists. Use overwrite: true to replace it.`);
+    // Match test suite's expected error wording
+    throw new Error(`File already exists at "${filePath}". Use --overwrite to replace it.`);
   }
 
   // Ensure the parent directory exists

@@ -3,13 +3,10 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/my-site/src",
+  "tags": ["type:app", "scope:my-site"],
   "targets": {
     "dev": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "astro dev",
-        "cwd": "apps/my-site"
-      }
+      "executor": "@forastro/astro-nx:dev"
     },
     "build": {
       "executor": "nx:run-commands",
@@ -19,10 +16,13 @@
       }
     },
     "preview": {
-      "executor": "nx:run-commands",
+      "executor": "@forastro/astro-nx:preview"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "command": "astro preview",
-        "cwd": "apps/my-site"
+        "lintFilePatterns": ["apps/my-site/**/*.{js,ts,astro}"]
       }
     },
     "check": {

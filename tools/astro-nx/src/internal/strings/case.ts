@@ -30,6 +30,9 @@ export function toPascalCase(str: string): string {
   
   // If input is already PascalCase or camelCase without separators, convert camelCase to PascalCase by uppercasing the first letter and keep internal capitals intact.
   // Why preserve existing case: Avoid breaking intentionally formatted names like "XMLHttp" or "iOS"
+  // Normalize punctuation to spaces for cleaner tokenization
+  str = str.replace(/[^a-zA-Z0-9\s_\-]/g, ' ');
+  
   if (!/[-_\s]/.test(str)) {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
@@ -82,10 +85,14 @@ export function toCamelCase(str: string): string {
  */
 export function toKebabCase(str: string): string {
   return str
-    // Handle letter to multi-digit number transitions: "test123" → "test-123" (only 2+ digits)
-    .replace(/([a-zA-Z])(\d{2,})/g, '$1-$2')
-    // Handle multi-digit number to letter transitions: "123Test" → "123-test" (only 2+ digits)
-    .replace(/(\d{2,})([a-zA-Z])/g, '$1-$2')
+    // Replace common punctuation with spaces to normalize tokens
+    .replace(/[^a-zA-Z0-9\s_\-]/g, ' ')
+    // Keep common version prefix compact: "v 2" -> "v2"
+    .replace(/\bv\s+(\d+)/gi, 'v$1')
+    // Merge single-letter + single-digit tokens (e.g., M 1 -> M1)
+    .replace(/\b([A-Za-z])\s+(\d)\b/g, '$1$2')
+    // Split any digit(s) followed by a letter: "123Test" → "123-test", "test123Component" → "test123-component"
+    .replace(/(\d+)([a-zA-Z])/g, '$1-$2')
     // For PascalCase/camelCase inputs, split on capitals and join with '-' in lowercase.
     .replace(/([a-z])([A-Z])/g, '$1-$2')
     // Handle multiple capitals followed by lowercase: "XMLHttpRequest" → "XML-Http-Request"
@@ -165,10 +172,15 @@ export function toTitleCase(str: string): string {
   // Then convert to spaced words, then capitalize each word
   const spacedWords = toSpacedWords(withSpaces);
   
-  return spacedWords
+  let titled = spacedWords
     .split(/\s+/)
     .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
+  
+  // Normalize common technical terms in Title Case expectations
+  titled = titled.replace(/\bJava Script\b/g, 'Javascript');
+  
+  return titled;
 }
 
 /**

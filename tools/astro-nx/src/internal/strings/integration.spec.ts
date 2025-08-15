@@ -53,7 +53,11 @@ describe('String Utilities Integration', () => {
       for (const input of testCases) {
         const slug = slugify(input);
         expect(isValidSlug(slug)).toBe(true);
-        expect(slug).toBe('my-component' + (input === 'Component123Test' ? '-123-test' : ''));
+        if (input === 'Component123Test') {
+          expect(slug).toBe('component-123-test');
+        } else {
+          expect(slug).toBe('my-component');
+        }
       }
     });
 

@@ -5,11 +5,7 @@
   "sourceRoot": "apps/blog/src",
   "targets": {
     "dev": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "astro dev",
-        "cwd": "apps/blog"
-      }
+      "executor": "@forastro/astro-nx:dev"
     },
     "build": {
       "executor": "nx:run-commands",
@@ -19,11 +15,7 @@
       }
     },
     "preview": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "astro preview",
-        "cwd": "apps/blog"
-      }
+      "executor": "@forastro/astro-nx:preview"
     },
     "lint": {
       "executor": "@nx/eslint:lint",

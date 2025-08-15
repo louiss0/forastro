@@ -101,7 +101,7 @@ function generatePage(
   ensureTreeDirs(tree, targetDir);
   
   // Write the processed content to the tree
-  safeWriteFile(tree, targetPath, content);
+  safeWriteFile(tree, targetPath, content, { overwrite: options.overwrite === true });
 }
 
 /**

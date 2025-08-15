@@ -140,7 +140,7 @@ describe('tree-ops', () => {
       // Should throw when trying to overwrite without permission
       expect(() => {
         safeWriteFile(tree, filePath, newContent);
-      }).toThrow('File "apps/test/existing.astro" already exists. Use overwrite: true to replace it.');
+      }).toThrow('File already exists at "apps/test/existing.astro". Use --overwrite to replace it.');
       
       // Original content should remain unchanged
       expect(tree.read(filePath)?.toString()).toBe(originalContent);
@@ -155,7 +155,7 @@ describe('tree-ops', () => {
       
       expect(() => {
         safeWriteFile(tree, filePath, newContent, { overwrite: false });
-      }).toThrow('File "apps/test/existing.astro" already exists. Use overwrite: true to replace it.');
+      }).toThrow('File already exists at "apps/test/existing.astro". Use --overwrite to replace it.');
     });
 
     it('should overwrite when target exists and overwrite is true', () => {

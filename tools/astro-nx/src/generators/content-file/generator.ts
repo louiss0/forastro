@@ -8,7 +8,7 @@ import { safeWriteFile } from '../../internal/fs/tree-ops.js';
 import { getTemplateByExtension } from '../../internal/templates/index.js';
 import { buildPath } from '../../internal/generate/paths.js';
 import { getDefaultContentExt } from '../../internal/detect/project-type.js';
-import { getProjectPaths } from '../../internal/detect/config.js';
+import { getProjectPaths } from '../../internal/generate/paths.js';
 import {
   validateNonEmptyString,
   validateProjectExists,
@@ -194,7 +194,7 @@ function addFiles(tree: Tree, options: ReturnType<typeof normalizeOptions>) {
   ensureTreeDirs(tree, options.targetDir);
   
   // Create the content file
-  safeWriteFile(tree, targetPath, content);
+  safeWriteFile(tree, targetPath, content, { overwrite: (options as any).overwrite === true });
 }
 
 

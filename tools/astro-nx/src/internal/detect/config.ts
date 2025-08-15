@@ -1,5 +1,7 @@
 import { existsSync, readFileSync, readdirSync } from 'fs';
 import { join } from 'path';
+// Re-exports for test compatibility: some tests mock getProjectPaths from this module
+export { getProjectPaths, getProjectFilePath } from '../generate/paths';
 
 export interface AstroConfig {
   site?: string;

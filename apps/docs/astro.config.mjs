@@ -6,6 +6,9 @@ import markdoc from '@astrojs/markdoc';
 
 // https://astro.build/config
 export default defineConfig({
+  image: {
+    service: { entrypoint: 'astro/assets/services/noop' },
+  },
   site: "https://forastro-docs.onrender.com",
   integrations: [
     starlight({

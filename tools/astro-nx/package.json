@@ -32,7 +32,6 @@
   "homepage": "https://github.com/louiss0/forastro#readme",
   "peerDependencies": {
     "@nx/devkit": "^21.0.0",
-    "dotenv": ">=16.0.0",
     "vitest": ">=1.0.0"
   },
   "dependencies": {

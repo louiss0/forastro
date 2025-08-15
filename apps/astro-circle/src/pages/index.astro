@@ -103,13 +103,14 @@ const [DefineDownloadButtonTemplate, DownloadButtonProjector] =
       <p class="text-xl leading-relaxed max-w-[65ch]">
         When using this component the name of the slot will render the icon in
         the following places. <br />
-        <Fragment
-          set:html={iterate(
-            DIRECTIONS,
-            (value) =>
-              `The ${value} slot will render the component in the ${value} side. <br/>`,
-          )}
-        />
+        {
+          iterate(DIRECTIONS, (value) => (
+            <>
+              The {value} slot will render the component in the {value} side.
+              <br />
+            </>
+          ))
+        }
       </p>
     </div>
   </header>

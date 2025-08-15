@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          run_install: false
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Print nx version
+        run: pnpm nx --version
+
+      - name: Lint (affected, exclude astro-nx)
+        run: pnpm nx affected -t lint --parallel --exclude=astro-nx
+
+      - name: Test (affected, exclude astro-nx)
+        run: pnpm nx affected -t test --parallel --exclude=astro-nx
+
+      - name: Astro check (affected)
+        run: pnpm nx affected -t check --parallel
+
+      - name: Build (affected)
+        run: pnpm nx affected -t build --parallel

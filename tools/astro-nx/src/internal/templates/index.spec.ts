@@ -68,7 +68,8 @@ describe('Template Factories', () => {
       const result = pageAstroTemplate();
       
       expect(result).toContain('---');
-      expect(result).toContain('const title = \'Sample Astro Page\'');
+      expect(result).toContain("title: 'Sample Astro Page'");
+      expect(result).toContain("description: 'This is a sample Astro page template'");
       expect(result).toContain('<html lang="en">');
       expect(result).toContain('<title>{title}</title>');
       expect(result).toContain('<h1>{title}</h1>');

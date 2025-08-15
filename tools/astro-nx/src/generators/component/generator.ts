@@ -79,7 +79,7 @@ function generateComponent(
   ensureTreeDirs(tree, targetDir);
   
   // Write the component file
-  safeWriteFile(tree, targetPath, componentContent);
+  safeWriteFile(tree, targetPath, componentContent, { overwrite: options.overwrite === true });
 }
 
 

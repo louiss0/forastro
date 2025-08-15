@@ -63,14 +63,21 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "tools/astro-nx/src/**/*.{ts,tsx}",
+          "tools/astro-nx/**/*.json"
+        ]
+      }
     },
     "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "executor": "nx:run-commands",
       "options": {
-        "reportsDirectory": "../../coverage/tools/astro-nx"
-      }
+        "command": "pnpm vitest --config tools/astro-nx/vitest.config.ts run",
+        "cwd": "."
+      },
+      "outputs": ["{workspaceRoot}/coverage/tools/astro-nx"]
     }
   }
 }

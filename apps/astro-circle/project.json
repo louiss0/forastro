@@ -4,13 +4,16 @@
   "projectType": "application",
   "sourceRoot": "apps/astro-circle/src",
   "tags": [
-    "astro:astro-circle"
+    "astro:astro-circle",
+    "type:app",
+    "scope:astro-circle"
   ],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec astro --root apps/astro-circle build"
+        "command": "astro build",
+        "cwd": "apps/astro-circle"
       }
     },
     "add": {
@@ -26,16 +29,26 @@
       }
     },
     "lint": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "command": "pnpm exec astro --root apps/astro-circle check"
+        "lintFilePatterns": ["apps/astro-circle/**/*.{js,ts,astro}"]
       }
     },
-    "dev": {
+    "check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm exec astro --root apps/astro-circle dev"
-      }
+        "command": "astro check",
+        "cwd": "apps/astro-circle"
+      },
+      "cache": true,
+      "outputs": ["{projectRoot}/.astro-check"]
+    },
+    "dev": {
+      "executor": "@forastro/astro-nx:dev"
+    },
+    "preview": {
+      "executor": "@forastro/astro-nx:preview"
     }
   }
 }

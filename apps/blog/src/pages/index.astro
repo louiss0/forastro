@@ -1,15 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import { getCollection } from 'astro:content';
+import { getCollection, type CollectionEntry } from 'astro:content';
 
-const posts = (await getCollection('blog'))
-  .filter(p => !p.data.draft)
-  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const posts = (await getCollection('blog') as CollectionEntry<'blog'>[])
+  .filter((p: CollectionEntry<'blog'>) => !p.data.draft)
+  .sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 ---
 <BaseLayout title="ForAstro Blog">
   <main>
     <h1>Blog</h1>
-    {posts.map((p) => <PostCard entry={p} />)}
+{posts.map((p: import('astro:content').CollectionEntry<'blog'>) => <PostCard entry={p} />)}
   </main>
 </BaseLayout>
