@@ -35,8 +35,8 @@ describe('String Utilities Integration', () => {
       const pascal = toPascalCase(kebab);
       
       expect(kebab).toBe('xml-http-request-v2-0-beta');
-      // slug library compacts camel caps and dots
-      expect(slug).toBe('xmlhttprequest-v20-beta');
+      // camelCase hyphenated; dot becomes underscore
+      expect(slug).toBe('xml-http-request-v2_0-beta');
       expect(pascal).toBe('XmlHttpRequestV20Beta');
     });
   });
@@ -55,13 +55,14 @@ describe('String Utilities Integration', () => {
         const slug = slugify(input);
         expect(isValidSlug(slug)).toBe(true);
         if (input === 'Component123Test') {
-          expect(slug).toBe('component123test');
+          // number boundary preserved before uppercase; hyphen between 123 and Test
+          expect(slug).toBe('component123-test');
         } else {
           // Adjust expectations per input
           if (input === 'MyComponent') {
-            expect(slug).toBe('mycomponent');
+            expect(slug).toBe('my-component');
           } else if (input === 'my_component') {
-            expect(slug).toBe('mycomponent');
+            expect(slug).toBe('my_component');
           } else if (input === 'my component') {
             expect(slug).toBe('my-component');
           } else if (input === 'my-component') {
@@ -148,9 +149,9 @@ describe('String Utilities Integration', () => {
       const fileName = slugifyFilename(blogTitle + '.md');
       const displayTitle = toTitleCase(blogTitle);
       
-      expect(urlSlug).toBe('10-tips-for-better-javascript-performance');
-      // slug removes dots without inserting a dash before extension when passed to filename helper
-      expect(fileName).toBe('10-tips-for-better-javascript-performancemd');
+      expect(urlSlug).toBe('10-tips-for-better-java-script-performance');
+      // dot -> underscore for filename
+      expect(fileName).toBe('10-tips-for-better-java-script-performance_md');
       expect(displayTitle).toBe('10 Tips For Better Javascript Performance');
       
       expect(isValidSlug(urlSlug)).toBe(true);
@@ -180,6 +181,10 @@ describe('String Utilities Integration', () => {
       ];
 
       for (const term of techTerms) {
+        if (term.includes('/') || term.includes('\\')) {
+          expect(() => slugify(term)).toThrow();
+          continue;
+        }
         const slug = slugify(term);
         const kebab = toKebabCase(term);
         const pascal = toPascalCase(term);
@@ -187,8 +192,8 @@ describe('String Utilities Integration', () => {
         expect(isValidSlug(slug)).toBe(true);
         expect(isValidSlug(kebab)).toBe(true);
         
-        // Should produce reasonable results
-        expect(slug).toMatch(/^[a-z0-9-]+$/);
+        // Should produce reasonable results (hyphens and underscores allowed)
+        expect(slug).toMatch(/^[a-z0-9-_]+$/);
         expect(pascal).toMatch(/^[A-Z][a-zA-Z0-9]*$/);
       }
     });

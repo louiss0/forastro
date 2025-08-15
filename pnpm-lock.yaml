@@ -374,6 +374,9 @@ importers:
       execa:
         specifier: ^9.6.0
         version: 9.6.0
+      slug:
+        specifier: ^11.0.0
+        version: 11.0.0
       tslib:
         specifier: ^2.8.1
         version: 2.8.1
@@ -6451,6 +6454,10 @@ packages:
   slash@3.0.0:
     resolution: {integrity: sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==}
     engines: {node: '>=8'}
+
+  slug@11.0.0:
+    resolution: {integrity: sha512-71pb27F9TII2dIweGr2ybS220IUZo1A9GKZ+e2q8rpUr24mejBb6fTaSStM0SE1ITUUOshilqZze8Yt1BKj+ew==}
+    hasBin: true
 
   slugify@1.6.6:
     resolution: {integrity: sha512-h+z7HKHYXj6wJU+AnS/+IH8Uh9fdcX1Lrhg1/VMdf9PwoBQXFcXiAdsy2tSK0P6gKwJLXp02r90ahUCqHk9rrw==}
@@ -15427,6 +15434,8 @@ snapshots:
       sax: 1.4.1
 
   slash@3.0.0: {}
+
+  slug@11.0.0: {}
 
   slugify@1.6.6: {}
 
