@@ -1,0 +1,26 @@
+= Welcome to the Forastro Blog
+:toc:
+:icons: font
+
+This content is written in AsciiDoc and processed by @forastro/asciidoc.
+
+== Features
+
+The @forastro/asciidoc package provides:
+
+* AsciiDoc syntax highlighting
+* Integration with CSS frameworks
+* Seamless Astro component support
+
+== Usage
+
+You can now import and use AsciiDoc files directly in your Astro components thanks to the asciidocLoader integration.
+
+[source,javascript]
+----
+import welcome from '../content/welcome.adoc';
+----
+
+== Getting Started
+
+Start writing your blog posts in AsciiDoc format and enjoy the rich markup capabilities!
