@@ -31,8 +31,10 @@ jobs:
 
       - name: Install package dependencies
         run: |
-          pnpm -C packages/asciidoc install 
-          pnpm -C packages/utilities install
+          pnpm -C packages/asciidoc install --frozen-lockfile
+          pnpm -C packages/utilities install --frozen-lockfile
+          pnpm -C apps/astro-circle install --frozen-lockfile
+          pnpm -C apps/docs install --frozen-lockfile
 
       - name: Print nx version
         run: pnpm nx --version
