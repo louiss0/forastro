@@ -33,13 +33,13 @@ jobs:
         run: pnpm nx --version
 
       - name: Lint (affected, exclude problematic projects)
-        run: pnpm nx affected -t lint --parallel --exclude=astro-nx,docs,mock-blog --base=origin/main
+        run: pnpm nx affected -t lint --parallel --exclude=astro-nx --base=origin/main
 
       - name: Test (affected, exclude problematic projects)
-        run: pnpm nx affected -t test --parallel --exclude=astro-nx,docs,mock-blog --base=origin/main
+        run: pnpm nx affected -t test --parallel --exclude=astro-nx --base=origin/main
 
       - name: Astro check (affected, exclude problematic projects)
-        run: pnpm nx affected -t check --parallel --exclude=docs,mock-blog --base=origin/main
+        run: pnpm nx affected -t check --parallel --base=origin/main
 
       - name: Build (affected, exclude problematic projects)
-        run: pnpm nx affected -t build --parallel --exclude=docs,mock-blog --base=origin/main
+        run: pnpm nx affected -t build --parallel --base=origin/main
