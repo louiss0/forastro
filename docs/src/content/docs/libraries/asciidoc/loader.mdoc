@@ -1,0 +1,247 @@
+---
+title: Loader
+description: Documentation for the Asciidoc loader functionality
+---
+
+The main way to use this library is through the use of the Asciidoc Loader.
+The loader is a function that loads files from a folder using a path to a folder and the collection's name. This loader will always search for the file extensions `.adoc` or `.asciidoc`. It then uses both the folder path specified and the content collection name.
+To extract Asciidoc files and transform them into entries.
+
+```ts
+    function asciidocLoader(contentFolderName:string):Loader
+```
+
+{% aside type="note" title="Parameters" %}
+{% table %}
+- name
+- description
+---
+- contentFolderName
+- The folder to take files from.
+  It expects the folder name to start with a word and end with a `/`.
+  You can place forward slashes in between. \
+  **Folder names are expected to be alpha numeric**
+{% /table %}
+{% /aside %}
+
+## Usage
+
+To use this package import it from the `@forastro/asciidoc` namespace.
+Then use it in the `content.config.ts` file.
+
+```ts
+import { z, defineCollection } from "astro:content"
+import { asciidocLoader } from "@forastro/asciidoc"
+
+export const collections = {
+
+    blog: defineCollection( 
+        {
+            loader: asciidocLoader("src/content/")
+            schema: z.object({
+                doctitle: z.string(), 
+            }) 
+        }
+    ),
+
+}
+
+```
+
+{% aside type="caution" title="Schema and Attribute Restrictions" %}
+The Asciidoc Loader expects all attributes to be written in dashed case.
+It takes the dashed cased attributes and transform's them to camel-case.
+After that it then validates the attributes.
+
+This is done because in JavaScript the camel-case convention is used.
+The convention is to use dashed-case in Asciidoc.
+The Asciidoc Processor will coerce uppercase letters into lowercase.
+
+**Asciidoc doesn't support nested attributes at all.**
+So you can't do this.
+
+```yaml
+   user:
+    name:
+```
+{% /aside %}
+
+## Features
+
+{% aside title="Automatic Asciidoc File Searching" %}
+The Asciidoc Loader loads files from a folder that is in the `contentFolderName` plus the collection name. It will always look from the root where the astro config file is.
+{% /aside %}
+
+{% aside title="Automatic Config Loading" %}
+When you create a `asciidoc.config.m{ts,js}` in the same place as the Astro config one.
+It takes that file Then it looks for attributes, blocks and macros from the default export.
+It registers them into it's Asciidoc Processor.
+{% /aside %}
+
+{% aside title="Syntax Highlighting" %}
+The Asciidoc Loader can use either [Shiki](https://shiki.style/) or [Prism](https://prismjs.com) Syntax Highlighting.
+All you need to do is create the config file. That's it.
+{% /aside %}
+
+## Configuration
+
+To configure the loader you must create an `asciidoc.config.m{js,ts}` file.
+This file expect's a default export of an object literal.
+The props are supposed to be attributes, macros, and blocks.
+The macros are either inline or block.
+
+```ts
+  export default {
+
+    attributes: {
+      author: "Erika Moreau"
+
+    },
+    blocks: {
+      shout: {
+        context: "pass",
+        render:()=>  "shout"
+        }
+    },
+    macros:{
+      inline: { 
+        superLink: { 
+          context: 'quote', 
+          render:()=> "superLink" 
+        } 
+      },
+      block: {
+        tip: {
+          context: "pass",
+          render:(target)=> `TIP: ${target} `
+        }
+      } 
+    }
+  }
+```
+
+The attributes prop is a set of global attributes that will be the default for all Asciidoc
+Documents. When you use these attributes by default the shiki highlighter will be activated.
+
+
+
+
+{% table %}
+- name
+- value
+---
+- author
+- Must be FirstName LastName with capitals (e.g., John Smith)
+---
+- email
+- Any valid email address (e.g., user@example.com)
+---
+- backend
+- Any string value for the backend processor
+---
+- filetype
+- true or false to enable/disable filetype processing
+---
+- localdir
+- Any string value representing a directory path
+---
+- localdate
+- Valid date in YYYY-MM-DD format (e.g., 2024-01-10)
+---
+- localdatetime
+- Valid datetime in ISO format (e.g., 2024-01-10T15:30:00)
+---
+- localtime
+- Valid time in HH:MM:SS format (e.g., 15:30:00)
+---
+- localyear
+- Integer year value (e.g., 2024)
+---
+- attributeMissing
+- One of: drop, drop-line, skip, warn
+---
+- attributeUndefined
+- One of: drop, drop-line
+---
+- experimental
+- true or false to enable experimental features
+---
+- leveloffset
+- Number from 0 to 5 for section level offset
+---
+- partnums
+- true or false to enable part numbers
+---
+- setanchors
+- true or false to automatically generate anchors
+---
+- sectids
+- true or false to generate section IDs
+---
+- sectlinks
+- true or false to enable section links
+---
+- sectnums
+- true or false to enable section numbering
+---
+- sectnumlevels
+- Number from 0 to 5 for section numbering depth
+---
+- toc
+- One of: true, auto, left, right, macro, preamble
+---
+- toclevels
+- Number from 1 to 5 for TOC depth
+---
+- fragment
+- true or false to process as document fragment
+---
+- sourceHighlighter
+- Either "prism" or "shiki" for code highlighting
+---
+- prismLanguages
+- Array of language names (e.g., javascript, typescript, markdown).\
+  Default includes: markup, css, javascript, typescript, markdown, yaml, json, jsx, tsx, asciidoc, bash, php, git
+---
+- shikiTheme
+- Configuration object with:\
+  light: theme name for light mode\
+  dark: theme name for dark mode\
+  dim: optional theme name for dim mode\
+  Default: github-light, github-dark, github-dark-dimmed
+{% /table %}
+
+The block prop is a prop that takes in an object.
+The object's keys are the names of the block's.
+
+The value's are an object that takes in these props.
+
+- The context: the type of block that will be created the values are:
+
+  - listing
+  - literal
+  - pass
+  - quote
+  - sidebar
+
+- The render: A function that takes in a string and a set of attributes.
+  The _string_ is some preprocessed content.
+  The _attributes_ are the attributes from the attributes list.
+
+The macro prop is a prop that take's either an inline or a block prop.
+Both props take in props where the keys are the names of either inline or block macros.
+
+The values are an object that take in a context and a render.
+
+- For the inline macros the value for context can only be:
+  - quoted
+  - anchor
+- For block marcos the value for context can only be:
+  - listing
+  - literal
+  - pass
+  - quote
+  - sidebar
+
+Both block and inline marco's render function take in the **target** as the first
+parameter and a set of **attributes** as the second parameter.
