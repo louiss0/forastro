@@ -1,6 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 
-import { asciidocBaseSchema, asciidocLoader } from '@forastro/asciidoc';
+import { asciidocBaseSchema, asciidocLoader } from '../../src/index';
 
 const blog = defineCollection({
   // Load Markdown and MDX files in the `src/content/blog/` directory.

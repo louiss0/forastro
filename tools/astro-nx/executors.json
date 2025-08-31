@@ -1,0 +1,27 @@
+{
+  "$schema": "https://raw.githubusercontent.com/nrwl/nx/master/packages/nx/schemas/executors.json",
+  "executors": {
+    "build": {
+      "implementation": "./src/executors/build/executor",
+      "schema": "./src/executors/build/schema.json",
+      "description": "Build an Astro project"
+    },
+    "dev": {
+      "implementation": "./src/executors/dev/executor",
+      "schema": "./src/executors/dev/schema.json", 
+      "description": "Serve an Astro project in development mode"
+    },
+    "preview": {
+      "implementation": "./src/executors/preview/executor",
+      "schema": "./src/executors/preview/schema.json",
+      "description": "Preview a built Astro project"
+    },
+    "check": {
+      "implementation": "./src/executors/check/executor",
+      "schema": "./src/executors/check/schema.json",
+      "description": "Check Astro project for TypeScript errors and other issues",
+      "cache": true,
+      "outputs": ["{projectRoot}/.astro-check"]
+    }
+  }
+}

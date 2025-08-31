@@ -1,0 +1,83 @@
+{
+  "name": "astro-nx",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/astro-nx/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/tools/astro-nx",
+        "main": "tools/astro-nx/src/index.ts",
+        "tsConfig": "tools/astro-nx/tsconfig.lib.json",
+        "assets": [
+          "tools/astro-nx/*.md",
+          {
+            "input": "tools/astro-nx/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "tools/astro-nx/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "plugin.json",
+            "output": "."
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "executors.json",
+            "output": "."
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "LICENSE",
+            "output": "."
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "README.md",
+            "output": "."
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "CHANGELOG.md",
+            "output": "."
+          },
+          {
+            "input": "tools/astro-nx",
+            "glob": "TODO.adoc",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "tools/astro-nx/src/**/*.{ts,tsx}",
+          "tools/astro-nx/**/*.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm vitest --config tools/astro-nx/vitest.config.ts run",
+        "cwd": "."
+      },
+      "outputs": ["{workspaceRoot}/coverage/tools/astro-nx"]
+    }
+  }
+}

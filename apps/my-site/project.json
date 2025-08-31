@@ -1,0 +1,38 @@
+{
+  "name": "my-site",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/my-site/src",
+  "tags": ["type:app", "scope:my-site"],
+  "targets": {
+    "dev": {
+      "executor": "@forastro/astro-nx:dev"
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro build",
+        "cwd": "apps/my-site"
+      }
+    },
+    "preview": {
+      "executor": "@forastro/astro-nx:preview"
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/my-site/**/*.{js,ts,astro}"]
+      }
+    },
+    "check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "astro check",
+        "cwd": "apps/my-site"
+      },
+      "cache": true,
+      "outputs": ["{projectRoot}/.astro-check"]
+    }
+  }
+}

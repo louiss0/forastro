@@ -1,0 +1,53 @@
+{
+  "name": "@forastro/astro-nx",
+  "version": "0.1.0",
+  "generators": {
+    "page": {
+      "factory": "./src/generators/page/generator",
+      "schema": "./src/generators/page/schema.json",
+      "description": "Generate an Astro page (project-type-aware extension)"
+    },
+    "component": {
+      "factory": "./src/generators/component/generator",
+      "schema": "./src/generators/component/schema.json",
+      "description": "Generate an Astro component with props"
+    },
+    "content-file": {
+      "factory": "./src/generators/content-file/generator",
+      "schema": "./src/generators/content-file/schema.json",
+      "description": "Generate content files (md/adoc/mdx/mdoc)"
+    },
+    "astro-file": {
+      "factory": "./src/generators/astro-file/generator",
+      "schema": "./src/generators/astro-file/schema.json",
+      "description": "Unified front-end generator for Astro pages and components"
+    },
+    "app": {
+      "factory": "./src/generators/app/generator",
+      "schema": "./src/generators/app/schema.json",
+      "description": "Generate a React Vite app with modern tooling and best practices"
+    }
+  },
+  "executors": {
+    "dev": {
+      "factory": "./src/executors/dev/executor",
+      "schema": "./src/executors/dev/schema.json",
+      "description": "Start Astro dev server"
+    },
+    "build": {
+      "factory": "./src/executors/build/executor",
+      "schema": "./src/executors/build/schema.json",
+      "description": "Build Astro project"
+    },
+    "preview": {
+      "factory": "./src/executors/preview/executor",
+      "schema": "./src/executors/preview/schema.json",
+      "description": "Preview production build"
+    },
+    "check": {
+      "factory": "./src/executors/check/executor",
+      "schema": "./src/executors/check/schema.json",
+      "description": "Run astro check"
+    }
+  }
+}

@@ -1,0 +1,75 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": 2,
+  "title": "Astro Dev Executor",
+  "description": "Start the Astro development server with hot reloading and advanced debugging",
+  "type": "object",
+  "properties": {
+    "host": {
+      "type": "string",
+      "description": "Hostname or IP address to bind the development server to",
+      "default": "localhost",
+      "oneOf": [
+        {
+          "const": "localhost",
+          "title": "Local access only"
+        },
+        {
+          "const": "0.0.0.0",
+          "title": "Network accessible"
+        },
+        {
+          "pattern": "^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$",
+          "title": "Custom IP address"
+        }
+      ],
+      "examples": ["localhost", "0.0.0.0", "127.0.0.1"]
+    },
+    "port": {
+      "type": "number",
+      "description": "Port number where the development server will listen for requests",
+      "default": 4321,
+      "minimum": 1024,
+      "maximum": 65535,
+      "x-prompt": {
+        "message": "Which port should the dev server use?",
+        "type": "input"
+      }
+    },
+    "open": {
+      "type": "boolean",
+      "description": "Automatically open the development site in your default browser after starting",
+      "default": false
+    },
+    "config": {
+      "type": "string",
+      "description": "Path to Astro configuration file (relative to project root)",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*\\.(mjs|js|ts)$",
+      "examples": ["astro.config.mjs", "config/astro.config.ts"],
+      "x-prompt": "Path to Astro config file (leave empty for default):"
+    },
+    "root": {
+      "type": "string",
+      "description": "Path to the project root directory (relative to workspace root)",
+      "default": "projectRoot",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*$"
+    },
+    "verbose": {
+      "type": "boolean",
+      "description": "Enable detailed logging for debugging development server issues",
+      "default": false
+    },
+    "inspect": {
+      "type": "boolean",
+      "description": "Enable Node.js inspector for debugging server-side code",
+      "default": false
+    },
+    "envFile": {
+      "type": "string",
+      "description": "Path to environment variables file to load during development",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9\\._/-]*\\.(env|env\\.local|env\\.development)$",
+      "examples": [".env", ".env.local", ".env.development", "config/.env"]
+    }
+  },
+  "additionalProperties": false
+}

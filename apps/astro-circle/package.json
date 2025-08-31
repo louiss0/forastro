@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "test": "echo \"No tests implemented yet\" && exit 0",
+    "astro": "astro"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +17,9 @@
   "dependencies": {
     "astro": "^5.8.1",
     "astro-icon": "^1.1.5",
-    "unocss": "^66.1.2"
+    "unocss": "^66.1.2",
+    "@unocss/reset": "^66.1.2",
+    "@fontsource/palanquin": "^5.0.0",
+    "@fontsource/raleway": "^5.0.0"
   }
 }

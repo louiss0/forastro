@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": 2,
+  "title": "React Vite App Generator",
+  "description": "Generate a React Vite app with modern tooling and best practices",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the application to generate",
+      "pattern": "^[a-zA-Z0-9][a-zA-Z0-9_-]*$",
+      "minLength": 1,
+      "maxLength": 50,
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the application?",
+      "examples": ["my-app", "dashboard", "web-portal", "admin-panel"]
+    },
+    "directory": {
+      "type": "string",
+      "description": "Subdirectory within apps/ where the application will be created",
+      "pattern": "^[a-zA-Z0-9/_-]*$",
+      "examples": ["frontend", "admin", "client", "web"]
+    },
+    "tags": {
+      "type": "string",
+      "description": "Comma-separated tags to organize and categorize the project",
+      "examples": ["scope:frontend,type:app", "team:web,platform:react"]
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip automatic code formatting after application generation",
+      "default": false
+    },
+    "packageManager": {
+      "type": "string",
+      "description": "Package manager to use for dependency management",
+      "enum": ["pnpm", "npm", "yarn", "jpd"],
+      "default": "pnpm",
+      "x-prompt": {
+        "message": "Which package manager would you like to use?",
+        "type": "list",
+        "items": [
+          { "value": "pnpm", "label": "pnpm - Fast, disk space efficient (recommended)" },
+          { "value": "npm", "label": "npm - Node.js default package manager" },
+          { "value": "yarn", "label": "yarn - Classic yarn package manager" },
+          { "value": "jpd", "label": "jpd - Custom package manager" }
+        ]
+      }
+    },
+    "reactQuery": {
+      "type": "boolean",
+      "description": "Add React Query (TanStack Query) for server state management and data fetching",
+      "default": false,
+      "x-prompt": "Would you like to include React Query for data fetching?"
+    },
+    "primeReact": {
+      "type": "boolean",
+      "description": "Add PrimeReact component library for rich UI components",
+      "default": false,
+      "x-prompt": "Would you like to include PrimeReact component library?"
+    },
+    "nuqs": {
+      "type": "boolean",
+      "description": "Add nuqs for type-safe URL search parameter state management",
+      "default": false,
+      "x-prompt": "Would you like to include nuqs for URL state management?"
+    },
+    "zod": {
+      "type": "boolean",
+      "description": "Add Zod for TypeScript-first schema validation",
+      "default": false,
+      "x-prompt": "Would you like to include Zod for data validation?"
+    },
+    "fontsource": {
+      "type": "boolean",
+      "description": "Add Fontsource integration for self-hosted fonts",
+      "default": false,
+      "x-prompt": "Would you like to include Fontsource for font management?"
+    }
+  },
+  "required": ["name"],
+  "additionalProperties": false
+}

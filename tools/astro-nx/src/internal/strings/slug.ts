@@ -1,0 +1,164 @@
+import slug from 'slug';
+
+/**
+ * Configuration options for slug generation
+ */
+export interface SlugifyOptions {
+  /** Maximum length of the generated slug (default: 100) */
+  maxLength?: number;
+  /** Character to use for separating words (default: '-') */
+  separator?: string;
+  /** Whether to preserve numbers (default: true) - kept for API compatibility */
+  preserveNumbers?: boolean;
+  /** Whether to force lowercase (default: true) */
+  lowercase?: boolean;
+  /** Custom replacements for specific characters/patterns */
+  replacements?: Record<string, string>;
+  /** Whether to allow Unicode characters (default: false). If true, we disable strict mode in slug. */
+  allowUnicode?: boolean;
+}
+
+/**
+ * Map our options to slug's options and generate a slug.
+ */
+export function slugify(input: string, options: SlugifyOptions = {}): string {
+  const {
+    maxLength = 100,
+    separator = '-',
+    preserveNumbers = true, // eslint-disable-line @typescript-eslint/no-unused-vars
+    lowercase = true,
+    replacements = {},
+    allowUnicode = false,
+  } = options;
+
+  if (!input || typeof input !== 'string') return '';
+  // Disallow any slashes (forward or backslash) in input
+  if (/[\\/]/.test(input)) {
+    throw new Error('Slashes are not allowed in slug inputs');
+  }
+
+  // Apply caller-provided replacements first
+  let raw = input;
+  for (const [search, replace] of Object.entries(replacements)) {
+    const re = new RegExp(escapeRegExp(search), 'g');
+    raw = raw.replace(re, replace);
+  }
+
+  // Helper to normalize one segment (no underscores or dots inside)
+  const normalizePart = (part: string): string => {
+    if (!part) return '';
+    // Slash/backslash to spaces so slug turns them into hyphens
+    part = part.replace(/[\\/]+/g, ' ');
+    // Insert spaces for camelCase/PascalCase boundaries
+    part = part
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/([A-Z]+)([A-Z][a-z])/g, '$1 $2');
+    const opts: slug.Options = {
+      replacement: separator,
+      lower: lowercase,
+      strict: !allowUnicode,
+    };
+    return slug(part, opts);
+  };
+
+  // Periods become underscores; underscores are preserved.
+  // Strategy: split on '.', then split subparts on '_', normalize each with slug, join subparts with '_' and outer with '_'
+  const dotParts = raw.split('.');
+  const normalizedDotParts = dotParts.map((dotPart) => {
+    const underscoreParts = dotPart.split('_');
+    const normUnderscoreParts = underscoreParts.map((p) => normalizePart(p));
+    // collapse any empty parts to avoid double underscores unless they were intentional
+    const joined = normUnderscoreParts.join('_').replace(/_{2,}/g, '_');
+    return joined;
+  });
+  let result = normalizedDotParts.join('_').replace(/_{2,}/g, '_');
+
+  // Trim leading/trailing separators (hyphen or underscore)
+  result = result
+    .replace(new RegExp(`^(${escapeRegExp(separator)}|_)+`), '')
+    .replace(new RegExp(`(${escapeRegExp(separator)}|_)+$`), '');
+
+  // Enforce max length while preferring word boundaries
+  if (maxLength > 0 && result.length > maxLength) {
+    const truncated = result.substring(0, maxLength);
+    const lastSep = Math.max(truncated.lastIndexOf(separator), truncated.lastIndexOf('_'));
+    result = lastSep > maxLength * 0.7 ? truncated.substring(0, lastSep) : truncated;
+    result = result
+      .replace(new RegExp(`^(${escapeRegExp(separator)}|_)+`), '')
+      .replace(new RegExp(`(${escapeRegExp(separator)}|_)+$`), '');
+  }
+
+  return result;
+}
+
+export function slugifyFilename(input: string, options: SlugifyOptions = {}): string {
+  const defaultOptions: SlugifyOptions = {
+    maxLength: 200,
+    separator: '-',
+    lowercase: true,
+    allowUnicode: false,
+    replacements: {
+      '<': ' ',
+      '>': ' ',
+      ':': ' ',
+      '"': ' ',
+      // Slashes become hyphens
+      '/': '-',
+      '\\': '-',
+      '|': '-',
+      '?': ' ',
+      '*': ' ',
+      '!': ' ',
+      '@': ' ',
+      '#': ' ',
+    },
+  };
+
+  return slugify(input, { ...defaultOptions, ...options });
+}
+
+export function slugifyIdentifier(input: string, options: SlugifyOptions = {}): string {
+  const defaultOptions: SlugifyOptions = {
+    maxLength: 100,
+    separator: '_',
+    lowercase: true,
+    allowUnicode: false,
+  };
+
+  let result = slugify(input, { ...defaultOptions, ...options });
+  if (/^[0-9]/.test(result)) result = '_' + result;
+  if (!result) result = '_';
+  return result;
+}
+
+function escapeRegExp(str: string): string {
+  return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+export function isValidSlug(
+  slugStr: string,
+  options: Pick<SlugifyOptions, 'maxLength' | 'separator' | 'allowUnicode'> = {}
+): boolean {
+  const { maxLength = 100, separator = '-', allowUnicode = false } = options;
+  if (!slugStr || typeof slugStr !== 'string') return false;
+  if (maxLength > 0 && slugStr.length > maxLength) return false;
+  if (slugStr.startsWith(separator) || slugStr.endsWith(separator)) return false;
+  if (slugStr.includes(separator + separator)) return false;
+
+  const sep = escapeRegExp(separator);
+  if (allowUnicode) {
+    // Allow letters, numbers, ASCII, chosen separator, and underscores
+    const invalid = new RegExp(`[^\x00-\x7F\p{L}\p{N}_${sep}]`, 'u');
+    return !invalid.test(slugStr);
+  }
+  const pattern = new RegExp(`^[a-zA-Z0-9${sep}_]+$`);
+  return pattern.test(slugStr);
+}
+
+export function unslugify(slugStr: string, separator: string = '-'): string {
+  if (!slugStr || typeof slugStr !== 'string') return '';
+  return slugStr
+    .split(separator)
+    .map((w) => (w[0] ? w[0].toUpperCase() + w.slice(1).toLowerCase() : ''))
+    .join(' ');
+}

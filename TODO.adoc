@@ -1,0 +1,134 @@
+= TODO
+
+== Bugs
+
+[CAUTION]
+.StarligthConfigSyntax
+====
+
+File: apps/docs/astro.config.mjs
+Object: social configuration needs to be an array instead of object
+Description:
+• Change social config from object to array format for Starlight v0.35.2
+• Update the social links to use new array syntax
+====
+
+[CAUTION] 
+.AstroIconVirtualImport
+====
+
+File: apps/astro-circle/package.json
+Dependencies: astro-icon package causing build failures
+Description:
+• astro-icon virtual import is failing during build
+• May need to update or replace with newer icon solution
+====
+
+[CAUTION]
+.TestConfigurationErrors
+====
+
+File: tools/astro-nx/vite.config.ts
+Configuration: NX workspace root does not exist issue
+Description:
+• Fix vite test configuration for astro-nx project
+• Ensure proper workspace root configuration
+====
+
+[CAUTION]
+.MissingTestScripts
+====
+
+File: apps/astro-circle/package.json
+Scripts: test script only echoes error message
+Description:
+• Implement proper test script for astro-circle app
+• Add test dependencies and configuration
+====
+
+== Refactors
+
+[WARNING]
+.ESLintErrors
+====
+
+File: tools/astro-nx/src/generators/component/generator.ts
+Function: unused import 'buildPath'
+Description:
+• Remove unused import 'buildPath' from component generator
+• Clean up other unused variables and imports across the project
+====
+
+[WARNING]
+.TypeScriptStrictness
+====
+
+File: tools/astro-nx/src/generators/page/generator.ts
+Type: title property type 'unknown' should be 'string'
+Description:
+• Fix type assertions and ensure proper TypeScript typing
+• Remove trivial type annotations that can be inferred
+• Fix no-explicit-any warnings by providing proper types
+====
+
+[WARNING]
+.ESLintConfigurationUpdate
+====
+
+File: eslint.config.cjs
+Configuration: missing astro plugin and better TypeScript rules
+Description:
+• Add astro-specific ESLint rules for .astro files  
+• Enhance TypeScript ESLint rules to match coding philosophy
+• Add proper configuration for different file types
+====
+
+[WARNING]
+.WorkspacePackageStructure
+====
+
+File: package.json, pnpm-workspace.yaml
+Configuration: workspace should be fully package-based without root node_modules
+Description:
+• Remove root node_modules and ensure all dependencies are in packages
+• Update workspace configuration to prevent hoisting
+• Ensure proper package isolation
+====
+
+== Features
+
+[IMPORTANT]
+.ComprehensiveTestSuite
+====
+
+File: packages/utilities/package.json
+Testing: no test configuration present
+Description:
+• Add vitest configuration for utilities package
+• Implement unit tests with 80%+ coverage
+• Add integration tests for complex functionality
+====
+
+[IMPORTANT]
+.ProperLintingStandards
+====
+
+File: eslint.config.cjs
+Configuration: enhance with coding philosophy rules
+Description:
+• Add custom ESLint rules matching user's coding philosophy
+• Implement rules for clarity, self-documentation, and state management
+• Add automatic formatting integration with consistent style
+====
+
+[IMPORTANT]
+.BuildSystemOptimization
+====
+
+File: nx.json
+Configuration: optimize build caching and dependency management
+Description:
+• Ensure proper build dependencies and caching
+• Fix build outputs and target configurations
+• Optimize build performance across all packages
+====

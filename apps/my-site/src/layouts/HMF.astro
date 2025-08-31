@@ -1,0 +1,33 @@
+---
+import Default from "./Default.astro";
+
+import Navbar from "~/components/Navbar.astro";
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { slots } = Astro;
+
+// Use slot fallbacks instead of generating HTML strings
+// This improves safety and satisfies eslint astro/no-set-html-directive
+
+const { title, description } = Astro.props;
+---
+
+<Default {...{ title, description }}>
+  <header>
+    <Navbar client:idle />
+    <slot name="header">
+      <p>You must have a header content for this layout</p>
+    </slot>
+  </header>
+  <main>
+    <slot />
+  </main>
+  <footer>
+    <slot name="footer">
+      <p>You must have a footer content for this layout</p>
+    </slot>
+  </footer>
+</Default>

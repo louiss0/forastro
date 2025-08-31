@@ -14,7 +14,7 @@ import asciidoctor from 'asciidoctor';
 
 export const getAsciidocPaths = z
   .function()
-  .args(z.string())
+  .args(z.string().min(1, "Don't pass in an empty string pass in a value with forward slashes and words instead"))
   .returns(z.promise(z.array(z.string())))
   .implement(async (folderName: string) => {
     return glob('**/*.{adoc,asciidoc}', {

@@ -1,0 +1,160 @@
+= TODO
+
+== Bugs
+
+[CAUTION]
+.CrossPlatformBinResolver
+====
+
+File: src/internal/cli/resolve-bin.ts
+Function: resolvePackageManager
+Description:
+• Uses 'which' command but should use 'where' on Windows
+• Windows cross-platform binary resolution inconsistency
+====
+
+[CAUTION]
+.PathSeparatorInconsistency
+====
+
+File: src/internal/generate/pathing.ts
+Function: generateAstroPath
+Description:
+• Uses hardcoded forward slashes in relativePath calculation
+• Will break on Windows systems with backslash separators
+• Replace '+' with proper path.sep usage
+====
+
+
+== Refactors
+
+[WARNING]
+.ValidationLogicScattering
+====
+✅ COMPLETED: Refactored generators to use shared workflow helper
+
+File: src/internal/generate/workflow.ts
+Function: runGeneratorWorkflow, normalizeBaseOptions, resolveTargetPath
+Description:
+• Created shared generator workflow with standardized validation
+• Consolidated path resolution logic across generators
+• Added idempotent behavior with overwrite flag support
+• Component and page generators now use shared workflow
+====
+
+[WARNING]
+.ConfigDetectionLimitations
+====
+
+File: src/internal/detect/config.ts
+Function: readAstroConfig
+Description:
+• Uses text parsing instead of proper AST parsing
+• May miss complex configuration patterns
+• Consider using actual Astro config loader when available
+====
+
+[WARNING]
+.HardcodedProjectPaths
+====
+
+File: src/generators/page/generator.ts
+Function: normalizeOptions
+Description:
+• Hardcodes 'apps/' prefix for project root detection
+• Doesn't handle libs/ or custom project structures
+• Should use Nx project configuration for path resolution
+====
+
+File: src/generators/component/generator.ts
+Function: normalizeOptions
+Description:
+• Same hardcoded 'apps/' path assumption
+• Not flexible for different workspace layouts
+====
+
+[WARNING]
+.StringCaseCohesion
+====
+
+File: src/internal/generate/pathing.ts
+Function: toPascalCase, toCamelCase, toKebabCase
+Description:
+• Case conversion utilities could be consolidated
+• Consider using existing Nx utilities for consistency
+• Add comprehensive edge case handling
+====
+
+== Features
+
+[IMPORTANT]
+.ExecutorSchemaValidation
+====
+
+File: src/executors/build/executor.ts
+File: src/executors/dev/executor.ts
+File: src/executors/check/executor.ts
+File: src/executors/preview/executor.ts
+Description:
+• Add JSON schema validation for executor options
+• Implement proper TypeScript interfaces for all schemas
+• Add runtime validation using zod or similar
+====
+
+[IMPORTANT]
+.GeneratorSchemaEnhancements
+====
+
+File: src/generators/page/schema.json
+File: src/generators/component/schema.json
+File: src/generators/content-file/schema.json
+File: src/generators/astro-file/schema.json
+Description:
+• Add enum constraints for extension types
+• Include better descriptions and examples
+• Add conditional schema validation based on project type
+====
+
+[IMPORTANT]
+.TestCoverageExpansion
+====
+
+File: src/executors/executor.smoke.spec.ts
+Description:
+• Add comprehensive integration tests for all executors
+• Test edge cases like missing config files
+• Add generator integration tests with real file system
+====
+
+[IMPORTANT]
+.ContentCollectionSupport
+====
+
+File: src/generators/content-file/generator.ts
+Description:
+• Add validation for content collection schemas
+• Support custom content collection configurations
+• Integrate with Astro's content layer API when available
+====
+
+[IMPORTANT]
+.ProjectTypeDetection
+====
+
+File: src/internal/detect/project-type.ts
+Description:
+• Enhance detection algorithms for mixed projects
+• Add support for detecting Astro v4+ features
+• Cache detection results for performance
+====
+
+[IMPORTANT]
+.ErrorHandlingConsistency
+====
+
+Description:
+• Standardize error handling patterns across all modules
+• Implement proper error recovery strategies
+• Add better error messages with actionable suggestions
+• Consider using Result/Either patterns for error handling
+====

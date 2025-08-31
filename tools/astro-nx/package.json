@@ -1,0 +1,43 @@
+{
+  "name": "@forastro/astro-nx",
+  "version": "0.1.1",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "files": [
+    "src/**/*.js",
+    "src/**/*.d.ts",
+    "plugin.json",
+    "executors.json",
+    "generators.json",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "nx build astro-nx",
+    "prepublishOnly": "nx build astro-nx"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/louiss0/forastro.git",
+    "directory": "tools/astro-nx"
+  },
+  "bugs": {
+    "url": "https://github.com/louiss0/forastro/issues"
+  },
+  "homepage": "https://github.com/louiss0/forastro#readme",
+  "peerDependencies": {
+    "@nx/devkit": "^21.0.0",
+    "vitest": ">=1.0.0"
+  },
+  "dependencies": {
+    "@nx/devkit": "^21.2.3",
+    "execa": "^9.6.0",
+    "slug": "^11.0.0",
+    "tslib": "^2.8.1"
+  }
+}

@@ -1,0 +1,23 @@
+---
+title: 'Sample AsciiDoc Content'
+description: 'This is a sample AsciiDoc content file'
+pubDate: 2024-01-01
+author: 'Astro'
+tags: ['sample', 'asciidoc']
+---
+
+= Sample AsciiDoc Content
+
+This is a sample AsciiDoc content file that can be used as a template for new content.
+
+== Features
+
+* Rich text formatting with AsciiDoc
+* Frontmatter for metadata  
+* Professional documentation structure
+
+== Usage
+
+Copy this file and modify the frontmatter and content as needed for your specific use case.
+
+NOTE: AsciiDoc provides powerful formatting options for technical documentation.

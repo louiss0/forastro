@@ -1,0 +1,58 @@
+---
+const title = 'Sample Astro Page';
+const description = 'This is a sample Astro page template';
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+  </head>
+  <body>
+    <main>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      
+      <section>
+        <h2>Getting Started</h2>
+        <p>This is a sample page that you can use as a template for creating new pages in your Astro project.</p>
+        
+        <ul>
+          <li>Edit this file to customize the content</li>
+          <li>Add components and layouts as needed</li>
+          <li>Use Astro's powerful features for building static sites</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
+
+<style>
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    font-family: system-ui, sans-serif;
+  }
+  
+  h1 {
+    color: #333;
+    margin-bottom: 1rem;
+  }
+  
+  section {
+    margin-top: 2rem;
+  }
+  
+  ul {
+    margin: 1rem 0;
+  }
+  
+  li {
+    margin: 0.5rem 0;
+  }
+</style>

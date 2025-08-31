@@ -1,0 +1,142 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "version": 2,
+  "title": "Astro File Generator",
+  "description": "Unified front-end generator for Astro pages and components",
+  "type": "object",
+  "properties": {
+    "kind": {
+      "type": "string",
+      "description": "The specific type of Astro file to generate (What you want to create)",
+      "enum": ["page", "component", "file"],
+      "x-prompt": {
+        "message": "What kind of file would you like to generate?",
+        "type": "list",
+        "items": [
+          { "value": "component", "label": "Component - Reusable Astro component" },
+          { "value": "page", "label": "Page - Route-based Astro page" },
+          { "value": "file", "label": "File - Arbitrary Astro file" }
+        ]
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "The name of the Astro file to be generated",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9-_]*$",
+      "minLength": 1,
+      "maxLength": 50,
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What name would you like to use for the file?"
+    },
+    "project": {
+      "type": "string",
+      "description": "The target project where the file will be created",
+      "$default": {
+        "$source": "projectName"
+      },
+      "x-prompt": "Which project should contain this file?",
+      "x-dropdown": "projects"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Custom subdirectory path where the file will be created (relative to default location)",
+      "pattern": "^[a-zA-Z0-9/_-]*$"
+    },
+    "destination": {
+      "type": "string",
+      "description": "Target directory relative to src/ (e.g., 'layouts', 'components/ui'). Default: 'pages' for pages, current behavior for components",
+      "pattern": "^[a-zA-Z0-9/_-]*$"
+    },
+    "ext": {
+      "type": "string",
+      "description": "File extension to use (defaults based on kind if not specified)",
+      "enum": ["astro", "md", "adoc", "mdx", "mdoc"],
+      "default": "astro",
+      "x-prompt": {
+        "message": "Which file extension would you prefer?",
+        "type": "list",
+        "items": [
+          { "value": "astro", "label": "astro - Standard Astro component/page" },
+          { "value": "mdx", "label": "mdx - Markdown with JSX" },
+          { "value": "md", "label": "md - Plain Markdown" },
+          { "value": "adoc", "label": "adoc - AsciiDoc format" },
+          { "value": "mdoc", "label": "mdoc - Markdoc format" }
+        ]
+      }
+    },
+    "props": {
+      "type": "string",
+      "description": "Component props definition in TypeScript format (only applies when kind is 'component')",
+      "pattern": "^[a-zA-Z][a-zA-Z0-9:,\\s]*$",
+      "examples": ["title: string", "title: string, count: number", "data: { id: number; name: string }"]
+    },
+    "bulk": {
+      "type": "boolean",
+      "description": "Generate the file across multiple projects simultaneously",
+      "default": false
+    },
+    "projects": {
+      "type": "array",
+      "description": "List of specific project names to target when bulk mode is enabled",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "skipFormat": {
+      "type": "boolean",
+      "description": "Skip automatic code formatting after file generation",
+      "default": false
+    },
+    "minimalFrontmatter": {
+      "type": "boolean",
+      "description": "Include only minimal frontmatter when needed; otherwise no frontmatter for plain markup files",
+      "default": true
+    }
+  },
+  "required": ["name", "project"],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": { "const": "component" }
+        }
+      },
+      "then": {
+        "properties": {
+          "props": {
+            "description": "Component props definition in TypeScript format (required for components)"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "props": false
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "bulk": { "const": true }
+        }
+      },
+      "then": {
+        "required": ["name", "projects"],
+        "properties": {
+          "project": false
+        }
+      },
+      "else": {
+        "properties": {
+          "projects": false
+        }
+      }
+    }
+  ]
+}

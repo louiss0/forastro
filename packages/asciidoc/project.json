@@ -6,16 +6,17 @@
   "release": {
     "version": {
       "currentVersionResolver": "git-tag",
-      "preserveLocalDependencyProtocols": false,
-      "manifestRootsToUpdate": ["dist/{projectRoot}"]
+      "preserveLocalDependencyProtocols": false
     }
   },
   "tags": ["nx:lib", "nx:lib:ongoing"],
-  "test": {
-    "executor": "@nx/vite:test",
-    "outputs": ["{options.reportsDirectory}"],
-    "options": {
-      "reportsDirectory": "../../coverage/packages/asciidoc"
+  "targets": {
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "../../coverage/packages/asciidoc"
+      }
     }
   }
 }

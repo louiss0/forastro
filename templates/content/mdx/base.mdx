@@ -1,0 +1,51 @@
+---
+title: "Your Post Title"
+description: "A brief description of your post content"
+pubDate: "2024-01-01"
+tags: ["tag1", "tag2", "category"]
+draft: false
+author: "Your Name"
+image: 
+  url: "/path/to/image.jpg"
+  alt: "Alt text for the image"
+---
+
+import { CustomComponent } from '../components/CustomComponent';
+
+# Your Post Title
+
+## Introduction
+
+Start writing your content here. This is a template for MDX content with proper frontmatter configuration and JSX capabilities.
+
+<CustomComponent title="Interactive Element">
+  This is an example of embedding JSX components within MDX content.
+</CustomComponent>
+
+## Main Content
+
+Add your main content sections here.
+
+### Subsection
+
+More detailed content goes here.
+
+```javascript
+// Example code block
+function example() {
+  console.log("Hello, MDX!");
+}
+```
+
+<div className="highlight-box">
+  <p>This is a highlighted section using JSX within MDX.</p>
+</div>
+
+## Conclusion
+
+Wrap up your content with a conclusion.
+
+export const metadata = {
+  title: "Your Post Title",
+  description: "A brief description of your post content"
+};
