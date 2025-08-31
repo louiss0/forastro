@@ -433,6 +433,23 @@ declare const asciidocConfigObjectSchema: z.ZodObject<{
 }>;
 
 type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
+type DocumentAttributes = Record<string, unknown>;
+/**
+ * Normalizes AsciiDoc attributes prior to schema validation.
+ *
+ * Transformations:
+ * - Empty strings ("") → true (common AsciiDoc pattern for boolean attributes)
+ * - Strings matching CSV pattern → string[] (comma-split, trimmed, empties removed)
+ *
+ * The CSV pattern matches:
+ * - Single token + comma: "foo," or "foo,   " → ["foo"]
+ * - Multiple tokens with spaces: "foo, bar, baz," → ["foo", "bar", "baz"]
+ * - Does NOT match "foo,bar" (no space after comma)
+ *
+ * @param input - Raw attributes from document.getAttributes()
+ * @returns New object with normalized attribute values (non-mutating)
+ */
+declare function normalizeAsciiDocAttributes(input: DocumentAttributes): DocumentAttributes;
 declare function asciidocLoader(contentFolderName: string): {
     name: string;
     load(context: astro_loaders.LoaderContext): Promise<void>;
@@ -540,4 +557,4 @@ declare const asciidocDraftSchema: z.ZodIntersection<z.ZodEffects<z.ZodObject<{
     stage: "draft" | "published" | "editing";
 }>>;
 
-export { ASCIIDOC_POST_STAGE, type AsciidocBaseSchema, type AsciidocConfigObject, type AsciidocPostStage, asciidocBaseSchema, asciidocDraftSchema, asciidocLoader };
+export { ASCIIDOC_POST_STAGE, type AsciidocBaseSchema, type AsciidocConfigObject, type AsciidocPostStage, type DocumentAttributes, asciidocBaseSchema, asciidocDraftSchema, asciidocLoader, normalizeAsciiDocAttributes };
