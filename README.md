@@ -33,16 +33,64 @@ should be built. The tag `lib:ongoing` will be used to tell which project's will
 
 When it comes to packages I use Nx Release's Conventional Commits to decide how they should be released.
 
-To release a package all you need to do is use `pnpm exec nx release`.
-If thing's don't work out then use.
+### Package Versioning Strategy
 
-1. `nx release changelog`
-2. `nx release version`
-3. `nx release publish`
+This monorepo uses **independent versioning** for packages, meaning each package maintains its own version number and can be released independently. This approach provides:
+
+- **Flexibility**: Packages can be released at different cadences based on their individual changes
+- **Clear History**: Each package has its own version history and changelog
+- **Reduced Impact**: Breaking changes in one package don't force version bumps in unrelated packages
+- **Semantic Alignment**: Version numbers directly reflect the actual changes made to each package
+
+#### Current Package Versions:
+- `@forastro/asciidoc`: v0.0.3
+- `@forastro/utilities`: v5.1.3
+- `@forastro/starlight-asciidoc`: Independent versioning
+- `@forastro/nx-astro-plugin`: Independent versioning
+- `@forastro/test-publish`: Independent versioning
+
+#### Alternative: Fixed Versioning
+
+While we use independent versioning, Nx also supports fixed versioning where all packages share the same version number. This approach would be suitable if:
+- All packages are tightly coupled
+- Coordinated releases are preferred
+- Simplified version management is desired
+
+To switch to fixed versioning, update `nx.json`:
+```json
+{
+  "release": {
+    "projectsRelationship": "fixed"
+  }
+}
+```
+
+### Release Commands
+
+To release packages, you have several options:
+
+**Automated Release (Recommended)**:
+```bash
+pnpm exec nx release
+```
+
+**Manual Step-by-Step Release**:
+```bash
+# 1. Generate changelogs
+nx release changelog
+
+# 2. Bump package versions  
+nx release version
+
+# 3. Publish to npm
+nx release publish
+```
+
+For detailed release documentation, see `RELEASE.md`.
 
 ## Development Workflow - Git Flow
 
-This repository follows the Git Flow branching model for organized development and release management.
+This repository follows the Git Flow branching model for organized development and release management, integrated with Nx Release for automated package publishing.
 
 ### Branch Structure
 
@@ -54,41 +102,106 @@ This repository follows the Git Flow branching model for organized development a
 
 ### Workflow Guidelines
 
-1. **Feature Development**: Create feature branches from `develop`
-   ```bash
-   git checkout develop
-   git checkout -b feature/your-feature-name
-   ```
+#### 1. Feature Development
+Create feature branches from `develop` and follow conventional commits:
 
-2. **Completing Features**: Merge feature branches back to `develop`
-   ```bash
-   git checkout develop
-   git merge feature/your-feature-name
-   git branch -d feature/your-feature-name
-   ```
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b feature/your-feature-name
 
-3. **Release Preparation**: Create release branches from `develop`
-   ```bash
-   git checkout develop
-   git checkout -b release/1.2.0
-   ```
+# Make changes and commit using conventional commits
+git add .
+git commit -m "feat(packages/asciidoc): add new loader function"
+```
 
-4. **Completing Releases**: Merge release branches to both `main` and `develop`
-   ```bash
-   git checkout main
-   git merge release/1.2.0
-   git tag -a v1.2.0 -m "Release version 1.2.0"
-   git checkout develop
-   git merge release/1.2.0
-   git branch -d release/1.2.0
-   ```
+#### 2. Completing Features
+Merge feature branches back to `develop` after code review:
 
-5. **Hotfixes**: Create hotfix branches from `main`
-   ```bash
-   git checkout main
-   git checkout -b hotfix/critical-bug
-   # Fix and merge to both main and develop
-   ```
+```bash
+git checkout develop
+git merge feature/your-feature-name
+git branch -d feature/your-feature-name
+git push origin develop
+```
+
+#### 3. Release Preparation
+Create release branches from `develop` and run the release process:
+
+```bash
+git checkout develop
+git pull origin develop
+git checkout -b release/$(date +%Y-%m-%d)
+
+# Run release process (see RELEASE.md for detailed steps)
+pnpm exec nx release
+
+# Push release branch
+git push origin release/$(date +%Y-%m-%d)
+```
+
+#### 4. Completing Releases
+Merge release branches to both `main` and `develop`:
+
+```bash
+# Merge to main
+git checkout main
+git merge release/$(date +%Y-%m-%d)
+git push origin main
+
+# Merge back to develop
+git checkout develop
+git merge release/$(date +%Y-%m-%d)
+git push origin develop
+
+# Clean up
+git branch -d release/$(date +%Y-%m-%d)
+git push origin --delete release/$(date +%Y-%m-%d)
+```
+
+#### 5. Hotfixes
+Create hotfix branches from `main` for critical issues:
+
+```bash
+git checkout main
+git pull origin main
+git checkout -b hotfix/critical-bug-description
+
+# Make fixes and commit
+git add .
+git commit -m "fix(packages/utilities): resolve critical security vulnerability"
+
+# Run release process
+pnpm exec nx release
+
+# Merge to both main and develop
+git checkout main
+git merge hotfix/critical-bug-description
+git push origin main
+
+git checkout develop
+git merge hotfix/critical-bug-description
+git push origin develop
+
+# Clean up
+git branch -d hotfix/critical-bug-description
+```
+
+### Conventional Commits Integration
+
+All commits must follow Angular's Conventional Commits standard:
+- Use semantic commit types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+- Include scope using `(package/filename)` pattern for monorepo clarity
+- Write detailed commit messages with lists of changes
+- Use `BREAKING CHANGE:` footer for breaking changes
+
+Examples:
+```bash
+feat(packages/asciidoc): add syntax highlighting support
+fix(apps/docs): resolve mobile navigation issue
+docs(templates/astro-minimal): update installation instructions
+BREAKING CHANGE: change default export structure
+```
 
 In each package folder a `esbuild.config.cts` file is held which uses a plugin from the plugins/ folder called `replaceValuesInExportsPlugin`.
 That function is responsible for changing the `exports:` props's values after the build.

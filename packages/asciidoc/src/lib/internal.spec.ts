@@ -1,6 +1,7 @@
 import { glob } from "fast-glob";
 import { loadConfig, } from "c12";
 import { loadAsciidocConfig, getAsciidocPaths, asciidocConfigObjectSchema, AsciidocProcessorController, } from "./internal";
+import { normalizeAsciiDocAttributes } from "./asciidoc";
 import { z } from "astro/zod";
 
 describe(
@@ -241,4 +242,122 @@ describe(
         })
 
 
-    }) 
+    })
+
+describe("normalizeAsciiDocAttributes", () => {
+  it("converts empty strings to true", () => {
+    const input = { toc: "" };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.toc).toBe(true);
+  });
+
+  it("converts single-token CSV with trailing comma to array", () => {
+    const input = { tags: "foo," };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.tags).toEqual(["foo"]);
+  });
+
+  it("converts single-token CSV with trailing comma and spaces to array", () => {
+    const input = { tags: "foo,   " };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.tags).toEqual(["foo"]);
+  });
+
+  it("converts multi-token CSV with spaces to array", () => {
+    const input = { tags: "foo, bar, baz," };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.tags).toEqual(["foo", "bar", "baz"]);
+  });
+
+  it("converts two-token CSV with spaces to array", () => {
+    const input = { categories: "tech, programming" };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.categories).toEqual(["tech", "programming"]);
+  });
+
+  it("handles mixed alphanumeric and hyphen/underscore tokens", () => {
+    const input = { items: "item_1, item-2, item3," };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.items).toEqual(["item_1", "item-2", "item3"]);
+  });
+
+  it("does not convert comma-separated values without spaces", () => {
+    const input = { tags: "foo,bar" }; // does not match the regex
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.tags).toBe("foo,bar");
+  });
+
+  it("does not convert single tokens without comma", () => {
+    const input = { category: "tech" };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.category).toBe("tech");
+  });
+
+  it("leaves non-string values intact", () => {
+    const input = { n: 42, flag: false, str: "hello" };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out).toEqual(input);
+  });
+
+  it("handles mixed attribute types in same object", () => {
+    const input = {
+      toc: "",
+      tags: "foo, bar, baz,",
+      category: "tech",
+      count: 42,
+      enabled: false,
+      invalid: "foo,bar" // no space, should not convert
+    };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out).toEqual({
+      toc: true,
+      tags: ["foo", "bar", "baz"],
+      category: "tech",
+      count: 42,
+      enabled: false,
+      invalid: "foo,bar"
+    });
+  });
+
+  it("converts dash-case and snake_case keys to camelCase", () => {
+    const input = {
+      "user-name": "john",
+      "api_key": "secret",
+      "simple-key": "",
+      "multi_word_key": "value, another,"
+    };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out).toEqual({
+      userName: "john",
+      apiKey: "secret",
+      simpleKey: true,
+      multiWordKey: ["value", "another"]
+    });
+  });
+
+  it("returns a new object (non-mutating)", () => {
+    const input = { toc: "", tags: "foo, bar," };
+    const out = normalizeAsciiDocAttributes(input);
+    
+    // Original object should be unchanged
+    expect(input.toc).toBe("");
+    expect(input.tags).toBe("foo, bar,");
+    
+    // Output should be different object
+    expect(out).not.toBe(input);
+    expect(out.toc).toBe(true);
+    expect(out.tags).toEqual(["foo", "bar"]);
+  });
+
+  it("does not match strings with double spaces/empty tokens", () => {
+    const input = { tags: "foo, , bar," }; // Has an empty token - doesn't match our regex
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.tags).toBe("foo, , bar,"); // Should stay as string since regex doesn't match
+  });
+
+  it("filters out empty strings from arrays when regex matches", () => {
+    const input = { tags: "foo, bar," }; // Valid pattern with trailing comma
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out.tags).toEqual(["foo", "bar"]); // Split and trim, empty strings filtered
+  });
+});

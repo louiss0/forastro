@@ -8,7 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup --outDir ../../dist/packages/asciidoc"
+    "build": "tsup"
   },
   "dependencies": {
     "asciidoctor": "^3.0.4",

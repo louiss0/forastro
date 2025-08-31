@@ -3,12 +3,14 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "postinstall": "node ./tools/scripts/patch-nx-cli.js && node ./tools/scripts/setup-git-hooks.js",
     "preversion": "pnpm -w -r run build",
+    "setup-hooks": "node ./tools/scripts/setup-git-hooks.js",
     "lint:affected": "pnpm nx affected -t lint --parallel --exclude=astro-nx",
     "test:affected": "pnpm nx affected -t test --parallel --exclude=astro-nx",
     "build:affected": "pnpm nx affected -t build --parallel",
     "check:affected": "pnpm nx affected -t check --parallel",
-    "ci": "pnpm -w install --frozen-lockfile  pnpm run lint:affected  pnpm run test:affected  pnpm run check:affected  pnpm run build:affected"
+    "ci": "pnpm -w install --frozen-lockfile  pnpm run lint:affected  pnpm run test:affected  pnpm run check:affected  pnpm run build:affected"
   },
   "private": true,
   "devDependencies": {
