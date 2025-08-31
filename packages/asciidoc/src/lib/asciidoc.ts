@@ -21,31 +21,42 @@ export type DocumentAttributes = Record<string, unknown>;
  * Transformations:
  * - Empty strings ("") → true (common AsciiDoc pattern for boolean attributes)
  * - Strings matching CSV pattern → string[] (comma-split, trimmed, empties removed)
+ * - Convert dash-case/snake_case keys → camelCase keys
  * 
  * The CSV pattern matches:
  * - Single token + comma: "foo," or "foo,   " → ["foo"]
  * - Multiple tokens with spaces: "foo, bar, baz," → ["foo", "bar", "baz"]
  * - Does NOT match "foo,bar" (no space after comma)
  * 
+ * Key conversion examples:
+ * - "user-name" → "userName"
+ * - "api_key" → "apiKey"
+ * - "simple" → "simple" (no change)
+ * 
  * @param input - Raw attributes from document.getAttributes()
- * @returns New object with normalized attribute values (non-mutating)
+ * @returns New object with normalized attribute values and camelCase keys (non-mutating)
  */
 export function normalizeAsciiDocAttributes(input: DocumentAttributes): DocumentAttributes {
   const out: DocumentAttributes = {};
+  
   for (const [key, value] of Object.entries(input)) {
+    // Convert dash-case/snake_case keys to camelCase
+    const camelCaseKey = key.replace(/[-_]([a-z])/g, (_, letter) => letter.toUpperCase());
+    
     if (value === "") {
-      out[key] = true;
+      out[camelCaseKey] = true;
       continue;
     }
     if (typeof value === "string" && CSV_LIST_REGEX.test(value)) {
-      out[key] = value
+      out[camelCaseKey] = value
         .split(",")
         .map((s) => s.trim())
         .filter(Boolean);
       continue;
     }
-    out[key] = value;
+    out[camelCaseKey] = value;
   }
+  
   return out;
 }
 
@@ -361,18 +372,7 @@ export function asciidocLoader(contentFolderName: string) {
           const rawAttrs = document.getAttributes() as DocumentAttributes;
           const normalizedAttrs = normalizeAsciiDocAttributes(rawAttrs);
 
-          attributes = dashedOrSnakeCaseKeysRecordSchema
-            .transform((attrs) =>
-              Object.fromEntries(
-                Object.entries(attrs).map(([key, value]) => [
-                  key.replace(/[-_]([a-z])/g, (_, letter) =>
-                    letter.toUpperCase(),
-                  ),
-                  value,
-                ]),
-              ),
-            )
-            .parse(normalizedAttrs);
+          attributes = dashedOrSnakeCaseKeysRecordSchema.parse(normalizedAttrs);
         } catch (error: unknown) {
           if (error instanceof z.ZodError) {
             logger.error(

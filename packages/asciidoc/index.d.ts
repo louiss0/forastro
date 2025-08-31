@@ -440,14 +440,20 @@ type DocumentAttributes = Record<string, unknown>;
  * Transformations:
  * - Empty strings ("") → true (common AsciiDoc pattern for boolean attributes)
  * - Strings matching CSV pattern → string[] (comma-split, trimmed, empties removed)
+ * - Convert dash-case/snake_case keys → camelCase keys
  *
  * The CSV pattern matches:
  * - Single token + comma: "foo," or "foo,   " → ["foo"]
  * - Multiple tokens with spaces: "foo, bar, baz," → ["foo", "bar", "baz"]
  * - Does NOT match "foo,bar" (no space after comma)
  *
+ * Key conversion examples:
+ * - "user-name" → "userName"
+ * - "api_key" → "apiKey"
+ * - "simple" → "simple" (no change)
+ *
  * @param input - Raw attributes from document.getAttributes()
- * @returns New object with normalized attribute values (non-mutating)
+ * @returns New object with normalized attribute values and camelCase keys (non-mutating)
  */
 declare function normalizeAsciiDocAttributes(input: DocumentAttributes): DocumentAttributes;
 declare function asciidocLoader(contentFolderName: string): {

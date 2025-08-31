@@ -346,6 +346,22 @@ describe("normalizeAsciiDocAttributes", () => {
     });
   });
 
+  it("converts dash-case and snake_case keys to camelCase", () => {
+    const input = {
+      "user-name": "john",
+      "api_key": "secret",
+      "simple-key": "",
+      "multi_word_key": "value, another,"
+    };
+    const out = normalizeAsciiDocAttributes(input);
+    expect(out).toEqual({
+      userName: "john",
+      apiKey: "secret",
+      simpleKey: true,
+      multiWordKey: ["value", "another"]
+    });
+  });
+
   it("returns a new object (non-mutating)", () => {
     const input = { toc: "", tags: "foo, bar," };
     const out = normalizeAsciiDocAttributes(input);
