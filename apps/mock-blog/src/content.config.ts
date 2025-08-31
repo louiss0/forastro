@@ -1,10 +1,9 @@
-import { defineCollection, z } from 'astro:content';
-
-import { asciidocBaseSchema, asciidocLoader } from '../../src/index';
+import { defineCollection } from 'astro:content';
+import { asciidocBaseSchema, asciidocLoader } from '../../../packages/asciidoc/src/index.js';
 
 const blog = defineCollection({
-  // Load Markdown and MDX files in the `src/content/blog/` directory.
-  loader: asciidocLoader('src/content'),
+  // Load AsciiDoc files in the `src/content/blog/` directory.
+  loader: asciidocLoader('src/content/blog'),
   // Type-check frontmatter using a schema
   schema: () => asciidocBaseSchema,
 });
