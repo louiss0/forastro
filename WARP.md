@@ -632,6 +632,51 @@ yadm bootstrap
 - **Test-first**: Write tests before implementation
 - **80%+ test coverage**: 60% minimum acceptable
 
+### Testing Strategy
+
+This repository uses **Vitest** with **V8 coverage** for comprehensive testing across packages.
+
+#### Coverage Policy
+
+- **.astro components are intentionally excluded** from tests/coverage to avoid experimental component testing complexities
+- **Focus on TypeScript modules**: utilities, loaders, schemas, plugins, and internal functions
+- **Realistic thresholds based on testable code**: Coverage requirements vary by package based on complexity
+
+#### Package Testing Configuration
+
+**@forastro/utilities**:
+- **Coverage Target**: 80% lines/statements/branches/functions
+- **Test Environment**: Node.js
+- **Focus Areas**: Utility functions, hooks, internal helpers, export validation
+
+**@forastro/asciidoc**:
+- **Coverage Target**: 70% lines/statements, 85% branches, 50% functions
+- **Test Environment**: Node.js with extensive mocking
+- **Focus Areas**: Schema validation, attribute normalization, plugin registration, utility functions
+- **Complex loader integration tests are disabled** due to mocking complexity with AsciidocProcessorController
+
+#### Running Tests
+
+```bash
+# Package-specific testing
+pnpm -C packages/utilities test:coverage
+pnpm -C packages/asciidoc test:coverage
+
+# Workspace-wide testing
+npx nx affected -t test --parallel
+npx nx run-many -t test --all
+
+# Continuous testing
+pnpm -C packages/utilities test:watch
+```
+
+#### Test Structure
+
+- **Unit tests**: `src/__tests__/*.test.ts`
+- **Fixtures**: `src/__fixtures__/` (excluded from coverage)
+- **Mock strategy**: Mock external dependencies (fs, asciidoctor, c12) for deterministic tests
+- **Focus on public APIs**: Test exported functions and classes, not internal implementation details
+
 ### Accessibility Standards
 
 - **Semantic HTML**: Use appropriate elements for content structure
