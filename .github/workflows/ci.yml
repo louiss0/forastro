@@ -32,14 +32,14 @@ jobs:
       - name: Print nx version
         run: pnpm nx --version
 
-      - name: Lint (affected, exclude astro-nx)
-        run: pnpm nx affected -t lint --parallel --exclude=astro-nx --base=origin/main
+      - name: Lint (affected, exclude astro-nx and docs)
+        run: pnpm nx affected -t lint --parallel --exclude=astro-nx,docs --base=origin/main
 
-      - name: Test (affected, exclude astro-nx)
-        run: pnpm nx affected -t test --parallel --exclude=astro-nx --base=origin/main
+      - name: Test (affected, exclude astro-nx and docs)
+        run: pnpm nx affected -t test --parallel --exclude=astro-nx,docs --base=origin/main
 
-      - name: Astro check (affected)
-        run: pnpm nx affected -t check --parallel --base=origin/main
+      - name: Astro check (affected, exclude docs)
+        run: pnpm nx affected -t check --parallel --exclude=docs --base=origin/main
 
-      - name: Build (affected)
-        run: pnpm nx affected -t build --parallel --base=origin/main
+      - name: Build (affected, exclude docs)
+        run: pnpm nx affected -t build --parallel --exclude=docs --base=origin/main
