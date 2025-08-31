@@ -55,6 +55,9 @@
   },
   "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,
+  "affected": {
+    "defaultBase": "main"
+  },
   "release": {
     "projects": ["packages/*"],
     "projectsRelationship": "independent",
