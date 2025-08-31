@@ -26,9 +26,9 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Install workspace dependencies
+      - name: Install dependencies
         run: pnpm install --frozen-lockfile
-    
+
       - name: Print nx version
         run: pnpm nx --version
 
