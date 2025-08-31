@@ -2,7 +2,8 @@
 const { entry } = Astro.props; // entry: CollectionEntry<'blog'>
 ---
 <article>
-  <h2><a href={`/blog/${entry.slug}/`}>{entry.data.title}</a></h2>
+  <h2><a href={`/blog/${entry.id}/`}>{entry.data.title}</a></h2>
   {entry.data.description && <p>{entry.data.description}</p>}
-  <small>{entry.data.pubDate.toDateString()}</small>
+  <small>{new Date(entry.data.updatedAt).toDateString()}</small>
+  <p><em>By: {entry.data.author}</em></p>
 </article>

@@ -1,0 +1,32 @@
+= Hello, World
+John Doe <john.doe@example.com>
+:description: Welcome to the blog! This is our first post demonstrating AsciiDoc integration with the Forastro monorepo blogging system.
+:docdate: 2025-01-11
+:created-at: 2025-01-11
+:email: john.doe@example.com
+:localdate: 2025-01-11
+
+Welcome to the blog!
+
+This is our first post using AsciiDoc format, powered by the `@forastro/asciidoc` package. 
+
+== Features
+
+AsciiDoc provides rich markup capabilities including:
+
+* *Bold text* and _italic text_
+* Code blocks with syntax highlighting
+* Tables, lists, and more
+
+== Getting Started
+
+You can now write blog posts in AsciiDoc format and take advantage of all its powerful features for technical writing.
+
+[source,javascript]
+----
+// Example code block
+const welcome = "Hello, AsciiDoc world!";
+console.log(welcome);
+----
+
+Enjoy writing with AsciiDoc!

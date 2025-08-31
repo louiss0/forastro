@@ -29,7 +29,9 @@
       "options": {
         "command": "astro check",
         "cwd": "apps/blog"
-      }
+      },
+      "cache": true,
+      "outputs": ["{projectRoot}/.astro-check"]
     }
   },
   "tags": ["type:app", "scope:blog"]
