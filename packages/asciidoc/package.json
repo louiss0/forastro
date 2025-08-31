@@ -8,10 +8,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "build": "tsup"
   },
   "dependencies": {
     "asciidoctor": "^3.0.4",

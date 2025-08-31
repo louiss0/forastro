@@ -1,0 +1,20 @@
+{
+  "name": "@forastro/docs",
+  "type": "module",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/markdoc": "^0.12.4",
+    "@astrojs/starlight": "^0.35.2",
+    "@astrojs/starlight-markdoc": "^0.2.0",
+    "astro": "^5.12.9",
+    "markdoc": "^0.1.3",
+    "sharp": "^0.32.6"
+  }
+}
