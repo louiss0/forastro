@@ -1,6 +1,10 @@
 = Welcome to the Forastro Blog
-:toc:
-:icons: font
+Jane Doe <jane.doe@forastro.dev>
+:description: This content demonstrates AsciiDoc integration with the @forastro/asciidoc package and its rich markup capabilities for technical writing.
+:docdate: 2025-01-11
+:created-at: 2025-01-11
+:email: jane.doe@forastro.dev
+:localdate: 2025-01-11
 
 This content is written in AsciiDoc and processed by @forastro/asciidoc.
 

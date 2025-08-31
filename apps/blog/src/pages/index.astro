@@ -6,8 +6,9 @@ import { getCollection, type CollectionEntry } from 'astro:content';
 // import welcome from '../content/welcome.adoc';
 
 const posts = (await getCollection('blog') as CollectionEntry<'blog'>[])
-  .filter((p: CollectionEntry<'blog'>) => !p.data.draft)
-  .sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+  .sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => 
+    new Date(b.data.updatedAt).getTime() - new Date(a.data.updatedAt).getTime()
+  );
 ---
 <BaseLayout title="ForAstro Blog">
   <main>
