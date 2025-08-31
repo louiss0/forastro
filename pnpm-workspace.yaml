@@ -4,3 +4,5 @@ onlyBuiltDependencies:
 packages:
   - "apps/*"
   - "packages/*"
+  - "tools/*"
+  - "templates/*"

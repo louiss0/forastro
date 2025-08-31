@@ -1,22 +1,22 @@
 {
+  "name": "mock-blog",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "docs",
   "projectType": "application",
-  "sourceRoot": "apps/docs/src",
-  "tags": ["type:app", "scope:docs"],
+  "sourceRoot": "apps/mock-blog/src",
+  "tags": ["type:app", "scope:mock-blog"],
   "targets": {
     "dev": {
       "executor": "nx:run-commands",
       "options": {
         "command": "astro dev",
-        "cwd": "apps/docs"
+        "cwd": "apps/mock-blog"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
         "command": "astro build",
-        "cwd": "apps/docs"
+        "cwd": "apps/mock-blog"
       },
       "outputs": ["{projectRoot}/dist"]
     },
@@ -24,14 +24,14 @@
       "executor": "nx:run-commands",
       "options": {
         "command": "astro preview",
-        "cwd": "apps/docs"
+        "cwd": "apps/mock-blog"
       }
     },
     "check": {
       "executor": "nx:run-commands",
       "options": {
         "command": "astro check",
-        "cwd": "apps/docs"
+        "cwd": "apps/mock-blog"
       }
     }
   }

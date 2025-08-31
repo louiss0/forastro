@@ -62,6 +62,7 @@
     "vitest": "^3.2.4"
   },
   "dependencies": {
+    "@astrojs/rss": "^4.0.12",
     "@astrojs/starlight-markdoc": "^0.2.0",
     "@fontsource/palanquin": "^5.2.6",
     "@fontsource/raleway": "^5.2.6",
