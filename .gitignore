@@ -14,3 +14,4 @@ vitest.config.*.timestamp*
 
 # Keep .githooks/ directory and files for commit validation
 # Keep .github/workflows/ directory for CI/CD
+coverage/
