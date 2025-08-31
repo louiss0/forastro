@@ -1,0 +1,24 @@
+= Document with Code
+Jane Smith <jane@example.com>
+v1.0, 2023-12-25
+:description: Document with code blocks
+:source-highlighter: shiki
+
+== JavaScript Example
+
+[source,javascript]
+----
+function hello() {
+  console.log("Hello, World!");
+}
+----
+
+== TypeScript Example
+
+[source,typescript]
+----
+interface User {
+  name: string;
+  email: string;
+}
+----

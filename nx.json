@@ -19,6 +19,11 @@
       "inputs": ["production", "^production"],
       "cache": true
     },
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "inputs": ["default", "^production"],
+      "cache": true
+    },
     "check": {
       "inputs": ["production", "^production"],
       "cache": true
@@ -52,6 +57,9 @@
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
+  },
+  "affected": {
+    "defaultBase": "main"
   },
   "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,

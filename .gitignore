@@ -6,7 +6,7 @@ mock-app
 **/.env
 **/cache
 .nx/workspace-data/**
-pnpm-workspace.yaml
+
 vite.config.*.timestamp*
 vitest.config.*.timestamp*
 .cursor/rules/nx-rules.mdc
@@ -14,3 +14,5 @@ vitest.config.*.timestamp*
 
 # Keep .githooks/ directory and files for commit validation
 # Keep .github/workflows/ directory for CI/CD
+coverage/
+docs/

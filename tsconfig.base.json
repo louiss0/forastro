@@ -21,13 +21,10 @@
     "baseUrl": ".",
     "paths": {
       "@forastro/asciidoc": ["packages/asciidoc/src/index.ts"],
-      "@forastro/astro-nx": ["tools/astro-nx/src/index.ts"],
-      "@forastro/markdoc-html-tags": ["packages/markdoc-html-tags"],
-      "@forastro/packages": ["packages/src/index.ts"],
-      "@forastro/remark-html-directives-integration": [
-        "packages/remark-html-directives-integration"
-      ],
-      "@forastro/utilities": ["packages/utilities/src/index.ts"]
+      "@forastro/asciidoc/*": ["packages/asciidoc/src/*"],
+      "@forastro/utilities": ["packages/utilities/src/index.ts"],
+      "@forastro/utilities/*": ["packages/utilities/src/*"],
+      "@forastro/astro-nx": ["tools/astro-nx/src/index.ts"]
     }
   },
   "references": [
@@ -35,13 +32,10 @@
       "path": "packages/asciidoc"
     },
     {
-      "path": "packages/nx-astro-plugin"
-    },
-    {
-      "path": "packages/starlight-asciidoc"
-    },
-    {
       "path": "packages/utilities"
+    },
+    {
+      "path": "tools/astro-nx"
     }
   ],
   "exclude": ["node_modules", "tmp"]
