@@ -38,13 +38,6 @@
       "options": {
         "command": "pnpm tsc -p apps/astro-circle/tsconfig.json --noEmit"
       }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "apps/astro-circle/.vitest"
-      }
     }
   }
 }
