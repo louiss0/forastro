@@ -11,7 +11,9 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@forastro/utilities": "workspace:*"
+    "@forastro/utilities": "workspace:*",
+    "@iconify-json/simple-icons": "^1.2.25",
+    "@iconify-json/logos": "^1.2.9"
   },
   "keywords": [],
   "author": "",
