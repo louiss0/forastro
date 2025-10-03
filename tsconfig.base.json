@@ -18,14 +18,7 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@forastro/asciidoc": ["packages/asciidoc/src/index.ts"],
-      "@forastro/asciidoc/*": ["packages/asciidoc/src/*"],
-      "@forastro/utilities": ["packages/utilities/src/index.ts"],
-      "@forastro/utilities/*": ["packages/utilities/src/*"],
-      "@forastro/astro-nx": ["tools/astro-nx/src/index.ts"]
-    }
+    "baseUrl": "."
   },
   "references": [
     {
@@ -33,9 +26,6 @@
     },
     {
       "path": "packages/utilities"
-    },
-    {
-      "path": "tools/astro-nx"
     }
   ],
   "exclude": ["node_modules", "tmp"]

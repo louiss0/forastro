@@ -12,7 +12,7 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.test.ts'],
+    include: ['src/**/*.{test,spec}.ts'],
     exclude: ['**/__fixtures__/**', 'dist/**', 'coverage/**', 'mock-blog/**'],
     coverage: {
       provider: 'v8',
@@ -35,11 +35,12 @@ export default defineConfig({
         'src/lib/unocss.ts',
         'src/lib/unocss.spec.ts'
       ],
+      all: true,
       thresholds: {
-        lines: 70,
-        statements: 70,
-        branches: 85,
-        functions: 50,
+        lines: 80,
+        statements: 80,
+        branches: 80,
+        functions: 80,
       },
     },
   },

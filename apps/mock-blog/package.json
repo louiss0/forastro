@@ -7,5 +7,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro"
+  },
+  "dependencies": {
+    "sharp": "^0.34.4"
   }
 }
