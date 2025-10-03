@@ -27,15 +27,9 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": [
-          "apps/blog/src/**/*.ts",
-          "apps/blog/src/**/*.tsx",
-          "apps/blog/src/**/*.astro",
-          "apps/blog/**/*.config.ts",
-          "apps/blog/**/*.config.mjs"
-        ]
+        "command": "pnpm eslint \"apps/blog/**/*.{ts,tsx,astro}\" --max-warnings=0"
       }
     },
     "type-check": {

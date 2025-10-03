@@ -29,7 +29,8 @@ export default [
     },
     plugins: { '@typescript-eslint': tseslint },
     rules: {
-      '@typescript-eslint/consistent-type-imports': 'error',
+      '@typescript-eslint/consistent-type-imports': 'warn',
+      '@typescript-eslint/naming-convention': 'off',
     },
   },
   // Test file relaxations

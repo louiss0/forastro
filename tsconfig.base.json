@@ -21,9 +21,7 @@
     "baseUrl": ".",
     "paths": {
       "@forastro/asciidoc": ["packages/asciidoc/src/index.ts"],
-      "@forastro/asciidoc/*": ["packages/asciidoc/src/*"],
-      "@forastro/utilities": ["packages/utilities/src/index.ts"],
-      "@forastro/utilities/*": ["packages/utilities/src/*"]
+      "@forastro/utilities": ["packages/utilities/src/index.ts"]
     }
   },
   "references": [

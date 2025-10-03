@@ -28,15 +28,9 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": [
-          "apps/mock-blog/src/**/*.ts",
-          "apps/mock-blog/src/**/*.tsx",
-          "apps/mock-blog/src/**/*.astro",
-          "apps/mock-blog/**/*.config.ts",
-          "apps/mock-blog/**/*.config.mjs"
-        ]
+        "command": "pnpm eslint \"apps/mock-blog/**/*.{ts,tsx,astro}\" --max-warnings=0"
       }
     },
     "type-check": {

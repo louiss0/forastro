@@ -20,12 +20,9 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": [
-          "packages/utilities/src/**/*.ts",
-          "packages/utilities/**/*.config.ts"
-        ]
+        "command": "pnpm eslint \"packages/utilities/**/*.{ts,tsx}\" --max-warnings=0"
       }
     },
     "type-check": {

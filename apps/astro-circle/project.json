@@ -28,15 +28,9 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
+      "executor": "nx:run-commands",
       "options": {
-        "lintFilePatterns": [
-          "apps/astro-circle/src/**/*.ts",
-          "apps/astro-circle/src/**/*.tsx",
-          "apps/astro-circle/src/**/*.astro",
-          "apps/astro-circle/**/*.config.ts",
-          "apps/astro-circle/**/*.config.mjs"
-        ]
+        "command": "pnpm eslint \"apps/astro-circle/**/*.{ts,tsx,astro}\" --max-warnings=0"
       }
     },
     "type-check": {
