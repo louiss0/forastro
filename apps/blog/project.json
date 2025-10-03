@@ -37,13 +37,6 @@
       "options": {
         "command": "pnpm tsc -p apps/blog/tsconfig.json --noEmit"
       }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "options": {
-        "passWithNoTests": true,
-        "reportsDirectory": "apps/blog/.vitest"
-      }
     }
   },
   "tags": ["type:app", "scope:blog"]
