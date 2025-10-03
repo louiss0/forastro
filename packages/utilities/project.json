@@ -26,11 +26,9 @@
       }
     },
     "type-check": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{workspaceRoot}/dist/packages/utilities"],
+      "executor": "nx:run-commands",
       "options": {
-        "rootDir": "packages/utilities",
-        "tsConfig": "packages/utilities/tsconfig.lib.json"
+        "command": "pnpm tsc -p packages/utilities/tsconfig.lib.json --noEmit"
       }
     },
     "test": {

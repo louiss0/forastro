@@ -34,10 +34,9 @@
       }
     },
     "type-check": {
-      "executor": "@nx/js:tsc",
+      "executor": "nx:run-commands",
       "options": {
-        "tsConfig": "apps/astro-circle/tsconfig.json",
-        "noEmit": true
+        "command": "pnpm tsc -p apps/astro-circle/tsconfig.json --noEmit"
       }
     },
     "test": {

@@ -26,11 +26,9 @@
       }
     },
     "type-check": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{workspaceRoot}/dist/packages/asciidoc"],
+      "executor": "nx:run-commands",
       "options": {
-        "rootDir": "packages/asciidoc",
-        "tsConfig": "packages/asciidoc/tsconfig.lib.json"
+        "command": "pnpm tsc -p packages/asciidoc/tsconfig.lib.json --noEmit"
       }
     },
     "test": {

@@ -33,10 +33,9 @@
       }
     },
     "type-check": {
-      "executor": "@nx/js:tsc",
+      "executor": "nx:run-commands",
       "options": {
-        "tsConfig": "apps/blog/tsconfig.json",
-        "noEmit": true
+        "command": "pnpm tsc -p apps/blog/tsconfig.json --noEmit"
       }
     },
     "test": {
