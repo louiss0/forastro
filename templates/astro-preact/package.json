@@ -21,10 +21,10 @@
     "ts-pattern": "*"
   },
   "devDependencies": {
-    "@astrojs/preact": "*",
+    "@astrojs/preact": "^4.1.1",
     "@iconify/json": "*",
     "@svgr/core": "*",
-    "astro": "*",
+    "astro": "^5.14.1",
     "unocss": "*",
     "unplugin-icons": "*"
   }
