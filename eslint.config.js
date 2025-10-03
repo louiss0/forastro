@@ -43,7 +43,7 @@ export default [
     },
   },
   // Astro files
-  astro.configs.recommended,
+  ...astro.configs.recommended,
   // Prettier last to disable conflicting rules
   prettier,
 ];

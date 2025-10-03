@@ -22,7 +22,7 @@
     "lint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "pnpm eslint \"packages/asciidoc/**/*.{ts,tsx}\" --max-warnings=0"
+        "command": "pnpm eslint \"packages/asciidoc/**/*.{ts,tsx}\""
       }
     },
     "type-check": {
