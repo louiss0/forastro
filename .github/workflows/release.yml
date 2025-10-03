@@ -42,10 +42,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: pnpm nx affected -t test --parallel --exclude=astro-nx
+        run: pnpm nx affected -t test --parallel
 
       - name: Lint code
-        run: pnpm nx affected -t lint --parallel --exclude=astro-nx
+        run: pnpm nx affected -t lint --parallel
 
       - name: Astro check
         run: pnpm nx affected -t check --parallel

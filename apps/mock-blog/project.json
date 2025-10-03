@@ -1,37 +1,56 @@
 {
   "name": "mock-blog",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
+  "root": "apps/mock-blog",
   "sourceRoot": "apps/mock-blog/src",
+  "projectType": "application",
   "tags": ["type:app", "scope:mock-blog"],
   "targets": {
     "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro dev",
+        "command": "pnpm astro dev",
         "cwd": "apps/mock-blog"
       }
     },
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro build",
+        "command": "pnpm astro build",
         "cwd": "apps/mock-blog"
       },
       "outputs": ["{projectRoot}/dist"]
     },
-    "preview": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "astro preview",
-        "cwd": "apps/mock-blog"
-      }
-    },
     "check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro check",
+        "command": "pnpm astro check",
         "cwd": "apps/mock-blog"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/mock-blog/src/**/*.ts",
+          "apps/mock-blog/src/**/*.tsx",
+          "apps/mock-blog/src/**/*.astro",
+          "apps/mock-blog/**/*.config.ts",
+          "apps/mock-blog/**/*.config.mjs"
+        ]
+      }
+    },
+    "type-check": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "tsConfig": "apps/mock-blog/tsconfig.json",
+        "noEmit": true
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "apps/mock-blog/.vitest"
       }
     }
   }

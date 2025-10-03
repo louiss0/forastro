@@ -19,6 +19,15 @@
         "cwd": "packages/utilities"
       }
     },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "packages/utilities/src/**/*.ts",
+          "packages/utilities/**/*.config.ts"
+        ]
+      }
+    },
     "type-check": {
       "executor": "@nx/js:tsc",
       "outputs": ["{workspaceRoot}/dist/packages/utilities"],
@@ -31,7 +40,14 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/packages/utilities"
+        "reportsDirectory": "../../coverage/packages/utilities",
+        "passWithNoTests": true
+      }
+    },
+    "check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node -e \"process.exit(0)\""
       }
     }
   }

@@ -1,37 +1,56 @@
 {
   "name": "blog",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "projectType": "application",
+  "root": "apps/blog",
   "sourceRoot": "apps/blog/src",
+  "projectType": "application",
   "targets": {
     "dev": {
-      "executor": "@forastro/astro-nx:dev"
-    },
-    "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro build",
+        "command": "pnpm astro dev",
         "cwd": "apps/blog"
       }
     },
-    "preview": {
-      "executor": "@forastro/astro-nx:preview"
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
       "options": {
-        "lintFilePatterns": ["apps/blog/**/*.{js,ts,astro}"]
+        "command": "pnpm astro build",
+        "cwd": "apps/blog"
       }
     },
     "check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro check",
+        "command": "pnpm astro check",
         "cwd": "apps/blog"
-      },
-      "cache": true,
-      "outputs": ["{projectRoot}/.astro-check"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "options": {
+        "lintFilePatterns": [
+          "apps/blog/src/**/*.ts",
+          "apps/blog/src/**/*.tsx",
+          "apps/blog/src/**/*.astro",
+          "apps/blog/**/*.config.ts",
+          "apps/blog/**/*.config.mjs"
+        ]
+      }
+    },
+    "type-check": {
+      "executor": "@nx/js:tsc",
+      "options": {
+        "tsConfig": "apps/blog/tsconfig.json",
+        "noEmit": true
+      }
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "options": {
+        "passWithNoTests": true,
+        "reportsDirectory": "apps/blog/.vitest"
+      }
     }
   },
   "tags": ["type:app", "scope:blog"]

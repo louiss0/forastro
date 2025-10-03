@@ -23,8 +23,7 @@
       "@forastro/asciidoc": ["packages/asciidoc/src/index.ts"],
       "@forastro/asciidoc/*": ["packages/asciidoc/src/*"],
       "@forastro/utilities": ["packages/utilities/src/index.ts"],
-      "@forastro/utilities/*": ["packages/utilities/src/*"],
-      "@forastro/astro-nx": ["tools/astro-nx/src/index.ts"]
+      "@forastro/utilities/*": ["packages/utilities/src/*"]
     }
   },
   "references": [
@@ -33,9 +32,6 @@
     },
     {
       "path": "packages/utilities"
-    },
-    {
-      "path": "tools/astro-nx"
     }
   ],
   "exclude": ["node_modules", "tmp"]
