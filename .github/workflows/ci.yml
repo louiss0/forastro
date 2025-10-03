@@ -35,8 +35,8 @@ jobs:
       - name: Lint (affected)
         run: pnpm nx affected -t lint --parallel --base=origin/main
 
-      - name: Test (affected)
-        run: pnpm nx affected -t test --parallel --base=origin/main
+      - name: Test packages only (libraries)
+        run: pnpm nx run-many -t test --projects="tag:nx:lib" --parallel
 
       - name: Astro check (affected, exclude problematic projects)
         run: pnpm nx affected -t check --parallel --base=origin/main

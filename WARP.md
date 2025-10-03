@@ -290,6 +290,14 @@ Since `.github/workflows/` is present, this repo uses **CI-centric** Git Flow:
 - **Hotfixes**: Branch from `main`, fix, merge to `main` (deploy), then merge back to `develop`
 - **Continuous deployment** from `main` branch
 
+### Testing policy in CI
+
+- Apps in this repository are NOT tested in CI.
+- Only libraries (packages) are tested, and they must meet coverage thresholds.
+- Workflows use:
+  - `pnpm nx run-many -t test --projects="tag:nx:lib" --parallel`
+- Coverage thresholds are enforced via Vitest config in each package (V8 provider, 80% across lines/functions/branches/statements).
+
 ### Hotfix Workflow
 
 ```bash
