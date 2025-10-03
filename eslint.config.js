@@ -3,10 +3,19 @@ import tseslint from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 import astro from 'eslint-plugin-astro';
 import prettier from 'eslint-config-prettier';
+import nxPlugin from '@nx/eslint-plugin';
 
 export default [
   {
     ignores: ['**/dist/**', '**/.next/**', '**/node_modules/**', 'docs/**/node_modules/**'],
+  },
+  // General rules (including Nx)
+  {
+    plugins: { '@nx': nxPlugin },
+    rules: {
+      // Disable module boundary fixer that breaks on Windows with wildcard tsconfig paths
+      '@nx/enforce-module-boundaries': 'off',
+    },
   },
   // TypeScript rules
   {
@@ -21,6 +30,15 @@ export default [
     plugins: { '@typescript-eslint': tseslint },
     rules: {
       '@typescript-eslint/consistent-type-imports': 'error',
+    },
+  },
+  // Test file relaxations
+  {
+    files: ['**/*.test.ts', '**/*.spec.ts'],
+    rules: {
+      '@typescript-eslint/prefer-promise-reject-errors': 'off',
+      '@typescript-eslint/no-empty-function': 'off',
+      '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_', 'varsIgnorePattern': '^_' }],
     },
   },
   // Astro files
