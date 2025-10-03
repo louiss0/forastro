@@ -18,11 +18,7 @@
     "verbatimModuleSyntax": true,
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@forastro/asciidoc": ["packages/asciidoc/src/index.ts"],
-      "@forastro/utilities": ["packages/utilities/src/index.ts"]
-    }
+    "baseUrl": "."
   },
   "references": [
     {
