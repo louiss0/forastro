@@ -42,6 +42,14 @@ export default [
       '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_', 'varsIgnorePattern': '^_' }],
     },
   },
+  // Ignore/relax for generated declaration files
+  {
+    files: ['**/*.d.ts'],
+    rules: {
+      '@typescript-eslint/consistent-type-imports': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+    }
+  },
   // Astro files
   ...astro.configs.recommended,
   // Prettier last to disable conflicting rules
