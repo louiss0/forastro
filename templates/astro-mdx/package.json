@@ -18,10 +18,10 @@
   "author": "Shelton Louis",
   "license": "ISC",
   "devDependencies": {
-    "@astrojs/mdx": "^4.3.6",
+    "@astrojs/mdx": "*",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "astro": "^5.14.1",
+    "astro": "*",
     "unocss": "*"
   },
   "dependencies": {

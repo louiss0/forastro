@@ -19,13 +19,13 @@
     "@code-fixer-23/cn-efs": "*",
     "@forastro/flow": "2.5.4",
     "@forastro/utilities": "*",
-    "astro-icon": "*",
-    "ts-pattern": "*"
+    "ts-pattern": "*",
+    "astro-icon": "*"
   },
   "devDependencies": {
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "astro": "^5.14.1",
+    "astro": "*",
     "unocss": "*"
   }
 }
