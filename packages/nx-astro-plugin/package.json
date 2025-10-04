@@ -1,0 +1,39 @@
+{
+  "name": "@forastro/nx-astro-plugin",
+  "version": "0.1.0",
+  "description": "Nx plugin for Astro: scaffold, integrate, and run Astro in package-based workspaces.",
+  "type": "module",
+  "license": "MIT",
+  "author": "forastro",
+  "keywords": ["nx", "astro", "plugin", "forastro"],
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./generators": "./generators.json",
+    "./executors": "./executors.json"
+  },
+  "files": [
+    "dist",
+    "generators.json",
+    "executors.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "nx": ">=21.0.0",
+    "astro": ">=4.0.0"
+  },
+  "dependencies": {
+    "@nx/devkit": "^21.6.3",
+    "execa": "^9.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "nx": {
+    "name": "nx-astro-plugin"
+  }
+}

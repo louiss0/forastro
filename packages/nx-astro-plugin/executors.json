@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json.schemastore.org/nx-plugin.schema.json",
+  "executors": {
+    "dev": {
+      "implementation": "./dist/executors/dev/executor.js",
+      "schema": "./dist/executors/dev/schema.json",
+      "description": "Run astro dev"
+    },
+    "build": {
+      "implementation": "./dist/executors/build/executor.js",
+      "schema": "./dist/executors/build/schema.json",
+      "description": "Run astro build"
+    },
+    "preview": {
+      "implementation": "./dist/executors/preview/executor.js",
+      "schema": "./dist/executors/preview/schema.json",
+      "description": "Run astro preview"
+    },
+    "check": {
+      "implementation": "./dist/executors/check/executor.js",
+      "schema": "./dist/executors/check/schema.json",
+      "description": "Run astro check"
+    },
+    "sync": {
+      "implementation": "./dist/executors/sync/executor.js",
+      "schema": "./dist/executors/sync/schema.json",
+      "description": "Run astro sync"
+    },
+    "add": {
+      "implementation": "./dist/executors/add/executor.js",
+      "schema": "./dist/executors/add/schema.json",
+      "description": "Run astro add to add integrations"
+    }
+  }
+}

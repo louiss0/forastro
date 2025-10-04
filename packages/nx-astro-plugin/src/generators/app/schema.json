@@ -1,0 +1,17 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Create Astro app",
+  "type": "object",
+  "properties": {
+    "name": { "type": "string" },
+    "directory": { "type": "string", "default": "apps" },
+    "template": { "type": "string", "default": "minimal" },
+    "typescript": { "type": "boolean", "default": true },
+    "integrations": { "type": "array", "items": { "type": "string" } },
+    "eslint": { "type": "string", "enum": ["auto", "true", "false"], "default": "auto" },
+    "skipInstall": { "type": "boolean", "default": false },
+    "offlineStrategy": { "type": "string", "enum": ["none", "copy-fixture"], "default": "none" },
+    "packageManager": { "type": "string", "enum": ["auto", "jpd", "pnpm", "npm", "yarn"], "default": "auto" }
+  },
+  "required": ["name"]
+}

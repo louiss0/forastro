@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "title": "Add Astro integration",
+  "type": "object",
+  "properties": {
+    "project": { "type": "string" },
+    "names": { "type": "array", "items": { "type": "string" } },
+    "eslint": { "type": "string", "enum": ["auto", "true", "false"], "default": "auto" }
+  },
+  "required": ["project", "names"]
+}

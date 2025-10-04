@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "types": ["vitest", "node"],
+    "lib": ["ES2020"]
+  },
+  "include": ["src/**/*.spec.ts", "src/**/*.test.ts"]
+}
