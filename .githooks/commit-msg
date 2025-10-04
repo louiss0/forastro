@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+# Enforce Conventional Commits via commitlint
+pnpm exec commitlint --edit "$1"
