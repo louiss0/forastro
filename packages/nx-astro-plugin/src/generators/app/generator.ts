@@ -1,5 +1,5 @@
 import type { Tree } from '@nx/devkit';
-import { formatFiles, joinPathFragments, generateFiles, updateJson, addDependenciesToPackageJson } from '@nx/devkit';
+import { formatFiles, joinPathFragments, generateFiles, updateJson } from '@nx/devkit';
 import { execa } from 'execa';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';

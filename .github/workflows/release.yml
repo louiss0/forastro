@@ -105,8 +105,12 @@ jobs:
           # Generate changelogs
           pnpm nx release changelog --yes --verbose
           
-          # Publish to npm
-          pnpm nx release publish --yes --verbose
+          # Publish to npm only if NPM_TOKEN is present
+          if [ -z "${NPM_TOKEN}" ]; then
+            echo "NPM_TOKEN is not set. Skipping npm publish step."
+          else
+            pnpm nx release publish --yes --verbose
+          fi
 
   # Dry Run Job (for develop branch and PRs)
   release-dry-run:
