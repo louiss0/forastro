@@ -33,5 +33,9 @@ export default async function generateContent(tree: Tree, options: Schema) {
     }
   }
 
-  await formatFiles(tree);
+  try {
+    await formatFiles(tree);
+  } catch {
+    // Swallow formatting errors in constrained environments (CI/E2E)
+  }
 }
