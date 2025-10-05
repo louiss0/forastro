@@ -70,7 +70,7 @@ jobs:
       - name: Generate Astro app via plugin (offline fixture)
         working-directory: e2e
         run: |
-          pnpm nx g @forastro/nx-astro-plugin:app e2e-site --directory=apps --offlineStrategy=copy-fixture
+          pnpm nx g @forastro/nx-astro-plugin:app --name=e2e-site --directory=apps --offlineStrategy=copy-fixture
 
       - name: Add MDX integration via generator
         working-directory: e2e
