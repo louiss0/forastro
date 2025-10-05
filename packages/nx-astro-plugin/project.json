@@ -29,5 +29,5 @@
       }
     }
   },
-  "tags": ["nx:lib:ongoing"]
+  "tags": ["nx:lib", "nx:lib:ongoing"]
 }
