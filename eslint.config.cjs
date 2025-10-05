@@ -5,8 +5,10 @@ const tseslint = require('typescript-eslint');
 const astroParser = require('astro-eslint-parser');
 const astroPlugin = require('eslint-plugin-astro');
 
+const path = require('path');
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
+  // Use __dirname when available (CJS), otherwise fall back to the current working directory
+  baseDirectory: typeof __dirname !== 'undefined' ? __dirname : process.cwd(),
   recommendedConfig: js.configs.recommended,
 });
 
