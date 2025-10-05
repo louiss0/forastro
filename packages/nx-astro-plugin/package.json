@@ -1,0 +1,58 @@
+{
+  "name": "@forastro/nx-astro-plugin",
+  "version": "0.1.2",
+  "description": "Nx plugin for Astro: scaffold, integrate, and run Astro in package-based workspaces.",
+  "type": "module",
+  "license": "MIT",
+  "author": "forastro",
+  "keywords": ["nx", "astro", "plugin", "forastro"],
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js",
+    "./generators": "./generators.json",
+    "./executors": "./executors.json",
+    "./package.json": "./package.json"
+  },
+  "generators": "./generators.json",
+  "executors": "./executors.json",
+  "files": [
+    "dist",
+    "generators.json",
+    "executors.json",
+    "README.md",
+    "src/generators/**/schema.json",
+    "src/executors/**/schema.json",
+    "src/generators/app/templates/**/*"
+  ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "nx": ">=21.0.0",
+    "astro": ">=4.0.0"
+  },
+  "dependencies": {
+    "@nx/devkit": "^21.6.3",
+    "execa": "^9.6.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/louiss0/forastro",
+    "directory": "packages/nx-astro-plugin"
+  },
+  "bugs": {
+    "url": "https://github.com/louiss0/forastro/issues",
+    "email": "louisshelton0@gmail.com"
+  },
+  "nx": {
+    "name": "nx-astro-plugin"
+  }
+}

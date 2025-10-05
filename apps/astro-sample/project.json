@@ -1,0 +1,30 @@
+{
+  "name": "astro-sample",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/astro-sample/src",
+  "targets": {
+    "dev": {
+      "executor": "@forastro/nx-astro-plugin:dev",
+      "options": {}
+    },
+    "build": {
+      "executor": "@forastro/nx-astro-plugin:build",
+      "options": {
+        "outDir": "dist"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "preview": {
+      "executor": "@forastro/nx-astro-plugin:preview",
+      "options": {}
+    },
+    "check": {
+      "executor": "@forastro/nx-astro-plugin:check",
+      "options": {}
+    },
+    "sync": {
+      "executor": "@forastro/nx-astro-plugin:sync",
+      "options": {}
+    }
+  }
+}
