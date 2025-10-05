@@ -1,6 +1,6 @@
 import type { Tree } from '@nx/devkit';
 import { readProjectConfiguration } from '@nx/devkit';
-import { detectPackageManager, getExecFor } from '../../utils/pm.js';
+import { resolveAstroBinary } from '../../utils/pm.js';
 import { execa } from 'execa';
 
 interface Schema {
@@ -11,13 +11,10 @@ interface Schema {
 
 export default async function addIntegration(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
-  const pm = detectPackageManager();
-  const { npx, runner } = getExecFor(pm);
+  const astroBin = await resolveAstroBinary(proj.root, (tree as any).root ?? process.cwd());
 
   for (const name of options.names) {
-    const args: string[] = [];
-    if (runner.length) args.push(...runner);
-    args.push('astro', 'add', name, '--yes');
-    await execa(npx, args, { cwd: proj.root, stdio: 'inherit' });
+    const args: string[] = ['add', name, '--yes'];
+    await execa(astroBin, args, { cwd: proj.root, stdio: 'inherit' });
   }
 }
