@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "@forastro/nx-astro-plugin:layout",
+  "type": "object",
+  "properties": {
+    "project": { "type": "string", "description": "Nx project name" },
+    "name": { "type": "string", "description": "Layout name" },
+    "directory": { "type": "string", "description": "Optional subdirectory under src/layouts" }
+  },
+  "required": ["project", "name"]
+}

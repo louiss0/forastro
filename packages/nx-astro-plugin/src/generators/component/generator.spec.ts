@@ -1,0 +1,53 @@
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import type { Tree, ProjectConfiguration } from '@nx/devkit';
+import generator from './generator.js';
+import * as devkit from '@nx/devkit';
+
+vi.mock('@nx/devkit', async () => {
+  const actual = await vi.importActual<typeof devkit>('@nx/devkit');
+  return {
+    ...actual,
+    readProjectConfiguration: vi.fn(),
+    joinPathFragments: actual.joinPathFragments,
+    formatFiles: vi.fn(),
+  };
+});
+
+describe('component generator', () => {
+  let tree: Tree;
+  const mockReadProjectConfiguration = vi.mocked(devkit.readProjectConfiguration);
+  const mockFormatFiles = vi.mocked(devkit.formatFiles);
+  const writeSpy = vi.fn<[string, string], void>();
+
+  beforeEach(() => {
+    writeSpy.mockReset();
+    tree = {
+      root: '/workspace',
+      exists: vi.fn<[string], boolean>().mockReturnValue(false) as unknown as Tree['exists'],
+      write: writeSpy as unknown as Tree['write'],
+      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+    } as unknown as Tree;
+
+    mockReadProjectConfiguration.mockReturnValue({
+      root: 'apps/site',
+      name: 'site',
+    } as unknown as ProjectConfiguration);
+  });
+
+  it('creates a component in src/components with PascalCase name', async () => {
+    await generator(tree, { project: 'site', name: 'my button' });
+
+    const call = writeSpy.mock.calls[0];
+    const path = call[0].replace(/\\/g, '/');
+    expect(path).toContain('apps/site/src/components/MyButton.astro');
+    expect(mockFormatFiles).toHaveBeenCalled();
+  });
+
+  it('supports directory option under src/components', async () => {
+    await generator(tree, { project: 'site', name: 'modal', directory: 'ui' });
+
+    const call = writeSpy.mock.calls[0];
+    const path = call[0].replace(/\\/g, '/');
+    expect(path).toContain('apps/site/src/components/ui/Modal.astro');
+  });
+});

@@ -6,9 +6,11 @@
   "license": "MIT",
   "author": "forastro",
   "keywords": ["nx", "astro", "plugin", "forastro"],
-  "main": "./dist/index.js",
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "sideEffects": false,
   "exports": {
-    ".": "./dist/index.js",
+    ".": "./dist/src/index.js",
     "./generators": "./generators.json",
     "./executors": "./executors.json",
     "./package.json": "./package.json"
@@ -32,8 +34,11 @@
     "access": "public"
   },
   "peerDependencies": {
-    "nx": ">=21.0.0",
-    "astro": ">=4.0.0"
+    "nx": ">=21.0.0 <22.0.0",
+    "astro": ">=5.0.0"
+  },
+  "engines": {
+    "node": ">=18.17.0 || >=20.0.0"
   },
   "dependencies": {
     "@nx/devkit": "^21.6.3",

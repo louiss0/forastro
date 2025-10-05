@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "@forastro/nx-astro-plugin:add",
+  "type": "object",
+  "properties": {
+    "names": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "One or more integration package names to add via 'astro add'"
+    },
+    "allowGlobal": {
+      "type": "boolean",
+      "description": "Allow using global astro binary if not installed locally"
+    },
+    "binOverride": {
+      "type": "string",
+      "description": "Explicit path to astro binary to use"
+    },
+    "args": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Additional arguments passed to 'astro add'"
+    }
+  },
+  "required": ["names"]
+}

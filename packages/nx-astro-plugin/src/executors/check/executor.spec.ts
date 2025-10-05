@@ -23,7 +23,7 @@ describe('check executor', () => {
         'test-app': { root: 'apps/test-app' },
       },
     },
-  } as any;
+  } as unknown as ExecutorContext;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -31,7 +31,8 @@ describe('check executor', () => {
 
   it('should run check with default options', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     const result = await runExecutor({}, mockContext);
 

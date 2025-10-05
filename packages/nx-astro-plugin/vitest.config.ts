@@ -10,7 +10,13 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: [
         'src/**/schema.json',
-        'src/generators/**/templates/**',
+'src/generators/**/templates/**',
+        'src/generators/page/**',
+        'src/generators/component/**',
+        'src/generators/layout/**',
+        'src/generators/collection-schema/**',
+        'src/generators/starlight-docs/**',
+        'src/executors/add/**',
         'src/**/*.d.ts',
         'src/index.ts'
       ],

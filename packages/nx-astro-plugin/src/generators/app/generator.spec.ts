@@ -23,14 +23,15 @@ describe('app generator', () => {
   const mockFormatFiles = vi.mocked(devkit.formatFiles);
   const mockGenerateFiles = vi.mocked(devkit.generateFiles);
   const mockUpdateJson = vi.mocked(devkit.updateJson);
+  const writeMock = vi.fn<[string, string], void>();
 
   beforeEach(() => {
     tree = {
       root: '/workspace',
-      exists: vi.fn().mockReturnValue(false),
-      write: vi.fn(),
-      read: vi.fn(),
-    } as any;
+      exists: vi.fn<[string], boolean>().mockReturnValue(false) as unknown as Tree['exists'],
+      write: writeMock as unknown as Tree['write'],
+      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+    } as unknown as Tree;
     vi.clearAllMocks();
   });
 
@@ -50,7 +51,8 @@ describe('app generator', () => {
   });
 
   it('should create project with npx create-astro by default', async () => {
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await generator(tree, {
       name: 'test-app',
@@ -69,7 +71,8 @@ describe('app generator', () => {
   });
 
   it('should use custom template when specified', async () => {
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await generator(tree, {
       name: 'test-app',
@@ -84,28 +87,30 @@ describe('app generator', () => {
   });
 
   it('should use custom directory', async () => {
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await generator(tree, {
       name: 'test-app',
       directory: 'packages',
     });
 
-    const writeCall = (tree.write as any).mock.calls[0];
+    const writeCall = writeMock.mock.calls[0];
     const normalizedPath = writeCall[0].replace(/\\/g, '/');
     expect(normalizedPath).toContain('packages/test-app/project.json');
   });
 
   it('should write project.json with correct executors', async () => {
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await generator(tree, {
       name: 'test-app',
     });
 
-    const writeCall = (tree.write as any).mock.calls.find((call: any) =>
+    const writeCall = writeMock.mock.calls.find((call) =>
       call[0].includes('project.json')
-    );
+    ) as [string, string] | undefined;
     expect(writeCall).toBeDefined();
     const projectJson = JSON.parse(writeCall[1]);
     expect(projectJson.targets).toHaveProperty('dev');
@@ -116,7 +121,8 @@ describe('app generator', () => {
   });
 
   it('should update package.json when it exists', async () => {
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
     tree.exists = vi.fn().mockImplementation((path) => {
       return path.includes('package.json');
     });
@@ -141,7 +147,8 @@ describe('app generator', () => {
   });
 
   it('should preserve existing astro devDependency', async () => {
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
     tree.exists = vi.fn().mockImplementation((path) => {
       return path.includes('package.json');
     });

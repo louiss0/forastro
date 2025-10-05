@@ -57,8 +57,8 @@ forastro/
 │   ├── astro-minimal/             # Basic Astro template
 │   ├── astro-preact/              # Astro + Preact template
 │   └── astro-mdx/                 # Astro + MDX template
-├── tools/                         # Development tools
-│   └── astro-nx/                  # Custom Nx plugin for Astro
+├── packages/                     # Publishable npm packages
+│   └── nx-astro-plugin/           # Custom Nx plugin for Astro
 ├── shared/                        # Cross-package utilities
 │   └── generateNewPackageJSON.ts  # Build transformation logic
 ├── .github/workflows/             # CI/CD pipelines
@@ -72,7 +72,7 @@ forastro/
 - **`shared/generateNewPackageJSON.ts`**: Reusable schema validation and package.json transformation logic
 - **`nx.json`**: Defines release configuration, project tags, and build caching rules
 - **`eslint.config.cjs`**: Shared ESLint configuration with TypeScript and Astro support
-- **`tools/astro-nx/`**: Custom Nx plugin providing Astro-specific generators and executors
+- **`packages/nx-astro-plugin/`**: Custom Nx plugin providing Astro-specific generators and executors
 - **`templates/`**: Ready-to-use Astro project templates for different tech stacks
 
 ## 3. Development Commands
@@ -483,8 +483,8 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
       - run: pnpm install --frozen-lockfile
-      - run: pnpm nx affected -t lint --parallel --exclude=astro-nx
-      - run: pnpm nx affected -t test --parallel --exclude=astro-nx  
+      - run: pnpm nx affected -t lint --parallel --exclude=@forastro/nx-astro-plugin
+      - run: pnpm nx affected -t test --parallel --exclude=@forastro/nx-astro-plugin  
       - run: pnpm nx affected -t check --parallel
       - run: pnpm nx affected -t build --parallel
 ```
@@ -598,20 +598,20 @@ Each template includes:
 - UnoCSS setup
 - Package dependencies
 
-### Tools: astro-nx Plugin
+### Tools: nx-astro-plugin
 
-Located in `tools/astro-nx/`, this is a custom Nx plugin providing:
+Located in `packages/nx-astro-plugin/`, this is a custom Nx plugin providing:
 - Astro-specific generators for creating components, pages, and content files
-- Custom executors for `dev` and `preview` targets
+- Custom executors for `dev`, `build`, `preview`, `check`, and `sync` targets
 - Template management and scaffolding utilities
 
 **Usage**:
 ```bash
 # Generate new Astro component
-npx nx g @forastro/astro-nx:component my-component
+npx nx g @forastro/nx-astro-plugin:component my-component
 
 # Generate new page
-npx nx g @forastro/astro-nx:page my-page
+npx nx g @forastro/nx-astro-plugin:page my-page
 ```
 
 ## 13. Contributing Guidelines

@@ -23,7 +23,7 @@ describe('preview executor', () => {
         'test-app': { root: 'apps/test-app' },
       },
     },
-  } as any;
+  } as unknown as ExecutorContext;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -31,7 +31,8 @@ describe('preview executor', () => {
 
   it('should run preview with default options', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     const result = await runExecutor({}, mockContext);
 
@@ -42,7 +43,8 @@ describe('preview executor', () => {
 
   it('should pass port option', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await runExecutor({ port: 4322 }, mockContext);
 

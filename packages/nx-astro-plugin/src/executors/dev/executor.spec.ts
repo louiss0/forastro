@@ -25,7 +25,7 @@ describe('dev executor', () => {
         },
       },
     },
-  } as any;
+  } as unknown as ExecutorContext;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -33,7 +33,8 @@ describe('dev executor', () => {
 
   it('should run dev server with default options', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     const result = await runExecutor({}, mockContext);
 
@@ -44,7 +45,8 @@ describe('dev executor', () => {
 
   it('should pass port option', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await runExecutor({ port: 4321 }, mockContext);
 
@@ -55,7 +57,8 @@ describe('dev executor', () => {
 
   it('should pass host option', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await runExecutor({ host: '0.0.0.0' }, mockContext);
 
@@ -66,7 +69,8 @@ describe('dev executor', () => {
 
   it('should pass open flag', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
-    mockExeca.mockResolvedValue({} as any);
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
 
     await runExecutor({ open: true }, mockContext);
 

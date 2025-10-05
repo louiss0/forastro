@@ -4,6 +4,25 @@ import { execa } from 'execa';
 
 export type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
+export interface ExecRunner {
+  npx: string;
+  runner: string[]; // e.g., ['dlx']
+}
+
+export function getExecFor(pm: PackageManager): ExecRunner {
+  switch (pm) {
+    case 'pnpm':
+      return { npx: 'pnpm', runner: ['dlx'] };
+    case 'yarn':
+      return { npx: 'yarn', runner: ['dlx'] };
+    case 'bun':
+      return { npx: 'bunx', runner: [] };
+    case 'npm':
+    default:
+      return { npx: 'npx', runner: [] };
+  }
+}
+
 const LOCKFILE_MAP: Array<{ file: string; pm: PackageManager }> = [
   { file: 'pnpm-lock.yaml', pm: 'pnpm' },
   { file: 'package-lock.json', pm: 'npm' },
@@ -71,13 +90,19 @@ export async function resolveAstroBinary(
   // 3. Global (if allowed)
   if (allowGlobal) {
     try {
-      const { stdout } = await execa('which', [binName], { stdio: 'pipe' });
-      if (stdout.trim()) return stdout.trim();
+      if (isWindows) {
+        const { stdout } = await execa('where', [binName], { stdio: 'pipe' });
+        const first = stdout.split(/\r?\n/).find(Boolean)?.trim();
+        if (first) return first;
+      } else {
+        const { stdout } = await execa('which', [binName], { stdio: 'pipe' });
+        if (stdout.trim()) return stdout.trim();
+      }
     } catch {
-      // which not available or astro not found
+      // binary not found globally
     }
 
-    // Windows fallback: check PATH manually
+    // Windows extra fallback: check PATH by executing
     if (isWindows) {
       try {
         await execa('astro', ['--version'], { stdio: 'ignore' });

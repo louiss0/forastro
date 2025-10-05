@@ -37,7 +37,18 @@ export default async function generator(tree: Tree, options: Schema) {
       '--git', 'false',
       '--install', 'false'
     ];
-    await execa('npx', args, { stdio: 'inherit', cwd: tree.root });
+    // Runner selection: default to npx, allow override by env FORASTRO_PM=jpd|pnpm
+    async function has(cmd: string) {
+      try { await execa(cmd, ['--version'], { stdio: 'ignore' }); return true; } catch { return false; }
+    }
+    const prefer = ((process.env['FORASTRO_PM'] as string | undefined) || '').toLowerCase();
+    if (prefer === 'jpd' && await has('jpd')) {
+      await execa('jpd', ['dlx', ...args], { stdio: 'inherit', cwd: tree.root });
+    } else if (prefer === 'pnpm' && await has('pnpm')) {
+      await execa('pnpm', ['dlx', ...args], { stdio: 'inherit', cwd: tree.root });
+    } else {
+      await execa('npx', args, { stdio: 'inherit', cwd: tree.root });
+    }
   }
 
   // Ensure project folder exists in Tree when created by external command

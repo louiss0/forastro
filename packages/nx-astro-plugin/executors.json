@@ -27,8 +27,8 @@
       "description": "Run astro sync"
     },
     "add": {
-      "implementation": "./dist/executors/add/executor.js",
-      "schema": "./dist/executors/add/schema.json",
+      "implementation": "./dist/src/executors/add/executor.js",
+      "schema": "./src/executors/add/schema.json",
       "description": "Run astro add to add integrations"
     }
   }

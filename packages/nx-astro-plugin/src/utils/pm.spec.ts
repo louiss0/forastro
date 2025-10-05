@@ -20,8 +20,9 @@ describe('detectPackageManager', () => {
   });
 
   it('should detect pnpm from project-local lockfile', async () => {
-    mockExistsSync.mockImplementation((path: any) => {
-      return path.includes('pnpm-lock.yaml') && path.includes('project');
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
+      return p.includes('pnpm-lock.yaml') && p.includes('project');
     });
 
     const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
@@ -29,8 +30,9 @@ describe('detectPackageManager', () => {
   });
 
   it('should detect npm from project-local lockfile', async () => {
-    mockExistsSync.mockImplementation((path: any) => {
-      return path.includes('package-lock.json') && path.includes('project');
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
+      return p.includes('package-lock.json') && p.includes('project');
     });
 
     const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
@@ -38,8 +40,9 @@ describe('detectPackageManager', () => {
   });
 
   it('should detect yarn from project-local lockfile', async () => {
-    mockExistsSync.mockImplementation((path: any) => {
-      return path.includes('yarn.lock') && path.includes('project');
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
+      return p.includes('yarn.lock') && p.includes('project');
     });
 
     const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
@@ -47,8 +50,9 @@ describe('detectPackageManager', () => {
   });
 
   it('should detect bun from project-local lockfile', async () => {
-    mockExistsSync.mockImplementation((path: any) => {
-      return path.includes('bun.lockb') && path.includes('project');
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
+      return p.includes('bun.lockb') && p.includes('project');
     });
 
     const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
@@ -56,9 +60,10 @@ describe('detectPackageManager', () => {
   });
 
   it('should fallback to workspace lockfile if no project lockfile', async () => {
-    mockExistsSync.mockImplementation((path: any) => {
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
       // No project lockfile, but workspace has pnpm-lock.yaml
-      return path.includes('pnpm-lock.yaml') && path.includes('/workspace') && !path.includes('project');
+      return p.includes('pnpm-lock.yaml') && p.includes('/workspace') && !p.includes('project');
     });
 
     const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
@@ -67,9 +72,9 @@ describe('detectPackageManager', () => {
 
   it('should fallback to global PM detection if no lockfiles', async () => {
     mockExistsSync.mockReturnValue(false);
-    mockExeca.mockImplementation((cmd: any) => {
+    mockExeca.mockImplementation((cmd: string) => {
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as any);
+        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
@@ -80,9 +85,9 @@ describe('detectPackageManager', () => {
 
   it('should try npm after pnpm fails in global detection', async () => {
     mockExistsSync.mockReturnValue(false);
-    mockExeca.mockImplementation((cmd: any) => {
+    mockExeca.mockImplementation((cmd: string) => {
       if (cmd === 'npm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as any);
+        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
@@ -114,8 +119,9 @@ describe('resolveAstroBinary', () => {
   });
 
   it('should resolve project-local binary first', async () => {
-    mockExistsSync.mockImplementation((path: any) => {
-      return path.includes('project') && path.includes('node_modules');
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
+      return p.includes('project') && p.includes('node_modules');
     });
 
     const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace');
@@ -127,7 +133,7 @@ describe('resolveAstroBinary', () => {
     const originalPlatform = process.platform;
     Object.defineProperty(process, 'platform', { value: 'linux' });
 
-    mockExistsSync.mockImplementation((path: any) => {
+    mockExistsSync.mockImplementation((path: unknown) => {
       const pathStr = String(path);
       // On Windows, path.join uses backslashes even if platform is mocked
       // So we need to check for both forward and backslashes
@@ -148,8 +154,9 @@ describe('resolveAstroBinary', () => {
     const originalPlatform = process.platform;
     Object.defineProperty(process, 'platform', { value: 'win32' });
 
-    mockExistsSync.mockImplementation((path: any) => {
-      return path.includes('project') && path.includes('node_modules') && path.endsWith('.cmd');
+    mockExistsSync.mockImplementation((path: unknown) => {
+      const p = String(path);
+      return p.includes('project') && p.includes('node_modules') && p.endsWith('.cmd');
     });
 
     const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace');
@@ -163,13 +170,13 @@ describe('resolveAstroBinary', () => {
     Object.defineProperty(process, 'platform', { value: 'linux' });
 
     mockExistsSync.mockReturnValue(false);
-    mockExeca.mockImplementation((cmd: any, args: any) => {
+    mockExeca.mockImplementation((cmd: string, args?: readonly string[]) => {
       if (cmd === 'which' && args && args[0] === 'astro') {
-        return Promise.resolve({ stdout: '/usr/local/bin/astro', stderr: '', exitCode: 0 } as any);
-      }      
+        return Promise.resolve({ stdout: '/usr/local/bin/astro', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+      }
       // PM detection fallback
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as any);
+        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
@@ -182,7 +189,7 @@ describe('resolveAstroBinary', () => {
 
   it('should throw if allowGlobal is false and local not found', async () => {
     mockExistsSync.mockReturnValue(false);
-    mockExeca.mockImplementation(() => Promise.resolve({ stdout: 'pnpm', stderr: '', exitCode: 0 } as any));
+    mockExeca.mockImplementation(() => Promise.resolve({ stdout: 'pnpm', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>));
 
     await expect(
       resolveAstroBinary('/workspace/apps/project', '/workspace', false)
@@ -192,9 +199,9 @@ describe('resolveAstroBinary', () => {
   it('should throw helpful error message with detected PM', async () => {
     mockExistsSync.mockReturnValue(false);
     // Mock PM detection to return pnpm
-    mockExeca.mockImplementation((cmd: any) => {
+    mockExeca.mockImplementation((cmd: string) => {
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as any);
+        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
@@ -202,8 +209,9 @@ describe('resolveAstroBinary', () => {
     try {
       await resolveAstroBinary('/workspace/apps/project', '/workspace', false);
       expect.fail('Should have thrown');
-    } catch (err: any) {
-      expect(err.message).toContain('pnpm add -D astro');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      expect(msg).toContain('pnpm add -D astro');
     }
   });
 
@@ -212,12 +220,12 @@ describe('resolveAstroBinary', () => {
     Object.defineProperty(process, 'platform', { value: 'win32' });
 
     mockExistsSync.mockReturnValue(false);
-    mockExeca.mockImplementation((cmd: any, args: any) => {
+    mockExeca.mockImplementation((cmd: string, args?: readonly string[]) => {
       if (cmd === 'which') {
         return Promise.reject(new Error('which not available'));
       }
-      if (cmd === 'astro' && args[0] === '--version') {
-        return Promise.resolve({ stdout: '5.0.0', stderr: '', exitCode: 0 } as any);
+      if (cmd === 'astro' && args && args[0] === '--version') {
+        return Promise.resolve({ stdout: '5.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
