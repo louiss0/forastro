@@ -1,0 +1,10 @@
+{
+  "extends": "astro/tsconfigs/strict",
+  "compilerOptions": {
+    "types": ["astro/client", "vite/client"],
+    "moduleResolution": "Bundler",
+    "strictNullChecks": true
+  },
+  "include": ["src", "**/*.ts", "**/*.tsx", "**/*.astro"],
+  "exclude": ["dist", "node_modules", "astro.config.*", "vite.config.*", "../../packages/**"]
+}

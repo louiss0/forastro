@@ -15,13 +15,26 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["type-check", "lint", "^build"],
       "inputs": ["production", "^production"],
       "cache": true
     },
-    "check": {
-      "inputs": ["production", "^production"],
+    "type-check": {
+      "dependsOn": ["^type-check"],
+      "inputs": ["default", "^production"],
       "cache": true
+    },
+    "lint": {
+      "inputs": ["default", "^production"],
+      "cache": true
+    },
+    "test": {
+      "inputs": ["default", "^production"],
+      "cache": true
+    },
+    "check": {
+      "dependsOn": ["lint", "type-check", "test"],
+      "cache": false
     },
     "@nx/vite:test": {
       "inputs": ["default", "^production"],
@@ -37,11 +50,6 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "@nx/js:tsc": {
-      "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
-    },
     "tsup": {
       "cache": true,
       "dependsOn": ["^build"],
@@ -49,9 +57,8 @@
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"]
     }
   },
-  "workspaceLayout": {
-    "appsDir": "apps",
-    "libsDir": "packages"
+  "affected": {
+    "defaultBase": "main"
   },
   "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,

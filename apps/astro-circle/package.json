@@ -7,19 +7,15 @@
     "dev": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "test": "echo \"No tests implemented yet\" && exit 0",
     "astro": "astro"
+  },
+  "dependencies": {
+    "@forastro/utilities": "workspace:*",
+    "@iconify-json/simple-icons": "^1.2.25",
+    "@iconify-json/logos": "^1.2.9"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.5.2",
-  "dependencies": {
-    "astro": "^5.8.1",
-    "astro-icon": "^1.1.5",
-    "unocss": "^66.1.2",
-    "@unocss/reset": "^66.1.2",
-    "@fontsource/palanquin": "^5.0.0",
-    "@fontsource/raleway": "^5.0.0"
-  }
+  "packageManager": "pnpm@10.5.2"
 }

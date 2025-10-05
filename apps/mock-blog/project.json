@@ -1,0 +1,43 @@
+{
+  "name": "mock-blog",
+  "root": "apps/mock-blog",
+  "sourceRoot": "apps/mock-blog/src",
+  "projectType": "application",
+  "tags": ["type:app", "scope:mock-blog"],
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm astro dev",
+        "cwd": "apps/mock-blog"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm astro build",
+        "cwd": "apps/mock-blog"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm astro check",
+        "cwd": "apps/mock-blog"
+      }
+    },
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm eslint \"apps/mock-blog/**/*.{ts,tsx,astro}\" --max-warnings=0"
+      }
+    },
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm tsc -p apps/mock-blog/tsconfig.json --noEmit"
+      }
+    }
+  }
+}

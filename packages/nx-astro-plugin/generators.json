@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json.schemastore.org/nx-plugin.schema.json",
+  "generators": {
+    "init": {
+      "factory": "./dist/src/generators/init/generator.js",
+      "schema": "./src/generators/init/schema.json",
+      "description": "Initialize workspace defaults for Astro in Nx"
+    },
+    "app": {
+      "factory": "./dist/src/generators/app/generator.js",
+      "schema": "./src/generators/app/schema.json",
+      "description": "Create an Astro application using create-astro (non-interactive)"
+    },
+    "add-integration": {
+      "factory": "./dist/src/generators/add-integration/generator.js",
+      "schema": "./src/generators/add-integration/schema.json",
+      "description": "Add and configure Astro integrations"
+    },
+    "generate-content": {
+      "factory": "./dist/src/generators/generate-content/generator.js",
+      "schema": "./src/generators/generate-content/schema.json",
+      "description": "Generate example content based on installed integrations"
+    },
+    "page": {
+      "factory": "./dist/src/generators/page/generator.js",
+      "schema": "./src/generators/page/schema.json",
+      "description": "Generate an Astro page"
+    },
+    "component": {
+      "factory": "./dist/src/generators/component/generator.js",
+      "schema": "./src/generators/component/schema.json",
+      "description": "Generate an Astro component"
+    },
+    "layout": {
+      "factory": "./dist/src/generators/layout/generator.js",
+      "schema": "./src/generators/layout/schema.json",
+      "description": "Generate an Astro layout"
+    },
+    "collection-schema": {
+      "factory": "./dist/src/generators/collection-schema/generator.js",
+      "schema": "./src/generators/collection-schema/schema.json",
+      "description": "Generate a content collection schema"
+    },
+    "starlight-docs": {
+      "factory": "./dist/src/generators/starlight-docs/generator.js",
+      "schema": "./src/generators/starlight-docs/schema.json",
+      "description": "Bootstrap a Starlight docs structure"
+    }
+  }
+}

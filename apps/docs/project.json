@@ -1,9 +1,0 @@
-{
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "name": "docs",
-  "projectType": "application",
-  "sourceRoot": "apps/docs/src",
-  "tags": [
-    "astro:docs"
-  ]
-}

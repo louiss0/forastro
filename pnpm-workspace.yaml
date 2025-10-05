@@ -1,0 +1,8 @@
+onlyBuiltDependencies:
+  - nx
+
+packages:
+  - "apps/*"
+  - "packages/*"
+  - "tools/*"
+  - "templates/*"

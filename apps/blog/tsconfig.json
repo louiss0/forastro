@@ -1,13 +1,10 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "allowJs": true,
-    "checkJs": false,
-    "allowSyntheticDefaultImports": true,
-    "jsx": "react-jsx",
-    "types": ["astro/client"]
+    "types": ["astro/client", "vite/client"],
+    "moduleResolution": "Bundler",
+    "composite": false
   },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "include": ["src", "**/*.ts", "**/*.tsx", "**/*.astro"],
+  "exclude": ["dist", "node_modules", "astro.config.*", "vite.config.*", "../../packages/**"]
 }

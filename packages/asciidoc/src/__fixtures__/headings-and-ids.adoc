@@ -1,0 +1,34 @@
+= Main Title
+Dr. Bob Wilson <bob.wilson@example.com>
+2023-12-25
+:description: Document with complex headings
+:sectids:
+:sectlinks:
+
+== Introduction
+
+Introduction content.
+
+=== Getting Started
+
+Getting started content.
+
+==== Installation
+
+Installation steps.
+
+===== Prerequisites
+
+Prerequisites info.
+
+== Advanced Topics
+
+Advanced content.
+
+=== Configuration
+
+Configuration details.
+
+== Conclusion
+
+Final thoughts.

@@ -1,0 +1,15 @@
+= Simple Document
+John Doe <john@example.com>
+v1.0, 2023-12-25
+:description: A simple document for testing
+:keywords: test, simple, asciidoc
+
+This is a simple document.
+
+== First Section
+
+Some content here.
+
+=== Subsection
+
+More content with a https://example.com[link].

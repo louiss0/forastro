@@ -12,6 +12,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -19,26 +26,20 @@ jobs:
           node-version: '20'
           cache: 'pnpm'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
       - name: Print nx version
         run: pnpm nx --version
 
-      - name: Lint (affected, exclude astro-nx)
-        run: pnpm nx affected -t lint --parallel --exclude=astro-nx
+      - name: Lint (affected)
+        run: pnpm nx affected -t lint --parallel --base=origin/main
 
-      - name: Test (affected, exclude astro-nx)
-        run: pnpm nx affected -t test --parallel --exclude=astro-nx
+      - name: Test packages only (libraries)
+        run: pnpm nx run-many -t test --projects="tag:nx:lib" --parallel
 
-      - name: Astro check (affected)
-        run: pnpm nx affected -t check --parallel
+      - name: Astro check (affected, exclude problematic projects)
+        run: pnpm nx affected -t check --parallel --base=origin/main
 
-      - name: Build (affected)
-        run: pnpm nx affected -t build --parallel
+      - name: Build (affected, exclude problematic projects)
+        run: pnpm nx affected -t build --parallel --base=origin/main

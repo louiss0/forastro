@@ -1,54 +1,43 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "name": "astro-circle",
-  "projectType": "application",
+  "root": "apps/astro-circle",
   "sourceRoot": "apps/astro-circle/src",
-  "tags": [
-    "astro:astro-circle",
-    "type:app",
-    "scope:astro-circle"
-  ],
+  "projectType": "application",
+  "tags": ["type:app", "scope:astro-circle"],
   "targets": {
-    "build": {
+    "dev": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro build",
+        "command": "pnpm astro dev",
         "cwd": "apps/astro-circle"
       }
     },
-    "add": {
+    "build": {
       "executor": "nx:run-commands",
+      "outputs": ["{projectRoot}/dist"],
       "options": {
-        "command": "pnpm exec astro --root apps/astro-circle add"
-      }
-    },
-    "info": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "pnpm exec astro --root apps/astro-circle info"
-      }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/astro-circle/**/*.{js,ts,astro}"]
+        "command": "pnpm astro build",
+        "cwd": "apps/astro-circle"
       }
     },
     "check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "astro check",
+        "command": "pnpm astro check",
         "cwd": "apps/astro-circle"
-      },
-      "cache": true,
-      "outputs": ["{projectRoot}/.astro-check"]
+      }
     },
-    "dev": {
-      "executor": "@forastro/astro-nx:dev"
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm eslint \"apps/astro-circle/**/*.{ts,tsx,astro}\" --max-warnings=0"
+      }
     },
-    "preview": {
-      "executor": "@forastro/astro-nx:preview"
+    "type-check": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm tsc -p apps/astro-circle/tsconfig.json --noEmit"
+      }
     }
   }
 }
