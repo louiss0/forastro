@@ -1,7 +1,6 @@
 import type { Tree } from '@nx/devkit';
-import { formatFiles, joinPathFragments, generateFiles, updateJson } from '@nx/devkit';
+import { formatFiles, joinPathFragments, generateFiles, updateJson, addDependenciesToPackageJson } from '@nx/devkit';
 import { execa } from 'execa';
-import { detectPackageManager, getExecFor } from '../../utils/pm.js';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -14,7 +13,6 @@ interface Schema {
   eslint?: 'auto' | 'true' | 'false';
   skipInstall?: boolean;
   offlineStrategy?: 'none' | 'copy-fixture';
-  packageManager?: 'auto' | 'jpd' | 'pnpm' | 'npm' | 'yarn';
 }
 
 export default async function generator(tree: Tree, options: Schema) {
@@ -32,13 +30,14 @@ export default async function generator(tree: Tree, options: Schema) {
       name: projectName,
     });
   } else {
-    const pm = options.packageManager && options.packageManager !== 'auto' ? options.packageManager : detectPackageManager();
-    const { npx, runner } = getExecFor(pm);
-    const args: string[] = [];
-    if (runner.length) args.push(...runner);
-    args.push('create-astro@latest', projectName, '--template', options.template ?? 'minimal', '--git', 'false', '--install', 'false');
-    // create-astro may default to TS depending on template; we keep TS default per templates
-    await execa(npx, args, { stdio: 'inherit', cwd: tree.root });
+    const args = [
+      'create-astro@latest',
+      projectName,
+      '--template', options.template ?? 'minimal',
+      '--git', 'false',
+      '--install', 'false'
+    ];
+    await execa('npx', args, { stdio: 'inherit', cwd: tree.root });
   }
 
   // Ensure project folder exists in Tree when created by external command
@@ -70,12 +69,16 @@ export default async function generator(tree: Tree, options: Schema) {
     );
   }
 
-  // Ensure package.json has nx.name to stabilize project name
+  // Ensure package.json has nx.name and astro devDependency
   const pkgPath = join(projectRoot, 'package.json');
   if (tree.exists(pkgPath)) {
     updateJson(tree, pkgPath, (pkg) => {
       pkg.nx = pkg.nx || {};
       pkg.nx.name = projectName;
+      pkg.devDependencies = pkg.devDependencies || {};
+      if (!pkg.devDependencies.astro) {
+        pkg.devDependencies.astro = '^5.0.0';
+      }
       return pkg;
     });
   }
