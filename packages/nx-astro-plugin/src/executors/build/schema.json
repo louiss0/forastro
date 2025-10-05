@@ -3,7 +3,10 @@
   "title": "astro build",
   "type": "object",
   "properties": {
-    "outDir": { "type": "string", "default": "dist" },
-    "config": { "type": "string" }
+    "outDir": { "type": "string", "default": "dist", "description": "Output directory" },
+    "config": { "type": "string", "description": "Path to config file" },
+    "allowGlobal": { "type": "boolean", "default": true, "description": "Allow global astro binary as fallback" },
+    "binOverride": { "type": "string", "description": "Explicit path to astro binary" },
+    "args": { "type": "array", "items": { "type": "string" }, "description": "Extra CLI arguments" }
   }
 }
