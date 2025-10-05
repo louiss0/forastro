@@ -3,10 +3,13 @@
   "title": "astro dev",
   "type": "object",
   "properties": {
-    "port": { "type": "number" },
-    "host": { "type": "string" },
-    "root": { "type": "string" },
-    "open": { "type": "boolean" },
-    "config": { "type": "string" }
+    "port": { "type": "number", "description": "Port to listen on" },
+    "host": { "type": "string", "description": "Hostname to bind to" },
+    "root": { "type": "string", "description": "Project root directory" },
+    "open": { "type": "boolean", "description": "Open browser on server start" },
+    "config": { "type": "string", "description": "Path to config file" },
+    "allowGlobal": { "type": "boolean", "default": true, "description": "Allow global astro binary as fallback" },
+    "binOverride": { "type": "string", "description": "Explicit path to astro binary" },
+    "args": { "type": "array", "items": { "type": "string" }, "description": "Extra CLI arguments" }
   }
 }
