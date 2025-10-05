@@ -64,8 +64,8 @@ jobs:
       - name: Install Astro and plugin under test
         working-directory: e2e
         run: |
-          pnpm add -D astro@^5
-          pnpm add -D "file:../packages/nx-astro-plugin/${{ steps.pack.outputs.pkg_tgz }}"
+          pnpm add -w -D astro@^5
+          pnpm add -w -D "file:../packages/nx-astro-plugin/${{ steps.pack.outputs.pkg_tgz }}"
 
       - name: Generate Astro app via plugin (offline fixture)
         working-directory: e2e
