@@ -1,7 +1,8 @@
 import type { Tree } from '@nx/devkit';
 import { readProjectConfiguration, joinPathFragments, generateFiles, formatFiles } from '@nx/devkit';
 import { detectIntegrations } from '../../utils/astro.js';
-import { join } from 'node:path';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 interface Schema {
   project: string;
@@ -18,7 +19,9 @@ export default async function generateContent(tree: Tree, options: Schema) {
   if (options.presets?.includes('blog')) {
     const base = joinPathFragments(proj.root, 'src');
     if (!tree.exists(join(base, 'content'))) {
-      generateFiles(tree, join(__dirname, 'templates', 'blog'), base, { tmpl: '' });
+      const fileName = fileURLToPath(import.meta.url);
+      const dirName = dirname(fileName);
+      generateFiles(tree, join(dirName, 'templates', 'blog'), base, { tmpl: '' });
     }
   }
 
