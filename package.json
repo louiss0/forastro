@@ -19,7 +19,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@faker-js/faker": "^9.9.0",
     "@forastro/asciidoc": "^2.3.4",
-    "@forastro/nx-astro-plugin": "file:packages\\nx-astro-plugin\\forastro-nx-astro-plugin-0.1.2.tgz",
+    "@forastro/nx-astro-plugin": "workspace:*",
     "@nx/devkit": "21.6.3",
     "@nx/esbuild": "21.6.3",
     "@nx/eslint": "21.6.3",
