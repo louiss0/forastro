@@ -4,7 +4,7 @@ import { join } from 'node:path';
 export type PackageManager = 'jpd' | 'pnpm' | 'npm' | 'yarn';
 
 export function detectPackageManager(): PackageManager {
-  const ua = process.env.npm_config_user_agent || '';
+  const ua = process.env['npm_config_user_agent'] || '';
   if (/jpd/i.test(ua)) return 'jpd';
   if (/pnpm/i.test(ua)) return 'pnpm';
   if (/yarn/i.test(ua)) return 'yarn';

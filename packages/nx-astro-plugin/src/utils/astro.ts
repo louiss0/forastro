@@ -14,8 +14,8 @@ export function detectIntegrations(projectRoot: string): string[] {
   const cfg = projectAstroConfigPath(projectRoot);
   if (!cfg) return [];
   const content = readFileSync(cfg, 'utf8');
-  const matches = [...content.matchAll(/@astrojs\/(\w+)/g)].map((m) => m[1]);
-  return Array.from(new Set(matches));
+  const matches = [...content.matchAll(/@astrojs\/(\w+)/g)].map((m) => m[1]).filter(Boolean) as string[];
+  return Array.from(new Set(matches)) as string[];
 }
 
 export function ensureIntegrationsArray(content: string): string {

@@ -1,5 +1,6 @@
-import { Tree, readProjectConfiguration, joinPathFragments, generateFiles, formatFiles } from '@nx/devkit';
-import { detectIntegrations } from '../../utils/astro';
+import type { Tree } from '@nx/devkit';
+import { readProjectConfiguration, joinPathFragments, generateFiles, formatFiles } from '@nx/devkit';
+import { detectIntegrations } from '../../utils/astro.js';
 import { join } from 'node:path';
 
 interface Schema {

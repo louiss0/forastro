@@ -1,4 +1,4 @@
-import { ExecutorContext } from '@nx/devkit';
+import type { ExecutorContext } from '@nx/devkit';
 import { execa } from 'execa';
 import { join } from 'node:path';
 

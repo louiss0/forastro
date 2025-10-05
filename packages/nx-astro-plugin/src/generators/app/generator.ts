@@ -1,8 +1,9 @@
-import { Tree, formatFiles, joinPathFragments, generateFiles, updateJson, addProjectConfiguration } from '@nx/devkit';
+import type { Tree } from '@nx/devkit';
+import { formatFiles, joinPathFragments, generateFiles, updateJson } from '@nx/devkit';
 import { execa } from 'execa';
-import { detectPackageManager, getExecFor, workspaceHasEslint } from '../../utils/pm';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { detectPackageManager, getExecFor } from '../../utils/pm.js';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 interface Schema {
   name: string;
@@ -22,12 +23,16 @@ export default async function generator(tree: Tree, options: Schema) {
   const projectRoot = joinPathFragments(dir, projectName);
 
   if (options.offlineStrategy === 'copy-fixture') {
-    generateFiles(tree, joinPathFragments(__dirname, 'templates', 'astro-min'), projectRoot, {
+    const fileName = fileURLToPath(import.meta.url);
+    const dirName = dirname(fileName);
+    const pkgRoot = join(dirName, '..', '..', '..', '..');
+    const tplPath = joinPathFragments(pkgRoot, 'src', 'generators', 'app', 'templates', 'astro-min');
+    generateFiles(tree, tplPath, projectRoot, {
       tmpl: '',
       name: projectName,
     });
   } else {
-    const pm = options.packageManager === 'auto' ? detectPackageManager() : options.packageManager;
+    const pm = options.packageManager && options.packageManager !== 'auto' ? options.packageManager : detectPackageManager();
     const { npx, runner } = getExecFor(pm);
     const args: string[] = [];
     if (runner.length) args.push(...runner);

@@ -21,7 +21,8 @@
     "executors.json",
     "README.md",
     "src/generators/**/schema.json",
-    "src/executors/**/schema.json"
+    "src/executors/**/schema.json",
+    "src/generators/app/templates/**/*"
   ],
   "publishConfig": {
     "access": "public"
