@@ -75,12 +75,12 @@ jobs:
       - name: Add MDX integration via generator
         working-directory: e2e
         run: |
-          pnpm nx g @forastro/nx-astro-plugin:add-integration --project=e2e-site --names=mdx
+          pnpm nx g @forastro/nx-astro-plugin:add-integration --project=e2e-site --names=mdx --verbose
 
       - name: Generate content (blog + MDX example)
         working-directory: e2e
         run: |
-          pnpm nx g @forastro/nx-astro-plugin:generate-content --project=e2e-site --presets=blog --mdxExamples=true
+          pnpm nx g @forastro/nx-astro-plugin:generate-content --project=e2e-site --presets=blog --mdxExamples=true --verbose
 
       - name: Verify check
         working-directory: e2e
