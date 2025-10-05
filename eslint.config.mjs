@@ -7,7 +7,7 @@ import nxPlugin from '@nx/eslint-plugin';
 
 export default [
   {
-    ignores: ['**/dist/**', '**/.next/**', '**/node_modules/**', 'docs/**/node_modules/**'],
+    ignores: ['**/dist/**', '**/.next/**', '**/node_modules/**', 'docs/**/node_modules/**', 'apps/docs/**/node_modules/**'],
   },
   // General rules (including Nx)
   {
