@@ -12,7 +12,11 @@ interface Options {
 }
 
 function projectCwd(context: ExecutorContext): string {
-  const projRoot = context.projectsConfigurations?.projects?.[context.projectName!]?.root;
+  const projectName = context.projectName;
+  if (!projectName) {
+    throw new Error('Project name is required but was not found in executor context');
+  }
+  const projRoot = context.projectsConfigurations?.projects?.[projectName]?.root;
   return projRoot ? join(context.root, projRoot) : (context.root || process.cwd());
 }
 
@@ -22,7 +26,7 @@ export default async function runExecutor(options: Options, context: ExecutorCon
 
   let astroBin: string;
   try {
-    astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? true));
+    astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? false));
   } catch (err: any) {
     console.error(err.message);
     return { success: false };

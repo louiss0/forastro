@@ -51,7 +51,7 @@ export async function detectPackageManager(
 export async function resolveAstroBinary(
   projectRoot: string,
   workspaceRoot: string,
-  allowGlobal: boolean = true
+  allowGlobal = true
 ): Promise<string> {
   const isWindows = process.platform === 'win32';
   const binName = isWindows ? 'astro.cmd' : 'astro';

@@ -24,6 +24,10 @@
     "src/executors/**/schema.json",
     "src/generators/app/templates/**/*"
   ],
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest watch"
+  },
   "publishConfig": {
     "access": "public"
   },
