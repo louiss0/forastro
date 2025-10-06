@@ -36,7 +36,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/packages/utilities",
-        "passWithNoTests": true,
+        "passWithNoTests": false,
         "config": "packages/utilities/vitest.config.ts"
       }
     },
