@@ -100,21 +100,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
-          # Optional: ensure local npm auth for this job only (masked in logs)
-          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
-
-          # Version packages based on commits
-          pnpm nx release version --yes --verbose
-          
-          # Generate changelogs
-          pnpm nx release changelog --yes --verbose
-          
-          # Publish to npm only if NPM_TOKEN is present
-          if [ -z "${NPM_TOKEN}" ]; then
-            echo "NPM_TOKEN is not set. Skipping npm publish step."
-          else
-            pnpm nx release publish --yes --verbose
-          fi
+          pnpm exec nx release  --verbose
 
   # Dry Run Job (for develop branch and PRs)
   release-dry-run:
@@ -150,10 +136,6 @@ jobs:
 
       - name: Release dry run
         run: |
-          echo "🔍 Running release dry run to preview changes..."
-          pnpm nx release changelog --dry-run --verbose
-          pnpm nx release version --dry-run --verbose
-          echo "🔍 Simulating publish (no packages will be published)..."
           pnpm nx release publish --dry-run --verbose
 
       - name: Comment PR with release preview
