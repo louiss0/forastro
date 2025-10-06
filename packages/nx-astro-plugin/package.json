@@ -1,6 +1,6 @@
 {
   "name": "@forastro/nx-astro-plugin",
-  "version": "0.3.0",
+  "version": "0.0.0",
   "description": "Nx plugin for Astro: scaffold, integrate, and run Astro in package-based workspaces.",
   "type": "module",
   "license": "MIT",
@@ -65,7 +65,5 @@
     "url": "https://github.com/louiss0/forastro/issues",
     "email": "louisshelton0@gmail.com"
   },
-  "nx": {
-    "name": "nx-astro-plugin"
-  }
+  
 }
