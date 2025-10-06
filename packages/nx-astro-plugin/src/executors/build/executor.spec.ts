@@ -47,7 +47,7 @@ describe('build executor', () => {
     const [projectRoot, workspaceRoot, allowGlobal] = mockResolveAstroBinary.mock.calls[0];
     expect(projectRoot.replace(/\\/g, '/')).toBe('/workspace/apps/test-app');
     expect(workspaceRoot).toBe('/workspace');
-    expect(allowGlobal).toBe(false);
+    expect(allowGlobal).toBe(true);
     const [bin, args, opts] = mockExeca.mock.calls[0];
     expect(bin).toBe('/workspace/node_modules/.bin/astro');
     expect(args).toEqual(['build']);
@@ -115,7 +115,7 @@ describe('build executor', () => {
     expect(allowGlobal).toBe(true);
   });
 
-  it('should default allowGlobal to false', async () => {
+  it('should default allowGlobal to true (matches schema default)', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
@@ -125,7 +125,7 @@ describe('build executor', () => {
     expect(mockResolveAstroBinary).toHaveBeenCalledWith(
       expect.any(String),
       expect.any(String),
-      false
+      true
     );
   });
 
@@ -180,7 +180,7 @@ const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => unde
     expect(mockResolveAstroBinary).toHaveBeenCalledWith(
       '/workspace',
       '/workspace',
-      false
+      true
     );
   });
 

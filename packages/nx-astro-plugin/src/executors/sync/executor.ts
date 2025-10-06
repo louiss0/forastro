@@ -26,7 +26,7 @@ export default async function runExecutor(options: Options, context: ExecutorCon
 
   let astroBin: string;
   try {
-    astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? false));
+astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? true));
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(msg);
