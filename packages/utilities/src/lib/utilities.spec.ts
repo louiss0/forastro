@@ -307,7 +307,7 @@ describe('Utilities - Async Operations', () => {
     });
 
     it('should throw error for non-iterable', () => {
-      expect(async () => {
+      await expect(async () => {
         for await (const item of iterate(null as any, vi.fn())) {
           // This shouldn't be reached
         }
