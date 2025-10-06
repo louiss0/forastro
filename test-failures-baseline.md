@@ -7,13 +7,13 @@
 
 **Total Failed Tests:** 27
 **Projects with Failures:** 2 out of 3 projects tested
-- ✖ astro-nx: 27 failed tests across 2 test files
+- ✖ @forastro/nx-astro-plugin: 27 failed tests across 2 test files
 - ✖ utilities: No test files found (exiting with code 1)
 - ✖ astro-circle: No test specified, using echo command
 
 ## Project-by-Project Breakdown
 
-### 1. astro-nx Project
+### 1. @forastro/nx-astro-plugin Project
 **Test Files:** 2 failed | 5 passed (7 total)
 **Tests:** 27 failed | 155 passed (182 total)
 **Duration:** 7.10s
@@ -102,7 +102,7 @@ This baseline establishes the current state of 27 failing test specifications th
 - Failure type (missing files, incorrect content, wrong arguments, etc.)
 - Expected vs actual behavior
 
-The majority of failures (27/27) are in the astro-nx project and relate to:
+The majority of failures (27/27) are in the @forastro/nx-astro-plugin project and relate to:
 1. Executor argument construction and validation
 2. File generation in various generators
 3. Content formatting and template issues

@@ -29,7 +29,7 @@ describe('init generator', () => {
       exists: vi.fn().mockReturnValue(true),
       write: vi.fn(),
       read: vi.fn(),
-    } as any;
+    } as unknown as Tree;
     vi.clearAllMocks();
   });
 

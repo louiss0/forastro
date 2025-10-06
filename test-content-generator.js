@@ -2,18 +2,16 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-// Test the content-file generator with different options
-console.log('Testing content-file generator...');
+// Test the generate-content generator with blog preset
+console.log('Testing generate-content generator...');
 
 try {
-  // Test 1: Basic markdown file
-  console.log('\n1. Testing basic markdown file creation...');
-  const result = execSync('npx ts-node tools/astro-nx/src/generators/content-file/generator.ts', { 
+  console.log('\n1. Generating blog preset content for apps/blog...');
+  execSync('pnpm nx g @forastro/nx-astro-plugin:generate-content --project=blog --presets=blog --mdxExamples=true', {
     stdio: 'inherit',
-    cwd: __dirname 
+    cwd: __dirname
   });
-  console.log('Test 1 completed');
-  
+  console.log('Test completed');
 } catch (error) {
   console.error('Error running generator:', error.message);
 }

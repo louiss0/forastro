@@ -1,0 +1,11 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "@forastro/nx-astro-plugin:page",
+  "type": "object",
+  "properties": {
+    "project": { "type": "string", "description": "Nx project name" },
+    "name": { "type": "string", "description": "Page name (file stem)" },
+    "directory": { "type": "string", "description": "Optional subdirectory under src/pages" }
+  },
+  "required": ["project", "name"]
+}

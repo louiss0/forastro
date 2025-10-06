@@ -6,8 +6,8 @@
     "inlineSources": true,
     "types": ["node"],
     "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "lib": ["ES2020"],
     "verbatimModuleSyntax": true,
     "strict": true

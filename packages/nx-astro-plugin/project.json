@@ -23,7 +23,7 @@
     "test": {
       "executor": "@nx/vite:test",
       "options": {
-        "passWithNoTests": true,
+        "passWithNoTests": false,
         "reportsDirectory": "packages/nx-astro-plugin/coverage",
         "config": "packages/nx-astro-plugin/vitest.config.ts"
       }

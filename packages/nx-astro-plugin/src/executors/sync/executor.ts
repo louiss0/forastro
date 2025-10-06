@@ -1,7 +1,7 @@
 import type { ExecutorContext } from '@nx/devkit';
 import { execa } from 'execa';
 import { join } from 'node:path';
-import { resolveAstroBinary } from '../../utils/pm.js';
+import { resolveAstroBinary } from '../../utils/pm';
 
 interface Options {
   config?: string;
@@ -26,9 +26,10 @@ export default async function runExecutor(options: Options, context: ExecutorCon
 
   let astroBin: string;
   try {
-    astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? false));
-  } catch (err: any) {
-    console.error(err.message);
+astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? true));
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(msg);
     return { success: false };
   }
 
@@ -40,7 +41,9 @@ export default async function runExecutor(options: Options, context: ExecutorCon
   try {
     await execa(astroBin, args, { cwd, stdio: 'inherit' });
     return { success: true };
-  } catch {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(msg);
     return { success: false };
   }
 }

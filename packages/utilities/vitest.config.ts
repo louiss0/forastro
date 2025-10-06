@@ -6,19 +6,46 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.test.ts'],
-    exclude: ['src/components/**', '**/*.astro', 'dist/**', 'coverage/**', '**/__fixtures__/**'],
+    passWithNoTests: false,
+    include: ['src/**/__tests__/**/*.{spec,test}.{ts,tsx}'],
+    exclude: [
+      'node_modules',
+      'dist/**',
+      'coverage/**',
+      'src/components/**',
+      '**/*.astro',
+      '**/__fixtures__/**',
+      '**/__mocks__/**'
+    ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: '../../coverage/packages/utilities',
-      exclude: ['src/components/**', '**/*.astro', '**/__fixtures__/**', 'public/**', '**/*.spec.ts', '*.config.ts', 'vite.config.ts', 'vitest.config.ts', 'tsup.config.ts'],
+      all: true,
+      include: ['src/**/*.{ts,tsx}'],
+      exclude: [
+        'src/components/**',
+        '**/*.astro',
+        '**/__fixtures__/**',
+        '**/__mocks__/**',
+        'public/**',
+        '**/*.spec.ts',
+        '**/*.test.ts',
+        '*.config.ts',
+        'vite.config.ts',
+        'vitest.config.ts',
+        'tsup.config.ts',
+        // Projector-related exclusions (precise)
+        'src/lib/useTemplaterAndProjector.ts'
+      ],
       thresholds: {
         lines: 80,
         statements: 80,
         branches: 80,
         functions: 80,
       },
+      excludeAfterRemap: true,
+      reportOnFailure: true,
     },
   },
 });

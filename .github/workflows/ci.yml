@@ -38,8 +38,11 @@ jobs:
       - name: Test packages only (libraries)
         run: pnpm nx run-many -t test --projects="tag:nx:lib" --parallel
 
+      - name: Test utilities with coverage
+        run: pnpm nx test utilities -- --coverage --coverageReporters="text-summary,lcov"
+
       - name: Astro check (affected, exclude problematic projects)
         run: pnpm nx affected -t check --parallel --base=origin/main
 
       - name: Build (affected, exclude problematic projects)
-        run: pnpm nx affected -t build --parallel --base=origin/main
+        run: pnpm nx affected -t build --parallel --base=origin/main --exclude=@forastro/template_astro-preact

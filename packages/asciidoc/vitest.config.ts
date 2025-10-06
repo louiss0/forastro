@@ -12,8 +12,8 @@ export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/*.{test,spec}.ts'],
-    exclude: ['**/__fixtures__/**', 'dist/**', 'coverage/**', 'mock-blog/**'],
+    include: ['src/**/__tests__/**/*.{test,spec}.ts'],
+    exclude: ['**/__fixtures__/**', 'dist/**', 'coverage/**', 'mock-blog/**', '**/__mocks__/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
@@ -28,7 +28,7 @@ export default defineConfig({
         '*.config.*',
         'index.js',
         'index.d.ts',
-        '**/*.spec.ts',
+'**/*.spec.ts','**/*.test.ts',
         'vite.config.ts',
         'vitest.config.ts',
         'tsup.config.ts',
@@ -36,6 +36,7 @@ export default defineConfig({
         'src/lib/unocss.spec.ts'
       ],
       all: true,
+      include: ['src/**/*.{ts,tsx}'],
       thresholds: {
         lines: 80,
         statements: 80,

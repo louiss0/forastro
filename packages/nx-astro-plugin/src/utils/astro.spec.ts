@@ -20,7 +20,7 @@ describe('astro utils', () => {
 
   describe('projectAstroConfigPath', () => {
     it('should return path to astro.config.ts if it exists', () => {
-      mockExistsSync.mockImplementation((path: any) => {
+      mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).endsWith('astro.config.ts');
       });
 
@@ -29,7 +29,7 @@ describe('astro utils', () => {
     });
 
     it('should return path to astro.config.mjs if .ts does not exist', () => {
-      mockExistsSync.mockImplementation((path: any) => {
+      mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).endsWith('astro.config.mjs');
       });
 
@@ -38,7 +38,7 @@ describe('astro utils', () => {
     });
 
     it('should return path to astro.config.js if .ts and .mjs do not exist', () => {
-      mockExistsSync.mockImplementation((path: any) => {
+      mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).endsWith('astro.config.js');
       });
 
@@ -75,7 +75,7 @@ describe('astro utils', () => {
 
     it('should detect single @astrojs integration', () => {
       mockExistsSync.mockReturnValue(true);
-      mockReadFileSync.mockReturnValue('import react from "@astrojs/react";' as any);
+      mockReadFileSync.mockReturnValue('import react from "@astrojs/react";');
 
       const result = detectIntegrations('/workspace/project');
       expect(result).toEqual(['react']);
@@ -84,7 +84,7 @@ describe('astro utils', () => {
     it('should detect multiple @astrojs integrations', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        'import react from "@astrojs/react";\nimport vue from "@astrojs/vue";\nimport tailwind from "@astrojs/tailwind";' as any
+        'import react from "@astrojs/react";\nimport vue from "@astrojs/vue";\nimport tailwind from "@astrojs/tailwind";'
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -97,7 +97,7 @@ describe('astro utils', () => {
     it('should deduplicate integrations', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        'import react from "@astrojs/react";\nimport { React } from "@astrojs/react";' as any
+        'import react from "@astrojs/react";\nimport { React } from "@astrojs/react";'
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -107,7 +107,7 @@ describe('astro utils', () => {
     it('should handle config with no integrations', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        'import { defineConfig } from "astro/config";\nexport default defineConfig({});' as any
+        'import { defineConfig } from "astro/config";\nexport default defineConfig({});'
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -117,7 +117,7 @@ describe('astro utils', () => {
     it('should handle various integration naming patterns', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        '@astrojs/node, @astrojs/vercel, @astrojs/cloudflare' as any
+        '@astrojs/node, @astrojs/vercel, @astrojs/cloudflare'
       );
 
       const result = detectIntegrations('/workspace/project');

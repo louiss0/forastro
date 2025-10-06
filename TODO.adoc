@@ -28,7 +28,7 @@ Description:
 .TestConfigurationErrors
 ====
 
-File: tools/astro-nx/vite.config.ts
+File: packages/nx-astro-plugin/vite.config.ts
 Configuration: NX workspace root does not exist issue
 Description:
 • Fix vite test configuration for astro-nx project
@@ -52,7 +52,7 @@ Description:
 .ESLintErrors
 ====
 
-File: tools/astro-nx/src/generators/component/generator.ts
+File: packages/nx-astro-plugin/src/generators/component/generator.ts
 Function: unused import 'buildPath'
 Description:
 • Remove unused import 'buildPath' from component generator
@@ -63,7 +63,7 @@ Description:
 .TypeScriptStrictness
 ====
 
-File: tools/astro-nx/src/generators/page/generator.ts
+File: packages/nx-astro-plugin/src/generators/page/generator.ts
 Type: title property type 'unknown' should be 'string'
 Description:
 • Fix type assertions and ensure proper TypeScript typing

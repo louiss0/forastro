@@ -17,7 +17,8 @@ describe('exec utils', () => {
 
   describe('run', () => {
     it('should execute command with correct arguments and cwd', async () => {
-      mockExeca.mockResolvedValue({} as any);
+      const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+      mockExeca.mockResolvedValue(ok);
 
       await run('node', ['--version'], '/workspace/project');
 
@@ -36,7 +37,8 @@ describe('exec utils', () => {
     });
 
     it('should handle empty args array', async () => {
-      mockExeca.mockResolvedValue({} as any);
+      const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+      mockExeca.mockResolvedValue(ok);
 
       await run('pwd', [], '/workspace/project');
 
@@ -50,7 +52,8 @@ describe('exec utils', () => {
 
   describe('tryRun', () => {
     it('should return true on successful execution', async () => {
-      mockExeca.mockResolvedValue({} as any);
+      const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+      mockExeca.mockResolvedValue(ok);
 
       const result = await tryRun('node', ['--version'], '/workspace/project');
 
@@ -80,10 +83,11 @@ describe('exec utils', () => {
     });
 
     it('should handle multiple sequential calls', async () => {
+      const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
       mockExeca
-        .mockResolvedValueOnce({} as any)
+        .mockResolvedValueOnce(ok)
         .mockRejectedValueOnce(new Error('Failed'))
-        .mockResolvedValueOnce({} as any);
+        .mockResolvedValueOnce(ok);
 
       expect(await tryRun('cmd1', [], '/workspace/project')).toBe(true);
       expect(await tryRun('cmd2', [], '/workspace/project')).toBe(false);

@@ -16,5 +16,3 @@ vitest.config.*.timestamp*
 # Keep .github/workflows/ directory for CI/CD
 coverage/
 docs/
-*.tgz
-packages/**/*.tgz

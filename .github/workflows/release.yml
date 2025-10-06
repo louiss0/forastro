@@ -80,6 +80,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           registry-url: 'https://registry.npmjs.org'
+          always-auth: true
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -99,6 +100,9 @@ jobs:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          # Optional: ensure local npm auth for this job only (masked in logs)
+          echo "//registry.npmjs.org/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+
           # Version packages based on commits
           pnpm nx release version --yes --verbose
           
@@ -149,6 +153,8 @@ jobs:
           echo "🔍 Running release dry run to preview changes..."
           pnpm nx release changelog --dry-run --verbose
           pnpm nx release version --dry-run --verbose
+          echo "🔍 Simulating publish (no packages will be published)..."
+          pnpm nx release publish --dry-run --verbose
 
       - name: Comment PR with release preview
         if: github.event_name == 'pull_request'

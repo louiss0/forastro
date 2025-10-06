@@ -2,7 +2,11 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { Tree } from '@nx/devkit';
 import generator from './generator.js';
 import * as devkit from '@nx/devkit';
+import type { ProjectConfiguration } from '@nx/devkit';
 import * as astro from '../../utils/astro.js';
+
+type WriteSpy = ReturnType<typeof vi.fn<[string, string], void>>;
+interface TreeWithSpy extends Tree { __writeSpy: WriteSpy }
 
 vi.mock('@nx/devkit', async () => {
   const actual = await vi.importActual<typeof devkit>('@nx/devkit');
@@ -27,18 +31,21 @@ describe('generate-content generator', () => {
   const mockDetectIntegrations = vi.mocked(astro.detectIntegrations);
 
   beforeEach(() => {
+    const writeSpy = vi.fn<[string, string], void>();
     tree = {
       root: '/workspace',
-      exists: vi.fn().mockReturnValue(false),
-      write: vi.fn(),
-      read: vi.fn(),
-    } as any;
+      exists: vi.fn<[string], boolean>().mockReturnValue(false) as unknown as Tree['exists'],
+      write: writeSpy as unknown as Tree['write'],
+      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+    } as unknown as Tree;
     vi.clearAllMocks();
+    // attach spy for later assertions on write
+    (tree as unknown as TreeWithSpy).__writeSpy = writeSpy;
 
     mockReadProjectConfiguration.mockReturnValue({
       root: 'apps/test-app',
       name: 'test-app',
-    } as any);
+    } as unknown as ProjectConfiguration);
 
     mockDetectIntegrations.mockReturnValue([]);
   });
@@ -83,7 +90,8 @@ describe('generate-content generator', () => {
     expect(mockDetectIntegrations).toHaveBeenCalledWith('apps/test-app');
     expect(tree.write).toHaveBeenCalled();
 
-    const writeCall = (tree.write as any).mock.calls[0];
+    const writeSpy = (tree as unknown as TreeWithSpy).__writeSpy;
+    const writeCall = writeSpy.mock.calls[0];
     const normalizedPath = writeCall[0].replace(/\\/g, '/');
     expect(normalizedPath).toContain('apps/test-app/src/pages/example.mdx');
     expect(writeCall[1]).toBe('# Hello MDX!');
@@ -142,7 +150,7 @@ describe('generate-content generator', () => {
     mockReadProjectConfiguration.mockReturnValue({
       root: 'packages/my-docs',
       name: 'my-docs',
-    } as any);
+    } as unknown as ProjectConfiguration);
 
     await generator(tree, {
       project: 'my-docs',
@@ -157,7 +165,7 @@ describe('generate-content generator', () => {
     mockReadProjectConfiguration.mockReturnValue({
       root: 'apps/custom-app',
       name: 'custom-app',
-    } as any);
+    } as unknown as ProjectConfiguration);
 
     await generator(tree, {
       project: 'custom-app',
