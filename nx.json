@@ -78,9 +78,6 @@
         "skipLockFileUpdate": true
       }
     },
-    "releaseTagPattern": "{projectName}@{version}",
-    "git": {
-      "commitMessage": "chore({projectName}): release version {version}"
-    }
+    "releaseTagPattern": "{projectName}@{version}"
   }
 }
