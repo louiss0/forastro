@@ -35,11 +35,8 @@ export default defineConfig({
         'vite.config.ts',
         'vitest.config.ts',
         'tsup.config.ts',
-        // Projector-related exclusions (adjust paths as needed)
-        'src/**/projector/**',
-        'src/**/*Projector*.{ts,tsx}',
-        'src/**/Projector/**',
-        'src/**/projection/**'
+        // Projector-related exclusions (precise)
+        'src/lib/useTemplaterAndProjector.ts'
       ],
       thresholds: {
         lines: 80,
