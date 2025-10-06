@@ -36,7 +36,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/packages/asciidoc",
-        "passWithNoTests": true
+        "passWithNoTests": false
       }
     },
     "check": {
