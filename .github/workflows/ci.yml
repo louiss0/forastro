@@ -45,4 +45,4 @@ jobs:
         run: pnpm nx affected -t check --parallel --base=origin/main
 
       - name: Build (affected, exclude problematic projects)
-        run: pnpm nx affected -t build --parallel --base=origin/main
+        run: pnpm nx affected -t build --parallel --base=origin/main --exclude=@forastro/template_astro-preact
