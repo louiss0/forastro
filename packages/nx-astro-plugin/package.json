@@ -31,7 +31,6 @@
     "src/generators/app/templates/**/*"
   ],
   "scripts": {
-    "build": "pnpm nx build @forastro/nx-astro-plugin",
     "test": "vitest run",
     "test:watch": "vitest watch"
   },
