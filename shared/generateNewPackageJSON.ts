@@ -132,5 +132,12 @@ export function transformPackageJSON_ExportsForBuild(
       newPackageJSON.exports,
       valuesToIgnoreInExports,
     );
+  
+  // Transform the files array to exclude src/ directory and remove test files
+  newPackageJSON.files = newPackageJSON.files
+    .filter(file => !file.startsWith('src/'))
+    .concat(['*.js', '*.d.ts', 'lib/**/*'])
+    .filter((file, index, self) => self.indexOf(file) === index); // Remove duplicates
+  
   return newPackageJSON;
 }

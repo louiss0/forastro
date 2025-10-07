@@ -6,9 +6,9 @@ import {
   type PackageJSON,
 } from '../../shared/generateNewPackageJSON';
 
-const BUILD_REGEX_STRING = '^tsup$';
+const BUILD_REGEX_STRING = '^tsup\\s+--outDir\\s+(?:\\.*\\/)*[a-z]+(?:\\/[a-z]+)+';
 const BUILD_REGEX_MESSAGE =
-  "The 'build' script must be 'tsup' to build in the current directory.";
+  "The 'build' script must be in the format 'tsup --outDir <path>', where <path> must contain at least two lowercase letter segments.";
 
 const PackageJsonSchemaResult = createPackageJsonSchema(
   BUILD_REGEX_STRING,
@@ -29,11 +29,11 @@ export default defineConfig((ctx) => ({
     'lib/unocss': './src/lib/unocss.ts',
     'lib/tailwind': './src/lib/tailwind.ts'
   },
-  outDir: '.', // Output to current directory
+  outDir: '../../dist/packages/asciidoc', // Output to dist folder
   format: ['esm'],
   dts: true, // Generate .d.ts files
   minify: true,
-  clean: false, // Don't clean since we're outputting to current directory
+  clean: true, // Clean dist folder
   external: ['asciidoctor'],
   publicDir: true,
   splitting: false, // Disable code splitting to prevent chunking
@@ -57,7 +57,7 @@ export default defineConfig((ctx) => ({
         );
 
         fs.writeFile(
-          'package.json',
+          `${ctx.outDir}/package.json`,
           JSON.stringify(newPackageJSON, null, 2),
           { encoding: 'utf-8', flag: 'w' },
           function (err) {

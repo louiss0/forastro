@@ -28,7 +28,6 @@ export default defineConfig((ctx) => ({
   dts: true, // Generate .d.ts files
   minify: true,
   clean: true, // Clean output directory before building
-  publicDir: true,
   async onSuccess() {
     fs.readFile(
       'package.json',

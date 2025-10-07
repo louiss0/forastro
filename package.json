@@ -11,7 +11,8 @@
     "ci": "pnpm -w install --frozen-lockfile  pnpm run lint:affected  pnpm run test:affected  pnpm run check:affected  pnpm run build:affected"
   },
   "private": true,
-  "devDependencies": {
+"devDependencies": {
+    "@eslint/js": "^8.57.0",
     "@anatine/zod-mock": "^3.14.0",
     "@astrojs/check": "^0.9.4",
     "@eslint/eslintrc": "^3.3.1",
@@ -52,6 +53,7 @@
     "tsx": "^4.20.5",
     "typescript": "5.9.2",
     "typescript-eslint": "8.40.0",
+    "astro-eslint-parser": "^1.2.2",
     "verdaccio": "^6.1.6",
     "vite": "7.1.3",
     "vite-tsconfig-paths": "5.1.4",

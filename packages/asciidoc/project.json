@@ -15,7 +15,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/packages/asciidoc"],
       "options": {
-        "command": "tsup",
+        "command": "tsup --outDir ../../dist/packages/asciidoc",
         "cwd": "packages/asciidoc"
       }
     },

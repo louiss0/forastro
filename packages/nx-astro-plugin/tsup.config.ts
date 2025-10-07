@@ -9,7 +9,7 @@ export default defineConfig({
     '!src/**/*.spec.ts',
     '!src/**/*.test.ts',
   ],
-  outDir: '../../dist/packages/nx-astro-plugin/dist/src',
+  outDir: '../../dist/packages/nx-astro-plugin/',
   format: ['esm'],
   platform: 'node',
   target: 'node18',

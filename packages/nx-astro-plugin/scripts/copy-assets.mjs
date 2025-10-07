@@ -1,4 +1,4 @@
-import { cpSync, mkdirSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { cpSync, mkdirSync, existsSync, readdirSync, statSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
 const PKG_ROOT = process.cwd(); // packages/nx-astro-plugin
@@ -63,4 +63,14 @@ copyDirRecursive(COMPILED_SRC, join(PUBLISH_ROOT, 'src'), (abs, rel, isFile) => 
   return abs.endsWith('.js') || abs.endsWith('.js.map');
 });
 
-console.log('Copied assets to', PUBLISH_ROOT);
+// 5) Copy and update package.json
+const srcPackageJson = join(PKG_ROOT, 'package.json');
+const destPackageJson = join(PUBLISH_ROOT, 'package.json');
+if (existsSync(srcPackageJson)) {
+  const pkg = JSON.parse(readFileSync(srcPackageJson, 'utf-8'));
+  // Update paths in exports if needed - they should already be correct for dist
+  writeFileSync(destPackageJson, JSON.stringify(pkg, null, 2), 'utf-8');
+  console.log('✓ Copied package.json');
+}
+
+console.log('✓ Copied all assets to', PUBLISH_ROOT);

@@ -38,8 +38,11 @@
     "url": "https://github.com/louiss0"
   },
   "files": [
-    "src/",
-    "index.js"
+    "*.js",
+    "*.d.ts",
+    "README.md",
+    "CHANGELOG.md",
+    "components/**/*"
   ],
   "keywords": [
     "withastro",
