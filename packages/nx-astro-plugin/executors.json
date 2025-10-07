@@ -2,32 +2,32 @@
   "$schema": "https://json.schemastore.org/nx-plugin.schema.json",
   "executors": {
     "dev": {
-      "implementation": "./src/executors/dev/executor.ts",
+      "implementation": "./src/executors/dev/executor",
       "schema": "./src/executors/dev/schema.json",
       "description": "Run astro dev"
     },
     "build": {
-      "implementation": "./src/executors/build/executor.ts",
+      "implementation": "./src/executors/build/executor",
       "schema": "./src/executors/build/schema.json",
       "description": "Run astro build"
     },
     "preview": {
-      "implementation": "./src/executors/preview/executor.ts",
+      "implementation": "./src/executors/preview/executor",
       "schema": "./src/executors/preview/schema.json",
       "description": "Run astro preview"
     },
     "check": {
-      "implementation": "./src/executors/check/executor.ts",
+      "implementation": "./src/executors/check/executor",
       "schema": "./src/executors/check/schema.json",
       "description": "Run astro check"
     },
     "sync": {
-      "implementation": "./src/executors/sync/executor.ts",
+      "implementation": "./src/executors/sync/executor",
       "schema": "./src/executors/sync/schema.json",
       "description": "Run astro sync"
     },
     "add": {
-      "implementation": "./src/executors/add/executor.ts",
+      "implementation": "./src/executors/add/executor",
       "schema": "./src/executors/add/schema.json",
       "description": "Run astro add to add integrations"
     }

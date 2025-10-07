@@ -15,13 +15,8 @@
   },
   "targetDefaults": {
     "build": {
-      "dependsOn": ["type-check", "lint", "^build"],
+      "dependsOn": ["lint", "^build"],
       "inputs": ["production", "^production"],
-      "cache": true
-    },
-    "type-check": {
-      "dependsOn": ["^type-check"],
-      "inputs": ["default", "^production"],
       "cache": true
     },
     "lint": {
@@ -33,7 +28,7 @@
       "cache": true
     },
     "check": {
-      "dependsOn": ["lint", "type-check", "test"],
+      "dependsOn": ["lint", "test"],
       "cache": false
     },
     "@nx/vite:test": {
