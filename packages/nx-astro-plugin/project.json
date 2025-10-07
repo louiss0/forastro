@@ -6,12 +6,11 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{projectRoot}/dist"],
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
       "options": {
-        "main": "packages/nx-astro-plugin/src/index.ts",
-        "tsConfig": "packages/nx-astro-plugin/tsconfig.lib.json",
-        "outputPath": "packages/nx-astro-plugin/dist"
+        "command": "tsup --config tsup.config.ts && node scripts/copy-assets.mjs",
+        "cwd": "packages/nx-astro-plugin"
       }
     },
     "lint": {
