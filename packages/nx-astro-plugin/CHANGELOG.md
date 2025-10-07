@@ -1,3 +1,13 @@
+## 0.1.1 (2025-10-07)
+
+### 🩹 Fixes
+
+- **nx-astro-plugin:** remove circular build script from package.json ([d61c0a5](https://github.com/louiss0/forastro/commit/d61c0a5))
+
+### ❤️ Thank You
+
+- Shelton Louis @louiss0
+
 ## 0.1.0 (2025-10-06)
 
 ### 🚀 Features

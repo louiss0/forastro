@@ -1,3 +1,23 @@
+## 2.5.0 (2025-10-07)
+
+### 🚀 Features
+
+- **nx-astro-plugin:** Nx Astro plugin and sample app; enable release dry-run ([#48](https://github.com/louiss0/forastro/pull/48))
+- **docs:** replace mock blog with comprehensive library documentation ([8516356](https://github.com/louiss0/forastro/commit/8516356))
+- **apps:** move mock-blog from packages to apps and configure Nx TypeScript support ([5b7aee4](https://github.com/louiss0/forastro/commit/5b7aee4))
+- **@forastro/asciidoc:** normalize document attributes before schema validation ([4f5df3e](https://github.com/louiss0/forastro/commit/4f5df3e))
+- **asciidoc:** enhance package with build outputs and configuration updates ([281c7b8](https://github.com/louiss0/forastro/commit/281c7b8))
+
+### 🩹 Fixes
+
+- **ci:** exclude mock-blog from CI until module resolution is fixed ([7093a8c](https://github.com/louiss0/forastro/commit/7093a8c))
+- **astro-nx:** align string utils, templates, and generators with tests - Refine slugify and case utilities (versions, brand terms, punctuation) - Use YAML frontmatter with quoted strings across templates - Honor overwrite option in generators; unify error messaging - Fix content generator getProjectPaths import; adjust tests accordingly ([c573e3c](https://github.com/louiss0/forastro/commit/c573e3c))
+
+### ❤️ Thank You
+
+- shelton louis @louiss0
+- Shelton Louis @louiss0
+
 ## 2.3.2 (2025-07-15)
 
 ### 🩹 Fixes
