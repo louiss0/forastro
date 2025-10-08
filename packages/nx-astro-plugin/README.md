@@ -13,8 +13,9 @@ What
   - init: prepare workspace defaults (no integrated mode)
   - app: create an Astro app using create-astro
   - add-integration: add/configure integrations (astro add)
-  - generate-content: sample content based on integrations
-  - page, component, layout, collection-schema, starlight-docs
+  - content: generate content files with validation
+  - page: generate static or dynamic pages
+  - component, layout, collection-schema, starlight-docs
 - Executors:
   - dev, build, preview, check, sync
 
@@ -34,8 +35,40 @@ Usage
   - pnpm nx build my-site && pnpm nx preview my-site
 - Add integrations:
   - pnpm nx g @forastro/nx-astro-plugin:add-integration --project=my-site --names=mdx,react
-- Generate content:
-  - pnpm nx g @forastro/nx-astro-plugin:generate-content --project=my-site --presets=blog --mdxExamples=true
+
+Generators
+
+Page Generator
+- Generate static pages:
+  - pnpm nx g @forastro/nx-astro-plugin:page --project=my-site --name=about
+  - Creates: src/pages/about.astro with frontmatter and placeholder content
+- Generate dynamic pages:
+  - pnpm nx g @forastro/nx-astro-plugin:page --project=my-site --name=slug --type=dynamic
+  - Creates: src/pages/[slug].astro with getStaticPaths() for content collections
+  - Automatically detects srcDir from astro.config
+- Custom directories:
+  - pnpm nx g @forastro/nx-astro-plugin:page --project=my-site --name=blog/post --type=static
+  - Creates: src/pages/blog/post.astro
+
+Content Generator
+- Generate markdown content:
+  - pnpm nx g @forastro/nx-astro-plugin:content --project=my-site --collection=posts --contentType=markdown --name="My First Post"
+  - Creates: src/content/posts/my-first-post.md with YAML frontmatter
+- Generate MDX content (requires @astrojs/mdx):
+  - pnpm nx g @forastro/nx-astro-plugin:content --project=my-site --collection=posts --contentType=mdx --name="Interactive Post"
+  - Creates: src/content/posts/interactive-post.mdx
+- Generate Markdoc content (requires @astrojs/markdoc):
+  - pnpm nx g @forastro/nx-astro-plugin:content --project=my-site --collection=docs --contentType=markdoc --name="Getting Started"
+  - Creates: src/content/docs/getting-started.md
+- Generate AsciiDoc content (requires asciidoctor):
+  - pnpm nx g @forastro/nx-astro-plugin:content --project=my-site --collection=posts --contentType=asciidoc --name="Technical Post"
+  - Creates: src/content/posts/technical-post.adoc with AsciiDoc header
+
+Validation Features
+- Collection validation: Verifies collection exists, lists available collections if not found
+- Content type validation: Checks for required integrations, provides installation instructions
+- Automatic slugification: Converts names to URL-friendly slugs
+- Directory detection: Reads astro.config for srcDir and contentDir settings
 
 Notes
 - The plugin detects the invoking package manager (JPD > pnpm > npm/yarn) based on user agent when commands run.

@@ -1,3 +1,30 @@
+## [Unreleased]
+
+### 🚀 Features
+
+- **page generator:** add static and dynamic page type support with directory detection
+  - Generate static pages with frontmatter and placeholder content
+  - Generate dynamic pages with `getStaticPaths()` for content collections
+  - Auto-detect `srcDir` from astro.config files
+  - Support custom directory paths
+- **content generator:** add content type validation and multiple format support
+  - Validate collections exist before generating content
+  - Support markdown, MDX, Markdoc, and AsciiDoc formats
+  - Detect required integrations and provide installation instructions
+  - Generate appropriate frontmatter for each content type
+  - Automatic name slugification
+
+### 🔄 Changes
+
+- **content generator:** rename `generate-content` to `content` for consistency
+
+### 🛠️ Internal
+
+- Add utility functions for Astro config parsing
+- Add content collection detection
+- Add content type support detection
+- Comprehensive test coverage for all new features (87.97% overall)
+
 ## 0.1.1 (2025-10-07)
 
 ### 🩹 Fixes
