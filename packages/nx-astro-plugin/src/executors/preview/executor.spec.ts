@@ -52,4 +52,58 @@ describe('preview executor', () => {
     expect(args).toContain('--port');
     expect(args).toContain('4322');
   });
+
+  it('should pass host option', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ host: '0.0.0.0' }, mockContext);
+
+    const [, args] = mockExeca.mock.calls[0];
+    expect(args).toContain('--host');
+    expect(args).toContain('0.0.0.0');
+  });
+
+  it('should pass additional args', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ args: ['--open', '--verbose'] }, mockContext);
+
+    const [, args] = mockExeca.mock.calls[0];
+    expect(args).toContain('--open');
+    expect(args).toContain('--verbose');
+  });
+
+  it('should use binOverride if provided', async () => {
+    const customBin = '/custom/path/to/astro';
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ binOverride: customBin }, mockContext);
+
+    expect(mockResolveAstroBinary).not.toHaveBeenCalled();
+    const [bin] = mockExeca.mock.calls[0];
+    expect(bin).toBe(customBin);
+  });
+
+  it('should return failure when binary resolution fails', async () => {
+    mockResolveAstroBinary.mockRejectedValue(new Error('Astro binary not found'));
+
+    const result = await runExecutor({}, mockContext);
+
+    expect(result.success).toBe(false);
+    expect(mockExeca).not.toHaveBeenCalled();
+  });
+
+  it('should return failure when preview command fails', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockExeca.mockRejectedValue(new Error('Preview failed'));
+
+    const result = await runExecutor({}, mockContext);
+
+    expect(result.success).toBe(false);
+  });
 });
