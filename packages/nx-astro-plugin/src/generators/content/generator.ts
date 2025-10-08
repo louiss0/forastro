@@ -77,19 +77,19 @@ export default async function generator(tree: Tree, options: Schema) {
     throw new Error(
       `Collection '${options.collection}' not found.\n` +
         `Available collections: ${availableCollections.length > 0 ? availableCollections.join(', ') : 'none'}\n` +
-        `Create a collection in src/content/config.ts or as a directory in src/content/`
+        `Create a collection in src/content/config.ts or as a directory in src/content/`,
     );
   }
 
   // Detect and validate content type support
   const support = detectContentTypeSupport(proj.root);
-  
+
   if (options.contentType === 'mdx' && !support.mdx) {
     throw new Error(
       `Content type 'mdx' is not supported.\n` +
         `To use MDX:\n` +
         `  - Install: npm install @astrojs/mdx\n` +
-        `  - Add to astro.config: import mdx from '@astrojs/mdx'`
+        `  - Add to astro.config: import mdx from '@astrojs/mdx'`,
     );
   }
 
@@ -98,7 +98,7 @@ export default async function generator(tree: Tree, options: Schema) {
       `Content type 'markdoc' is not supported.\n` +
         `To use Markdoc:\n` +
         `  - Install: npm install @astrojs/markdoc\n` +
-        `  - Add to astro.config: import markdoc from '@astrojs/markdoc'`
+        `  - Add to astro.config: import markdoc from '@astrojs/markdoc'`,
     );
   }
 
@@ -106,7 +106,7 @@ export default async function generator(tree: Tree, options: Schema) {
     throw new Error(
       `Content type 'asciidoc' is not supported.\n` +
         `To use AsciiDoc:\n` +
-        `  - Install: npm install asciidoctor`
+        `  - Install: npm install asciidoctor`,
     );
   }
 
@@ -115,16 +115,18 @@ export default async function generator(tree: Tree, options: Schema) {
   const ext = getExtension(options.contentType);
   const filePath = join(
     joinPathFragments(proj.root, contentDir, options.collection),
-    `${fileName}${ext}`
+    `${fileName}${ext}`,
   );
 
   if (!tree.exists(filePath)) {
-    const title = names(options.name).className.replace(/([A-Z])/g, ' $1').trim();
+    const title = names(options.name)
+      .className.replace(/([A-Z])/g, ' $1')
+      .trim();
     const content =
       options.contentType === 'asciidoc'
         ? generateAsciidocContent(title)
         : generateMarkdownContent(title);
-    
+
     tree.write(filePath, content);
   }
 

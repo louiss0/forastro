@@ -34,14 +34,4 @@
     }
   },
   "required": ["project", "collection", "contentType", "name"]
-  "$schema": "http://json-schema.org/schema",
-  "title": "Generate content",
-  "type": "object",
-  "properties": {
-    "project": { "type": "string" },
-    "presets": { "type": "array", "items": { "type": "string", "enum": ["blog", "docs", "landing"] } },
-    "mdxExamples": { "type": "boolean", "default": false },
-    "tailwindExamples": { "type": "boolean", "default": false }
-  },
-  "required": ["project"]
 }

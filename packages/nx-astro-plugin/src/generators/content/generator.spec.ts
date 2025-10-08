@@ -23,11 +23,17 @@ vi.mock('../../utils/astro.js', () => ({
 
 describe('content generator', () => {
   let tree: Tree;
-  const mockReadProjectConfiguration = vi.mocked(devkit.readProjectConfiguration);
-  const mockFormatFiles = vi.mocked(devkit.formatFiles);
+  const mockReadProjectConfiguration = vi.mocked(
+    devkit.readProjectConfiguration,
+  );
+  const _mockFormatFiles = vi.mocked(devkit.formatFiles);
   const mockParseAstroConfigDirs = vi.mocked(astroUtils.parseAstroConfigDirs);
-  const mockListContentCollections = vi.mocked(astroUtils.listContentCollections);
-  const mockDetectContentTypeSupport = vi.mocked(astroUtils.detectContentTypeSupport);
+  const mockListContentCollections = vi.mocked(
+    astroUtils.listContentCollections,
+  );
+  const mockDetectContentTypeSupport = vi.mocked(
+    astroUtils.detectContentTypeSupport,
+  );
 
   const writeSpy = vi.fn<[string, string], void>();
 
@@ -37,9 +43,14 @@ describe('content generator', () => {
 
     tree = {
       root: '/workspace',
-      exists: vi.fn<[string], boolean>().mockReturnValue(false) as unknown as Tree['exists'],
+      exists: vi
+        .fn<[string], boolean>()
+        .mockReturnValue(false) as unknown as Tree['exists'],
       write: writeSpy as unknown as Tree['write'],
-      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+      read: vi.fn<
+        [string, string?],
+        string | null
+      >() as unknown as Tree['read'],
     } as unknown as Tree;
 
     mockReadProjectConfiguration.mockReturnValue({
@@ -73,7 +84,7 @@ describe('content generator', () => {
           collection: 'invalid',
           contentType: 'markdown',
           name: 'My Post',
-        })
+        }),
       ).rejects.toThrow("Collection 'invalid' not found");
     });
 
@@ -86,7 +97,7 @@ describe('content generator', () => {
           collection: 'invalid',
           contentType: 'markdown',
           name: 'My Post',
-        })
+        }),
       ).rejects.toThrow('Available collections: posts, pages');
     });
 
@@ -117,7 +128,7 @@ describe('content generator', () => {
           collection: 'posts',
           contentType: 'mdx',
           name: 'My Post',
-        })
+        }),
       ).rejects.toThrow("Content type 'mdx' is not supported");
     });
 
@@ -135,7 +146,7 @@ describe('content generator', () => {
           collection: 'posts',
           contentType: 'mdx',
           name: 'My Post',
-        })
+        }),
       ).rejects.toThrow('npm install @astrojs/mdx');
     });
 
@@ -153,7 +164,7 @@ describe('content generator', () => {
           collection: 'posts',
           contentType: 'markdoc',
           name: 'My Post',
-        })
+        }),
       ).rejects.toThrow("Content type 'markdoc' is not supported");
     });
 
@@ -171,7 +182,7 @@ describe('content generator', () => {
           collection: 'posts',
           contentType: 'asciidoc',
           name: 'My Post',
-        })
+        }),
       ).rejects.toThrow("Content type 'asciidoc' is not supported");
     });
   });
