@@ -1,13 +1,16 @@
 # Astro Generators Enhancement - Implementation Progress
 
 ## 🎯 Project Overview
+
 Enhancing the `@forastro/nx-astro-plugin` with two major generator improvements:
+
 1. **Page Generator**: Add static/dynamic page type support
 2. **Content Generator**: Rename and add collection/content-type validation
 
 ## ✅ Completed Work
 
 ### 1. Git Flow Setup
+
 - ✅ Feature branch created: `feature/astro-generators-enhancements`
 - ✅ Branch pushed to origin
 - ✅ CI-centric workflow confirmed (.github/workflows exists)
@@ -15,6 +18,7 @@ Enhancing the `@forastro/nx-astro-plugin` with two major generator improvements:
 ### 2. Page Generator Enhancement (COMPLETE)
 
 #### Files Modified:
+
 - `packages/nx-astro-plugin/src/generators/page/schema.json`
 - `packages/nx-astro-plugin/src/generators/page/generator.ts`
 - `packages/nx-astro-plugin/src/generators/page/generator.spec.ts`
@@ -22,18 +26,22 @@ Enhancing the `@forastro/nx-astro-plugin` with two major generator improvements:
 - `packages/nx-astro-plugin/src/utils/astro.spec.ts`
 
 #### Features Implemented:
+
 ✅ **Schema Updates:**
+
 - Added `type` field with enum `["static", "dynamic"]`
 - Default value: `"static"`
 - Proper description for user guidance
 
 ✅ **Static Pages:**
+
 - Generate pages with frontmatter script section
 - Include placeholder div with h1 title
 - Support custom directory paths
 - Respect Astro config `srcDir` setting
 
 ✅ **Dynamic Pages:**
+
 - Auto-bracket page names (e.g., `[slug].astro`)
 - Include `getStaticPaths()` export
 - Import `getCollection` from `astro:content`
@@ -41,12 +49,14 @@ Enhancing the `@forastro/nx-astro-plugin` with two major generator improvements:
 - Props destructuring for entry data
 
 ✅ **Directory Detection:**
+
 - Parse `astro.config.ts/mjs/js` for `srcDir`
 - Default to `src/pages` if not found
 - Normalize Windows paths to forward slashes
 - Handle various quote types in config
 
 #### Utility Functions Added:
+
 ```typescript
 // In src/utils/astro.ts
 
@@ -56,30 +66,34 @@ export interface AstroConfigDirs {
   contentDir: string;
 }
 
-export function parseAstroConfigDirs(projectRoot: string): AstroConfigDirs
+export function parseAstroConfigDirs(projectRoot: string): AstroConfigDirs;
 // Returns detected or default directories
 
 export interface ContentTypeSupport {
-  markdown: boolean;  // Always true
-  mdx: boolean;       // Check @astrojs/mdx
-  markdoc: boolean;   // Check @astrojs/markdoc
-  asciidoc: boolean;  // Check asciidoctor packages
+  markdown: boolean; // Always true
+  mdx: boolean; // Check @astrojs/mdx
+  markdoc: boolean; // Check @astrojs/markdoc
+  asciidoc: boolean; // Check asciidoctor packages
 }
 
-export function detectContentTypeSupport(projectRoot: string): ContentTypeSupport
+export function detectContentTypeSupport(
+  projectRoot: string,
+): ContentTypeSupport;
 // Scans astro.config and package.json
 
-export function listContentCollections(projectRoot: string): string[]
+export function listContentCollections(projectRoot: string): string[];
 // Parses src/content/config.ts for collection names
 // Fallback: lists directories in content folder
 ```
 
 #### Test Coverage:
+
 - ✅ 34 astro utility tests (all passing)
 - ✅ 8 page generator tests (all passing)
 - ✅ Overall coverage: 93.28% (above 80% threshold)
 
 #### Commit:
+
 ```
 feat(nx-astro-plugin): add static and dynamic page types with dir detection
 
@@ -100,11 +114,13 @@ Commit: 53720f1
 ## 📋 Remaining Work: Content Generator
 
 ### Todo List Status:
+
 The following tasks remain from your todo list:
 
 #### Task 2: Content Generator (Rename & Enhance)
 
 **Files to Create/Modify:**
+
 1. `packages/nx-astro-plugin/generators.json` - Update entry
 2. `packages/nx-astro-plugin/src/generators/content/` (rename from generate-content)
 3. `packages/nx-astro-plugin/src/generators/content/schema.json` - New schema
@@ -114,6 +130,7 @@ The following tasks remain from your todo list:
 **Key Requirements:**
 
 ##### Schema Design:
+
 ```json
 {
   "properties": {
@@ -140,6 +157,7 @@ The following tasks remain from your todo list:
 ```
 
 ##### Implementation Steps:
+
 1. **Validation:**
    - Verify collection exists using `listContentCollections()`
    - If not found, throw error listing available collections
@@ -158,6 +176,7 @@ The following tasks remain from your todo list:
 3. **Frontmatter Templates:**
 
 **Markdown/MDX/Markdoc (YAML):**
+
 ```yaml
 ---
 title: "{{ Humanized Title }}"
@@ -177,10 +196,11 @@ tags: []
 ```
 
 **AsciiDoc:**
+
 ```asciidoc
 = {{ Humanized Title }}
-:description: 
-:tags: 
+:description:
+:tags:
 :draft: true
 :pubDate: {{ new Date().toISOString() }}
 
@@ -194,6 +214,7 @@ tags: []
 ```
 
 ##### Error Messages:
+
 ```typescript
 // Collection not found
 throw new Error(
@@ -213,6 +234,7 @@ throw new Error(
 ```
 
 ##### Test Cases Required:
+
 1. **Collection Validation:**
    - ❌ Invalid collection → throws with available list
    - ✅ Valid collection → proceeds
@@ -236,6 +258,7 @@ throw new Error(
 #### Task 3: Package Configuration
 
 **Files to Update:**
+
 1. `packages/nx-astro-plugin/package.json`
    - Verify `files` array includes schemas
    - Current: Already has `src/generators/**/schema.json`
@@ -252,6 +275,7 @@ throw new Error(
 #### Final Steps:
 
 1. **Lint & Format:**
+
    ```bash
    jpd exec nx format:write
    jpd exec nx lint nx-astro-plugin
@@ -259,16 +283,17 @@ throw new Error(
    ```
 
 2. **Commit Structure:**
+
    ```bash
    # Commit 1: Rename
    git commit -m "refactor(nx-astro-plugin): rename generate-content to content"
-   
+
    # Commit 2: Implementation
    git commit -m "feat(nx-astro-plugin): add content generator with collection and type validation"
-   
+
    # Commit 3: Tests
    git commit -m "test(nx-astro-plugin): add comprehensive tests for content generator"
-   
+
    # Commit 4: Config
    git commit -m "build(nx-astro-plugin): update package config for renamed generator"
    ```

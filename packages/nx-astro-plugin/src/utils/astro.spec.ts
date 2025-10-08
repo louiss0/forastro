@@ -1,7 +1,21 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { existsSync, readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  statSync,
+} from 'node:fs';
 import { join } from 'node:path';
-import { projectAstroConfigPath, detectIntegrations, ensureIntegrationsArray, writeConfig, parseAstroConfigDirs, detectContentTypeSupport, listContentCollections } from './astro.js';
+import {
+  projectAstroConfigPath,
+  detectIntegrations,
+  ensureIntegrationsArray,
+  writeConfig,
+  parseAstroConfigDirs,
+  detectContentTypeSupport,
+  listContentCollections,
+} from './astro.js';
 
 vi.mock('node:fs');
 
@@ -86,7 +100,7 @@ describe('astro utils', () => {
     it('should detect multiple @astrojs integrations', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        'import react from "@astrojs/react";\nimport vue from "@astrojs/vue";\nimport tailwind from "@astrojs/tailwind";'
+        'import react from "@astrojs/react";\nimport vue from "@astrojs/vue";\nimport tailwind from "@astrojs/tailwind";',
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -99,7 +113,7 @@ describe('astro utils', () => {
     it('should deduplicate integrations', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        'import react from "@astrojs/react";\nimport { React } from "@astrojs/react";'
+        'import react from "@astrojs/react";\nimport { React } from "@astrojs/react";',
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -109,7 +123,7 @@ describe('astro utils', () => {
     it('should handle config with no integrations', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        'import { defineConfig } from "astro/config";\nexport default defineConfig({});'
+        'import { defineConfig } from "astro/config";\nexport default defineConfig({});',
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -119,7 +133,7 @@ describe('astro utils', () => {
     it('should handle various integration naming patterns', () => {
       mockExistsSync.mockReturnValue(true);
       mockReadFileSync.mockReturnValue(
-        '@astrojs/node, @astrojs/vercel, @astrojs/cloudflare'
+        '@astrojs/node, @astrojs/vercel, @astrojs/cloudflare',
       );
 
       const result = detectIntegrations('/workspace/project');
@@ -139,7 +153,9 @@ describe('astro utils', () => {
     it('should add integrations array if missing', () => {
       const content = 'export default defineConfig({});';
       const result = ensureIntegrationsArray(content);
-      expect(result).toBe('export default defineConfig({\n  integrations: [],});');
+      expect(result).toBe(
+        'export default defineConfig({\n  integrations: [],});',
+      );
     });
 
     it('should handle defineConfig with existing properties', () => {
@@ -150,7 +166,8 @@ describe('astro utils', () => {
     });
 
     it('should not modify content with integrations: [ ... ] already present', () => {
-      const content = 'export default defineConfig({ integrations: [react(), vue()] });';
+      const content =
+        'export default defineConfig({ integrations: [react(), vue()] });';
       const result = ensureIntegrationsArray(content);
       expect(result).toBe(content);
     });
@@ -208,7 +225,6 @@ export default defineConfig({
   });
 
   describe('parseAstroConfigDirs', () => {
-
     it('should return default dirs when config file does not exist', () => {
       mockExistsSync.mockReturnValue(false);
 
@@ -259,7 +275,6 @@ export default defineConfig({
   });
 
   describe('detectContentTypeSupport', () => {
-
     it('should always return markdown as supported', () => {
       mockExistsSync.mockReturnValue(false);
 
@@ -300,11 +315,13 @@ import markdoc from '@astrojs/markdoc';
       mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).includes('package.json');
       });
-      mockReadFileSync.mockReturnValue(JSON.stringify({
-        dependencies: {
-          '@astrojs/mdx': '^1.0.0'
-        }
-      }));
+      mockReadFileSync.mockReturnValue(
+        JSON.stringify({
+          dependencies: {
+            '@astrojs/mdx': '^1.0.0',
+          },
+        }),
+      );
 
       const result = detectContentTypeSupport('/workspace/project');
       expect(result.mdx).toBe(true);
@@ -314,11 +331,13 @@ import markdoc from '@astrojs/markdoc';
       mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).includes('package.json');
       });
-      mockReadFileSync.mockReturnValue(JSON.stringify({
-        devDependencies: {
-          '@astrojs/markdoc': '^1.0.0'
-        }
-      }));
+      mockReadFileSync.mockReturnValue(
+        JSON.stringify({
+          devDependencies: {
+            '@astrojs/markdoc': '^1.0.0',
+          },
+        }),
+      );
 
       const result = detectContentTypeSupport('/workspace/project');
       expect(result.markdoc).toBe(true);
@@ -328,11 +347,13 @@ import markdoc from '@astrojs/markdoc';
       mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).includes('package.json');
       });
-      mockReadFileSync.mockReturnValue(JSON.stringify({
-        dependencies: {
-          'asciidoctor': '^2.0.0'
-        }
-      }));
+      mockReadFileSync.mockReturnValue(
+        JSON.stringify({
+          dependencies: {
+            asciidoctor: '^2.0.0',
+          },
+        }),
+      );
 
       const result = detectContentTypeSupport('/workspace/project');
       expect(result.asciidoc).toBe(true);
@@ -342,11 +363,13 @@ import markdoc from '@astrojs/markdoc';
       mockExistsSync.mockImplementation((path: unknown) => {
         return String(path).includes('package.json');
       });
-      mockReadFileSync.mockReturnValue(JSON.stringify({
-        devDependencies: {
-          'astro-asciidoc': '^1.0.0'
-        }
-      }));
+      mockReadFileSync.mockReturnValue(
+        JSON.stringify({
+          devDependencies: {
+            'astro-asciidoc': '^1.0.0',
+          },
+        }),
+      );
 
       const result = detectContentTypeSupport('/workspace/project');
       expect(result.asciidoc).toBe(true);
@@ -354,7 +377,6 @@ import markdoc from '@astrojs/markdoc';
   });
 
   describe('listContentCollections', () => {
-
     it('should return empty array if content directory does not exist', () => {
       mockExistsSync.mockReturnValue(false);
 
@@ -385,13 +407,18 @@ export const collections = {
     it.skip('should list directories as fallback collections', () => {
       mockExistsSync.mockImplementation((path: unknown) => {
         const pathStr = String(path);
-        return pathStr.includes('src/content') && !pathStr.includes('config.ts');
+        return (
+          pathStr.includes('src/content') && !pathStr.includes('config.ts')
+        );
       });
       mockReadFileSync.mockReturnValue('');
       mockReaddirSync.mockReturnValue(['blog', 'docs', 'config.ts'] as never[]);
-      mockStatSync.mockImplementation((path: unknown) => ({
-        isDirectory: () => !String(path).includes('config.ts'),
-      } as never));
+      mockStatSync.mockImplementation(
+        (path: unknown) =>
+          ({
+            isDirectory: () => !String(path).includes('config.ts'),
+          }) as never,
+      );
 
       const result = listContentCollections('/workspace/project');
       expect(result).toContain('blog');

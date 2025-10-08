@@ -1,5 +1,9 @@
 import type { Tree } from '@nx/devkit';
-import { readProjectConfiguration, formatFiles, joinPathFragments } from '@nx/devkit';
+import {
+  readProjectConfiguration,
+  formatFiles,
+  joinPathFragments,
+} from '@nx/devkit';
 import { join } from 'node:path';
 import { parseAstroConfigDirs } from '../../utils/astro.js';
 
@@ -10,7 +14,12 @@ interface Schema {
   type?: 'static' | 'dynamic';
 }
 
-const toKebab = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+const toKebab = (s: string) =>
+  s
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 
 function generateStaticPage(name: string): string {
   return `---
@@ -55,25 +64,28 @@ const { entry } = Astro.props;
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
   const pageType = options.type || 'static';
-  
+
   // Parse Astro config to get pagesDir
   const { pagesDir } = parseAstroConfigDirs(proj.root);
-  
+
   let pageName = toKebab(options.name);
-  
+
   // For dynamic pages, ensure brackets around param name
   if (pageType === 'dynamic' && !pageName.includes('[')) {
     pageName = `[${pageName}]`;
   }
-  
-  const baseDir = options.directory ? options.directory.replace(/\\/g, '/') : '';
+
+  const baseDir = options.directory
+    ? options.directory.replace(/\\/g, '/')
+    : '';
   const targetDir = joinPathFragments(proj.root, pagesDir, baseDir);
   const filePath = join(targetDir, `${pageName}.astro`);
 
   if (!tree.exists(filePath)) {
-    const contents = pageType === 'dynamic' 
-      ? generateDynamicPage(options.name)
-      : generateStaticPage(options.name);
+    const contents =
+      pageType === 'dynamic'
+        ? generateDynamicPage(options.name)
+        : generateStaticPage(options.name);
     tree.write(filePath, contents);
   }
 

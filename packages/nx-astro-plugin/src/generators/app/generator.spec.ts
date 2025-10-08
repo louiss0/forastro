@@ -28,9 +28,14 @@ describe('app generator', () => {
   beforeEach(() => {
     tree = {
       root: '/workspace',
-      exists: vi.fn<[string], boolean>().mockReturnValue(false) as unknown as Tree['exists'],
+      exists: vi
+        .fn<[string], boolean>()
+        .mockReturnValue(false) as unknown as Tree['exists'],
       write: writeMock as unknown as Tree['write'],
-      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+      read: vi.fn<
+        [string, string?],
+        string | null
+      >() as unknown as Tree['read'],
     } as unknown as Tree;
     vi.clearAllMocks();
   });
@@ -45,7 +50,7 @@ describe('app generator', () => {
     expect(mockExeca).not.toHaveBeenCalled();
     expect(tree.write).toHaveBeenCalledWith(
       expect.stringContaining('project.json'),
-      expect.stringContaining('test-app')
+      expect.stringContaining('test-app'),
     );
     expect(mockFormatFiles).toHaveBeenCalled();
   });
@@ -63,10 +68,11 @@ describe('app generator', () => {
       expect.arrayContaining([
         'create-astro@latest',
         'apps/test-app',
-        '--template', 'minimal',
+        '--template',
+        'minimal',
         '--yes',
       ]),
-      expect.any(Object)
+      expect.any(Object),
     );
     expect(mockFormatFiles).toHaveBeenCalled();
   });
@@ -83,7 +89,7 @@ describe('app generator', () => {
     expect(mockExeca).toHaveBeenCalledWith(
       'npx',
       expect.arrayContaining(['--template', 'blog']),
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
@@ -110,7 +116,7 @@ describe('app generator', () => {
     });
 
     const writeCall = writeMock.mock.calls.find((call) =>
-      call[0].includes('project.json')
+      call[0].includes('project.json'),
     ) as [string, string] | undefined;
     expect(writeCall).toBeDefined();
     const projectJson = JSON.parse(writeCall[1]);
@@ -135,7 +141,7 @@ describe('app generator', () => {
     expect(mockUpdateJson).toHaveBeenCalledWith(
       tree,
       expect.stringContaining('package.json'),
-      expect.any(Function)
+      expect.any(Function),
     );
 
     // Test the updateJson callback

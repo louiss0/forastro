@@ -14,14 +14,19 @@ export function detectIntegrations(projectRoot: string): string[] {
   const cfg = projectAstroConfigPath(projectRoot);
   if (!cfg) return [];
   const content = readFileSync(cfg, 'utf8');
-  const matches = [...content.matchAll(/@astrojs\/(\w+)/g)].map((m) => m[1]).filter(Boolean) as string[];
+  const matches = [...content.matchAll(/@astrojs\/(\w+)/g)]
+    .map((m) => m[1])
+    .filter(Boolean) as string[];
   return Array.from(new Set(matches)) as string[];
 }
 
 export function ensureIntegrationsArray(content: string): string {
   // Simple heuristic: ensure integrations: [] exists
   if (/integrations\s*:\s*\[/.test(content)) return content;
-  return content.replace(/defineConfig\(\{/, 'defineConfig({\n  integrations: [],');
+  return content.replace(
+    /defineConfig\(\{/,
+    'defineConfig({\n  integrations: [],',
+  );
 }
 
 export function writeConfig(path: string, content: string) {
@@ -60,7 +65,9 @@ export interface ContentTypeSupport {
   asciidoc: boolean;
 }
 
-export function detectContentTypeSupport(projectRoot: string): ContentTypeSupport {
+export function detectContentTypeSupport(
+  projectRoot: string,
+): ContentTypeSupport {
   const support: ContentTypeSupport = {
     markdown: true, // Always available in Astro
     mdx: false,
@@ -111,12 +118,12 @@ export function listContentCollections(projectRoot: string): string[] {
   // Strategy A: Parse config.ts for defineCollection keys
   if (existsSync(configPath)) {
     const content = readFileSync(configPath, 'utf8');
-    const collectionsMatch = content.match(
-      /collections\s*:\s*\{([\s\S]*?)\}/
-    );
+    const collectionsMatch = content.match(/collections\s*:\s*\{([\s\S]*?)\}/);
     if (collectionsMatch) {
       const collectionsBlock = collectionsMatch[1];
-      const keyMatches = collectionsBlock.matchAll(/['"` ]([a-zA-Z0-9_-]+)['"` ]\s*:/g);
+      const keyMatches = collectionsBlock.matchAll(
+        /['"` ]([a-zA-Z0-9_-]+)['"` ]\s*:/g,
+      );
       for (const m of keyMatches) {
         if (m[1]) collections.push(m[1]);
       }
