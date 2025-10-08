@@ -7,6 +7,18 @@ import {
 } from 'node:fs';
 import { join } from 'node:path';
 
+/**
+ * Find the Astro configuration file in a project.
+ *
+ * Checks for astro.config.ts, astro.config.mjs, and astro.config.js in the project root.
+ *
+ * @param projectRoot - Absolute path to the project root directory
+ * @returns Path to the config file, or null if not found
+ *
+ * @example
+ * const configPath = projectAstroConfigPath('/workspace/apps/my-site');
+ * // Returns: '/workspace/apps/my-site/astro.config.ts' (if it exists)
+ */
 export function projectAstroConfigPath(projectRoot: string): string | null {
   const cands = ['astro.config.ts', 'astro.config.mjs', 'astro.config.js'];
   for (const f of cands) {
@@ -16,6 +28,18 @@ export function projectAstroConfigPath(projectRoot: string): string | null {
   return null;
 }
 
+/**
+ * Detect installed Astro integrations from the config file.
+ *
+ * Uses regex to find @astrojs/* imports in the Astro config file.
+ *
+ * @param projectRoot - Absolute path to the project root directory
+ * @returns Array of integration names (e.g., ['react', 'mdx', 'tailwind'])
+ *
+ * @example
+ * const integrations = detectIntegrations('/workspace/apps/my-site');
+ * // Returns: ['react', 'mdx'] if those integrations are installed
+ */
 export function detectIntegrations(projectRoot: string): string[] {
   const cfg = projectAstroConfigPath(projectRoot);
   if (!cfg) return [];
@@ -45,6 +69,19 @@ export interface AstroConfigDirs {
   contentDir: string;
 }
 
+/**
+ * Parse Astro config to extract directory paths.
+ *
+ * Reads the Astro config file to determine the srcDir, and derives
+ * the pagesDir and contentDir from it.
+ *
+ * @param projectRoot - Absolute path to the project root directory
+ * @returns Object containing srcDir, pagesDir, and contentDir paths
+ *
+ * @example
+ * const dirs = parseAstroConfigDirs('/workspace/apps/my-site');
+ * // Returns: { srcDir: 'src', pagesDir: 'src/pages', contentDir: 'src/content' }
+ */
 export function parseAstroConfigDirs(projectRoot: string): AstroConfigDirs {
   const cfg = projectAstroConfigPath(projectRoot);
   let srcDir = 'src';
@@ -71,6 +108,19 @@ export interface ContentTypeSupport {
   asciidoc: boolean;
 }
 
+/**
+ * Detect which content types are supported in the project.
+ *
+ * Checks both the Astro config and package.json to determine if MDX, Markdoc,
+ * and AsciiDoc integrations are installed. Markdown is always available.
+ *
+ * @param projectRoot - Absolute path to the project root directory
+ * @returns Object indicating which content types are supported
+ *
+ * @example
+ * const support = detectContentTypeSupport('/workspace/apps/my-site');
+ * // Returns: { markdown: true, mdx: true, markdoc: false, asciidoc: false }
+ */
 export function detectContentTypeSupport(
   projectRoot: string,
 ): ContentTypeSupport {
@@ -112,6 +162,20 @@ export function detectContentTypeSupport(
   return support;
 }
 
+/**
+ * List all content collections in the project.
+ *
+ * Uses a dual-strategy approach:
+ * 1. Parses config.ts to find collection names in the collections object
+ * 2. Lists directories in the content folder
+ *
+ * @param projectRoot - Absolute path to the project root directory
+ * @returns Sorted array of collection names
+ *
+ * @example
+ * const collections = listContentCollections('/workspace/apps/my-site');
+ * // Returns: ['blog', 'docs', 'posts']
+ */
 export function listContentCollections(projectRoot: string): string[] {
   const { contentDir } = parseAstroConfigDirs(projectRoot);
   const fullPath = join(projectRoot, contentDir);

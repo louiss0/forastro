@@ -34,6 +34,39 @@ const CLIENT_FRAMEWORKS: Framework[] = [
   'angular',
 ];
 
+/**
+ * Generate an Astro component (server or client).
+ *
+ * Supports both server-side Astro components and client-side framework components.
+ * For client components, automatically detects installed integrations and selects
+ * the appropriate framework template.
+ *
+ * @param tree - Nx virtual file system tree
+ * @param options - Component generation options
+ * @param options.project - Name of the Nx project
+ * @param options.name - Name of the component (will be converted to PascalCase)
+ * @param options.directory - Optional subdirectory under src/components
+ * @param options.type - Component type: 'server' (default) or 'client'
+ * @param options.framework - Client framework (auto-detected if not specified)
+ *
+ * @example
+ * // Generate a server Astro component (default)
+ * await generator(tree, {
+ *   project: 'my-site',
+ *   name: 'my button'
+ * });
+ * // Creates: src/components/MyButton.astro
+ *
+ * @example
+ * // Generate a React client component
+ * await generator(tree, {
+ *   project: 'my-site',
+ *   name: 'Counter',
+ *   type: 'client',
+ *   framework: 'react'
+ * });
+ * // Creates: src/components/Counter.tsx
+ */
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
   const compName = toPascal(options.name);

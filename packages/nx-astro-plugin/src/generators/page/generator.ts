@@ -55,6 +55,37 @@ const { entry } = Astro.props;
 `;
 }
 
+/**
+ * Generate an Astro page (static or dynamic).
+ *
+ * Creates a new page in the Astro project's pages directory. Supports both static
+ * pages and dynamic pages with getStaticPaths for content collections.
+ *
+ * @param tree - Nx virtual file system tree
+ * @param options - Page generation options
+ * @param options.project - Name of the Nx project
+ * @param options.name - Name of the page (will be converted to kebab-case)
+ * @param options.directory - Optional subdirectory under src/pages
+ * @param options.type - Page type: 'static' (default) or 'dynamic'
+ *
+ * @example
+ * // Generate a static about page
+ * await generator(tree, {
+ *   project: 'my-site',
+ *   name: 'About Us',
+ *   type: 'static'
+ * });
+ * // Creates: src/pages/about-us.astro
+ *
+ * @example
+ * // Generate a dynamic page with getStaticPaths
+ * await generator(tree, {
+ *   project: 'my-site',
+ *   name: 'slug',
+ *   type: 'dynamic'
+ * });
+ * // Creates: src/pages/[slug].astro with getStaticPaths()
+ */
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
   const pageType = options.type || 'static';

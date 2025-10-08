@@ -67,6 +67,43 @@ function generateAsciidocContent(title: string): string {
 `;
 }
 
+/**
+ * Generate content for an Astro content collection.
+ *
+ * Creates a new content file (Markdown, MDX, Markdoc, or AsciiDoc) in the specified
+ * collection. Validates that the collection exists and that the required integrations
+ * are installed for the chosen content type.
+ *
+ * @param tree - Nx virtual file system tree
+ * @param options - Content generation options
+ * @param options.project - Name of the Nx project
+ * @param options.collection - Target content collection (e.g., 'posts', 'docs')
+ * @param options.contentType - Content file format: 'markdown', 'mdx', 'markdoc', or 'asciidoc'
+ * @param options.name - Content file name (will be slugified)
+ *
+ * @throws Error if collection doesn't exist
+ * @throws Error if content type integration is not installed
+ *
+ * @example
+ * // Generate a markdown blog post
+ * await generator(tree, {
+ *   project: 'my-site',
+ *   collection: 'posts',
+ *   contentType: 'markdown',
+ *   name: 'My First Post'
+ * });
+ * // Creates: src/content/posts/my-first-post.md
+ *
+ * @example
+ * // Generate MDX content with interactive components
+ * await generator(tree, {
+ *   project: 'my-site',
+ *   collection: 'posts',
+ *   contentType: 'mdx',
+ *   name: 'Interactive Post'
+ * });
+ * // Creates: src/content/posts/interactive-post.mdx
+ */
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
   const { contentDir } = parseAstroConfigDirs(proj.root);
