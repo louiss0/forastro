@@ -127,18 +127,21 @@ All content generator requirements have been successfully implemented and tested
 #### Features Implemented:
 
 ✅ **Schema Implementation:**
+
 - Added `project`, `collection`, `contentType`, and `name` fields
 - Required all four fields for explicit validation
 - Enum for contentType: `["markdown", "mdx", "markdoc", "asciidoc"]`
 - Proper descriptions for CLI guidance
 
 ✅ **Validation Implementation:**
+
 - Verifies collection exists using `listContentCollections()`
 - Throws error with available collections list if not found
 - Verifies content type support using `detectContentTypeSupport()`
 - Throws error with installation instructions if unsupported
 
 ✅ **File Generation:**
+
 - Slugifies names using `@nx/devkit` names utility
 - Maps extensions correctly:
   - `markdown` → `.md`
@@ -148,11 +151,13 @@ All content generator requirements have been successfully implemented and tested
 - Constructs proper path: `{contentDir}/{collection}/{slug}.{ext}`
 
 ✅ **Frontmatter Templates:**
+
 - **Markdown/MDX/Markdoc**: YAML frontmatter with title, description, pubDate, draft, tags
 - **AsciiDoc**: AsciiDoc header with same metadata fields
 - All templates include TODO comments for guidance
 
 ✅ **Error Messages:**
+
 - Clear collection validation errors with available collections list
 - Content type errors with specific installation instructions
 - Helpful guidance for each unsupported content type
@@ -160,16 +165,19 @@ All content generator requirements have been successfully implemented and tested
 #### Test Coverage:
 
 ✅ **Collection Validation:**
+
 - ✅ Invalid collection throws with available list
 - ✅ Valid collection proceeds
 
 ✅ **Content Type Detection:**
+
 - ✅ MDX without `@astrojs/mdx` throws with install instructions
 - ✅ Markdoc without `@astrojs/markdoc` throws
 - ✅ AsciiDoc without asciidoctor packages throws
 - ✅ All supported types create files correctly
 
 ✅ **File Generation:**
+
 - ✅ Markdown: creates `.md` with YAML frontmatter
 - ✅ MDX: creates `.mdx` with YAML frontmatter
 - ✅ Markdoc: creates `.md` with YAML frontmatter
@@ -177,6 +185,7 @@ All content generator requirements have been successfully implemented and tested
 - ✅ Proper slugification of file names
 
 **Test Stats:**
+
 - 12 content generator tests (all passing)
 - 100% statement coverage
 - 94.44% branch coverage
@@ -211,6 +220,7 @@ Commit: 56bd368
    - Add migration guide for `generate-content` → `content` rename
 
 2. **Final Verification:**
+
    ```bash
    jpd exec nx format:write
    jpd exec nx lint nx-astro-plugin
@@ -228,12 +238,13 @@ Commit: 56bd368
 
 **Branch:** `feature/astro-generators-enhancements`
 **Commits:** 4 total
-  - Page Generator Enhancement (53720f1)
-  - Utility Functions Implementation
-  - Content Generator Implementation (56bd368)
-**Tests:** All passing (130 tests, 2 skipped)
-**Coverage:** 87.97% (above 80% threshold)
-**CI Status:** Ready to push
+
+- Page Generator Enhancement (53720f1)
+- Utility Functions Implementation
+- Content Generator Implementation (56bd368)
+  **Tests:** All passing (130 tests, 2 skipped)
+  **Coverage:** 87.97% (above 80% threshold)
+  **CI Status:** Ready to push
 
 ## 📝 Implementation Notes
 
@@ -268,11 +279,13 @@ Commit: 56bd368
 Both major enhancements are now complete:
 
 ✅ **Page Generator:**
+
 - Static and dynamic page types
 - Directory detection from Astro config
 - Comprehensive test coverage
 
 ✅ **Content Generator:**
+
 - Collection validation
 - Content type support detection
 - Multiple format support (markdown, mdx, markdoc, asciidoc)

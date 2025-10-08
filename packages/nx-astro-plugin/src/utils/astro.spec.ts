@@ -470,7 +470,7 @@ export { collections };
     });
 
     it('should handle empty collections block in config', () => {
-      mockExistsSync.mockImplementation((path: unknown) => {
+      mockExistsSync.mockImplementation((_path: unknown) => {
         return true;
       });
       mockReadFileSync.mockReturnValue(`

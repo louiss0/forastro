@@ -16,7 +16,9 @@ interface Schema {
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
   const compName = toPascal(options.name);
-  const baseDir = options.directory ? options.directory.replace(/\\/g, '/') : '';
+  const baseDir = options.directory
+    ? options.directory.replace(/\\/g, '/')
+    : '';
   const targetDir = joinPathFragments(proj.root, 'src', 'components', baseDir);
   const filePath = join(targetDir, `${compName}.astro`);
 

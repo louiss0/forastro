@@ -16,13 +16,15 @@
  * toKebab("  Multiple   Spaces  ") // "multiple-spaces"
  */
 export function toKebab(s: string): string {
-  return s
-    .trim()
-    // Insert hyphen before capital letters (for camelCase/PascalCase)
-    .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
+  return (
+    s
+      .trim()
+      // Insert hyphen before capital letters (for camelCase/PascalCase)
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+  );
 }
 
 /**
@@ -38,15 +40,17 @@ export function toKebab(s: string): string {
  * toPascal("user_profile") // "UserProfile"
  */
 export function toPascal(s: string): string {
-  return s
-    .trim()
-    // Insert space before capital letters (for camelCase/PascalCase)
-    .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
-    .replace(/[^a-zA-Z0-9]+/g, ' ')
-    .split(' ')
-    .filter((w): w is string => Boolean(w))
-    .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-    .join('');
+  return (
+    s
+      .trim()
+      // Insert space before capital letters (for camelCase/PascalCase)
+      .replace(/([a-z0-9])([A-Z])/g, '$1 $2')
+      .replace(/[^a-zA-Z0-9]+/g, ' ')
+      .split(' ')
+      .filter((w): w is string => Boolean(w))
+      .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
+      .join('')
+  );
 }
 
 /**
