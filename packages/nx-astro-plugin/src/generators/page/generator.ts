@@ -6,6 +6,7 @@ import {
 } from '@nx/devkit';
 import { join } from 'node:path';
 import { parseAstroConfigDirs } from '../../utils/astro.js';
+import { toKebab } from '../../utils/naming.js';
 
 interface Schema {
   project: string;
@@ -13,13 +14,6 @@ interface Schema {
   directory?: string;
   type?: 'static' | 'dynamic';
 }
-
-const toKebab = (s: string) =>
-  s
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 
 function generateStaticPage(name: string): string {
   return `---

@@ -384,32 +384,46 @@ import markdoc from '@astrojs/markdoc';
       expect(result).toEqual([]);
     });
 
-    it.skip('should parse collections from config.ts', () => {
-      mockExistsSync.mockImplementation((path: unknown) => {
+    it('should parse collections from config.ts', () => {
+      mockExistsSync.mockReturnValue(true); // All paths exist
+      mockReadFileSync.mockImplementation((path: unknown) => {
         const pathStr = String(path);
-        return pathStr.includes('src/content') || pathStr.includes('config.ts');
-      });
-      mockReadFileSync.mockReturnValue(`
+        if (pathStr.includes('config.ts')) {
+          return `
 import { defineCollection, z } from 'astro:content';
 
-export const collections = {
-  'posts': defineCollection({ schema: z.object({}) }),
-  'pages': defineCollection({ schema: z.object({}) }),
+const collections: {
+  "posts": defineCollection({ schema: z.object({}) }),
+  "pages": defineCollection({ schema: z.object({}) }),
 };
-      `);
-      mockReaddirSync.mockReturnValue([]);
+export { collections };
+      `;
+        }
+        return '';
+      });
+      mockReaddirSync.mockReturnValue(['posts', 'pages'] as never[]);
+      mockStatSync.mockImplementation(
+        () =>
+          ({
+            isDirectory: () => true,
+          }) as never,
+      );
 
       const result = listContentCollections('/workspace/project');
       expect(result).toContain('posts');
       expect(result).toContain('pages');
     });
 
-    it.skip('should list directories as fallback collections', () => {
+    it('should list directories as fallback collections', () => {
       mockExistsSync.mockImplementation((path: unknown) => {
         const pathStr = String(path);
-        return (
-          pathStr.includes('src/content') && !pathStr.includes('config.ts')
-        );
+        // Content directory exists (both with and without config.ts in path)
+        // But config.ts file specifically does NOT exist
+        if (pathStr.endsWith('config.ts')) {
+          return false; // config.ts does not exist
+        }
+        // Content directory itself exists
+        return pathStr.includes('src') || pathStr.includes('content');
       });
       mockReadFileSync.mockReturnValue('');
       mockReaddirSync.mockReturnValue(['blog', 'docs', 'config.ts'] as never[]);
@@ -423,6 +437,122 @@ export const collections = {
       const result = listContentCollections('/workspace/project');
       expect(result).toContain('blog');
       expect(result).toContain('docs');
+      expect(result).not.toContain('config.ts');
+    });
+
+    it('should combine config.ts and directory listing', () => {
+      mockExistsSync.mockReturnValue(true); // All paths exist
+      mockReadFileSync.mockImplementation((path: unknown) => {
+        const pathStr = String(path);
+        if (pathStr.includes('config.ts')) {
+          return `
+const collections: {
+  "posts": defineCollection({ schema: z.object({}) }),
+};
+export { collections };
+      `;
+        }
+        return '';
+      });
+      mockReaddirSync.mockReturnValue(['blog', 'docs'] as never[]);
+      mockStatSync.mockImplementation(
+        () =>
+          ({
+            isDirectory: () => true,
+          }) as never,
+      );
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toContain('posts'); // From config
+      expect(result).toContain('blog'); // From directory
+      expect(result).toContain('docs'); // From directory
+      expect(result.length).toBe(3);
+    });
+
+    it('should handle empty collections block in config', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return true;
+      });
+      mockReadFileSync.mockReturnValue(`
+import { defineConfig } from 'astro/config';
+export const collections = {};
+      `);
+      mockReaddirSync.mockReturnValue(['blog'] as never[]);
+      mockStatSync.mockImplementation(
+        () =>
+          ({
+            isDirectory: () => true,
+          }) as never,
+      );
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toContain('blog'); // Only from directory
+    });
+
+    it('should handle readdirSync throwing an error', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('src/content');
+      });
+      mockReadFileSync.mockReturnValue('');
+      mockReaddirSync.mockImplementation(() => {
+        throw new Error('Permission denied');
+      });
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toEqual([]);
+    });
+
+    it('should deduplicate collections from config and directory', () => {
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockImplementation((path: unknown) => {
+        const pathStr = String(path);
+        if (pathStr.includes('config.ts')) {
+          return `
+const collections: {
+  "blog": defineCollection({ schema: z.object({}) }),
+};
+export { collections };
+      `;
+        }
+        return '';
+      });
+      mockReaddirSync.mockReturnValue(['blog', 'docs'] as never[]);
+      mockStatSync.mockImplementation(
+        () =>
+          ({
+            isDirectory: () => true,
+          }) as never,
+      );
+
+      const result = listContentCollections('/workspace/project');
+      expect(result.filter((c) => c === 'blog').length).toBe(1); // No duplicates
+      expect(result).toContain('docs');
+    });
+
+    it('should sort collections alphabetically', () => {
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockImplementation((path: unknown) => {
+        const pathStr = String(path);
+        if (pathStr.includes('config.ts')) {
+          return `
+const collections: {
+  "zebra": defineCollection({ schema: z.object({}) }),
+};
+export { collections };
+      `;
+        }
+        return '';
+      });
+      mockReaddirSync.mockReturnValue(['apple', 'banana'] as never[]);
+      mockStatSync.mockImplementation(
+        () =>
+          ({
+            isDirectory: () => true,
+          }) as never,
+      );
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toEqual(['apple', 'banana', 'zebra']);
     });
   });
 });

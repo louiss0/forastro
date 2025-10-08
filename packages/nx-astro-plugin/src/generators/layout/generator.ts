@@ -1,19 +1,17 @@
 import type { Tree } from '@nx/devkit';
-import { readProjectConfiguration, formatFiles, joinPathFragments } from '@nx/devkit';
+import {
+  readProjectConfiguration,
+  formatFiles,
+  joinPathFragments,
+} from '@nx/devkit';
 import { join } from 'node:path';
+import { toPascal } from '../../utils/naming.js';
 
 interface Schema {
   project: string;
   name: string;
   directory?: string;
 }
-
-const toPascal = (s: string) => s
-  .replace(/[^a-zA-Z0-9]+/g, ' ')
-  .split(' ')
-  .filter((w): w is string => Boolean(w))
-  .map((w) => w.charAt(0).toUpperCase() + w.slice(1).toLowerCase())
-  .join('');
 
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);

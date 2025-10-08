@@ -1,13 +1,16 @@
 import type { Tree } from '@nx/devkit';
-import { readProjectConfiguration, formatFiles, joinPathFragments } from '@nx/devkit';
+import {
+  readProjectConfiguration,
+  formatFiles,
+  joinPathFragments,
+} from '@nx/devkit';
 import { join } from 'node:path';
+import { toKebab } from '../../utils/naming.js';
 
 interface Schema {
   project: string;
   name: string; // collection name
 }
-
-const toKebab = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
 
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
