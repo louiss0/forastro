@@ -16,10 +16,10 @@
       "schema": "./src/generators/add-integration/schema.json",
       "description": "Add and configure Astro integrations"
     },
-    "generate-content": {
-      "factory": "./src/generators/generate-content/generator",
-      "schema": "./src/generators/generate-content/schema.json",
-      "description": "Generate example content based on installed integrations"
+    "content": {
+      "factory": "./src/generators/content/generator",
+      "schema": "./src/generators/content/schema.json",
+      "description": "Generate a content entry in a specific collection"
     },
     "page": {
       "factory": "./src/generators/page/generator",
