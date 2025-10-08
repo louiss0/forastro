@@ -74,6 +74,24 @@ describe('component generator', () => {
       const path = call[0].replace(/\\/g, '/');
       expect(path).toContain('apps/site/src/components/ui/Modal.astro');
     });
+
+    it('supports nested directory paths', async () => {
+      mockDetectIntegrations.mockReturnValue([]);
+      await generator(tree, { project: 'site', name: 'card', directory: 'ui/widgets' });
+
+      const call = writeSpy.mock.calls[0];
+      const path = call[0].replace(/\\/g, '/');
+      expect(path).toContain('apps/site/src/components/ui/widgets/Card.astro');
+    });
+
+    it('handles Windows-style directory paths', async () => {
+      mockDetectIntegrations.mockReturnValue([]);
+      await generator(tree, { project: 'site', name: 'header', directory: 'layout\\navigation' });
+
+      const call = writeSpy.mock.calls[0];
+      const path = call[0].replace(/\\/g, '/');
+      expect(path).toContain('apps/site/src/components/layout/navigation/Header.astro');
+    });
   });
 
   describe('client components', () => {
@@ -177,6 +195,65 @@ describe('component generator', () => {
       expect(content).toContain('export class CounterComponent');
       expect(content).toContain('count = signal(0)');
       expect(content).toContain('doubled = computed(() => this.count() * 2)');
+    });
+
+    it('generates client components in nested directories', async () => {
+      mockDetectIntegrations.mockReturnValue(['react']);
+      await generator(tree, { project: 'site', name: 'Button', type: 'client', framework: 'react', directory: 'ui/buttons' });
+
+      const call = writeSpy.mock.calls[0];
+      const path = call[0].replace(/\\/g, '/');
+      expect(path).toContain('apps/site/src/components/ui/buttons/Button.tsx');
+    });
+  });
+
+  describe('component content', () => {
+    it('server components include TypeScript Props interface', async () => {
+      mockDetectIntegrations.mockReturnValue([]);
+      await generator(tree, { project: 'site', name: 'Card', type: 'server' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('export interface Props');
+      expect(content).toContain('title?: string');
+      expect(content).toContain('Astro.props');
+    });
+
+    it('React components include TypeScript Props interface', async () => {
+      mockDetectIntegrations.mockReturnValue(['react']);
+      await generator(tree, { project: 'site', name: 'Button', type: 'client', framework: 'react' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('export interface ButtonProps');
+      expect(content).toContain('title?: string');
+    });
+
+    it('Preact components include TypeScript Props interface', async () => {
+      mockDetectIntegrations.mockReturnValue(['preact']);
+      await generator(tree, { project: 'site', name: 'Widget', type: 'client', framework: 'preact' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('export interface WidgetProps');
+      expect(content).toContain('title?: string');
+    });
+
+    it('Vue components include TypeScript Props interface', async () => {
+      mockDetectIntegrations.mockReturnValue(['vue']);
+      await generator(tree, { project: 'site', name: 'Panel', type: 'client', framework: 'vue' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('interface Props');
+      expect(content).toContain('title?: string');
+      expect(content).toContain('defineProps<Props>');
+    });
+
+    it('Svelte components include TypeScript Props interface', async () => {
+      mockDetectIntegrations.mockReturnValue(['svelte']);
+      await generator(tree, { project: 'site', name: 'Box', type: 'client', framework: 'svelte' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('interface Props');
+      expect(content).toContain('title?: string');
+      expect(content).toContain('$props()');
     });
   });
 });
