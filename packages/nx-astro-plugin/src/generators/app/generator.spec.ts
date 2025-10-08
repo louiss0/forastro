@@ -170,4 +170,82 @@ describe('app generator', () => {
     const result = updateCallback(pkg);
     expect(result.devDependencies.astro).toBe('^4.0.0');
   });
+
+  it('should use jpd when FORASTRO_PM=jpd and jpd is available', async () => {
+    const originalEnv = process.env['FORASTRO_PM'];
+    process.env['FORASTRO_PM'] = 'jpd';
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await generator(tree, {
+      name: 'test-app',
+    });
+
+    // First call checks jpd --version
+    expect(mockExeca).toHaveBeenNthCalledWith(
+      1,
+      'jpd',
+      ['--version'],
+      expect.objectContaining({ stdio: 'ignore' }),
+    );
+    // Second call uses jpd dlx
+    expect(mockExeca).toHaveBeenNthCalledWith(
+      2,
+      'jpd',
+      expect.arrayContaining(['dlx', 'create-astro@latest']),
+      expect.any(Object),
+    );
+
+    process.env['FORASTRO_PM'] = originalEnv;
+  });
+
+  it('should use pnpm when FORASTRO_PM=pnpm and pnpm is available', async () => {
+    const originalEnv = process.env['FORASTRO_PM'];
+    process.env['FORASTRO_PM'] = 'pnpm';
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await generator(tree, {
+      name: 'test-app',
+    });
+
+    // First call checks pnpm --version
+    expect(mockExeca).toHaveBeenNthCalledWith(
+      1,
+      'pnpm',
+      ['--version'],
+      expect.objectContaining({ stdio: 'ignore' }),
+    );
+    // Second call uses pnpm dlx
+    expect(mockExeca).toHaveBeenNthCalledWith(
+      2,
+      'pnpm',
+      expect.arrayContaining(['dlx', 'create-astro@latest']),
+      expect.any(Object),
+    );
+
+    process.env['FORASTRO_PM'] = originalEnv;
+  });
+
+  it('should fallback to npx when preferred PM is not available', async () => {
+    const originalEnv = process.env['FORASTRO_PM'];
+    process.env['FORASTRO_PM'] = 'jpd';
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca
+      .mockRejectedValueOnce(new Error('jpd not found'))
+      .mockResolvedValue(ok);
+
+    await generator(tree, {
+      name: 'test-app',
+    });
+
+    // Should fallback to npx
+    expect(mockExeca).toHaveBeenCalledWith(
+      'npx',
+      expect.arrayContaining(['create-astro@latest']),
+      expect.any(Object),
+    );
+
+    process.env['FORASTRO_PM'] = originalEnv;
+  });
 });

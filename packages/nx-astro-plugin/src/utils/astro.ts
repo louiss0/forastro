@@ -1,4 +1,10 @@
-import { existsSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  statSync,
+} from 'node:fs';
 import { join } from 'node:path';
 
 export function projectAstroConfigPath(projectRoot: string): string | null {
@@ -131,7 +137,6 @@ export function listContentCollections(projectRoot: string): string[] {
   }
 
   // Strategy B: List directories
-  const { readdirSync, statSync } = require('node:fs');
   try {
     const entries = readdirSync(fullPath);
     for (const entry of entries) {
