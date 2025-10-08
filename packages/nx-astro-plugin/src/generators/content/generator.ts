@@ -1,41 +1,132 @@
 import type { Tree } from '@nx/devkit';
-import { readProjectConfiguration, joinPathFragments, generateFiles, formatFiles } from '@nx/devkit';
-import { detectIntegrations } from '../../utils/astro.js';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import {
+  readProjectConfiguration,
+  formatFiles,
+  joinPathFragments,
+  names,
+} from '@nx/devkit';
+import { join } from 'node:path';
+import {
+  parseAstroConfigDirs,
+  listContentCollections,
+  detectContentTypeSupport,
+} from '../../utils/astro.js';
 
 interface Schema {
   project: string;
-  presets?: ('blog' | 'docs' | 'landing')[];
-  mdxExamples?: boolean;
-  tailwindExamples?: boolean;
+  collection: string;
+  contentType: 'markdown' | 'mdx' | 'markdoc' | 'asciidoc';
+  name: string;
 }
 
-export default async function generateContent(tree: Tree, options: Schema) {
+type ContentType = Schema['contentType'];
+
+function getExtension(contentType: ContentType): string {
+  const extensionMap: Record<ContentType, string> = {
+    markdown: '.md',
+    mdx: '.mdx',
+    markdoc: '.md',
+    asciidoc: '.adoc',
+  };
+  return extensionMap[contentType];
+}
+
+function generateMarkdownContent(title: string): string {
+  return `---
+title: "${title}"
+description: ""
+pubDate: ${new Date().toISOString()}
+draft: true
+tags: []
+---
+
+## Introduction
+
+<!-- TODO: Add your content here -->
+
+## Content
+
+<!-- TODO: Add more sections -->
+`;
+}
+
+function generateAsciidocContent(title: string): string {
+  return `= ${title}
+:description:
+:tags:
+:draft: true
+:pubDate: ${new Date().toISOString()}
+
+== Introduction
+
+// TODO: Add your content here
+
+== Content
+
+// TODO: Add more sections
+`;
+}
+
+export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
-  const integrations = detectIntegrations(proj.root);
+  const { contentDir } = parseAstroConfigDirs(proj.root);
 
-  // Always create a minimal blog preset if requested
-  if (options.presets?.includes('blog')) {
-    const base = joinPathFragments(proj.root, 'src');
-    if (!tree.exists(join(base, 'content'))) {
-      const fileName = fileURLToPath(import.meta.url);
-      const dirName = dirname(fileName);
-      generateFiles(tree, join(dirName, 'templates', 'blog'), base, { tmpl: '' });
-    }
+  // Validate collection exists
+  const availableCollections = listContentCollections(proj.root);
+  if (!availableCollections.includes(options.collection)) {
+    throw new Error(
+      `Collection '${options.collection}' not found.\n` +
+        `Available collections: ${availableCollections.length > 0 ? availableCollections.join(', ') : 'none'}\n` +
+        `Create a collection in src/content/config.ts or as a directory in src/content/`
+    );
   }
 
-  // Add MDX example if mdx present and requested
-  if (options.mdxExamples && integrations.includes('mdx')) {
-    const base = joinPathFragments(proj.root, 'src', 'pages');
-    if (!tree.exists(join(base, 'example.mdx'))) {
-      tree.write(join(base, 'example.mdx'), '# Hello MDX!');
-    }
+  // Detect and validate content type support
+  const support = detectContentTypeSupport(proj.root);
+  
+  if (options.contentType === 'mdx' && !support.mdx) {
+    throw new Error(
+      `Content type 'mdx' is not supported.\n` +
+        `To use MDX:\n` +
+        `  - Install: npm install @astrojs/mdx\n` +
+        `  - Add to astro.config: import mdx from '@astrojs/mdx'`
+    );
   }
 
-  try {
-    await formatFiles(tree);
-  } catch {
-    // Swallow formatting errors in constrained environments (CI/E2E)
+  if (options.contentType === 'markdoc' && !support.markdoc) {
+    throw new Error(
+      `Content type 'markdoc' is not supported.\n` +
+        `To use Markdoc:\n` +
+        `  - Install: npm install @astrojs/markdoc\n` +
+        `  - Add to astro.config: import markdoc from '@astrojs/markdoc'`
+    );
   }
+
+  if (options.contentType === 'asciidoc' && !support.asciidoc) {
+    throw new Error(
+      `Content type 'asciidoc' is not supported.\n` +
+        `To use AsciiDoc:\n` +
+        `  - Install: npm install asciidoctor`
+    );
+  }
+
+  // Generate file
+  const { fileName } = names(options.name);
+  const ext = getExtension(options.contentType);
+  const filePath = join(
+    joinPathFragments(proj.root, contentDir, options.collection),
+    `${fileName}${ext}`
+  );
+
+  if (!tree.exists(filePath)) {
+    const title = names(options.name).className.replace(/([A-Z])/g, ' $1').trim();
+    const content =
+      options.contentType === 'asciidoc'
+        ? generateAsciidocContent(title)
+        : generateMarkdownContent(title);
+    
+    tree.write(filePath, content);
+  }
+
+  await formatFiles(tree);
 }
