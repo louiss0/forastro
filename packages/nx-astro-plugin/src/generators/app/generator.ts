@@ -30,12 +30,14 @@ export default async function generator(tree: Tree, options: Schema) {
       name: projectName,
     });
   } else {
+    // Run create-astro with the full project path to avoid directory conflicts
     const args = [
       'create-astro@latest',
-      projectName,
+      projectRoot,
       '--template', options.template ?? 'minimal',
       '--git', 'false',
-      '--install', 'false'
+      '--install', 'false',
+      '--yes'
     ];
     // Runner selection: default to npx, allow override by env FORASTRO_PM=jpd|pnpm
     async function has(cmd: string) {
@@ -56,7 +58,7 @@ export default async function generator(tree: Tree, options: Schema) {
     // refresh from disk if needed (Nx tree may not see external files). In Nx execution it reads from FS at the end.
   }
 
-  // Add Nx project.json
+  // Add Nx project.json AFTER create-astro completes
   const projJsonPath = join(projectRoot, 'project.json');
   if (!tree.exists(projJsonPath)) {
     tree.write(
