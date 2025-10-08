@@ -42,6 +42,26 @@ Usage
 
 Generators
 
+Component Generator
+
+- Generate server (Astro) components (default):
+  - pnpm nx g @forastro/nx-astro-plugin:component --project=my-site --name="my button"
+  - Creates: src/components/MyButton.astro with Props interface
+- Generate client (framework) components:
+  - Auto-detects installed integrations and selects framework automatically
+  - pnpm nx g @forastro/nx-astro-plugin:component --project=my-site --name=Counter --type=client
+  - If multiple frameworks installed, specify explicitly:
+    - pnpm nx g @forastro/nx-astro-plugin:component --project=my-site --name=Counter --type=client --framework=react
+- Supported client frameworks:
+  - React: Generates component with hooks (useState, useEffect)
+  - Preact: Generates component with signals (signal, computed, effect)
+  - Vue: Generates .vue component with refs (ref, computed, onMounted)
+  - Svelte: Generates .svelte component with runes ($state, $derived, $effect)
+  - Angular: Generates standalone component with signals (signal, computed, effect)
+- Custom directories:
+  - pnpm nx g @forastro/nx-astro-plugin:component --project=my-site --name=Modal --directory=ui
+  - Creates: src/components/ui/Modal.[ext]
+
 Page Generator
 
 - Generate static pages:
