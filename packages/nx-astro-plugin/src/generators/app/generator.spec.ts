@@ -62,8 +62,9 @@ describe('app generator', () => {
       'npx',
       expect.arrayContaining([
         'create-astro@latest',
-        'test-app',
+        'apps/test-app',
         '--template', 'minimal',
+        '--yes',
       ]),
       expect.any(Object)
     );
