@@ -3,17 +3,50 @@
   "title": "@forastro/nx-astro-plugin:page",
   "type": "object",
   "properties": {
-    "project": { "type": "string", "description": "Nx project name" },
-    "name": { "type": "string", "description": "Page name (file stem)" },
+    "project": {
+      "type": "string",
+      "description": "Nx project name",
+      "x-prompt": "Which Astro project should the page be added to?",
+      "x-dropdown": "projects"
+    },
+    "name": {
+      "type": "string",
+      "description": "Page name (file stem)",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What should the page be called?"
+    },
     "directory": {
       "type": "string",
-      "description": "Optional subdirectory under src/pages"
+      "description": "Optional subdirectory under src/pages",
+      "x-prompt": "Optional: Subdirectory under 'src/pages' to place the page?"
     },
     "type": {
       "type": "string",
       "enum": ["static", "dynamic"],
       "default": "static",
-      "description": "Page type: static for regular pages, dynamic for pages with getStaticPaths"
+      "description": "Page type: static for regular pages, dynamic for pages with getStaticPaths",
+      "x-prompt": {
+        "message": "What type of page do you want to create?",
+        "type": "list",
+        "items": [
+          {
+            "value": "static",
+            "label": "Static - Regular page with fixed content"
+          },
+          {
+            "value": "dynamic",
+            "label": "Dynamic - Page with getStaticPaths for content collections"
+          }
+        ]
+      }
+    },
+    "layout": {
+      "type": "string",
+      "description": "Optional layout to import (without extension)",
+      "x-prompt": "Optional: Layout name to use (e.g., 'BaseLayout')?"
     }
   },
   "required": ["project", "name"]

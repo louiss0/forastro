@@ -108,6 +108,104 @@ describe('page generator', () => {
     });
   });
 
+  describe('layout support', () => {
+    it('generates static page with layout import', async () => {
+      await generator(tree, {
+        project: 'site',
+        name: 'About',
+        type: 'static',
+        layout: 'BaseLayout',
+      });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain(
+        "import BaseLayout from '../layouts/BaseLayout.astro'",
+      );
+      expect(content).toContain('<BaseLayout');
+      expect(content).toContain('title={title}');
+      expect(content).toContain('description={description}');
+      expect(content).toContain('</BaseLayout>');
+    });
+
+    it('generates dynamic page with layout import', async () => {
+      await generator(tree, {
+        project: 'site',
+        name: 'slug',
+        type: 'dynamic',
+        layout: 'BlogLayout',
+      });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain(
+        "import BlogLayout from '../layouts/BlogLayout.astro'",
+      );
+      expect(content).toContain('<BlogLayout');
+      expect(content).toContain('title={entry.data.title}');
+      expect(content).toContain('description={entry.data.description}');
+      expect(content).toContain('</BlogLayout>');
+    });
+
+    it('generates static page without layout when not specified', async () => {
+      await generator(tree, { project: 'site', name: 'Contact' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).not.toContain('import');
+      expect(content).not.toContain('Layout>');
+      expect(content).toContain('<div>');
+      expect(content).toContain('<h1>{title}</h1>');
+    });
+
+    it('generates dynamic page without layout when not specified', async () => {
+      await generator(tree, {
+        project: 'site',
+        name: 'slug',
+        type: 'dynamic',
+      });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).not.toContain('Layout');
+      expect(content).toContain('<article>');
+      expect(content).toContain('<h1>{entry.data.title}</h1>');
+    });
+  });
+
+  describe('page content', () => {
+    it('includes title and description for static pages', async () => {
+      await generator(tree, { project: 'site', name: 'Services' });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('const title = "Services"');
+      expect(content).toContain('const description = "Services page description"');
+    });
+
+    it('renders content with Content component for dynamic pages', async () => {
+      await generator(tree, {
+        project: 'site',
+        name: 'post',
+        type: 'dynamic',
+      });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('const { Content } = await entry.render()');
+      expect(content).toContain('<Content />');
+    });
+
+    it('includes proper article structure for dynamic pages', async () => {
+      await generator(tree, {
+        project: 'site',
+        name: 'blog',
+        type: 'dynamic',
+      });
+
+      const content = writeSpy.mock.calls[0][1];
+      expect(content).toContain('<article>');
+      expect(content).toContain('<header>');
+      expect(content).toContain('entry.data.title');
+      expect(content).toContain('entry.data.description');
+      expect(content).toContain('</article>');
+    });
+  });
+
   describe('dynamic pages', () => {
     it('creates a dynamic page with getStaticPaths', async () => {
       await generator(tree, { project: 'site', name: 'slug', type: 'dynamic' });
