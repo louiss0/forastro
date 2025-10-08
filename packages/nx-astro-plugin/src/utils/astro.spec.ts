@@ -204,4 +204,195 @@ export default defineConfig({
       expect(mockWriteFileSync).toHaveBeenCalledWith(path, content, 'utf8');
     });
   });
+
+  describe('parseAstroConfigDirs', () => {
+    const { parseAstroConfigDirs } = await import('./astro.js');
+
+    it('should return default dirs when config file does not exist', () => {
+      mockExistsSync.mockReturnValue(false);
+
+      const result = parseAstroConfigDirs('/workspace/project');
+
+      expect(result).toEqual({
+        srcDir: 'src',
+        pagesDir: 'src/pages',
+        contentDir: 'src/content',
+      });
+    });
+
+    it('should parse srcDir from config and compute paths', () => {
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockReturnValue(`
+import { defineConfig } from 'astro/config';
+
+export default defineConfig({
+  srcDir: 'app',
+  integrations: []
+});
+      `);
+
+      const result = parseAstroConfigDirs('/workspace/project');
+
+      expect(result).toEqual({
+        srcDir: 'app',
+        pagesDir: 'app/pages',
+        contentDir: 'app/content',
+      });
+    });
+
+    it('should handle various quote types', () => {
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockReturnValue(`srcDir: "custom"`);
+
+      const result = parseAstroConfigDirs('/workspace/project');
+      expect(result.srcDir).toBe('custom');
+    });
+
+    it('should normalize Windows paths to forward slashes', () => {
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockReturnValue(`srcDir: "app\\src"`);
+
+      const result = parseAstroConfigDirs('/workspace/project');
+      expect(result.srcDir).toBe('app/src');
+    });
+  });
+
+  describe('detectContentTypeSupport', () => {
+    const { detectContentTypeSupport } = await import('./astro.js');
+
+    it('should always return markdown as supported', () => {
+      mockExistsSync.mockReturnValue(false);
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.markdown).toBe(true);
+    });
+
+    it('should detect mdx from astro config', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('astro.config');
+      });
+      mockReadFileSync.mockReturnValue(`
+import { defineConfig } from 'astro/config';
+import mdx from '@astrojs/mdx';
+
+export default defineConfig({
+  integrations: [mdx()]
+});
+      `);
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.mdx).toBe(true);
+    });
+
+    it('should detect markdoc from astro config', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('astro.config');
+      });
+      mockReadFileSync.mockReturnValue(`
+import markdoc from '@astrojs/markdoc';
+      `);
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.markdoc).toBe(true);
+    });
+
+    it('should detect mdx from package.json dependencies', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('package.json');
+      });
+      mockReadFileSync.mockReturnValue(JSON.stringify({
+        dependencies: {
+          '@astrojs/mdx': '^1.0.0'
+        }
+      }));
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.mdx).toBe(true);
+    });
+
+    it('should detect markdoc from package.json devDependencies', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('package.json');
+      });
+      mockReadFileSync.mockReturnValue(JSON.stringify({
+        devDependencies: {
+          '@astrojs/markdoc': '^1.0.0'
+        }
+      }));
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.markdoc).toBe(true);
+    });
+
+    it('should detect asciidoc from asciidoctor package', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('package.json');
+      });
+      mockReadFileSync.mockReturnValue(JSON.stringify({
+        dependencies: {
+          'asciidoctor': '^2.0.0'
+        }
+      }));
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.asciidoc).toBe(true);
+    });
+
+    it('should detect asciidoc from astro-asciidoc package', () => {
+      mockExistsSync.mockImplementation((path: unknown) => {
+        return String(path).includes('package.json');
+      });
+      mockReadFileSync.mockReturnValue(JSON.stringify({
+        devDependencies: {
+          'astro-asciidoc': '^1.0.0'
+        }
+      }));
+
+      const result = detectContentTypeSupport('/workspace/project');
+      expect(result.asciidoc).toBe(true);
+    });
+  });
+
+  describe('listContentCollections', () => {
+    const { listContentCollections } = await import('./astro.js');
+
+    it('should return empty array if content directory does not exist', () => {
+      mockExistsSync.mockReturnValue(false);
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toEqual([]);
+    });
+
+    it('should parse collections from config.ts', () => {
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockReturnValue(`
+import { defineCollection, z } from 'astro:content';
+
+export const collections = {
+  'posts': defineCollection({ schema: z.object({}) }),
+  'pages': defineCollection({ schema: z.object({}) }),
+};
+      `);
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toContain('posts');
+      expect(result).toContain('pages');
+    });
+
+    it('should list directories as fallback collections', () => {
+      vi.doMock('node:fs', () => ({
+        readdirSync: () => ['blog', 'docs', 'config.ts'],
+        statSync: (path: string) => ({
+          isDirectory: () => !path.includes('config.ts'),
+        }),
+      }));
+
+      mockExistsSync.mockReturnValue(true);
+      mockReadFileSync.mockReturnValue('');
+
+      const result = listContentCollections('/workspace/project');
+      expect(result).toContain('blog');
+      expect(result).toContain('docs');
+    });
+  });
 });

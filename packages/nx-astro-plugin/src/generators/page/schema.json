@@ -5,7 +5,13 @@
   "properties": {
     "project": { "type": "string", "description": "Nx project name" },
     "name": { "type": "string", "description": "Page name (file stem)" },
-    "directory": { "type": "string", "description": "Optional subdirectory under src/pages" }
+    "directory": { "type": "string", "description": "Optional subdirectory under src/pages" },
+    "type": {
+      "type": "string",
+      "enum": ["static", "dynamic"],
+      "default": "static",
+      "description": "Page type: static for regular pages, dynamic for pages with getStaticPaths"
+    }
   },
   "required": ["project", "name"]
 }
