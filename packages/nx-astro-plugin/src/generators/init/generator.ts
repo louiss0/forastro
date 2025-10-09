@@ -35,7 +35,7 @@ interface Schema {
  *
  * @remarks
  * Target defaults configured:
- * - build: cacheable with production inputs, outputs to {projectRoot}/dist
+ * - build: cacheable, outputs to {projectRoot}/dist
  * - dev: not cacheable (development server)
  * - preview: not cacheable (preview server)
  * - check: cacheable (type checking)
@@ -48,7 +48,6 @@ export default async function init(tree: Tree, options: Schema) {
       nx.targetDefaults = nx.targetDefaults || {};
       nx.targetDefaults['@forastro/nx-astro-plugin:build'] = {
         cache: true,
-        inputs: ['production', '^production'],
         outputs: ['{projectRoot}/dist']
       };
       nx.targetDefaults['@forastro/nx-astro-plugin:dev'] = { cache: false };

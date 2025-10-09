@@ -46,33 +46,7 @@
     "framework": {
       "type": "string",
       "enum": ["react", "preact", "vue", "svelte", "angular"],
-      "description": "Framework for client components (auto-detected if only one integration installed)",
-      "x-prompt": {
-        "message": "Which framework should be used?",
-        "type": "list",
-        "items": [
-          {
-            "value": "react",
-            "label": "React (with hooks)"
-          },
-          {
-            "value": "preact",
-            "label": "Preact (with signals)"
-          },
-          {
-            "value": "vue",
-            "label": "Vue (with refs)"
-          },
-          {
-            "value": "svelte",
-            "label": "Svelte (with runes)"
-          },
-          {
-            "value": "angular",
-            "label": "Angular (with signals)"
-          }
-        ]
-      }
+      "description": "Framework for client components (only needed when type=client and multiple frameworks installed)"
     }
   },
   "required": ["project", "name"]
