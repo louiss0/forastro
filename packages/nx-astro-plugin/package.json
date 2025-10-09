@@ -11,10 +11,10 @@
     "plugin",
     "forastro"
   ],
-  "main": "./dist/src/index.js",
+  "main": "./index.js",
   "sideEffects": false,
   "exports": {
-    ".": "./dist/src/index.js",
+    ".": "./index.js",
     "./generators": "./generators.json",
     "./executors": "./executors.json",
     "./package.json": "./package.json"
@@ -25,10 +25,10 @@
     "generators.json",
     "executors.json",
     "README.md",
-    "src/generators/**/schema.json",
-    "src/executors/**/schema.json",
-    "src/generators/app/templates/**/*",
+    "generators/**/*.json",
     "generators/**/*.js",
+    "generators/**/templates/**/*",
+    "executors/**/*.json",
     "executors/**/*.js",
     "utils/**/*.js",
     "index.js"

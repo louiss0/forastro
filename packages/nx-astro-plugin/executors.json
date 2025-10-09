@@ -3,32 +3,32 @@
   "executors": {
     "dev": {
       "implementation": "./executors/dev/executor",
-      "schema": "./src/executors/dev/schema.json",
+      "schema": "./executors/dev/schema.json",
       "description": "Run astro dev"
     },
     "build": {
       "implementation": "./executors/build/executor",
-      "schema": "./src/executors/build/schema.json",
+      "schema": "./executors/build/schema.json",
       "description": "Run astro build"
     },
     "preview": {
       "implementation": "./executors/preview/executor",
-      "schema": "./src/executors/preview/schema.json",
+      "schema": "./executors/preview/schema.json",
       "description": "Run astro preview"
     },
     "check": {
       "implementation": "./executors/check/executor",
-      "schema": "./src/executors/check/schema.json",
+      "schema": "./executors/check/schema.json",
       "description": "Run astro check"
     },
     "sync": {
       "implementation": "./executors/sync/executor",
-      "schema": "./src/executors/sync/schema.json",
+      "schema": "./executors/sync/schema.json",
       "description": "Run astro sync"
     },
     "add": {
       "implementation": "./executors/add/executor",
-      "schema": "./src/executors/add/schema.json",
+      "schema": "./executors/add/schema.json",
       "description": "Run astro add to add integrations"
     }
   }

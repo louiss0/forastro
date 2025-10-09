@@ -3,47 +3,47 @@
   "generators": {
     "init": {
       "factory": "./generators/init/generator",
-      "schema": "./src/generators/init/schema.json",
+      "schema": "./generators/init/schema.json",
       "description": "Initialize workspace defaults for Astro in Nx"
     },
     "app": {
       "factory": "./generators/app/generator",
-      "schema": "./src/generators/app/schema.json",
+      "schema": "./generators/app/schema.json",
       "description": "Create an Astro application using create-astro (non-interactive)"
     },
     "add-integration": {
       "factory": "./generators/add-integration/generator",
-      "schema": "./src/generators/add-integration/schema.json",
+      "schema": "./generators/add-integration/schema.json",
       "description": "Add and configure Astro integrations"
     },
     "content": {
       "factory": "./generators/content/generator",
-      "schema": "./src/generators/content/schema.json",
+      "schema": "./generators/content/schema.json",
       "description": "Generate a content entry in a specific collection"
     },
     "page": {
       "factory": "./generators/page/generator",
-      "schema": "./src/generators/page/schema.json",
+      "schema": "./generators/page/schema.json",
       "description": "Generate an Astro page"
     },
     "component": {
       "factory": "./generators/component/generator",
-      "schema": "./src/generators/component/schema.json",
+      "schema": "./generators/component/schema.json",
       "description": "Generate an Astro component"
     },
     "layout": {
       "factory": "./generators/layout/generator",
-      "schema": "./src/generators/layout/schema.json",
+      "schema": "./generators/layout/schema.json",
       "description": "Generate an Astro layout"
     },
     "collection-schema": {
       "factory": "./generators/collection-schema/generator",
-      "schema": "./src/generators/collection-schema/schema.json",
+      "schema": "./generators/collection-schema/schema.json",
       "description": "Generate a content collection schema"
     },
     "starlight-docs": {
       "factory": "./generators/starlight-docs/generator",
-      "schema": "./src/generators/starlight-docs/schema.json",
+      "schema": "./generators/starlight-docs/schema.json",
       "description": "Bootstrap a Starlight docs structure"
     }
   }

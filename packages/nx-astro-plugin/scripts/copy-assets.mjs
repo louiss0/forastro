@@ -1,8 +1,12 @@
 import { cpSync, mkdirSync, existsSync, readdirSync, statSync, readFileSync, writeFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 
+// Flatten build structure - NO src/ folder in output
+// Everything goes to dist root: generators/, executors/, utils/, etc.
+
 const PKG_ROOT = process.cwd(); // packages/nx-astro-plugin
 const PUBLISH_ROOT = join(PKG_ROOT, '../../dist/packages/nx-astro-plugin');
+const SRC_DIR = join(PKG_ROOT, 'src');
 
 function ensureDir(p) {
   if (!existsSync(p)) mkdirSync(p, { recursive: true });
@@ -29,48 +33,38 @@ function copyDirRecursive(src, dest, filter) {
   }
 }
 
-// 1) Copy schema.json and any JSON under src/** to publish root under src/**
-const SRC_DIR = join(PKG_ROOT, 'src');
-const DEST_SRC_DIR = join(PUBLISH_ROOT, 'src');
-copyDirRecursive(SRC_DIR, DEST_SRC_DIR, (abs, rel, isFile) => {
+// 1) Copy schema.json files to generators/**/schema.json and executors/**/schema.json
+copyDirRecursive(join(SRC_DIR, 'generators'), join(PUBLISH_ROOT, 'generators'), (abs, rel, isFile) => {
   if (!isFile) return true;
-  return abs.endsWith('.json');
+  return abs.endsWith('schema.json');
 });
 
-// 2) Copy generator templates (everything) under src/generators/**/templates/**
-const GEN_DIR = join(SRC_DIR, 'generators');
-copyDirRecursive(GEN_DIR, join(DEST_SRC_DIR, 'generators'), (abs, rel, isFile) => {
-  // include only files that are inside a templates directory
-  if (!isFile) return true; // traverse dirs
+copyDirRecursive(join(SRC_DIR, 'executors'), join(PUBLISH_ROOT, 'executors'), (abs, rel, isFile) => {
+  if (!isFile) return true;
+  return abs.endsWith('schema.json');
+});
+
+// 2) Copy generator templates to generators/**/templates/**
+copyDirRecursive(join(SRC_DIR, 'generators'), join(PUBLISH_ROOT, 'generators'), (abs, rel, isFile) => {
+  if (!isFile) return true;
   const parts = abs.split(/[/\\]/g);
   return parts.includes('templates');
 });
 
-// 3) Copy top-level manifest JSON files used by Nx plugin
+// 3) Copy top-level manifest files
 for (const file of ['executors.json', 'generators.json', 'README.md']) {
   const src = join(PKG_ROOT, file);
   if (existsSync(src)) {
-    const dest = join(PUBLISH_ROOT, file);
-    ensureDir(dirname(dest));
-    cpSync(src, dest);
+    cpSync(src, join(PUBLISH_ROOT, file));
   }
 }
 
-// 4) Duplicate compiled JS from dist/src into src so runtime paths can omit the dist prefix
-const COMPILED_SRC = join(PUBLISH_ROOT, 'dist', 'src');
-copyDirRecursive(COMPILED_SRC, join(PUBLISH_ROOT, 'src'), (abs, rel, isFile) => {
-  if (!isFile) return true;
-  return abs.endsWith('.js') || abs.endsWith('.js.map');
-});
+// 4) Copy package.json
+const pkg = JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'), 'utf-8'));
+writeFileSync(join(PUBLISH_ROOT, 'package.json'), JSON.stringify(pkg, null, 2), 'utf-8');
 
-// 5) Copy and update package.json
-const srcPackageJson = join(PKG_ROOT, 'package.json');
-const destPackageJson = join(PUBLISH_ROOT, 'package.json');
-if (existsSync(srcPackageJson)) {
-  const pkg = JSON.parse(readFileSync(srcPackageJson, 'utf-8'));
-  // Update paths in exports if needed - they should already be correct for dist
-  writeFileSync(destPackageJson, JSON.stringify(pkg, null, 2), 'utf-8');
-  console.log('✓ Copied package.json');
-}
-
-console.log('✓ Copied all assets to', PUBLISH_ROOT);
+console.log('✓ Build complete!');
+console.log('  • Compiled JS: dist/packages/nx-astro-plugin/');
+console.log('  • Schemas: generators/**/schema.json, executors/**/schema.json');
+console.log('  • Templates: generators/**/templates/');
+console.log('  • Structure: FLATTENED (no src/ folder)');
