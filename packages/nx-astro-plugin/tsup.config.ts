@@ -2,7 +2,7 @@ import { defineConfig } from 'tsup';
 import { resolve } from 'node:path';
 
 // Runtime-only Nx plugin: ESM-only output, no sourcemaps, no type declarations
-// Preserves src/ directory structure under dist/packages/nx-astro-plugin/
+// Flattens output: src/ directory structure goes directly to dist/packages/nx-astro-plugin/
 export default defineConfig({
   entry: [
     'src/**/*.ts',
@@ -10,6 +10,7 @@ export default defineConfig({
     '!src/**/*.test.ts',
   ],
   outDir: '../../dist/packages/nx-astro-plugin/',
+  outBase: 'src',
   format: ['esm'],
   platform: 'node',
   target: 'node18',

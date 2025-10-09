@@ -62,7 +62,9 @@ export default async function generator(tree: Tree, options: Schema) {
   if (options.offlineStrategy === 'copy-fixture') {
     const fileName = fileURLToPath(import.meta.url);
     const dirName = dirname(fileName);
-    const pkgRoot = join(dirName, '..', '..', '..');
+    // After build, structure is: dist/packages/nx-astro-plugin/generators/app/generator.js
+    // We need to go up 2 levels to get to package root
+    const pkgRoot = join(dirName, '..', '..');
     const tplPath = joinPathFragments(
       pkgRoot,
       'generators',
