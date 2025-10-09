@@ -11,6 +11,13 @@ interface Options {
   args?: string[];
 }
 
+/**
+ * Resolves the project's working directory from the executor context.
+ *
+ * @param context - Nx executor context containing workspace and project configuration
+ * @returns Absolute path to the project directory
+ * @throws {Error} If the project name is not found in the executor context
+ */
 function projectCwd(context: ExecutorContext): string {
   const projectName = context.projectName;
   if (!projectName) {
@@ -20,6 +27,30 @@ function projectCwd(context: ExecutorContext): string {
   return projRoot ? join(context.root, projRoot) : (context.root || process.cwd());
 }
 
+/**
+ * Executes Astro's sync command to generate TypeScript types for content collections.
+ *
+ * This executor runs `astro sync` to automatically generate TypeScript definitions
+ * for your content collections based on their schemas. This ensures type safety when
+ * working with content collection entries throughout your project.
+ *
+ * @param options - Sync executor options from schema.json
+ * @param options.config - Optional path to custom Astro config file
+ * @param options.verbose - Enable verbose output with detailed sync information
+ * @param options.allowGlobal - Whether to allow using a globally installed Astro binary (default: true)
+ * @param options.binOverride - Optional path to override the Astro binary location (primarily for testing)
+ * @param options.args - Additional arguments to pass to the Astro CLI
+ * @param context - Nx executor context containing workspace and project configuration
+ * @returns Promise resolving to an object with a success boolean
+ *
+ * @example
+ * // Run sync to generate content collection types
+ * nx run my-site:sync
+ *
+ * @example
+ * // Run sync after modifying content/config.ts
+ * nx run my-site:sync --verbose=true
+ */
 export default async function runExecutor(options: Options, context: ExecutorContext) {
   const cwd = projectCwd(context);
   const workspaceRoot = context.root || process.cwd();
