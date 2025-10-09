@@ -3,7 +3,30 @@
   "title": "@forastro/nx-astro-plugin:starlight-docs",
   "type": "object",
   "properties": {
-    "project": { "type": "string", "description": "Nx project name" }
+    "project": {
+      "type": "string",
+      "description": "Nx project name",
+      "x-prompt": "Which Astro project should the Starlight docs be added to?",
+      "x-dropdown": "projects"
+    },
+    "includeExamples": {
+      "type": "boolean",
+      "default": false,
+      "description": "Generate example documentation files (getting-started, guides, reference)",
+      "x-prompt": "Generate example documentation files?"
+    },
+    "title": {
+      "type": "string",
+      "default": "Documentation",
+      "description": "Title for the documentation site",
+      "x-prompt": "What should the documentation site be titled?"
+    },
+    "description": {
+      "type": "string",
+      "default": "Project documentation",
+      "description": "Description for the documentation site",
+      "x-prompt": "Brief description for the documentation?"
+    }
   },
   "required": ["project"]
 }
