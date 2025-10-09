@@ -46,7 +46,6 @@ describe('init generator', () => {
 
     expect(result.targetDefaults['@forastro/nx-astro-plugin:build']).toEqual({
       cache: true,
-      inputs: ['production', '^production'],
       outputs: ['{projectRoot}/dist'],
     });
     expect(result.targetDefaults['@forastro/nx-astro-plugin:dev']).toEqual({ cache: false });
