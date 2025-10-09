@@ -22,13 +22,16 @@
   "generators": "./generators.json",
   "executors": "./executors.json",
   "files": [
-    "dist",
     "generators.json",
     "executors.json",
     "README.md",
     "src/generators/**/schema.json",
     "src/executors/**/schema.json",
-    "src/generators/app/templates/**/*"
+    "src/generators/app/templates/**/*",
+    "generators/**/*.js",
+    "executors/**/*.js",
+    "utils/**/*.js",
+    "index.js"
   ],
   "scripts": {
     "test": "vitest run",
