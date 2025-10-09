@@ -9,6 +9,25 @@ export interface ExecRunner {
   runner: string[]; // e.g., ['dlx']
 }
 
+/**
+ * Gets the appropriate command runner for a package manager.
+ *
+ * Returns the executable name and runner arguments needed to execute
+ * packages with each package manager (similar to `npx`).
+ *
+ * @param pm - Package manager type: 'pnpm', 'npm', 'yarn', or 'bun'
+ * @returns Object containing npx equivalent and runner arguments
+ *
+ * @example
+ * const { npx, runner } = getExecFor('pnpm');
+ * // Returns: { npx: 'pnpm', runner: ['dlx'] }
+ * await execa(npx, [...runner, 'create-astro']);
+ *
+ * @example
+ * const { npx, runner } = getExecFor('npm');
+ * // Returns: { npx: 'npx', runner: [] }
+ * await execa(npx, [...runner, 'astro', 'add', 'react']);
+ */
 export function getExecFor(pm: PackageManager): ExecRunner {
   switch (pm) {
     case 'pnpm':
@@ -31,7 +50,25 @@ const LOCKFILE_MAP: Array<{ file: string; pm: PackageManager }> = [
 ];
 
 /**
- * Detect package manager by checking lockfiles in project root, then workspace root, then global.
+ * Detects the package manager in use by checking lockfiles.
+ *
+ * Uses a three-tier detection strategy:
+ * 1. Checks project root for lockfiles (pnpm-lock.yaml, package-lock.json, etc.)
+ * 2. Checks workspace root for lockfiles
+ * 3. Falls back to global package manager detection by running --version
+ *
+ * @param projectRoot - Absolute path to the project directory
+ * @param workspaceRoot - Absolute path to the workspace root directory
+ * @returns Promise resolving to the detected package manager
+ * @throws Error if no package manager is detected or installed
+ *
+ * @example
+ * const pm = await detectPackageManager(
+ *   '/workspace/apps/my-site',
+ *   '/workspace'
+ * );
+ * console.log(`Using package manager: ${pm}`);
+ * // Output: "Using package manager: pnpm"
  */
 export async function detectPackageManager(
   projectRoot: string,
@@ -65,7 +102,42 @@ export async function detectPackageManager(
 }
 
 /**
- * Resolve astro binary: project local → workspace local → global (if allowed).
+ * Resolves the path to the Astro binary.
+ *
+ * Uses a three-tier resolution strategy to find the Astro CLI:
+ * 1. Project-local: node_modules/.bin/astro in project directory
+ * 2. Workspace-local: node_modules/.bin/astro in workspace root
+ * 3. Global: system-wide installation (if allowGlobal is true)
+ *
+ * On Windows, looks for astro.cmd instead of astro.
+ *
+ * @param projectRoot - Absolute path to the project directory
+ * @param workspaceRoot - Absolute path to the workspace root directory
+ * @param allowGlobal - Whether to allow using a globally installed Astro binary (default: true)
+ * @returns Promise resolving to the absolute path to the Astro binary
+ * @throws Error with installation instructions if Astro is not found
+ *
+ * @example
+ * // Resolve Astro binary with global fallback
+ * const astroBin = await resolveAstroBinary(
+ *   '/workspace/apps/my-site',
+ *   '/workspace',
+ *   true
+ * );
+ * await execa(astroBin, ['build']);
+ *
+ * @example
+ * // Resolve only local installations (no global fallback)
+ * try {
+ *   const astroBin = await resolveAstroBinary(projectRoot, workspaceRoot, false);
+ * } catch (err) {
+ *   console.error('Astro must be installed locally');
+ * }
+ *
+ * @remarks
+ * Platform-specific behavior:
+ * - Windows: Searches for 'astro.cmd' and uses 'where' command
+ * - Unix/Mac: Searches for 'astro' and uses 'which' command
  */
 export async function resolveAstroBinary(
   projectRoot: string,
@@ -123,6 +195,26 @@ export async function resolveAstroBinary(
   );
 }
 
+/**
+ * Checks if ESLint is installed in the workspace.
+ *
+ * Reads the workspace package.json and checks if 'eslint' is present
+ * in devDependencies. This is used to determine whether to suggest
+ * or configure ESLint-related features.
+ *
+ * @param workspaceRoot - Absolute path to the workspace root directory
+ * @returns True if ESLint is installed in devDependencies, false otherwise
+ *
+ * @example
+ * const hasEslint = workspaceHasEslint('/workspace');
+ * if (hasEslint) {
+ *   console.log('ESLint is available, suggesting eslint-plugin-astro');
+ * }
+ *
+ * @remarks
+ * Only checks devDependencies, not dependencies or global installations.
+ * Returns false if package.json cannot be read or parsed.
+ */
 export function workspaceHasEslint(workspaceRoot: string): boolean {
   try {
     const pkg = JSON.parse(readFileSync(join(workspaceRoot, 'package.json'), 'utf8'));

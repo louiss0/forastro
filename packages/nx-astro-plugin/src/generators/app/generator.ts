@@ -20,6 +20,40 @@ interface Schema {
   offlineStrategy?: 'none' | 'copy-fixture';
 }
 
+/**
+ * Generates a new Astro application using create-astro.
+ *
+ * This generator scaffolds a new Astro project within an Nx workspace by running
+ * `create-astro` non-interactively. It creates the project structure, adds Nx
+ * project configuration (project.json), and sets up Astro executors for common tasks.
+ *
+ * The generator supports both online creation (via create-astro) and offline mode
+ * using a bundled fixture template.
+ *
+ * @param tree - Nx virtual file system tree for staging file changes
+ * @param options - App generator options from schema.json
+ * @param options.name - Name of the Astro project (used for directory and Nx project name)
+ * @param options.directory - Optional parent directory (default: 'apps')
+ * @param options.template - Astro template to use (default: 'minimal'). Options: 'minimal', 'basics', 'blog', 'portfolio'
+ * @param options.typescript - Enable TypeScript (passed to create-astro)
+ * @param options.integrations - Array of integration names to install (deferred to add executor)
+ * @param options.eslint - ESLint configuration: 'auto' (detect), 'true', or 'false'
+ * @param options.skipInstall - Skip npm install after generation
+ * @param options.offlineStrategy - Offline mode: 'none' (default) or 'copy-fixture'
+ * @returns Promise that resolves when generation and formatting are complete
+ *
+ * @example
+ * // Generate a minimal Astro app
+ * nx g @forastro/nx-astro-plugin:app my-site
+ *
+ * @example
+ * // Generate with blog template in custom directory
+ * nx g @forastro/nx-astro-plugin:app blog --directory=websites --template=blog
+ *
+ * @example
+ * // Offline mode using bundled fixture
+ * nx g @forastro/nx-astro-plugin:app demo --offlineStrategy=copy-fixture
+ */
 export default async function generator(tree: Tree, options: Schema) {
   const dir = options.directory ?? 'apps';
   const projectName = options.name;
