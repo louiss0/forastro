@@ -16,3 +16,6 @@ vitest.config.*.timestamp*
 # Keep .github/workflows/ directory for CI/CD
 coverage/
 docs/
+
+# Test workspaces
+nx-plugin-test*/
