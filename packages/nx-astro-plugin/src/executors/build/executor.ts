@@ -1,7 +1,7 @@
 import type { ExecutorContext } from '@nx/devkit';
 import { execa } from 'execa';
 import { join } from 'node:path';
-import { resolveAstroBinary } from '../../utils/pm';
+import { resolveAstroBinary } from '../../utils/pm.js';
 
 interface Options {
   outDir?: string;

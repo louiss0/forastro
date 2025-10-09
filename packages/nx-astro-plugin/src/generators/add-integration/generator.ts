@@ -1,7 +1,7 @@
 import type { Tree } from '@nx/devkit';
 import { readProjectConfiguration } from '@nx/devkit';
-import { detectPackageManager, getExecFor } from '../../utils/pm';
-import type { PackageManager } from '../../utils/pm';
+import { detectPackageManager, getExecFor } from '../../utils/pm.js';
+import type { PackageManager } from '../../utils/pm.js';
 import { execa } from 'execa';
 
 interface Schema {

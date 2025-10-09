@@ -1,6 +1,6 @@
 import type { Tree } from '@nx/devkit';
 import { updateJson, formatFiles } from '@nx/devkit';
-import { workspaceHasEslint } from '../../utils/pm';
+import { workspaceHasEslint } from '../../utils/pm.js';
 
 interface Schema {
   eslint?: 'auto' | 'true' | 'false';
