@@ -1,3 +1,18 @@
+# 2.0.0 (2025-10-09)
+
+### 🩹 Fixes
+
+- ⚠️  **packages/nx-astro-plugin:** remove invalid production inputs and fix component prompting ([66808a0](https://github.com/louiss0/forastro/commit/66808a0))
+- ⚠️  **packages/nx-astro-plugin:** add .js extensions to ESM imports ([f2583c8](https://github.com/louiss0/forastro/commit/f2583c8))
+
+### ⚠️  Breaking Changes
+
+- **packages/nx-astro-plugin:** None
+
+### ❤️ Thank You
+
+- Shelton Louis @louiss0
+
 # 1.0.0 (2025-10-09)
 
 ### 🚀 Features
