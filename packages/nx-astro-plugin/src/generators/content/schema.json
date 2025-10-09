@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "@forastro/nx-astro-plugin:content",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string",
+      "description": "Nx project name"
+    },
+    "collection": {
+      "type": "string",
+      "description": "Target content collection (e.g., 'posts', 'pages')",
+      "x-prompt": "Which collection should this content be added to?"
+    },
+    "contentType": {
+      "type": "string",
+      "enum": ["markdown", "mdx", "markdoc", "asciidoc"],
+      "description": "Content file format",
+      "x-prompt": {
+        "message": "Which content format?",
+        "type": "list",
+        "items": [
+          { "value": "markdown", "label": "Markdown (.md)" },
+          { "value": "mdx", "label": "MDX (.mdx)" },
+          { "value": "markdoc", "label": "Markdoc (.md)" },
+          { "value": "asciidoc", "label": "AsciiDoc (.adoc)" }
+        ]
+      }
+    },
+    "name": {
+      "type": "string",
+      "description": "Content file name (will be slugified)",
+      "x-prompt": "What's the name of this content?"
+    }
+  },
+  "required": ["project", "collection", "contentType", "name"]
+}

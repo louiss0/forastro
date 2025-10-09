@@ -3,9 +3,54 @@
   "title": "@forastro/nx-astro-plugin:layout",
   "type": "object",
   "properties": {
-    "project": { "type": "string", "description": "Nx project name" },
-    "name": { "type": "string", "description": "Layout name" },
-    "directory": { "type": "string", "description": "Optional subdirectory under src/layouts" }
+    "project": {
+      "type": "string",
+      "description": "Nx project name",
+      "x-prompt": "Which Astro project should the layout be added to?",
+      "x-dropdown": "projects"
+    },
+    "name": {
+      "type": "string",
+      "description": "Layout name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What should the layout be called?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Optional subdirectory under src/layouts",
+      "x-prompt": "Optional: Subdirectory under 'src/layouts' to place the layout?"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["base", "blog", "docs", "marketing"],
+      "default": "base",
+      "description": "Layout type with pre-configured SEO and structure",
+      "x-prompt": {
+        "message": "Which layout type do you want to create?",
+        "type": "list",
+        "items": [
+          {
+            "value": "base",
+            "label": "Base - Generic layout with SEO support"
+          },
+          {
+            "value": "blog",
+            "label": "Blog - Article layout with author, date, and hero image"
+          },
+          {
+            "value": "docs",
+            "label": "Docs - Documentation layout with sidebar and navigation"
+          },
+          {
+            "value": "marketing",
+            "label": "Marketing - Landing page layout with hero and sections"
+          }
+        ]
+      }
+    }
   },
   "required": ["project", "name"]
 }

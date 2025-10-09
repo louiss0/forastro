@@ -11,6 +11,21 @@ interface Options {
   args?: string[];
 }
 
+/**
+ * Resolves the project's working directory from the executor context.
+ *
+ * This function determines the absolute path to the project directory by
+ * combining the workspace root with the project's relative root path.
+ * It ensures the executor operates in the correct directory for the target project.
+ *
+ * @param context - Nx executor context containing workspace and project configuration
+ * @returns Absolute path to the project directory
+ * @throws {Error} If the project name is not found in the executor context
+ *
+ * @example
+ * const cwd = projectCwd(context);
+ * // Returns: '/workspace/apps/my-site'
+ */
 function projectCwd(context: ExecutorContext): string {
   const projectName = context.projectName;
   if (!projectName) {
@@ -20,6 +35,40 @@ function projectCwd(context: ExecutorContext): string {
   return projRoot ? join(context.root, projRoot) : (context.root || process.cwd());
 }
 
+/**
+ * Executes the Astro build command for a project.
+ *
+ * This executor runs `astro build` to create a production-ready build of an Astro project.
+ * It resolves the Astro binary (project-local, workspace-local, or global), constructs
+ * the appropriate command-line arguments, and executes the build process.
+ *
+ * @param options - Build executor options from schema.json
+ * @param options.outDir - Optional custom output directory for the build
+ * @param options.config - Optional path to custom Astro config file
+ * @param options.allowGlobal - Whether to allow using a globally installed Astro binary (default: true)
+ * @param options.binOverride - Optional path to override the Astro binary location (primarily for testing)
+ * @param options.args - Additional arguments to pass to the Astro CLI
+ * @param context - Nx executor context containing workspace and project configuration
+ * @returns Promise resolving to an object with a success boolean
+ *
+ * @example
+ * // Run via Nx CLI
+ * nx run my-site:build
+ *
+ * @example
+ * // With custom config
+ * nx run my-site:build --config=astro.config.prod.ts
+ *
+ * @example
+ * // Programmatic usage
+ * const result = await runExecutor(
+ *   { outDir: 'dist/custom', config: 'astro.config.ts' },
+ *   context
+ * );
+ * if (result.success) {
+ *   console.log('Build completed successfully');
+ * }
+ */
 export default async function runExecutor(options: Options, context: ExecutorContext) {
   const cwd = projectCwd(context);
   const workspaceRoot = context.root || process.cwd();

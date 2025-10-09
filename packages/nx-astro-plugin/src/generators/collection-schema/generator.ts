@@ -1,14 +1,50 @@
 import type { Tree } from '@nx/devkit';
-import { readProjectConfiguration, formatFiles, joinPathFragments } from '@nx/devkit';
+import {
+  readProjectConfiguration,
+  formatFiles,
+  joinPathFragments,
+} from '@nx/devkit';
 import { join } from 'node:path';
+import { toKebab } from '../../utils/naming.js';
 
 interface Schema {
   project: string;
   name: string; // collection name
 }
 
-const toKebab = (s: string) => s.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-
+/**
+ * Generates a content collection schema configuration file.
+ *
+ * This generator creates a config.ts file for a new content collection
+ * with a basic Zod schema. The collection directory and config file are
+ * created if they don't exist. This provides type-safe content collections
+ * with frontmatter validation.
+ *
+ * @param tree - Nx virtual file system tree for staging file changes
+ * @param options - Collection schema generator options from schema.json
+ * @param options.project - Name of the Nx project
+ * @param options.name - Name of the content collection (will be converted to kebab-case)
+ * @returns Promise that resolves when the schema file is created and formatted
+ *
+ * @example
+ * // Create a new 'posts' collection schema
+ * nx g @forastro/nx-astro-plugin:collection-schema --project=my-site --name=posts
+ * // Creates: src/content/posts/config.ts
+ *
+ * @example
+ * // Create a 'docs' collection schema
+ * nx g @forastro/nx-astro-plugin:collection-schema --project=my-site --name=docs
+ * // Creates: src/content/docs/config.ts with basic schema
+ *
+ * @remarks
+ * The generated schema includes:
+ * - title: string (required)
+ * - description: string (optional)
+ * - published: boolean (default: true)
+ * - date: string (optional)
+ *
+ * Files are not overwritten if they already exist.
+ */
 export default async function generator(tree: Tree, options: Schema) {
   const proj = readProjectConfiguration(tree, options.project);
   const collection = toKebab(options.name);

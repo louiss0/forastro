@@ -41,6 +41,73 @@ describe('check executor', () => {
     expect(args).toContain('check');
   });
 
+  it('should pass config option', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ config: './custom-astro.config.mjs' }, mockContext);
+
+    const [, args] = mockExeca.mock.calls[0];
+    expect(args).toContain('--config');
+    expect(args).toContain('./custom-astro.config.mjs');
+  });
+
+  it('should pass tsconfig option', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ tsconfig: './tsconfig.custom.json' }, mockContext);
+
+    const [, args] = mockExeca.mock.calls[0];
+    expect(args).toContain('--tsconfig');
+    expect(args).toContain('./tsconfig.custom.json');
+  });
+
+  it('should pass verbose option', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ verbose: true }, mockContext);
+
+    const [, args] = mockExeca.mock.calls[0];
+    expect(args).toContain('--verbose');
+  });
+
+  it('should pass additional args', async () => {
+    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ args: ['--watch'] }, mockContext);
+
+    const [, args] = mockExeca.mock.calls[0];
+    expect(args).toContain('--watch');
+  });
+
+  it('should use binOverride if provided', async () => {
+    const customBin = '/custom/path/to/astro';
+    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
+    mockExeca.mockResolvedValue(ok);
+
+    await runExecutor({ binOverride: customBin }, mockContext);
+
+    expect(mockResolveAstroBinary).not.toHaveBeenCalled();
+    const [bin] = mockExeca.mock.calls[0];
+    expect(bin).toBe(customBin);
+  });
+
+  it('should return failure when binary resolution fails', async () => {
+    mockResolveAstroBinary.mockRejectedValue(new Error('Astro binary not found'));
+
+    const result = await runExecutor({}, mockContext);
+
+    expect(result.success).toBe(false);
+    expect(mockExeca).not.toHaveBeenCalled();
+  });
+
   it('should return failure on error', async () => {
     mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
     mockExeca.mockRejectedValue(new Error('Check failed'));

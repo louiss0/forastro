@@ -3,9 +3,77 @@
   "title": "@forastro/nx-astro-plugin:component",
   "type": "object",
   "properties": {
-    "project": { "type": "string", "description": "Nx project name" },
-    "name": { "type": "string", "description": "Component name" },
-    "directory": { "type": "string", "description": "Optional subdirectory under src/components" }
+    "project": {
+      "type": "string",
+      "description": "Nx project name",
+      "x-prompt": "Which Astro project should the component be added to?",
+      "x-dropdown": "projects"
+    },
+    "name": {
+      "type": "string",
+      "description": "Component name",
+      "$default": {
+        "$source": "argv",
+        "index": 0
+      },
+      "x-prompt": "What should the component be called?"
+    },
+    "directory": {
+      "type": "string",
+      "description": "Optional subdirectory under src/components",
+      "x-prompt": "Optional: Subdirectory under 'src/components' to place the component?"
+    },
+    "type": {
+      "type": "string",
+      "enum": ["server", "client"],
+      "default": "server",
+      "description": "Component type: server (Astro) or client (framework-specific)",
+      "x-prompt": {
+        "message": "What type of component do you want to create?",
+        "type": "list",
+        "items": [
+          {
+            "value": "server",
+            "label": "Server component (.astro)"
+          },
+          {
+            "value": "client",
+            "label": "Client component (framework)"
+          }
+        ]
+      }
+    },
+    "framework": {
+      "type": "string",
+      "enum": ["react", "preact", "vue", "svelte", "angular"],
+      "description": "Framework for client components (auto-detected if only one integration installed)",
+      "x-prompt": {
+        "message": "Which framework should be used?",
+        "type": "list",
+        "items": [
+          {
+            "value": "react",
+            "label": "React (with hooks)"
+          },
+          {
+            "value": "preact",
+            "label": "Preact (with signals)"
+          },
+          {
+            "value": "vue",
+            "label": "Vue (with refs)"
+          },
+          {
+            "value": "svelte",
+            "label": "Svelte (with runes)"
+          },
+          {
+            "value": "angular",
+            "label": "Angular (with signals)"
+          }
+        ]
+      }
+    }
   },
   "required": ["project", "name"]
 }
