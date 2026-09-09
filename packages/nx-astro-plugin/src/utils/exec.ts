@@ -1,5 +1,3 @@
-import { execa } from 'execa';
-
 /**
  * Executes a command with inherited stdio.
  *
@@ -21,6 +19,7 @@ import { execa } from 'execa';
  * await run('astro', ['build', '--config', 'astro.config.ts'], projectRoot);
  */
 export async function run(cmd: string, args: string[], cwd: string) {
+  const { execa } = await import('execa');
   const child = execa(cmd, args, { cwd, stdio: 'inherit' });
   await child;
 }

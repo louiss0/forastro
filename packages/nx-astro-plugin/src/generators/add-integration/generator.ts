@@ -1,8 +1,7 @@
 import type { Tree } from '@nx/devkit';
 import { readProjectConfiguration } from '@nx/devkit';
-import { detectPackageManager, getExecFor } from '../../utils/pm.js';
-import type { PackageManager } from '../../utils/pm.js';
-import { execa } from 'execa';
+import { detectPackageManager, getExecFor } from '../../utils/pm';
+import type { PackageManager } from '../../utils/pm';
 
 interface Schema {
   project: string;
@@ -42,6 +41,7 @@ interface Schema {
  * - Prompts are suppressed with --yes flag for non-interactive operation
  */
 export default async function addIntegration(tree: Tree, options: Schema) {
+  const { execa } = await import('execa');
   const proj = readProjectConfiguration(tree, options.project);
   const workspaceRoot = (tree as { root?: string }).root ?? process.cwd();
   const pm = (await Promise.resolve(detectPackageManager(proj.root, workspaceRoot)).catch(() => 'pnpm')) as PackageManager;

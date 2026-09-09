@@ -51,13 +51,18 @@ copyDirRecursive(join(SRC_DIR, 'generators'), join(PUBLISH_ROOT, 'generators'), 
   return parts.includes('templates');
 });
 
-// 3) Copy top-level manifest files
-for (const file of ['executors.json', 'generators.json', 'README.md']) {
-  const src = join(PKG_ROOT, file);
-  if (existsSync(src)) {
-    cpSync(src, join(PUBLISH_ROOT, file));
-  }
+// Local Nx execution resolves TypeScript from src, while the published package is flattened.
+function copyManifestForPublishing(name) {
+  const source = join(PKG_ROOT, name);
+  const manifest = readFileSync(source, 'utf-8').replaceAll('"./src/', '"./');
+  writeFileSync(join(PUBLISH_ROOT, name), manifest, 'utf-8');
 }
+
+for (const name of ['executors.json', 'generators.json']) {
+  copyManifestForPublishing(name);
+}
+
+cpSync(join(PKG_ROOT, 'README.md'), join(PUBLISH_ROOT, 'README.md'));
 
 // 4) Copy package.json
 const pkg = JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'), 'utf-8'));

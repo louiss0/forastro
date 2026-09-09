@@ -13,22 +13,30 @@ import loadLanguages from 'prismjs/components/index.js';
 import asciidoctor from 'asciidoctor';
 
 export const getAsciidocPaths = z
-  .function()
-  .args(z.string().min(1, "Don't pass in an empty string pass in a value with forward slashes and words instead"))
-  .returns(z.promise(z.array(z.string())))
-  .implement(async (folderName: string) => {
+  .function({
+    input: [
+      z
+        .string()
+        .min(
+          1,
+          "Don't pass in an empty string pass in a value with forward slashes and words instead",
+        ),
+    ],
+    output: z.promise(z.array(z.string())),
+  })
+  .implementAsync(async (folderName: string) => {
     return glob('**/*.{adoc,asciidoc}', {
       cwd: folderName,
     });
   });
 
-const renderSchema = z.function(
-  z.tuple([
+const renderSchema = z.function({
+  input: [
     z.string(),
     z.record(z.string(), z.union([z.string(), z.number(), z.boolean()])),
-  ]),
-  z.string(),
-);
+  ],
+  output: z.string(),
+});
 
 const commonAttributes = z
   .object({

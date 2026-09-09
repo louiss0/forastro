@@ -1,6 +1,26 @@
 {
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "plugins": [],
+  "plugins": [
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testMode": "watch",
+        "testTargetName": "test"
+      },
+      "include": [
+        "packages/asciidoc/**/*",
+        "packages/nx-astro-plugin/**/*",
+        "packages/utilities/**/*"
+      ]
+    },
+    {
+      "plugin": "@nx/eslint/plugin",
+      "options": {
+        "targetName": "lint"
+      },
+      "include": ["packages/nx-astro-plugin/**/*"]
+    }
+  ],
   "namedInputs": {
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
@@ -36,10 +56,6 @@
     "check": {
       "dependsOn": ["lint", "test"],
       "cache": false
-    },
-    "@nx/vite:test": {
-      "inputs": ["default", "^production"],
-      "cache": true
     },
     "@nx/vite:build": {
       "cache": true,
@@ -79,6 +95,8 @@
         "skipLockFileUpdate": true
       }
     },
-    "releaseTagPattern": "{projectName}@{version}"
+    "releaseTag": {
+      "pattern": "{projectName}@{version}"
+    }
   }
 }

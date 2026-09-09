@@ -1,7 +1,6 @@
 {
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "name": "@forastro/nx-astro-plugin",
-  "root": "packages/nx-astro-plugin",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/nx-astro-plugin/src",
   "projectType": "library",
   "release": {
@@ -10,6 +9,7 @@
       "preserveLocalDependencyProtocols": false
     }
   },
+  "tags": ["nx:lib", "nx:lib:ongoing"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
@@ -20,19 +20,9 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
       "options": {
-        "lintFilePatterns": ["packages/nx-astro-plugin/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nx/vite:test",
-      "options": {
-        "passWithNoTests": false,
-        "reportsDirectory": "packages/nx-astro-plugin/coverage",
-        "config": "packages/nx-astro-plugin/vitest.config.ts"
+        "args": ["**/*.ts"]
       }
     }
-  },
-  "tags": ["nx:lib", "nx:lib:ongoing"]
+  }
 }

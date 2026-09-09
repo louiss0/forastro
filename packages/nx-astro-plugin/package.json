@@ -41,19 +41,21 @@
     "access": "public"
   },
   "peerDependencies": {
-    "nx": ">=21.0.0 <22.0.0",
+    "nx": ">=21.0.0 <24.0.0",
     "astro": ">=5.0.0"
   },
   "engines": {
     "node": ">=18.17.0 || >=20.0.0"
   },
   "dependencies": {
-    "@nx/devkit": "^21.6.3",
+    "@nx/devkit": "^23.2.0",
     "execa": "^9.6.0"
   },
   "devDependencies": {
+    "astro": "^7.3.2",
+    "nx": "23.2.0",
     "typescript": "^5.9.2",
-    "vitest": "^3.2.4"
+    "vitest": "^4.1.11"
   },
   "repository": {
     "type": "git",

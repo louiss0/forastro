@@ -101,7 +101,7 @@ describe('AsciiDoc Schema Tests', () => {
           expect(result.error.issues).toContainEqual(
             expect.objectContaining({
               path: ['doctitle'],
-              code: 'invalid_string',
+              code: 'invalid_format',
             })
           );
         }

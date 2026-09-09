@@ -1,5 +1,5 @@
 
-import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
+import { windiCN_EFS } from "@code-fixer-23/cn-efs";
 import type { FunctionalComponent } from "preact";
 /**
  * This component is created to make sure that everything in between it is in the center 
@@ -9,7 +9,7 @@ import type { FunctionalComponent } from "preact";
   
  */
 
-import { AllowedTailwindScreenWidths, SpacingNumbers } from "~/utilities/types";
+import type { AllowedTailwindScreenWidths, SpacingNumbers } from "~/utilities/types";
 
 interface Props {
   gapClass?: `gap-${SpacingNumbers}`;
@@ -19,7 +19,7 @@ interface Props {
   xlGapClass?: `xl:gap-${SpacingNumbers}`;
   xl2GapClass?: `2xl:gap-${SpacingNumbers}`;
   flexDirectionClass?: "flex-col" | "flex-row";
-  until?: AllowedTailwindScreenWidths[number];
+  until?: AllowedTailwindScreenWidths;
 }
 
 
@@ -39,8 +39,8 @@ const Center: FunctionalComponent<Props> = (props) => {
   } = props;
 
   const flexRowMap = new Map<
-    AllowedTailwindScreenWidths[number],
-    `${AllowedTailwindScreenWidths[number]}:flex-row`
+    AllowedTailwindScreenWidths,
+    `${AllowedTailwindScreenWidths}:flex-row`
   >([
     ["sm", "sm:flex-row"],
     ["md", "md:flex-row"],
@@ -49,8 +49,8 @@ const Center: FunctionalComponent<Props> = (props) => {
     ["2xl", "2xl:flex-row"],
   ]);
   const flexColMap = new Map<
-    AllowedTailwindScreenWidths[number],
-    `${AllowedTailwindScreenWidths[number]}:flex-col`
+    AllowedTailwindScreenWidths,
+    `${AllowedTailwindScreenWidths}:flex-col`
   >([
     ["sm", "sm:flex-col"],
     ["md", "md:flex-col"],
@@ -71,7 +71,7 @@ const Center: FunctionalComponent<Props> = (props) => {
 
   return <div
     data-center-box
-    class={tailwindOrWindiCSSEvaluatorSorterAndFilter([
+    class={windiCN_EFS([
       "flex justify-center items-center h-full",
       flexDirectionClass,
       gapClass,

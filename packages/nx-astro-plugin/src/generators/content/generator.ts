@@ -10,7 +10,7 @@ import {
   parseAstroConfigDirs,
   listContentCollections,
   detectContentTypeSupport,
-} from '../../utils/astro.js';
+} from '../../utils/astro';
 
 interface Schema {
   project: string;

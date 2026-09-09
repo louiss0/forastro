@@ -32,11 +32,13 @@
       }
     },
     "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/packages/asciidoc"
+      ],
       "options": {
-        "reportsDirectory": "../../coverage/packages/asciidoc",
-        "passWithNoTests": false
+        "passWithNoTests": false,
+        "coverage.reportsDirectory": "../../coverage/packages/asciidoc"
       }
     },
     "check": {

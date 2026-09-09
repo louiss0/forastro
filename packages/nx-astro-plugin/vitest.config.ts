@@ -6,11 +6,11 @@ export default defineConfig({
     reporters: ['default'],
     coverage: {
       enabled: true,
-      all: true,
+
       include: ['src/**/*.ts'],
       exclude: [
         'src/**/schema.json',
-'src/generators/**/templates/**',
+        'src/generators/**/templates/**',
         'src/generators/page/**',
         'src/generators/component/**',
         'src/generators/layout/**',
@@ -18,7 +18,7 @@ export default defineConfig({
         'src/generators/starlight-docs/**',
         'src/executors/add/**',
         'src/**/*.d.ts',
-        'src/index.ts'
+        'src/index.ts',
       ],
       reporter: ['text', 'lcov'],
       thresholds: {

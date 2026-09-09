@@ -5,7 +5,7 @@ import {
   joinPathFragments,
 } from '@nx/devkit';
 import { join } from 'node:path';
-import { toPascal } from '../../utils/naming.js';
+import { toPascal } from '../../utils/naming';
 
 interface Schema {
   project: string;

@@ -5,8 +5,8 @@ import {
   joinPathFragments,
 } from '@nx/devkit';
 import { join } from 'node:path';
-import { toPascal } from '../../utils/naming.js';
-import { detectIntegrations } from '../../utils/astro.js';
+import { toPascal } from '../../utils/naming';
+import { detectIntegrations } from '../../utils/astro';
 
 interface Schema {
   project: string;

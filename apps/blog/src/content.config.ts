@@ -3,7 +3,7 @@ import { asciidocBaseSchema, asciidocLoader } from '@forastro/asciidoc';
 
 const blog = defineCollection({
   loader: asciidocLoader('src/content'),
-  schema: asciidocBaseSchema
+  schema: asciidocBaseSchema,
 });
 
 export const collections = { blog };

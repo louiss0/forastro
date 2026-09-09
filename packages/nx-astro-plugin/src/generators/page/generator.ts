@@ -5,8 +5,8 @@ import {
   joinPathFragments,
 } from '@nx/devkit';
 import { join } from 'node:path';
-import { parseAstroConfigDirs } from '../../utils/astro.js';
-import { toKebab } from '../../utils/naming.js';
+import { parseAstroConfigDirs } from '../../utils/astro';
+import { toKebab } from '../../utils/naming';
 
 interface Schema {
   project: string;

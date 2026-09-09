@@ -5,7 +5,7 @@ import {
   joinPathFragments,
 } from '@nx/devkit';
 import { join } from 'node:path';
-import { toKebab } from '../../utils/naming.js';
+import { toKebab } from '../../utils/naming';
 
 interface Schema {
   project: string;

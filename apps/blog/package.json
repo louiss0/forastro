@@ -12,6 +12,6 @@
   },
   "dependencies": {
     "@forastro/asciidoc": "workspace:*",
-    "astro": "^5.14.1"
+    "astro": "^7.3.2"
   }
 }

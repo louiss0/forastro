@@ -1,7 +1,5 @@
 import { readFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { execa } from 'execa';
-
 export type PackageManager = 'pnpm' | 'npm' | 'yarn' | 'bun';
 
 export interface ExecRunner {
@@ -89,6 +87,7 @@ export async function detectPackageManager(
   }
 
   // 3. Fallback to global detection
+  const { execa } = await import('execa');
   for (const pm of ['pnpm', 'npm', 'yarn', 'bun'] as PackageManager[]) {
     try {
       await execa(pm, ['--version'], { stdio: 'ignore' });
@@ -161,6 +160,7 @@ export async function resolveAstroBinary(
 
   // 3. Global (if allowed)
   if (allowGlobal) {
+    const { execa } = await import('execa');
     try {
       if (isWindows) {
         const { stdout } = await execa('where', [binName], { stdio: 'pipe' });

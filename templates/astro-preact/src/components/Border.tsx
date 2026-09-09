@@ -2,7 +2,7 @@
 import { type BorderOrOutlineSizes } from "~/utilities/types";
 import { allTailwindColors } from "~/utilities/constants";
 import type { FunctionComponent } from "preact";
-import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
+import { windiCN_EFS } from "@code-fixer-23/cn-efs";
 
 /**
  ** The border component by default creates a border that surrounds a component
@@ -46,7 +46,7 @@ export const Border: FunctionComponent<Props> = (props) => {
 
   return <div
     data-border-box
-    class={tailwindOrWindiCSSEvaluatorSorterAndFilter(
+    class={windiCN_EFS(
       "border border-current",
       borderSizeClass,
       $class

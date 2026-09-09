@@ -19,3 +19,9 @@ docs/
 
 # Test workspaces
 nx-plugin-test*/
+
+.claude/worktrees
+.claude/settings.local.json
+.nx/polygraph
+.nx/self-healing
+.nx/migrate-runs

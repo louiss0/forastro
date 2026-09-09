@@ -31,15 +31,6 @@
         "command": "pnpm tsc -p packages/utilities/tsconfig.lib.json --noEmit"
       }
     },
-    "test": {
-      "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "../../coverage/packages/utilities",
-        "passWithNoTests": false,
-        "config": "packages/utilities/vitest.config.ts"
-      }
-    },
     "check": {
       "executor": "nx:run-commands",
       "options": {

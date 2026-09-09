@@ -1,7 +1,6 @@
 import type { ExecutorContext } from '@nx/devkit';
-import { execa } from 'execa';
 import { join } from 'node:path';
-import { resolveAstroBinary } from '../../utils/pm.js';
+import { resolveAstroBinary } from '../../utils/pm';
 
 interface Options {
   port?: number;
@@ -61,6 +60,7 @@ function projectCwd(context: ExecutorContext): string {
  * nx run my-site:dev --host=0.0.0.0
  */
 export default async function runExecutor(options: Options, context: ExecutorContext) {
+  const { execa } = await import('execa');
   const cwd = projectCwd(context);
   const workspaceRoot = context.root || process.cwd();
 

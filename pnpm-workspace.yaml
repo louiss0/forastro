@@ -1,5 +1,9 @@
-onlyBuiltDependencies:
-  - nx
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
+  nx: true
+  sharp: true
+  unrs-resolver: true
 
 packages:
   - "apps/*"

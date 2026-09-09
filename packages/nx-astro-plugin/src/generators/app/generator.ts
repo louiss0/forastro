@@ -5,7 +5,6 @@ import {
   generateFiles,
   updateJson,
 } from '@nx/devkit';
-import { execa } from 'execa';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -77,6 +76,8 @@ export default async function generator(tree: Tree, options: Schema) {
       name: projectName,
     });
   } else {
+    const { execa } = await import('execa');
+
     // Run create-astro with the full project path to avoid directory conflicts
     const args = [
       'create-astro@latest',
@@ -160,7 +161,7 @@ export default async function generator(tree: Tree, options: Schema) {
       pkg.nx.name = projectName;
       pkg.devDependencies = pkg.devDependencies || {};
       if (!pkg.devDependencies.astro) {
-        pkg.devDependencies.astro = '^5.0.0';
+        pkg.devDependencies.astro = '^7.3.2';
       }
       return pkg;
     });

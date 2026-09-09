@@ -18,15 +18,15 @@
   "author": "Shelton Louis",
   "license": "ISC",
   "devDependencies": {
-    "@astrojs/mdx": "*",
+    "@astrojs/mdx": "^8.0.1",
     "@fontsource/lato": "*",
     "@fontsource/raleway": "*",
-    "astro": "*",
+    "astro": "^7.3.2",
     "unocss": "*"
   },
   "dependencies": {
     "@code-fixer-23/cn-efs": "*",
     "@forastro/utilities": "*",
-    "astro-icon": "*"
+    "astro-icon": "^1.2.0"
   }
 }

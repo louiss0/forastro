@@ -1,6 +1,6 @@
 
 import type { FunctionalComponent } from "preact";
-import { tailwindOrWindiCSSEvaluatorSorterAndFilter } from "@code-fixer-23/cn-efs";
+import { windiCN_EFS } from "@code-fixer-23/cn-efs";
 
 
 type Props<T extends string> = {
@@ -15,7 +15,7 @@ type Props<T extends string> = {
 export const Image: ImageFunctionalComponent = (props: Props<T>) => {
 
   const { src, alt, width, height, class: $class } = props;
-  return <img class={tailwindOrWindiCSSEvaluatorSorterAndFilter("object-cover", $class)} {...{ src, alt, width, height }} />
+  return <img class={windiCN_EFS("object-cover", $class)} {...{ src, alt, width, height }} />
 }
 
 

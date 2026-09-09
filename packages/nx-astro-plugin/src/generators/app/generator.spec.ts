@@ -150,7 +150,7 @@ describe('app generator', () => {
     const result = updateCallback(pkg);
     expect(result.nx).toBeDefined();
     expect(result.nx.name).toBe('test-app');
-    expect(result.devDependencies.astro).toBe('^5.0.0');
+    expect(result.devDependencies.astro).toBe('^7.3.2');
   });
 
   it('should preserve existing astro devDependency', async () => {

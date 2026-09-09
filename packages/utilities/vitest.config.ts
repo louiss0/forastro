@@ -15,13 +15,13 @@ export default defineConfig({
       'src/components/**',
       '**/*.astro',
       '**/__fixtures__/**',
-      '**/__mocks__/**'
+      '**/__mocks__/**',
     ],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html', 'lcov'],
       reportsDirectory: '../../coverage/packages/utilities',
-      all: true,
+
       include: ['src/**/*.{ts,tsx}'],
       exclude: [
         'src/components/**',
@@ -36,7 +36,7 @@ export default defineConfig({
         'vitest.config.ts',
         'tsup.config.ts',
         // Projector-related exclusions (precise)
-        'src/lib/useTemplaterAndProjector.ts'
+        'src/lib/useTemplaterAndProjector.ts',
       ],
       thresholds: {
         lines: 80,

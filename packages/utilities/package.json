@@ -50,6 +50,7 @@
     "ui"
   ],
   "devDependencies": {
+    "astro": "^7.3.2",
     "tsup": "^8.5.0"
   }
 }

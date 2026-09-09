@@ -8,6 +8,7 @@ export default defineConfig({
     'src/**/*.ts',
     '!src/**/*.spec.ts',
     '!src/**/*.test.ts',
+    '!src/**/templates/**',
   ],
   outDir: '../../dist/packages/nx-astro-plugin/',
   outBase: 'src',
@@ -16,6 +17,6 @@ export default defineConfig({
   target: 'node18',
   splitting: false,
   clean: true,
-  bundle: false,
+  bundle: true,
   tsconfig: resolve(__dirname, 'tsconfig.json'),
 });

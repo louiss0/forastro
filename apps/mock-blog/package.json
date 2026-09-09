@@ -9,6 +9,10 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@forastro/asciidoc": "workspace:*",
     "sharp": "^0.34.4"
+  },
+  "devDependencies": {
+    "astro": "^7.3.2"
   }
 }

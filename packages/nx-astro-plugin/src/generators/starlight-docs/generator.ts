@@ -2,7 +2,7 @@ import type { Tree } from '@nx/devkit';
 import { readProjectConfiguration, formatFiles, joinPathFragments } from '@nx/devkit';
 import { join } from 'node:path';
 import { existsSync, readFileSync } from 'node:fs';
-import { detectIntegrations } from '../../utils/astro.js';
+import { detectIntegrations } from '../../utils/astro';
 
 interface Schema {
   project: string;
