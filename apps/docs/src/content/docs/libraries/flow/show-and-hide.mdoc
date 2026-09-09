@@ -1,0 +1,82 @@
+---
+title: Show and Hide
+description: "Show and Hide are components that make a decision on whether to display it's child based on a condition.  Show is used to display it's child when a condition is true. Hide does the opposite. It hides when a condition is true."
+---
+
+{% $frontmatter.description %}
+
+## Show
+
+```tsx
+<Show when={isPublished} >
+"Content"
+</Show>
+```
+
+### Props
+
+These are the acceptable props.
+
+#### Required
+
+{%table%}
+
+* name
+* description
+---
+* when
+* If this prop is true the child will be rendered.
+---
+* children 
+* An HTML Element or string to be rendered 
+{%/table%}
+
+
+#### Optional
+
+{%table%}
+
+* name
+* description
+---
+* cloak
+* A prop that is used to set the element that is not meant to be shown to
+  `display:none` instead of it not being rendered.
+{%/table%}
+
+## Hide
+
+```tsx
+<Hide when={!isPublished} >
+"Content"
+</Hide>
+```
+
+### Props
+
+#### Required
+
+{%table%}
+
+* name
+* description
+---
+* when
+* If this prop is true the child won't be rendered.
+---
+* children 
+* An HTML Element or string to be rendered 
+{%/table%}
+
+
+#### Optional
+
+{%table%}
+
+* name
+* description
+---
+* cloak
+* A prop that is used to set the element that is not meant to be shown to
+  `display:none` instead of it not being rendered.
+{%/table%}
