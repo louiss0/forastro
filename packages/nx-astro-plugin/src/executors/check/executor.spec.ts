@@ -30,7 +30,9 @@ describe('check executor', () => {
   });
 
   it('should run check with default options', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -42,7 +44,9 @@ describe('check executor', () => {
   });
 
   it('should pass config option', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -54,7 +58,9 @@ describe('check executor', () => {
   });
 
   it('should pass tsconfig option', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -66,7 +72,9 @@ describe('check executor', () => {
   });
 
   it('should pass verbose option', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -77,7 +85,9 @@ describe('check executor', () => {
   });
 
   it('should pass additional args', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -100,7 +110,9 @@ describe('check executor', () => {
   });
 
   it('should return failure when binary resolution fails', async () => {
-    mockResolveAstroBinary.mockRejectedValue(new Error('Astro binary not found'));
+    mockResolveAstroBinary.mockRejectedValue(
+      new Error('Astro binary not found'),
+    );
 
     const result = await runExecutor({}, mockContext);
 
@@ -109,7 +121,9 @@ describe('check executor', () => {
   });
 
   it('should return failure on error', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     mockExeca.mockRejectedValue(new Error('Check failed'));
 
     const result = await runExecutor({}, mockContext);

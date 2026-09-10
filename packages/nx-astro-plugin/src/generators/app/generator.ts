@@ -1,174 +1,260 @@
-import type { Tree } from '@nx/devkit';
+import type { GeneratorCallback, Tree } from '@nx/devkit';
 import {
   formatFiles,
-  joinPathFragments,
   generateFiles,
+  installPackagesTask,
+  joinPathFragments,
   updateJson,
 } from '@nx/devkit';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 interface Schema {
   name: string;
   directory?: string;
-  template?: string;
   typescript?: boolean;
   integrations?: string[];
   eslint?: 'auto' | 'true' | 'false';
   skipInstall?: boolean;
-  offlineStrategy?: 'none' | 'copy-fixture';
+  packageManager?: 'auto' | 'pnpm' | 'npm' | 'yarn' | 'bun';
 }
 
-/**
- * Generates a new Astro application using create-astro.
- *
- * This generator scaffolds a new Astro project within an Nx workspace by running
- * `create-astro` non-interactively. It creates the project structure, adds Nx
- * project configuration (project.json), and sets up Astro executors for common tasks.
- *
- * The generator supports both online creation (via create-astro) and offline mode
- * using a bundled fixture template.
- *
- * @param tree - Nx virtual file system tree for staging file changes
- * @param options - App generator options from schema.json
- * @param options.name - Name of the Astro project (used for directory and Nx project name)
- * @param options.directory - Optional parent directory (default: 'apps')
- * @param options.template - Astro template to use (default: 'minimal'). Options: 'minimal', 'basics', 'blog', 'portfolio'
- * @param options.typescript - Enable TypeScript (passed to create-astro)
- * @param options.integrations - Array of integration names to install (deferred to add executor)
- * @param options.eslint - ESLint configuration: 'auto' (detect), 'true', or 'false'
- * @param options.skipInstall - Skip npm install after generation
- * @param options.offlineStrategy - Offline mode: 'none' (default) or 'copy-fixture'
- * @returns Promise that resolves when generation and formatting are complete
- *
- * @example
- * // Generate a minimal Astro app
- * nx g @forastro/nx-astro-plugin:app my-site
- *
- * @example
- * // Generate with blog template in custom directory
- * nx g @forastro/nx-astro-plugin:app blog --directory=websites --template=blog
- *
- * @example
- * // Offline mode using bundled fixture
- * nx g @forastro/nx-astro-plugin:app demo --offlineStrategy=copy-fixture
- */
-export default async function generator(tree: Tree, options: Schema) {
-  const dir = options.directory ?? 'apps';
-  const projectName = options.name;
-  const projectRoot = joinPathFragments(dir, projectName);
+const integrationPackages: Record<string, string> = {
+  mdx: '@astrojs/mdx',
+  markdoc: '@astrojs/markdoc',
+  react: '@astrojs/react',
+  preact: '@astrojs/preact',
+  svelte: '@astrojs/svelte',
+  solid: '@astrojs/solid-js',
+  vue: '@astrojs/vue',
+  tailwind: '@astrojs/tailwind',
+  sitemap: '@astrojs/sitemap',
+};
 
-  if (options.offlineStrategy === 'copy-fixture') {
-    const fileName = fileURLToPath(import.meta.url);
-    const dirName = dirname(fileName);
-    // After build, structure is: dist/packages/nx-astro-plugin/generators/app/generator.js
-    // We need to go up 2 levels to get to package root
-    const pkgRoot = join(dirName, '..', '..');
-    const tplPath = joinPathFragments(
-      pkgRoot,
-      'generators',
-      'app',
-      'templates',
-      'astro-min',
+function getIntegrationPackage(name: string): string {
+  return integrationPackages[name] ?? `@astrojs/${name}`;
+}
+
+function getIntegrationVariable(name: string): string {
+  return `${name.replace(/[^a-zA-Z0-9]/g, '')}Integration`;
+}
+
+function addIntegrationsToConfig(
+  content: string,
+  integrationNames: string[],
+): string {
+  if (integrationNames.length === 0) return content;
+
+  const integrationBindings = integrationNames.map((name) => {
+    const packageName = getIntegrationPackage(name);
+    const escapedPackageName = packageName.replace(
+      /[.*+?^${}()|[\]\\]/g,
+      '\\$&',
     );
-    generateFiles(tree, tplPath, projectRoot, {
-      tmpl: '',
-      name: projectName,
-    });
-  } else {
-    const { execa } = await import('execa');
+    const existingImport = content.match(
+      new RegExp(
+        `import\\s+([A-Za-z_$][\\w$]*)\\s+from\\s+['"]${escapedPackageName}['"]`,
+      ),
+    );
+    return {
+      packageName,
+      variableName: existingImport?.[1] ?? getIntegrationVariable(name),
+      hasImport: Boolean(existingImport),
+    };
+  });
+  const imports = integrationBindings
+    .filter(({ hasImport }) => !hasImport)
+    .map(
+      ({ packageName, variableName }) =>
+        `import ${variableName} from '${packageName}';`,
+    )
+    .join('\n');
+  const nextContent = imports ? `${imports}\n${content}` : content;
 
-    // Run create-astro with the full project path to avoid directory conflicts
-    const args = [
-      'create-astro@latest',
-      projectRoot,
-      '--template',
-      options.template ?? 'minimal',
-      '--git',
-      'false',
-      '--install',
-      'false',
-      '--yes',
-    ];
-    // Runner selection: default to npx, allow override by env FORASTRO_PM=jpd|pnpm
-    async function has(cmd: string) {
-      try {
-        await execa(cmd, ['--version'], { stdio: 'ignore' });
-        return true;
-      } catch {
-        return false;
-      }
-    }
-    const prefer = (
-      (process.env['FORASTRO_PM'] as string | undefined) || ''
-    ).toLowerCase();
-    if (prefer === 'jpd' && (await has('jpd'))) {
-      await execa('jpd', ['dlx', ...args], {
-        stdio: 'inherit',
-        cwd: tree.root,
-      });
-    } else if (prefer === 'pnpm' && (await has('pnpm'))) {
-      await execa('pnpm', ['dlx', ...args], {
-        stdio: 'inherit',
-        cwd: tree.root,
-      });
-    } else {
-      await execa('npx', args, { stdio: 'inherit', cwd: tree.root });
-    }
+  const calls = integrationBindings
+    .map(({ variableName }) => `${variableName}()`)
+    .join(', ');
+  if (/integrations\s*:\s*\[/.test(nextContent)) {
+    return nextContent.replace(
+      /integrations\s*:\s*\[([^\]]*)\]/,
+      (_, existing: string) => {
+        const existingCalls = existing.trim();
+        const newCalls = integrationBindings
+          .filter(
+            ({ variableName }) => !existingCalls.includes(`${variableName}(`),
+          )
+          .map(({ variableName }) => `${variableName}()`)
+          .join(', ');
+        return newCalls
+          ? `integrations: [${existingCalls}${existingCalls ? ', ' : ''}${newCalls}]`
+          : `integrations: [${existingCalls}]`;
+      },
+    );
   }
 
-  // Ensure project folder exists in Tree when created by external command
-  if (!tree.exists(projectRoot)) {
-    // refresh from disk if needed (Nx tree may not see external files). In Nx execution it reads from FS at the end.
-  }
+  return nextContent.replace(
+    /defineConfig\(\{/,
+    `defineConfig({\n  integrations: [${calls}],`,
+  );
+}
 
-  // Add Nx project.json AFTER create-astro completes
-  const projJsonPath = join(projectRoot, 'project.json');
-  if (!tree.exists(projJsonPath)) {
-    tree.write(
-      projJsonPath,
-      JSON.stringify(
-        {
-          name: projectName,
-          $schema: '../../node_modules/nx/schemas/project-schema.json',
-          sourceRoot: `${projectRoot}/src`,
-          targets: {
-            dev: { executor: '@forastro/nx-astro-plugin:dev', options: {} },
-            build: {
-              executor: '@forastro/nx-astro-plugin:build',
-              options: { outDir: 'dist' },
-              outputs: ['{projectRoot}/dist'],
-            },
-            preview: {
-              executor: '@forastro/nx-astro-plugin:preview',
-              options: {},
-            },
-            check: { executor: '@forastro/nx-astro-plugin:check', options: {} },
-            sync: { executor: '@forastro/nx-astro-plugin:sync', options: {} },
-          },
+function shouldConfigureEslint(tree: Tree, option: Schema['eslint']): boolean {
+  if (option === 'false') return false;
+  if (option === 'true') return true;
+  if (!tree.exists('package.json')) return false;
+
+  const packageJson = JSON.parse(
+    tree.read('package.json', 'utf-8') ?? '{}',
+  ) as {
+    devDependencies?: Record<string, string>;
+    dependencies?: Record<string, string>;
+  };
+  return Boolean(
+    packageJson.devDependencies?.['eslint'] ??
+      packageJson.dependencies?.['eslint'],
+  );
+}
+
+function getPackageManager(
+  tree: Tree,
+  requested: Schema['packageManager'],
+): 'pnpm' | 'npm' | 'yarn' | 'bun' {
+  if (requested && requested !== 'auto') {
+    return requested;
+  }
+  if (tree.exists('pnpm-lock.yaml')) return 'pnpm';
+  if (tree.exists('yarn.lock')) return 'yarn';
+  if (tree.exists('bun.lockb')) return 'bun';
+  return 'npm';
+}
+
+function createProjectConfiguration(
+  projectName: string,
+  projectRoot: string,
+  outDir: string,
+) {
+  return {
+    name: projectName,
+    $schema: '../../node_modules/nx/schemas/project-schema.json',
+    sourceRoot: `${projectRoot}/src`,
+    targets: {
+      dev: { executor: '@forastro/nx-astro-plugin:dev', options: {} },
+      build: {
+        executor: '@forastro/nx-astro-plugin:build',
+        options: { outDir },
+        outputs: [`{projectRoot}/${outDir}`],
+      },
+      preview: {
+        executor: '@forastro/nx-astro-plugin:preview',
+        options: { outDir },
+      },
+      check: { executor: '@forastro/nx-astro-plugin:check', options: {} },
+      sync: { executor: '@forastro/nx-astro-plugin:sync', options: {} },
+      'type-check': {
+        executor: 'nx:run-commands',
+        options: {
+          command: 'astro check',
+          cwd: projectRoot,
         },
+      },
+    },
+  };
+}
+
+/** Generates a complete Astro application in the Nx virtual tree. */
+export default async function generator(
+  tree: Tree,
+  options: Schema,
+): Promise<GeneratorCallback | undefined> {
+  const projectRoot = joinPathFragments(
+    options.directory ?? 'apps',
+    options.name,
+  );
+  const templateDirectory = join(
+    dirname(fileURLToPath(import.meta.url)),
+    'templates',
+    'astro-min',
+  );
+
+  // The scaffold is generated into the Tree rather than by create-astro. This
+  // keeps dry runs side-effect free and makes subsequent generators see files
+  // created by this generator in the same invocation.
+  generateFiles(tree, templateDirectory, projectRoot, {
+    tmpl: '',
+    name: options.name,
+  });
+
+  const configPath = joinPathFragments(projectRoot, 'astro.config.ts');
+  const configContent =
+    tree.read(configPath, 'utf-8') ??
+    `import { defineConfig } from 'astro/config';\n\nexport default defineConfig({});\n`;
+  const integrationNames = Array.from(
+    new Set(
+      (options.integrations ?? []).map((name) => name.trim()).filter(Boolean),
+    ),
+  );
+  tree.write(
+    configPath,
+    addIntegrationsToConfig(configContent, integrationNames),
+  );
+
+  if (options.typescript === false) {
+    tree.delete(configPath);
+    tree.write(
+      joinPathFragments(projectRoot, 'astro.config.mjs'),
+      addIntegrationsToConfig(configContent, integrationNames).replace(
+        /: [A-Za-z]+(?=\s*[,}])/g,
+        '',
+      ),
+    );
+    if (tree.exists(joinPathFragments(projectRoot, 'tsconfig.json'))) {
+      tree.delete(joinPathFragments(projectRoot, 'tsconfig.json'));
+    }
+  }
+
+  const packagePath = joinPathFragments(projectRoot, 'package.json');
+  if (tree.exists(packagePath)) {
+    updateJson(tree, packagePath, (packageJson) => {
+      packageJson.name = options.name;
+      packageJson.private = true;
+      packageJson.devDependencies ??= {};
+      packageJson.devDependencies.astro ??= '^7.3.2';
+      for (const name of integrationNames) {
+        packageJson.dependencies ??= {};
+        packageJson.dependencies[
+          integrationPackages[name] ?? `@astrojs/${name}`
+        ] ??= '^1.0.0';
+      }
+      if (shouldConfigureEslint(tree, options.eslint ?? 'auto')) {
+        packageJson.devDependencies.eslint ??= '^9.33.0';
+        packageJson.devDependencies['eslint-plugin-astro'] ??= '^1.3.1';
+      }
+      return packageJson;
+    });
+  }
+
+  if (shouldConfigureEslint(tree, options.eslint ?? 'auto')) {
+    tree.write(
+      joinPathFragments(projectRoot, 'eslint.config.mjs'),
+      `import eslintPluginAstro from 'eslint-plugin-astro';\n\nexport default [...eslintPluginAstro.configs.recommended];\n`,
+    );
+  }
+
+  const projectJsonPath = joinPathFragments(projectRoot, 'project.json');
+  if (!tree.exists(projectJsonPath)) {
+    tree.write(
+      projectJsonPath,
+      JSON.stringify(
+        createProjectConfiguration(options.name, projectRoot, 'dist'),
         null,
         2,
       ),
     );
   }
 
-  // Ensure package.json has nx.name and astro devDependency
-  const pkgPath = join(projectRoot, 'package.json');
-  if (tree.exists(pkgPath)) {
-    updateJson(tree, pkgPath, (pkg) => {
-      pkg.nx = pkg.nx || {};
-      pkg.nx.name = projectName;
-      pkg.devDependencies = pkg.devDependencies || {};
-      if (!pkg.devDependencies.astro) {
-        pkg.devDependencies.astro = '^7.3.2';
-      }
-      return pkg;
-    });
-  }
-
-  // Optionally run astro add for integrations (deferred: use executor add via Nx after creation)
-  // We only annotate here; users can run: nx run <proj>:add --names=mdx,react
-
   await formatFiles(tree);
+
+  if (options.skipInstall) return undefined;
+  const packageManager = getPackageManager(tree, options.packageManager);
+  return () => installPackagesTask(tree, true, projectRoot, packageManager);
 }

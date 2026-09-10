@@ -7,6 +7,6 @@ export default defineConfig({
   integrations: [
     asciidocLoader({
       // Configure asciidoc loader options here
-    })
+    }),
   ],
 });

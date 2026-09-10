@@ -1,82 +1,89 @@
 import { type Loader } from 'astro/loaders';
 import {
-  asciidocConfigObjectSchema,
   AsciidocProcessorController,
   generateSlug,
   getAsciidocPaths,
   loadAsciidocConfig,
 } from './internal';
+import type { asciidocConfigObjectSchema } from './internal';
 import { z } from 'astro/zod';
 import type { Document } from 'asciidoctor';
+import {
+  basename,
+  extname,
+  isAbsolute,
+  relative,
+  resolve,
+  sep,
+} from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 export type AsciidocConfigObject = z.infer<typeof asciidocConfigObjectSchema>;
 
-const CSV_LIST_REGEX = /^(?:[a-zA-Z0-9_-]+,\s*|[a-zA-Z0-9_-]+(?:,\s+[a-zA-Z0-9_-]+)+,?)$/;
+const CSV_LIST_REGEX =
+  /^(?:[a-zA-Z0-9_-]+,\s*|[a-zA-Z0-9_-]+(?:,\s+[a-zA-Z0-9_-]+)+,?)$/;
+const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = new Set(['.adoc', '.asciidoc']);
 
 export type DocumentAttributes = Record<string, unknown>;
 
 /**
  * Normalizes AsciiDoc attributes prior to schema validation.
- * 
- * Transformations:
- * - Empty strings ("") → true (common AsciiDoc pattern for boolean attributes)
- * - Strings matching CSV pattern → string[] (comma-split, trimmed, empties removed)
- * - Convert dash-case/snake_case keys → camelCase keys
- * 
- * The CSV pattern matches:
- * - Single token + comma: "foo," or "foo,   " → ["foo"]
- * - Multiple tokens with spaces: "foo, bar, baz," → ["foo", "bar", "baz"]
- * - Does NOT match "foo,bar" (no space after comma)
- * 
- * Key conversion examples:
- * - "user-name" → "userName"
- * - "api_key" → "apiKey"
- * - "simple" → "simple" (no change)
- * 
- * @param input - Raw attributes from document.getAttributes()
- * @returns New object with normalized attribute values and camelCase keys (non-mutating)
+ *
+ * AsciiDoc uses empty attributes as boolean flags and commonly represents
+ * lists as comma-separated values. Astro content schemas use JavaScript-style
+ * camelCase names, so dashed and snake_case attributes are normalized here.
  */
-export function normalizeAsciiDocAttributes(input: DocumentAttributes): DocumentAttributes {
-  const out: DocumentAttributes = {};
-  
+export function normalizeAsciiDocAttributes(
+  input: DocumentAttributes,
+): DocumentAttributes {
+  const normalizedAttributes: DocumentAttributes = {};
+
   for (const [key, value] of Object.entries(input)) {
-    // Convert dash-case/snake_case keys to camelCase
-    const camelCaseKey = key.replace(/[-_]([a-z])/g, (_, letter) => letter.toUpperCase());
-    
-    if (value === "") {
-      out[camelCaseKey] = true;
+    const camelCaseKey = key.replace(/[-_]([a-z])/g, (_, letter: string) =>
+      letter.toUpperCase(),
+    );
+
+    if (value === '') {
+      normalizedAttributes[camelCaseKey] = true;
       continue;
     }
-    if (typeof value === "string" && CSV_LIST_REGEX.test(value)) {
-      out[camelCaseKey] = value
-        .split(",")
-        .map((s) => s.trim())
+
+    if (typeof value === 'string' && CSV_LIST_REGEX.test(value)) {
+      normalizedAttributes[camelCaseKey] = value
+        .split(',')
+        .map((item) => item.trim())
         .filter(Boolean);
       continue;
     }
-    out[camelCaseKey] = value;
+
+    normalizedAttributes[camelCaseKey] = value;
   }
-  
-  return out;
+
+  return normalizedAttributes;
 }
 
-class FilePathAndSlug {
-  constructor(
-    public readonly pathRelativeToRoot: string,
-    public readonly slug: string,
-  ) {}
-}
+type FilePathAndSlug = {
+  pathRelativeToRoot: string;
+  slug: string;
+};
 
-let asciidocConfig: AsciidocConfigObject | undefined;
-
+/**
+ * Loads AsciiDoc content from a content root relative to the Astro project.
+ *
+ * The content root contract is deliberately the same as Astro's content
+ * loader contract: pass the directory containing collections (for example
+ * `src/content`), not a collection directory. The loader appends the
+ * collection name supplied by Astro.
+ */
 export function asciidocLoader(contentFolderName: string) {
   const asciidocProcessorController = new AsciidocProcessorController();
+  let asciidocConfig: AsciidocConfigObject | undefined;
 
   return {
     name: 'forastro/asciidoc-loader',
     async load(context) {
       const contentFolderNameSchema = z.string().regex(
-        /\w+(?:\/\w+)*/,
+        /^\w+(?:\/\w+)*$/,
         `A content folder name must be a string with word characters at the front only.
    Ex: content
    When referring to deeply nested folders in the project make sure you place a forward slash
@@ -101,20 +108,22 @@ export function asciidocLoader(contentFolderName: string) {
 
       logger.info('Loading Asciidoc paths and config file');
 
-      // Get the absolute path from astroConfig.root.pathname
-      // This works in both Node.js and Deno environments
-      const resolvedRootRepo = astroConfig.root.pathname;
-
-      asciidocConfig =
-        asciidocConfig ?? (await loadAsciidocConfig(resolvedRootRepo));
-
-      const asciidocFilePaths = await getAsciidocPaths(
-        `${resolvedRootRepo}/${contentFolderName}/${collection}`,
+      // URL.pathname is not a filesystem path on Windows (`/C:/...`). Convert
+      // the Astro root URL before passing it to path and glob APIs.
+      const resolvedRootRepo = fileURLToPath(astroConfig.root);
+      const collectionRoot = resolve(
+        resolvedRootRepo,
+        contentFolderName,
+        collection,
       );
+
+      asciidocConfig = await loadAsciidocConfig(resolvedRootRepo);
+
+      const asciidocFilePaths = await getAsciidocPaths(collectionRoot);
 
       switch (asciidocConfig.attributes?.sourceHighlighter) {
         case 'shiki':
-          if (asciidocConfig.attributes?.shikiTheme) {
+          if (asciidocConfig.attributes.shikiTheme) {
             await asciidocProcessorController.registerShiki(
               asciidocConfig.attributes.shikiTheme,
             );
@@ -137,9 +146,9 @@ export function asciidocLoader(contentFolderName: string) {
           }
           break;
       }
-      if (Object.keys(asciidocConfig).length !== 0) {
-        logger.info(`Creating Asciidoc Registry from using config file`);
 
+      if (asciidocConfig.blocks || asciidocConfig.macros) {
+        logger.info('Creating Asciidoc registry from config file');
         asciidocProcessorController.registerBlocksAndMacrosFromConfig(
           asciidocConfig.blocks,
           asciidocConfig.macros,
@@ -147,150 +156,51 @@ export function asciidocLoader(contentFolderName: string) {
       }
 
       logger.info('Clearing the store');
-
       store.clear();
 
       logger.info('Extracting data from files then storing it');
-
-      const fileNameToSlugMap = new Map<string, FilePathAndSlug>();
-
-      const fileNameRE = /(?<filename>[\w\s\d-]+)(?<extension>\.[a-z]+)$/;
+      const filePathToSlugMap = new Map<string, FilePathAndSlug>();
 
       for (const path of asciidocFilePaths) {
-        const fullFilePathMatch = path.match(fileNameRE);
-
-        if (!fullFilePathMatch) {
-          throw Error(`This path isn't correct.
-                         A folder can use any set of characters but must end in a forward slash.
-                         A filename must use word characters digits and whitespace no other characters.
-                        `);
-        }
-
-        const filename = fullFilePathMatch.groups?.['filename'] ?? '';
-
-        if (!filename) {
-          throw Error(
-            'There should be a word called filename in the word group',
-          );
-        }
-
-        const pathPrefixedWithFolderName = `${contentFolderName}/${collection}/${path}`;
-
+        const absoluteFilePath = resolve(collectionRoot, path);
+        const filePathAndSlug = getFilePathAndSlug(
+          resolvedRootRepo,
+          collectionRoot,
+          absoluteFilePath,
+        );
         const document = asciidocProcessorController.loadFileWithAttributes(
-          `${resolvedRootRepo}/${pathPrefixedWithFolderName}`,
+          absoluteFilePath,
           asciidocConfig.attributes,
         );
 
-        const sluggedFilename = generateSlug(filename);
-
         await setStoreUsingExtractedInfo(
-          pathPrefixedWithFolderName,
-          sluggedFilename,
+          filePathAndSlug.pathRelativeToRoot,
+          filePathAndSlug.slug,
           document,
         );
-
-        fileNameToSlugMap.set(
-          filename,
-          new FilePathAndSlug(pathPrefixedWithFolderName, sluggedFilename),
+        filePathToSlugMap.set(
+          filePathAndSlug.pathRelativeToRoot,
+          filePathAndSlug,
         );
       }
 
-      const SUPPORTED_ASCIIDOC_FILE_EXTENSIONS = ['.adoc', '.asciidoc'];
-
       watcher?.on('add', async (path) => {
-        const pathEndsWithOneOfTheSupportedAsciidocExtensions =
-          SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
+        if (!isSupportedFile(path)) return;
 
-        if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
-
-        const fullFilePathMatch = path.match(fileNameRE);
-
-        if (!fullFilePathMatch) {
-          throw Error(`This path ${path} isn't correct.
-                         A folder can use any set of characters but must end in a forward slash.
-                         A filename must use word characters digits and whitespace no other characters.
-                        `);
-        }
+        const absoluteFilePath = resolveWatcherPath(path, resolvedRootRepo);
+        if (!isInsideDirectory(absoluteFilePath, collectionRoot)) return;
 
         logger.info(
-          `You added this file ${path} it's info will be now parsed an added to the store`,
+          `You added this file ${path}; its info will now be parsed and added to the store`,
         );
 
-        const filename = fullFilePathMatch.groups?.['filename'] ?? '';
-
-        if (!filename) {
-          throw Error(
-            'There should be a word called filename in the word group',
-          );
-        }
-
-        const extractPath = (filePath: string, targetPath: string) => {
-          const escapedTargetPath = targetPath.replace(
-            /[.*+?^${}()|[\]\\]/g,
-            '\\$&',
-          ); // Escape special regex characters
-
-          const regex = new RegExp(`${escapedTargetPath}.*`);
-          const match = filePath.match(regex);
-
-          if (!match) {
-            throw Error(
-              "Please place the values in the right place don't change any params",
-            );
-          }
-
-          return match[0];
-        };
-
-        const pathRelativeToProjectRoot = extractPath(path, contentFolderName);
-
+        const filePathAndSlug = getFilePathAndSlug(
+          resolvedRootRepo,
+          collectionRoot,
+          absoluteFilePath,
+        );
         const document = asciidocProcessorController.loadFileWithAttributes(
-          path,
-          asciidocConfig?.attributes,
-        );
-
-        const sluggedFilename = generateSlug(filename);
-
-        await setStoreUsingExtractedInfo(
-          sluggedFilename,
-          pathRelativeToProjectRoot,
-          document,
-        );
-
-        fileNameToSlugMap.set(
-          filename,
-          new FilePathAndSlug(pathRelativeToProjectRoot, sluggedFilename),
-        );
-
-        logger.info(
-          `Finished adding the file now you can go to /${sluggedFilename} depending on your route to access it.`,
-        );
-      });
-
-      watcher?.on('change', async (path) => {
-        const pathEndsWithOneOfTheSupportedAsciidocExtensions =
-          SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
-
-        if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
-
-        const filename = path.match(fileNameRE)?.[1] ?? '';
-
-        logger.info(
-          `You changed this file ${filename} the store is being updated`,
-        );
-
-        const filePathAndSlug = fileNameToSlugMap.get(filename);
-
-        if (!filePathAndSlug) {
-          throw Error(`A slug is supposed to exist using this file name ${filename}.
-                        Some thing is wrong with the loader please file a report
-                        `);
-        }
-
-        store.delete(filePathAndSlug.slug);
-
-        const document = asciidocProcessorController.loadFileWithAttributes(
-          path,
+          absoluteFilePath,
           asciidocConfig?.attributes,
         );
 
@@ -299,49 +209,68 @@ export function asciidocLoader(contentFolderName: string) {
           filePathAndSlug.slug,
           document,
         );
-
-        logger.info(`The store is updated`);
+        filePathToSlugMap.set(
+          filePathAndSlug.pathRelativeToRoot,
+          filePathAndSlug,
+        );
       });
 
-      watcher?.on('unlink', (path) => {
-        const pathEndsWithOneOfTheSupportedAsciidocExtensions =
-          SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.some((ext) => path.endsWith(ext));
+      watcher?.on('change', async (path) => {
+        if (!isSupportedFile(path)) return;
 
-        if (!pathEndsWithOneOfTheSupportedAsciidocExtensions) return;
+        const absoluteFilePath = resolveWatcherPath(path, resolvedRootRepo);
+        if (!isInsideDirectory(absoluteFilePath, collectionRoot)) return;
 
-        const fullFilePathMatch = path.match(fileNameRE);
+        const pathRelativeToRoot = toPosixPath(
+          relative(resolvedRootRepo, absoluteFilePath),
+        );
+        const filePathAndSlug = filePathToSlugMap.get(pathRelativeToRoot);
 
-        if (!fullFilePathMatch) {
-          throw Error(`This path isn't correct.
-                         A folder can use any set of characters but must end in a forward slash.
-                         A filename must use word characters digits and whitespace no other characters.
-                        `);
-        }
-
-        const filename = fullFilePathMatch.groups?.['filename'] ?? '';
-
-        if (!filename) {
-          throw Error(
-            'There should be a word called filename in the word group',
+        if (!filePathAndSlug) {
+          throw new Error(
+            `No loader entry exists for changed file ${pathRelativeToRoot}.`,
           );
         }
 
-        logger.info(`You deleted this file ${filename}`);
+        logger.info(
+          `You changed this file ${pathRelativeToRoot}; the store is being updated`,
+        );
+        store.delete(filePathAndSlug.slug);
 
-        const fileNameAndSlug = fileNameToSlugMap.get(filename);
+        const document = asciidocProcessorController.loadFileWithAttributes(
+          absoluteFilePath,
+          asciidocConfig?.attributes,
+        );
+        await setStoreUsingExtractedInfo(
+          filePathAndSlug.pathRelativeToRoot,
+          filePathAndSlug.slug,
+          document,
+        );
 
-        if (!fileNameAndSlug) {
-          throw Error(`A slug is supposed to exist using this file name ${filename}.
-                        Some thing is wrong with the loader please file a report.
-                        From unlink event using this path ${path}.
-                        `);
+        logger.info('The store is updated');
+      });
+
+      watcher?.on('unlink', (path) => {
+        if (!isSupportedFile(path)) return;
+
+        const absoluteFilePath = resolveWatcherPath(path, resolvedRootRepo);
+        if (!isInsideDirectory(absoluteFilePath, collectionRoot)) return;
+
+        const pathRelativeToRoot = toPosixPath(
+          relative(resolvedRootRepo, absoluteFilePath),
+        );
+        const filePathAndSlug = filePathToSlugMap.get(pathRelativeToRoot);
+
+        if (!filePathAndSlug) {
+          throw new Error(
+            `No loader entry exists for deleted file ${pathRelativeToRoot}.`,
+          );
         }
 
-        store.delete(fileNameAndSlug.slug);
-
-        logger.info('The store has now been updated!');
-
-        logger.info('Finished');
+        logger.info(`You deleted this file ${pathRelativeToRoot}`);
+        store.delete(filePathAndSlug.slug);
+        filePathToSlugMap.delete(pathRelativeToRoot);
+        logger.info('The store has now been updated');
       });
 
       async function setStoreUsingExtractedInfo(
@@ -354,29 +283,29 @@ export function asciidocLoader(contentFolderName: string) {
           z.number(),
           z.boolean(),
         ]);
-
-        const dashedOrSnakeCaseKeysRecordSchema = z.record(
-          z
-            .string()
-            .regex(
-              /^(?<first_word>(?:[a-z0-9]+))(?<other_words_in_snake_or_dash_case>(?:-[a-z0-9]+|_[a-z0-9]+)*)$/,
-              'You must write using dash case Ex: url-repo',
-            ),
+        const attributeKeySchema = z
+          .string()
+          .regex(
+            /^[a-z][A-Za-z0-9]*$/,
+            'You must write using a valid attribute name',
+          );
+        const attributesSchema = z.record(
+          attributeKeySchema,
           allowedAsciidocValuesSchema.or(allowedAsciidocValuesSchema.array()),
         );
 
-        let attributes: z.infer<typeof dashedOrSnakeCaseKeysRecordSchema>;
+        let attributes: z.infer<typeof attributesSchema>;
 
         try {
-          // Extract raw attributes and normalize them before Zod validation
-          const rawAttrs = document.getAttributes() as DocumentAttributes;
-          const normalizedAttrs = normalizeAsciiDocAttributes(rawAttrs);
-
-          attributes = dashedOrSnakeCaseKeysRecordSchema.parse(normalizedAttrs);
+          attributes = attributesSchema.parse(
+            normalizeAsciiDocAttributes(
+              document.getAttributes() as DocumentAttributes,
+            ),
+          );
         } catch (error: unknown) {
           if (error instanceof z.ZodError) {
             logger.error(
-              'All attributes must be written in dashed or snake case in files',
+              'All attributes must be written using valid attribute names',
             );
             for (const issue of error.issues) {
               logger.error(
@@ -384,7 +313,6 @@ export function asciidocLoader(contentFolderName: string) {
               );
             }
           }
-
           return;
         }
 
@@ -417,4 +345,61 @@ export function asciidocLoader(contentFolderName: string) {
       }
     },
   } satisfies Loader;
+}
+
+function getFilePathAndSlug(
+  projectRoot: string,
+  collectionRoot: string,
+  absoluteFilePath: string,
+): FilePathAndSlug {
+  const extension = extname(absoluteFilePath).toLowerCase();
+  const filename = basename(absoluteFilePath, extension);
+
+  if (
+    !SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.has(extension) ||
+    !/^[\w\s\d-]+$/.test(filename)
+  ) {
+    throw new Error(
+      `Invalid AsciiDoc filename in ${absoluteFilePath}. Filenames may contain words, digits, spaces, and hyphens.`,
+    );
+  }
+
+  const pathRelativeToRoot = toPosixPath(
+    relative(projectRoot, absoluteFilePath),
+  );
+  const pathRelativeToCollection = toPosixPath(
+    relative(collectionRoot, absoluteFilePath),
+  );
+  const slugSource = pathRelativeToCollection.slice(
+    0,
+    pathRelativeToCollection.length - extension.length,
+  );
+  const slug = generateSlug(slugSource.replaceAll('/', '-'));
+
+  return { pathRelativeToRoot, slug };
+}
+
+function isSupportedFile(filePath: string): boolean {
+  return SUPPORTED_ASCIIDOC_FILE_EXTENSIONS.has(
+    extname(filePath).toLowerCase(),
+  );
+}
+
+function resolveWatcherPath(filePath: string, projectRoot: string): string {
+  return isAbsolute(filePath)
+    ? resolve(filePath)
+    : resolve(projectRoot, filePath);
+}
+
+function isInsideDirectory(filePath: string, directory: string): boolean {
+  const normalizedFilePath = resolve(filePath);
+  const normalizedDirectory = resolve(directory);
+  return (
+    normalizedFilePath === normalizedDirectory ||
+    normalizedFilePath.startsWith(`${normalizedDirectory}${sep}`)
+  );
+}
+
+function toPosixPath(filePath: string): string {
+  return filePath.replaceAll('\\', '/');
 }

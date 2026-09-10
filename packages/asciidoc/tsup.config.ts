@@ -1,12 +1,14 @@
 import { defineConfig } from 'tsup';
 import fs from 'node:fs';
+import path from 'node:path';
 import {
   createPackageJsonSchema,
   transformPackageJSON_ExportsForBuild,
   type PackageJSON,
 } from '../../shared/generateNewPackageJSON';
 
-const BUILD_REGEX_STRING = '^tsup\\s+--outDir\\s+(?:\\.*\\/)*[a-z]+(?:\\/[a-z]+)+';
+const BUILD_REGEX_STRING =
+  '^tsup\\s+--outDir\\s+(?:\\.*\\/)*[a-z]+(?:\\/[a-z]+)+';
 const BUILD_REGEX_MESSAGE =
   "The 'build' script must be in the format 'tsup --outDir <path>', where <path> must contain at least two lowercase letter segments.";
 
@@ -25,9 +27,9 @@ const PackageJsonSchema = PackageJsonSchemaResult;
 
 export default defineConfig((ctx) => ({
   entry: {
-    'index': './src/index.ts',
+    index: './src/index.ts',
     'lib/unocss': './src/lib/unocss.ts',
-    'lib/tailwind': './src/lib/tailwind.ts'
+    'lib/tailwind': './src/lib/tailwind.ts',
   },
   outDir: '../../dist/packages/asciidoc', // Output to dist folder
   format: ['esm'],
@@ -38,33 +40,22 @@ export default defineConfig((ctx) => ({
   publicDir: true,
   splitting: false, // Disable code splitting to prevent chunking
   async onSuccess() {
-    fs.readFile(
-      'package.json',
-      { encoding: 'utf-8', flag: 'r' },
-      function (err, data) {
-        if (err) throw err;
+    const packageJSON: PackageJSON = PackageJsonSchema.parse(
+      JSON.parse(fs.readFileSync('package.json', 'utf-8')),
+    );
+    const newPackageJSON = transformPackageJSON_ExportsForBuild(
+      packageJSON,
+      [],
+    );
 
-        const packageJSON: PackageJSON = PackageJsonSchema.parse(
-          JSON.parse(data),
-        );
-
-        const valuesToIgnoreInExports: string[] = []; // This remains empty as per original code
-
-        // Use the shared transformation function
-        const newPackageJSON = transformPackageJSON_ExportsForBuild(
-          packageJSON,
-          valuesToIgnoreInExports,
-        );
-
-        fs.writeFile(
-          `${ctx.outDir}/package.json`,
-          JSON.stringify(newPackageJSON, null, 2),
-          { encoding: 'utf-8', flag: 'w' },
-          function (err) {
-            if (err) throw err;
-          },
-        );
-      },
+    fs.copyFileSync(
+      path.resolve('../../LICENSE'),
+      path.join(ctx.outDir, 'LICENSE'),
+    );
+    fs.writeFileSync(
+      path.join(ctx.outDir, 'package.json'),
+      JSON.stringify(newPackageJSON, null, 2),
+      'utf-8',
     );
   },
 }));

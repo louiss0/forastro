@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-
 import type { Props, SSRResult } from 'astro';
 
 export type HasForEachMethod = {

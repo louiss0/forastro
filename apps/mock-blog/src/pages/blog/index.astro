@@ -9,7 +9,7 @@ import { Image } from 'astro:assets';
 
 const posts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
 	(a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) =>
-		b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+		new Date(b.data.updatedAt).valueOf() - new Date(a.data.updatedAt).valueOf(),
 );
 ---
 
@@ -101,7 +101,7 @@ const posts: CollectionEntry<'blog'>[] = (await getCollection('blog')).sort(
 									)}
 									<h4 class="title">{post.data.title}</h4>
 									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
+										<FormattedDate date={post.data.updatedAt} />
 									</p>
 								</a>
 							</li>

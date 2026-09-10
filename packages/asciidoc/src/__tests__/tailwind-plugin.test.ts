@@ -1,9 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
 
 // Mock the plugin creation function
-const mockPluginHandler = vi.fn();
 vi.mock('tailwindcss/plugin', () => ({
-  default: vi.fn(() => ({ pluginCreated: true }))
+  default: vi.fn(() => ({ pluginCreated: true })),
 }));
 
 // Mock colors
@@ -13,8 +12,8 @@ vi.mock('tailwindcss/colors', () => ({
     zinc: { 50: '#fafafa', 900: '#18181b' },
     neutral: { 50: '#fafafa', 900: '#171717' },
     gray: { 50: '#f9fafb', 900: '#111827' },
-    stone: { 50: '#fafaf9', 900: '#1c1917' }
-  }
+    stone: { 50: '#fafaf9', 900: '#1c1917' },
+  },
 }));
 
 import plugin from 'tailwindcss/plugin';

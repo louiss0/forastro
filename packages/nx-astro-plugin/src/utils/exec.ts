@@ -51,7 +51,11 @@ export async function run(cmd: string, args: string[], cwd: string) {
  *   console.log('Prettier formatting skipped');
  * }
  */
-export async function tryRun(cmd: string, args: string[], cwd: string): Promise<boolean> {
+export async function tryRun(
+  cmd: string,
+  args: string[],
+  cwd: string,
+): Promise<boolean> {
   try {
     await run(cmd, args, cwd);
     return true;

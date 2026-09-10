@@ -51,11 +51,16 @@ tags: []
 }
 
 function generateAsciidocContent(title: string): string {
+  const date = new Date().toISOString().slice(0, 10);
   return `= ${title}
-:description:
-:tags:
-:draft: true
-:pubDate: ${new Date().toISOString()}
+Generated Author <author@example.com>
+:author: Generated Author
+:authors: Generated Author
+:email: author@example.com
+:description: This generated document contains a useful description for your new content entry.
+:docdate: ${date}
+:localdate: ${date}
+:created-at: ${date}
 
 == Introduction
 
@@ -114,7 +119,7 @@ export default async function generator(tree: Tree, options: Schema) {
     throw new Error(
       `Collection '${options.collection}' not found.\n` +
         `Available collections: ${availableCollections.length > 0 ? availableCollections.join(', ') : 'none'}\n` +
-        `Create a collection in src/content/config.ts or as a directory in src/content/`,
+        `Create a collection in src/content.config.ts or as a directory in src/content/`,
     );
   }
 

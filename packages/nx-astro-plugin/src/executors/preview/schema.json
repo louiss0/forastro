@@ -5,9 +5,25 @@
   "properties": {
     "port": { "type": "number", "description": "Port to listen on" },
     "host": { "type": "string", "description": "Hostname to bind to" },
-    "outDir": { "type": "string", "default": "dist", "description": "Output directory" },
-    "allowGlobal": { "type": "boolean", "default": true, "description": "Allow global astro binary as fallback" },
-    "binOverride": { "type": "string", "description": "Explicit path to astro binary" },
-    "args": { "type": "array", "items": { "type": "string" }, "description": "Extra CLI arguments" }
+    "outDir": {
+      "type": "string",
+      "default": "dist",
+      "description": "Output directory"
+    },
+    "config": { "type": "string", "description": "Path to custom config file" },
+    "allowGlobal": {
+      "type": "boolean",
+      "default": true,
+      "description": "Allow global astro binary as fallback"
+    },
+    "binOverride": {
+      "type": "string",
+      "description": "Explicit path to astro binary"
+    },
+    "args": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Extra CLI arguments"
+    }
   }
 }

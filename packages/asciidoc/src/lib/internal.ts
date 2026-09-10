@@ -12,23 +12,18 @@ import prismjs from 'prismjs';
 import loadLanguages from 'prismjs/components/index.js';
 import asciidoctor from 'asciidoctor';
 
-export const getAsciidocPaths = z
-  .function({
-    input: [
-      z
-        .string()
-        .min(
-          1,
-          "Don't pass in an empty string pass in a value with forward slashes and words instead",
-        ),
-    ],
-    output: z.promise(z.array(z.string())),
-  })
-  .implementAsync(async (folderName: string) => {
-    return glob('**/*.{adoc,asciidoc}', {
-      cwd: folderName,
-    });
+export async function getAsciidocPaths(folderName: string) {
+  z.string()
+    .min(
+      1,
+      "Don't pass in an empty string pass in a value with forward slashes and words instead",
+    )
+    .parse(folderName);
+
+  return glob('**/*.{adoc,asciidoc}', {
+    cwd: folderName,
   });
+}
 
 const renderSchema = z.function({
   input: [
@@ -115,8 +110,7 @@ const bundledThemeNames = Object.keys(bundledThemes) as unknown as Array<
 >;
 
 const BundledLanguageNamesSchema = z.enum([
-  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  bundledThemeNames[0]!,
+  bundledThemeNames[0] as string,
   ...bundledThemeNames.slice(1),
 ]);
 
@@ -419,17 +413,7 @@ type AsciidocConfigObjectSchema = z.infer<typeof asciidocConfigObjectSchema>;
 export class AsciidocProcessorController {
   #processor = asciidoctor();
 
-  static #instance: AsciidocProcessorController | undefined;
-
   #shikiHighlighter: Awaited<ReturnType<typeof createHighlighter>> | undefined;
-
-  constructor() {
-    if (AsciidocProcessorController.#instance) {
-      return AsciidocProcessorController.#instance;
-    }
-
-    AsciidocProcessorController.#instance = this;
-  }
 
   registerPrism_JS(languages: z.infer<typeof PrismLanguagesSchema>) {
     loadLanguages(languages);
@@ -444,25 +428,25 @@ export class AsciidocProcessorController {
       },
       handlesHighlighting: () => true,
       highlight(_, source, lang = 'plaintext') {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        return prismjs.highlight(source, prismjs.languages[lang]!, lang);
+        const grammar =
+          prismjs.languages[lang] ?? prismjs.languages['plaintext'];
+        return grammar ? prismjs.highlight(source, grammar, lang) : source;
       },
     });
   }
 
   async registerShiki(themeOptions: {
-    light: BundledTheme;
-    dark: BundledTheme;
-    dim?: BundledTheme;
+    light: string;
+    dark: string;
+    dim?: string;
   }) {
-    this.#shikiHighlighter =
-      this.#shikiHighlighter &&
-      (await createHighlighter({
-        themes: themeOptions.dim
-          ? [themeOptions.light, themeOptions.dark, themeOptions.dim]
-          : [themeOptions.light, themeOptions.dark],
-        langs: Object.keys(bundledLanguages),
-      }));
+    const themes = themeOptions.dim
+      ? [themeOptions.light, themeOptions.dark, themeOptions.dim]
+      : [themeOptions.light, themeOptions.dark];
+    this.#shikiHighlighter = await createHighlighter({
+      themes: themes as BundledTheme[],
+      langs: Object.keys(bundledLanguages),
+    });
 
     const highlighter = this.#shikiHighlighter;
 

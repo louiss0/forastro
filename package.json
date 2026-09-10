@@ -8,11 +8,15 @@
   },
   "scripts": {
     "preversion": "pnpm -w -r run build",
-    "lint:affected": "pnpm nx affected -t lint --parallel --exclude=@forastro/nx-astro-plugin",
-    "test:affected": "pnpm nx affected -t test --parallel --exclude=@forastro/nx-astro-plugin",
-    "build:affected": "pnpm nx affected -t build --parallel",
-    "check:affected": "pnpm nx affected -t check --parallel",
-    "ci": "pnpm -w install --frozen-lockfile  pnpm run lint:affected  pnpm run test:affected  pnpm run check:affected  pnpm run build:affected"
+    "lint:affected": "cross-env NX_DAEMON=false pnpm nx affected -t lint --parallel --exclude=@forastro/nx-astro-plugin",
+    "test:affected": "cross-env NX_DAEMON=false pnpm nx affected -t test --parallel --exclude=@forastro/nx-astro-plugin",
+    "build:affected": "cross-env NX_DAEMON=false pnpm nx affected -t build --parallel --base=origin/main --head=HEAD",
+    "type-check:affected": "cross-env NX_DAEMON=false pnpm nx affected -t type-check --parallel --base=origin/main --head=HEAD",
+    "check:affected": "cross-env NX_DAEMON=false pnpm nx affected -t check --parallel --base=origin/main --head=HEAD",
+    "format:check": "prettier --check .",
+    "verify:packages": "cross-env NX_DAEMON=false pnpm nx run-many -t build --projects=asciidoc,utilities,@forastro/nx-astro-plugin --parallel && pnpm exec publint dist/packages/asciidoc && pnpm exec publint dist/packages/utilities && pnpm exec publint dist/packages/nx-astro-plugin && node tools/scripts/verify-packed-packages.mjs",
+    "verify:generated-app": "node tools/scripts/verify-generated-app.mjs",
+    "ci": "pnpm -w install --frozen-lockfile && pnpm run format:check && cross-env NX_DAEMON=false pnpm nx run-many -t lint --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t test --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t type-check --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t check --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t build --all --parallel=1 && pnpm run verify:packages"
   },
   "private": true,
   "devDependencies": {
@@ -21,7 +25,6 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^8.57.0",
     "@faker-js/faker": "^9.9.0",
-    "@forastro/asciidoc": "^2.3.4",
     "@nx/devkit": "23.2.0",
     "@nx/esbuild": "23.2.0",
     "@nx/eslint": "23.2.0",
@@ -44,6 +47,7 @@
     "ajv-formats": "^2.1.1",
     "astro": "^7.3.2",
     "astro-eslint-parser": "^1.2.2",
+    "cross-env": "^7.0.3",
     "esbuild": "^0.25.8",
     "eslint": "9.33.0",
     "eslint-config-prettier": "10.1.8",
@@ -54,6 +58,7 @@
     "jsonc-eslint-parser": "^2.4.0",
     "nx": "23.2.0",
     "prettier": "^3.6.2",
+    "publint": "^0.3.24",
     "tslib": "^2.8.1",
     "tsup": "^8.5.0",
     "tsx": "^4.20.5",
@@ -70,7 +75,7 @@
     "@fontsource/raleway": "^5.2.6",
     "@unocss/reset": "^66.4.2",
     "astro-icon": "^1.2.0",
-    "sharp": "^0.32.6",
+    "sharp": "^0.35.4",
     "unocss": "^66.5.0"
   }
 }

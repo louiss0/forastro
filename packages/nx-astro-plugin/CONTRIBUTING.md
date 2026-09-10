@@ -25,22 +25,26 @@ Thank you for your interest in contributing to the Nx Astro Plugin! This guide w
 ### Initial Setup
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/your-org/forastro.git
    cd forastro
    ```
 
 2. **Install dependencies:**
+
    ```bash
    pnpm install
    ```
 
 3. **Verify Nx is available:**
+
    ```bash
    pnpm dlx nx --version
    ```
 
 4. **Run baseline tests:**
+
    ```bash
    pnpm nx test nx-astro-plugin --coverage
    ```
@@ -53,6 +57,7 @@ Thank you for your interest in contributing to the Nx Astro Plugin! This guide w
 ### Editor Setup (Optional)
 
 For the best development experience, we recommend:
+
 - **Micro** editor with plugins: lsp, wakatime, detectindent, fzf, jump
 - **VS Code** with TypeScript, Prettier, and ESLint extensions
 - **Theme preferences**: Nord or Dracula
@@ -84,6 +89,7 @@ We follow the **Conventional Commits** specification:
 ```
 
 **Type** must be one of:
+
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation only
@@ -98,11 +104,13 @@ We follow the **Conventional Commits** specification:
 **Scope** should be `nx-astro-plugin` for this package.
 
 **Subject** must be:
+
 - Written in imperative mood (e.g., "add", "fix", "update")
 - Maximum 64 characters
 - No trailing period
 
 **Examples:**
+
 ```bash
 feat(nx-astro-plugin): add Starlight docs generator
 fix(nx-astro-plugin): handle Windows paths correctly
@@ -113,6 +121,7 @@ docs(nx-astro-plugin): update README with new options
 ### Testing Requirements
 
 Before committing, ensure:
+
 1. All tests pass: `pnpm nx test nx-astro-plugin`
 2. Linting passes: `pnpm nx lint nx-astro-plugin`
 3. Build succeeds: `pnpm nx build nx-astro-plugin`
@@ -163,12 +172,14 @@ packages/nx-astro-plugin/
 ### Executors vs. Generators
 
 **Executors** run tasks/commands:
+
 - Located in `src/executors/<name>/`
 - Each has: `executor.ts`, `schema.json`, `schema.d.ts`
 - Examples: `build`, `dev`, `preview`, `check`, `sync`
 - Purpose: Wrap Astro CLI commands with Nx integration
 
 **Generators** scaffold code:
+
 - Located in `src/generators/<name>/`
 - Each has: `generator.ts`, `schema.json`, `schema.d.ts`, `files/` (optional)
 - Examples: `app`, `component`, `page`, `content`
@@ -177,21 +188,25 @@ packages/nx-astro-plugin/
 ### Utility Modules
 
 **`utils/astro.ts`**
+
 - Detect Astro config files
 - Parse integration configurations
 - Validate Astro project structure
 
 **`utils/exec.ts`**
+
 - Execute shell commands safely
 - Handle command output and errors
 - Provide both throwing (`run`) and safe (`tryRun`) variants
 
 **`utils/pm.ts`**
+
 - Detect package manager (pnpm, npm, yarn)
 - Resolve Astro binary location
 - Check for ESLint and other tooling
 
 **`utils/naming.ts`**
+
 - Convert names to different cases (kebab, pascal, camel)
 - Normalize file names and identifiers
 - Validate naming conventions
@@ -239,7 +254,7 @@ describe('my-generator', () => {
 
   it('should create expected files', async () => {
     await myGenerator(tree, { project: 'test-app' });
-    
+
     expect(tree.exists('apps/test-app/src/index.astro')).toBe(true);
   });
 
@@ -252,6 +267,7 @@ describe('my-generator', () => {
 ### Mocking Strategy
 
 **For executors:**
+
 ```typescript
 vi.mock('execa');
 vi.mock('../../utils/pm.js', () => ({
@@ -260,6 +276,7 @@ vi.mock('../../utils/pm.js', () => ({
 ```
 
 **For generators:**
+
 ```typescript
 vi.mock('../../utils/astro.js', () => ({
   detectIntegrations: vi.fn(),
@@ -276,12 +293,14 @@ vi.mock('../../utils/astro.js', () => ({
 ### Coverage Requirements
 
 **New code should aim for:**
+
 - Statements: 100%
 - Branches: 90%+
 - Functions: 100%
 - Lines: 100%
 
 **Focus coverage on:**
+
 - All public APIs
 - Error handling paths
 - Edge cases and boundary conditions
@@ -292,6 +311,7 @@ vi.mock('../../utils/astro.js', () => ({
 ### Adding a New Generator
 
 1. **Create generator structure:**
+
    ```bash
    mkdir -p src/generators/my-feature
    cd src/generators/my-feature
@@ -304,8 +324,14 @@ vi.mock('../../utils/astro.js', () => ({
    - `files/` - Template files (optional)
 
 3. **Implement the generator:**
+
    ```typescript
-   import { Tree, formatFiles, generateFiles, joinPathFragments } from '@nx/devkit';
+   import {
+     Tree,
+     formatFiles,
+     generateFiles,
+     joinPathFragments,
+   } from '@nx/devkit';
    import type { MyFeatureSchema } from './schema';
 
    /**
@@ -320,7 +346,7 @@ vi.mock('../../utils/astro.js', () => ({
     */
    export default async function myFeatureGenerator(
      tree: Tree,
-     options: MyFeatureSchema
+     options: MyFeatureSchema,
    ) {
      // Validate inputs
      // Create files
@@ -330,6 +356,7 @@ vi.mock('../../utils/astro.js', () => ({
    ```
 
 4. **Define the schema (`schema.json`):**
+
    ```json
    {
      "$schema": "http://json-schema.org/schema",
@@ -347,6 +374,7 @@ vi.mock('../../utils/astro.js', () => ({
    ```
 
 5. **Register in `generators.json`:**
+
    ```json
    {
      "my-feature": {
@@ -358,11 +386,12 @@ vi.mock('../../utils/astro.js', () => ({
    ```
 
 6. **Write comprehensive tests:**
+
    ```typescript
    describe('my-feature generator', () => {
-     it('should create expected files', async () => { });
-     it('should handle existing files gracefully', async () => { });
-     it('should validate required options', async () => { });
+     it('should create expected files', async () => {});
+     it('should handle existing files gracefully', async () => {});
+     it('should validate required options', async () => {});
    });
    ```
 
@@ -375,6 +404,7 @@ vi.mock('../../utils/astro.js', () => ({
 ### Adding a New Executor
 
 1. **Create executor structure:**
+
    ```bash
    mkdir -p src/executors/my-command
    cd src/executors/my-command
@@ -386,6 +416,7 @@ vi.mock('../../utils/astro.js', () => ({
    - `schema.d.ts` - TypeScript types
 
 3. **Implement the executor:**
+
    ```typescript
    import type { ExecutorContext } from '@nx/devkit';
    import { execa } from 'execa';
@@ -407,7 +438,7 @@ vi.mock('../../utils/astro.js', () => ({
     */
    export default async function runExecutor(
      options: MyCommandOptions,
-     context: ExecutorContext
+     context: ExecutorContext,
    ) {
      // Resolve project directory
      // Build command arguments
@@ -418,6 +449,7 @@ vi.mock('../../utils/astro.js', () => ({
    ```
 
 4. **Register in `executors.json`:**
+
    ```json
    {
      "my-command": {
@@ -437,6 +469,7 @@ vi.mock('../../utils/astro.js', () => ({
 ### Schema Validation Rules
 
 **For enums, use:**
+
 ```json
 {
   "style": {
@@ -448,6 +481,7 @@ vi.mock('../../utils/astro.js', () => ({
 ```
 
 **For prompts, use:**
+
 ```json
 {
   "project": {
@@ -458,6 +492,7 @@ vi.mock('../../utils/astro.js', () => ({
 ```
 
 **For interactive prompts:**
+
 ```json
 {
   "includeExamples": {
@@ -478,23 +513,26 @@ vi.mock('../../utils/astro.js', () => ({
 This project follows a **clarity-first** coding philosophy inspired by Go conventions:
 
 1. **Readability over cleverness** - Code should be straightforward
-2. **Self-documenting** - Use descriptive names; comments explain *why*
+2. **Self-documenting** - Use descriptive names; comments explain _why_
 3. **Consistent patterns** - Follow established patterns in the codebase
 4. **Error as values** - Return errors explicitly; avoid throwing for control flow
 
 ### TypeScript Guidelines
 
 **Strict mode:**
+
 - Use `strict: true` in tsconfig
 - Avoid `any`; prefer `unknown` for truly dynamic types
 - Use explicit return types for public APIs
 
 **Imports:**
+
 - Group imports: Node.js built-ins → External packages → Internal modules
 - Use type imports: `import type { Type } from 'module'`
 - Prefer named exports over default exports (except for generators/executors)
 
 **Naming conventions:**
+
 - **Functions**: `camelCase`, action-oriented (e.g., `createComponent`, `validateProject`)
 - **Classes/Interfaces**: `PascalCase` (e.g., `GeneratorSchema`, `ExecutorOptions`)
 - **Constants**: `SCREAMING_SNAKE_CASE` for true constants, `camelCase` for config objects
@@ -503,6 +541,7 @@ This project follows a **clarity-first** coding philosophy inspired by Go conven
 ### Error Handling
 
 **Prefer explicit returns:**
+
 ```typescript
 // Good
 const result = await tryRun(command, args);
@@ -520,17 +559,19 @@ try {
 ```
 
 **Provide actionable error messages:**
+
 ```typescript
 throw new Error(
   `Starlight integration not found. Install it with:\n` +
-  `  pnpm add -D @astrojs/starlight\n` +
-  `Then add it to your astro.config.mjs integrations array.`
+    `  pnpm add -D @astrojs/starlight\n` +
+    `Then add it to your astro.config.mjs integrations array.`,
 );
 ```
 
 ### Cross-Platform Path Handling
 
 **Always use path utilities:**
+
 ```typescript
 // Good - cross-platform
 import { joinPathFragments } from '@nx/devkit';
@@ -545,6 +586,7 @@ const filePath = `${sourceRoot}/components/Button.astro`;
 ```
 
 **Normalize paths in tests:**
+
 ```typescript
 // When testing on Windows
 const normalized = filePath.replace(/\\/g, '/');
@@ -554,6 +596,7 @@ expect(normalized).toBe('apps/my-site/src/components/Button.astro');
 ### JSDoc Documentation
 
 **All public APIs must have:**
+
 ```typescript
 /**
  * Brief description of what the function does.
@@ -583,6 +626,7 @@ expect(normalized).toBe('apps/my-site/src/components/Button.astro');
 ```
 
 **Key requirements:**
+
 - Start with a concise summary
 - Document all parameters with `@param`
 - Include `@returns` describing the return value
@@ -608,6 +652,7 @@ Before opening a pull request, ensure:
 ### Opening a Pull Request
 
 1. **Push your feature branch:**
+
    ```bash
    git push origin feature/my-feature-name
    ```
@@ -656,17 +701,20 @@ npm pack
 ### Testing in a Local Workspace
 
 1. **Create a test workspace:**
+
    ```bash
    npx create-nx-workspace@latest test-workspace
    cd test-workspace
    ```
 
 2. **Install your local plugin:**
+
    ```bash
    pnpm add -D /path/to/forastro/dist/packages/nx-astro-plugin/forastro-nx-astro-plugin-*.tgz
    ```
 
 3. **Test generators:**
+
    ```bash
    pnpm nx g @forastro/nx-astro-plugin:app my-test-app
    pnpm nx g @forastro/nx-astro-plugin:component MyComponent --project=my-test-app
@@ -682,20 +730,23 @@ npm pack
 ### Debugging Tips
 
 **Enable verbose logging:**
+
 ```bash
 NX_VERBOSE_LOGGING=true pnpm nx run my-app:build
 ```
 
 **Debug with Node inspector:**
+
 ```bash
 node --inspect-brk node_modules/.bin/nx run my-app:build
 ```
 
 **Check generated files:**
+
 ```typescript
 // In tests, inspect the tree
 console.log(tree.listChanges());
-tree.listChanges().forEach(change => {
+tree.listChanges().forEach((change) => {
   console.log(change.path, change.type);
   if (change.type === 'CREATE') {
     console.log(tree.read(change.path, 'utf-8'));
@@ -704,6 +755,7 @@ tree.listChanges().forEach(change => {
 ```
 
 **Mock debugging:**
+
 ```typescript
 // Log mock calls
 const mockFn = vi.fn();

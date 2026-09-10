@@ -48,7 +48,7 @@
     "node": ">=18.17.0 || >=20.0.0"
   },
   "dependencies": {
-    "@nx/devkit": "^23.2.0",
+    "@nx/devkit": "23.2.0",
     "execa": "^9.6.0"
   },
   "devDependencies": {
@@ -59,7 +59,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/louiss0/forastro",
+    "url": "git+https://github.com/louiss0/forastro.git",
     "directory": "packages/nx-astro-plugin"
   },
   "bugs": {

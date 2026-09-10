@@ -44,7 +44,7 @@
     "check": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "node -e \"process.exit(0)\""
+        "command": "pnpm tsc -p packages/asciidoc/tsconfig.lib.json --noEmit"
       }
     }
   }

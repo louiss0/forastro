@@ -1,5 +1,8 @@
 import { describe, it, expect } from 'vitest';
-import { normalizeAsciiDocAttributes, type DocumentAttributes } from '../lib/asciidoc';
+import {
+  normalizeAsciiDocAttributes,
+  type DocumentAttributes,
+} from '../lib/asciidoc';
 
 describe('normalizeAsciiDocAttributes', () => {
   it('should convert empty strings to true', () => {
@@ -35,7 +38,7 @@ describe('normalizeAsciiDocAttributes', () => {
   it('should convert dash-case and snake_case keys to camelCase', () => {
     const input: DocumentAttributes = {
       'user-name': 'john',
-      'api_key': '12345',
+      api_key: '12345',
       'source-highlighter': 'shiki',
       normal: 'unchanged',
     };
@@ -95,7 +98,7 @@ describe('normalizeAsciiDocAttributes', () => {
   it('should handle CSV pattern matching edge cases', () => {
     const input: DocumentAttributes = {
       'single-trailing-comma': 'value,',
-      'multiple-spaces': 'one,   two,   three',  
+      'multiple-spaces': 'one,   two,   three',
       'no-spaces': 'one,two,three', // Should NOT match CSV pattern
       'mixed-format': 'normal text, not csv',
     };

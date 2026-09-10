@@ -2,6 +2,7 @@
   "name": "@forastro/template_astro-preact",
   "type": "module",
   "version": "0.0.1",
+  "private": true,
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -15,19 +16,19 @@
     "directory": "/packages/astro-preact"
   },
   "dependencies": {
-    "@code-fixer-23/cn-efs": "*",
-    "@forastro/utilities": "*",
-    "preact": "*",
-    "ts-pattern": "*"
+    "@code-fixer-23/cn-efs": "^3.0.1",
+    "@forastro/utilities": "workspace:*",
+    "preact": "^10.29.8",
+    "ts-pattern": "^5.8.0"
   },
   "devDependencies": {
     "@astrojs/preact": "^6.0.5",
     "@fontsource/lato": "^5.3.0",
     "@fontsource/raleway": "^5.3.0",
-    "@iconify/json": "*",
-    "@svgr/core": "*",
+    "@iconify/json": "^2.2.373",
+    "@svgr/core": "^8.1.0",
     "astro": "^7.3.2",
-    "unocss": "*",
-    "unplugin-icons": "*"
+    "unocss": "^66.5.0",
+    "unplugin-icons": "^22.2.0"
   }
 }

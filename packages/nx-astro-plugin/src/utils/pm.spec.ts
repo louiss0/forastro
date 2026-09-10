@@ -1,7 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { existsSync, readFileSync } from 'node:fs';
 import { execa } from 'execa';
-import { detectPackageManager, resolveAstroBinary, getExecFor, workspaceHasEslint } from './pm.js';
+import {
+  detectPackageManager,
+  resolveAstroBinary,
+  getExecFor,
+  workspaceHasEslint,
+} from './pm.js';
 
 // Mock dependencies
 vi.mock('node:fs');
@@ -25,7 +30,10 @@ describe('detectPackageManager', () => {
       return p.includes('pnpm-lock.yaml') && p.includes('project');
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('pnpm');
   });
 
@@ -35,7 +43,10 @@ describe('detectPackageManager', () => {
       return p.includes('package-lock.json') && p.includes('project');
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('npm');
   });
 
@@ -45,7 +56,10 @@ describe('detectPackageManager', () => {
       return p.includes('yarn.lock') && p.includes('project');
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('yarn');
   });
 
@@ -55,7 +69,10 @@ describe('detectPackageManager', () => {
       return p.includes('bun.lockb') && p.includes('project');
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('bun');
   });
 
@@ -64,10 +81,16 @@ describe('detectPackageManager', () => {
       const p = String(path);
       const normalized = p.replace(/\\+/g, '/');
       // No project lockfile, but workspace has pnpm-lock.yaml
-      return normalized.includes('/workspace/pnpm-lock.yaml') && !normalized.includes('/apps/project/');
+      return (
+        normalized.includes('/workspace/pnpm-lock.yaml') &&
+        !normalized.includes('/apps/project/')
+      );
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('pnpm');
   });
 
@@ -76,10 +99,16 @@ describe('detectPackageManager', () => {
     mockExistsSync.mockImplementation((path: unknown) => {
       const p = String(path);
       const normalized = p.replace(/\\+/g, '/');
-      return normalized.includes('/workspace/yarn.lock') && !normalized.includes('/apps/project/');
+      return (
+        normalized.includes('/workspace/yarn.lock') &&
+        !normalized.includes('/apps/project/')
+      );
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('yarn');
   });
 
@@ -87,12 +116,19 @@ describe('detectPackageManager', () => {
     mockExistsSync.mockReturnValue(false);
     mockExeca.mockImplementation((cmd: string) => {
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '10.0.0',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('pnpm');
   });
 
@@ -100,12 +136,19 @@ describe('detectPackageManager', () => {
     mockExistsSync.mockReturnValue(false);
     mockExeca.mockImplementation((cmd: string) => {
       if (cmd === 'npm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '10.0.0',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
 
-    const pm = await detectPackageManager('/workspace/apps/project', '/workspace');
+    const pm = await detectPackageManager(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(pm).toBe('npm');
   });
 
@@ -114,7 +157,7 @@ describe('detectPackageManager', () => {
     mockExeca.mockRejectedValue(new Error('not found'));
 
     await expect(
-      detectPackageManager('/workspace/apps/project', '/workspace')
+      detectPackageManager('/workspace/apps/project', '/workspace'),
     ).rejects.toThrow('No package manager detected');
   });
 });
@@ -140,12 +183,18 @@ describe('workspaceHasEslint', () => {
   const mockReadFileSync = vi.mocked(readFileSync);
 
   it('returns true when devDependencies.eslint exists', () => {
-    mockReadFileSync.mockReturnValueOnce(Buffer.from(JSON.stringify({ devDependencies: { eslint: '^9.0.0' } })) as any);
+    mockReadFileSync.mockReturnValueOnce(
+      Buffer.from(
+        JSON.stringify({ devDependencies: { eslint: '^9.0.0' } }),
+      ) as any,
+    );
     expect(workspaceHasEslint('/workspace')).toBe(true);
   });
 
   it('returns false when package.json missing or invalid', () => {
-    mockReadFileSync.mockImplementationOnce(() => { throw new Error('no file'); });
+    mockReadFileSync.mockImplementationOnce(() => {
+      throw new Error('no file');
+    });
     expect(workspaceHasEslint('/workspace')).toBe(false);
   });
 });
@@ -168,7 +217,10 @@ describe('resolveAstroBinary', () => {
       return p.includes('project') && p.includes('node_modules');
     });
 
-    const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace');
+    const bin = await resolveAstroBinary(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     const normalized = bin.replace(/\\/g, '/');
     expect(normalized).toContain('/project/node_modules/.bin/astro');
   });
@@ -182,11 +234,15 @@ describe('resolveAstroBinary', () => {
       // On Windows, path.join uses backslashes even if platform is mocked
       // So we need to check for both forward and backslashes
       const normalizedPath = pathStr.replace(/\\/g, '/');
-      const isWorkspaceBin = normalizedPath === '/workspace/node_modules/.bin/astro';
+      const isWorkspaceBin =
+        normalizedPath === '/workspace/node_modules/.bin/astro';
       return isWorkspaceBin;
     });
 
-    const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace');
+    const bin = await resolveAstroBinary(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     // Normalize the result for comparison
     const normalizedBin = bin.replace(/\\/g, '/');
     expect(normalizedBin).toBe('/workspace/node_modules/.bin/astro');
@@ -200,10 +256,17 @@ describe('resolveAstroBinary', () => {
 
     mockExistsSync.mockImplementation((path: unknown) => {
       const p = String(path);
-      return p.includes('project') && p.includes('node_modules') && p.endsWith('.cmd');
+      return (
+        p.includes('project') &&
+        p.includes('node_modules') &&
+        p.endsWith('.cmd')
+      );
     });
 
-    const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace');
+    const bin = await resolveAstroBinary(
+      '/workspace/apps/project',
+      '/workspace',
+    );
     expect(bin).toMatch(/astro\.cmd$/);
 
     Object.defineProperty(process, 'platform', { value: originalPlatform });
@@ -216,16 +279,28 @@ describe('resolveAstroBinary', () => {
     mockExistsSync.mockReturnValue(false);
     mockExeca.mockImplementation((cmd: string, args?: readonly string[]) => {
       if (cmd === 'which' && args && args[0] === 'astro') {
-        return Promise.resolve({ stdout: '/usr/local/bin/astro', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '/usr/local/bin/astro',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       // PM detection fallback
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '10.0.0',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
 
-    const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace', true);
+    const bin = await resolveAstroBinary(
+      '/workspace/apps/project',
+      '/workspace',
+      true,
+    );
     expect(bin).toBe('/usr/local/bin/astro');
 
     Object.defineProperty(process, 'platform', { value: originalPlatform });
@@ -233,10 +308,16 @@ describe('resolveAstroBinary', () => {
 
   it('should throw if allowGlobal is false and local not found', async () => {
     mockExistsSync.mockReturnValue(false);
-    mockExeca.mockImplementation(() => Promise.resolve({ stdout: 'pnpm', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>));
+    mockExeca.mockImplementation(() =>
+      Promise.resolve({
+        stdout: 'pnpm',
+        stderr: '',
+        exitCode: 0,
+      } as unknown as Awaited<ReturnType<typeof execa>>),
+    );
 
     await expect(
-      resolveAstroBinary('/workspace/apps/project', '/workspace', false)
+      resolveAstroBinary('/workspace/apps/project', '/workspace', false),
     ).rejects.toThrow('Astro is not installed locally or in the workspace');
   });
 
@@ -245,7 +326,11 @@ describe('resolveAstroBinary', () => {
     // Mock PM detection to return pnpm
     mockExeca.mockImplementation((cmd: string) => {
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '10.0.0',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
@@ -275,12 +360,18 @@ describe('resolveAstroBinary', () => {
         return Promise.reject(new Error('not on PATH'));
       }
       if (cmd === 'pnpm') {
-        return Promise.resolve({ stdout: '10.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '10.0.0',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
 
-    await expect(resolveAstroBinary('/workspace/apps/project', '/workspace', true)).rejects.toThrow('pnpm add -D astro');
+    await expect(
+      resolveAstroBinary('/workspace/apps/project', '/workspace', true),
+    ).rejects.toThrow('pnpm add -D astro');
 
     Object.defineProperty(process, 'platform', { value: originalPlatform });
   });
@@ -295,12 +386,20 @@ describe('resolveAstroBinary', () => {
         return Promise.reject(new Error('which not available'));
       }
       if (cmd === 'astro' && args && args[0] === '--version') {
-        return Promise.resolve({ stdout: '5.0.0', stderr: '', exitCode: 0 } as unknown as Awaited<ReturnType<typeof execa>>);
+        return Promise.resolve({
+          stdout: '5.0.0',
+          stderr: '',
+          exitCode: 0,
+        } as unknown as Awaited<ReturnType<typeof execa>>);
       }
       return Promise.reject(new Error('not found'));
     });
 
-    const bin = await resolveAstroBinary('/workspace/apps/project', '/workspace', true);
+    const bin = await resolveAstroBinary(
+      '/workspace/apps/project',
+      '/workspace',
+      true,
+    );
     expect(bin).toBe('astro.cmd');
 
     Object.defineProperty(process, 'platform', { value: originalPlatform });

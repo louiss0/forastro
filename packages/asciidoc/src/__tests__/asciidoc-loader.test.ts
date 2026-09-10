@@ -1,5 +1,11 @@
-import { describe, it, expect, vi, beforeEach, type MockedFunction } from 'vitest';
-import { asciidocLoader, normalizeAsciiDocAttributes, type DocumentAttributes } from '../lib/asciidoc';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { resolve, join, sep } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import {
+  asciidocLoader,
+  normalizeAsciiDocAttributes,
+  type DocumentAttributes,
+} from '../lib/asciidoc';
 
 // Mock all external dependencies
 vi.mock('fs/promises', () => ({
@@ -45,10 +51,16 @@ vi.mock('asciidoctor', () => ({
 
 vi.mock('shiki', () => ({
   createHighlighter: vi.fn().mockResolvedValue({
-    codeToHtml: vi.fn().mockReturnValue('<pre><code>highlighted code</code></pre>'),
+    codeToHtml: vi
+      .fn()
+      .mockReturnValue('<pre><code>highlighted code</code></pre>'),
   }),
   bundledLanguages: { javascript: {}, typescript: {} },
-  bundledThemes: { 'github-dark': {}, 'github-light': {}, 'github-dark-dimmed': {} },
+  bundledThemes: {
+    'github-dark': {},
+    'github-light': {},
+    'github-dark-dimmed': {},
+  },
 }));
 
 vi.mock('prismjs', () => ({
@@ -69,6 +81,8 @@ import { loadConfig } from 'c12';
 import { createHighlighter } from 'shiki';
 
 describe('AsciiDoc Loader Tests', () => {
+  const projectRoot = resolve('project-root');
+
   // Setup mock context with tracking for proper function calls
   const mockContext = {
     store: {
@@ -77,7 +91,7 @@ describe('AsciiDoc Loader Tests', () => {
       delete: vi.fn(),
     },
     config: {
-      root: { pathname: '/project/root' },
+      root: pathToFileURL(`${projectRoot}${sep}`),
     },
     generateDigest: vi.fn().mockReturnValue('test-digest'),
     logger: {
@@ -129,7 +143,7 @@ describe('AsciiDoc Loader Tests', () => {
     it('should convert dash-case and snake_case keys to camelCase', () => {
       const input: DocumentAttributes = {
         'user-name': 'john',
-        'api_key': '12345',
+        api_key: '12345',
         'source-highlighter': 'shiki',
         normal: 'unchanged',
       };
@@ -175,10 +189,10 @@ describe('AsciiDoc Loader Tests', () => {
         getAttributes: vi.fn().mockReturnValue({
           'doc-title': 'Simple Document',
           'doc-date': '2023-12-25',
-          'author': 'John Doe',
-          'email': 'john@example.com',
-          'description': 'A simple document for testing',
-          'keywords': 'test, simple, asciidoc',
+          author: 'John Doe',
+          email: 'john@example.com',
+          description: 'A simple document for testing',
+          keywords: 'test, simple, asciidoc',
         }),
         convert: vi.fn().mockReturnValue('<div>Converted HTML</div>'),
         getImages: vi.fn().mockReturnValue([]),
@@ -209,13 +223,9 @@ describe('AsciiDoc Loader Tests', () => {
     });
 
     it('should validate content folder name format', async () => {
-      // Mock specific error for invalid folder name
-      const contentFolderNameError = new Error('Invalid content folder name');
-      vi.spyOn(console, 'error').mockImplementation(() => {});
-      
       // Create a loader with an invalid folder name
       const loader = asciidocLoader('invalid folder name!');
-      
+
       // When using a regex-based validator, it should reject this folder name
       await expect(loader.load(mockContext)).rejects.toThrow();
     });
@@ -237,13 +247,15 @@ describe('AsciiDoc Loader Tests', () => {
 
       // Verify glob was called to find .adoc files
       expect(glob).toHaveBeenCalledWith('**/*.{adoc,asciidoc}', {
-        cwd: '/project/root/content/posts',
+        cwd: join(projectRoot, 'content', 'posts'),
       });
-      
+
       // Verify file loading and store operations
       expect(mockProcessor.loadFile).toHaveBeenCalled();
       expect(mockContext.store.set).toHaveBeenCalled();
-      expect(mockContext.store.clear).toHaveBeenCalledBefore(mockContext.store.set);
+      expect(mockContext.store.clear).toHaveBeenCalledBefore(
+        mockContext.store.set,
+      );
     });
 
     it('should generate proper store entries with metadata', async () => {
@@ -269,7 +281,7 @@ describe('AsciiDoc Loader Tests', () => {
               ]),
             }),
           }),
-        })
+        }),
       );
     });
 
@@ -295,7 +307,7 @@ describe('AsciiDoc Loader Tests', () => {
       expect(createHighlighter).toHaveBeenCalled();
       expect(mockProcessor.SyntaxHighlighter.register).toHaveBeenCalledWith(
         'shiki',
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -317,7 +329,7 @@ describe('AsciiDoc Loader Tests', () => {
       // Verify prism highlighter registration
       expect(mockProcessor.SyntaxHighlighter.register).toHaveBeenCalledWith(
         'prism',
-        expect.any(Object)
+        expect.any(Object),
       );
     });
 
@@ -338,7 +350,7 @@ describe('AsciiDoc Loader Tests', () => {
 
       // Verify error was logged
       expect(mockContext.logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('Shiki theme not configured')
+        expect.stringContaining('Shiki theme not configured'),
       );
     });
 
@@ -357,9 +369,10 @@ describe('AsciiDoc Loader Tests', () => {
       const loader = asciidocLoader('content');
       await loader.load(mockContext);
 
-      // Verify error was logged
-      expect(mockContext.logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('Prism languages not configured')
+      // The schema supplies the documented default Prism language set.
+      expect(mockProcessor.SyntaxHighlighter.register).toHaveBeenCalledWith(
+        'prism',
+        expect.any(Object),
       );
     });
 
@@ -370,7 +383,7 @@ describe('AsciiDoc Loader Tests', () => {
       const loader = asciidocLoader('content');
 
       await expect(loader.load(mockContext)).rejects.toThrow(
-        expect.stringContaining("This path isn't correct")
+        'Invalid AsciiDoc filename',
       );
     });
 
@@ -426,9 +439,11 @@ describe('AsciiDoc Loader Tests', () => {
 
       // Should not throw but should log errors
       await loader.load(mockContext);
-      
+
       expect(mockContext.logger.error).toHaveBeenCalledWith(
-        expect.stringContaining('All attributes must be written in dashed or snake case')
+        expect.stringContaining(
+          'All attributes must be written using valid attribute names',
+        ),
       );
     });
 
@@ -438,9 +453,18 @@ describe('AsciiDoc Loader Tests', () => {
         await loader.load(mockContext);
 
         // Verify watcher event handlers are registered
-        expect(mockContext.watcher.on).toHaveBeenCalledWith('add', expect.any(Function));
-        expect(mockContext.watcher.on).toHaveBeenCalledWith('change', expect.any(Function));
-        expect(mockContext.watcher.on).toHaveBeenCalledWith('unlink', expect.any(Function));
+        expect(mockContext.watcher.on).toHaveBeenCalledWith(
+          'add',
+          expect.any(Function),
+        );
+        expect(mockContext.watcher.on).toHaveBeenCalledWith(
+          'change',
+          expect.any(Function),
+        );
+        expect(mockContext.watcher.on).toHaveBeenCalledWith(
+          'unlink',
+          expect.any(Function),
+        );
       });
 
       it('should handle add event for asciidoc files', async () => {
@@ -448,22 +472,25 @@ describe('AsciiDoc Loader Tests', () => {
         await loader.load(mockContext);
 
         // Get the 'add' event handler
-        const addHandler = (mockContext.watcher.on as any).mock.calls
-          .find((call: any) => call[0] === 'add')[1];
+        const addHandler = (mockContext.watcher.on as any).mock.calls.find(
+          (call: any) => call[0] === 'add',
+        )[1];
 
         // Clear previous calls
         vi.clearAllMocks();
 
         // Simulate adding a new file
-        await addHandler('/project/root/content/posts/new-file.adoc');
+        await addHandler(
+          join(projectRoot, 'content', 'posts', 'new-file.adoc'),
+        );
 
         // Verify file loading and store update
         expect(mockProcessor.loadFile).toHaveBeenCalledWith(
-          '/project/root/content/posts/new-file.adoc',
-          expect.any(Object)
+          join(projectRoot, 'content', 'posts', 'new-file.adoc'),
+          expect.any(Object),
         );
         expect(mockContext.logger.info).toHaveBeenCalledWith(
-          expect.stringContaining('You added this file')
+          expect.stringContaining('You added this file'),
         );
       });
 
@@ -471,14 +498,15 @@ describe('AsciiDoc Loader Tests', () => {
         const loader = asciidocLoader('content');
         await loader.load(mockContext);
 
-        const addHandler = (mockContext.watcher.on as any).mock.calls
-          .find((call: any) => call[0] === 'add')[1];
+        const addHandler = (mockContext.watcher.on as any).mock.calls.find(
+          (call: any) => call[0] === 'add',
+        )[1];
 
         // Clear previous calls
         vi.clearAllMocks();
 
         // Simulate adding a non-asciidoc file
-        await addHandler('/project/root/content/posts/readme.md');
+        await addHandler(join(projectRoot, 'content', 'posts', 'readme.md'));
 
         // Verify no file loading occurred for non-adoc file
         expect(mockProcessor.loadFile).not.toHaveBeenCalled();
@@ -489,24 +517,28 @@ describe('AsciiDoc Loader Tests', () => {
         await loader.load(mockContext);
 
         // Set up filename-to-slug mapping in the loader's internal map
-        (mockContext.watcher.on as any).mock.calls
-          .find((call: any) => call[0] === 'add')[1]('/project/root/content/posts/simple.adoc');
+        (mockContext.watcher.on as any).mock.calls.find(
+          (call: any) => call[0] === 'add',
+        )[1](join(projectRoot, 'content', 'posts', 'simple.adoc'));
 
         // Get the 'change' event handler
-        const changeHandler = (mockContext.watcher.on as any).mock.calls
-          .find((call: any) => call[0] === 'change')[1];
+        const changeHandler = (mockContext.watcher.on as any).mock.calls.find(
+          (call: any) => call[0] === 'change',
+        )[1];
 
         // Clear previous calls
         vi.clearAllMocks();
 
         // Simulate changing a file
-        await changeHandler('/project/root/content/posts/simple.adoc');
+        await changeHandler(
+          join(projectRoot, 'content', 'posts', 'simple.adoc'),
+        );
 
         // Verify store update operations
         expect(mockContext.store.delete).toHaveBeenCalled();
         expect(mockProcessor.loadFile).toHaveBeenCalled();
         expect(mockContext.logger.info).toHaveBeenCalledWith(
-          expect.stringContaining('updated')
+          expect.stringContaining('updated'),
         );
       });
 
@@ -515,23 +547,25 @@ describe('AsciiDoc Loader Tests', () => {
         await loader.load(mockContext);
 
         // Set up filename-to-slug mapping in the loader's internal map
-        (mockContext.watcher.on as any).mock.calls
-          .find((call: any) => call[0] === 'add')[1]('/project/root/content/posts/simple.adoc');
+        (mockContext.watcher.on as any).mock.calls.find(
+          (call: any) => call[0] === 'add',
+        )[1](join(projectRoot, 'content', 'posts', 'simple.adoc'));
 
         // Get the 'unlink' event handler
-        const unlinkHandler = (mockContext.watcher.on as any).mock.calls
-          .find((call: any) => call[0] === 'unlink')[1];
+        const unlinkHandler = (mockContext.watcher.on as any).mock.calls.find(
+          (call: any) => call[0] === 'unlink',
+        )[1];
 
         // Clear previous calls
         vi.clearAllMocks();
 
         // Simulate removing a file
-        unlinkHandler('/project/root/content/posts/simple.adoc');
+        unlinkHandler(join(projectRoot, 'content', 'posts', 'simple.adoc'));
 
         // Verify store deletion
         expect(mockContext.store.delete).toHaveBeenCalled();
         expect(mockContext.logger.info).toHaveBeenCalledWith(
-          expect.stringContaining('deleted')
+          expect.stringContaining('deleted'),
         );
       });
     });
@@ -541,8 +575,10 @@ describe('AsciiDoc Loader Tests', () => {
     it('should handle various source highlighter configurations', async () => {
       const configurations = [
         { sourceHighlighter: undefined },
-        { sourceHighlighter: 'none' },
-        { sourceHighlighter: 'shiki', shikiTheme: { light: 'github-light', dark: 'github-dark' } },
+        {
+          sourceHighlighter: 'shiki',
+          shikiTheme: { light: 'github-light', dark: 'github-dark' },
+        },
         { sourceHighlighter: 'prism', prismLanguages: ['javascript'] },
       ];
 

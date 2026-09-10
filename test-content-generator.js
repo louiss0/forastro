@@ -7,10 +7,13 @@ console.log('Testing generate-content generator...');
 
 try {
   console.log('\n1. Generating blog preset content for apps/blog...');
-  execSync('pnpm nx g @forastro/nx-astro-plugin:generate-content --project=blog --presets=blog --mdxExamples=true', {
-    stdio: 'inherit',
-    cwd: __dirname
-  });
+  execSync(
+    'pnpm nx g @forastro/nx-astro-plugin:generate-content --project=blog --presets=blog --mdxExamples=true',
+    {
+      stdio: 'inherit',
+      cwd: __dirname,
+    },
+  );
   console.log('Test completed');
 } catch (error) {
   console.error('Error running generator:', error.message);

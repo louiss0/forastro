@@ -4,7 +4,7 @@ import { join, normalize, sep } from 'node:path';
 
 /**
  * Test suite for cross-platform path handling utilities.
- * 
+ *
  * This suite ensures that path operations work correctly across different
  * operating systems (Windows, Linux, macOS) by testing both forward and
  * backward slashes, absolute and relative paths, and edge cases.
@@ -178,7 +178,7 @@ describe('Cross-Platform Path Handling', () => {
       const componentPath = joinPathFragments(
         sourceRoot,
         'components',
-        'Button.astro'
+        'Button.astro',
       );
       expect(componentPath).toBe('apps/my-site/src/components/Button.astro');
     });
@@ -189,17 +189,16 @@ describe('Cross-Platform Path Handling', () => {
         sourceRoot,
         'content',
         'blog',
-        'post-1.md'
+        'post-1.md',
       );
       expect(contentPath).toBe('apps/my-site/src/content/blog/post-1.md');
     });
 
     it('should handle paths from workspace root', () => {
-      const workspaceRoot = process.platform === 'win32' 
-        ? 'C:\\workspace' 
-        : '/workspace';
+      const workspaceRoot =
+        process.platform === 'win32' ? 'C:\\workspace' : '/workspace';
       const projectPath = join(workspaceRoot, 'apps', 'my-site');
-      
+
       expect(projectPath).toContain('workspace');
       expect(projectPath).toContain('apps');
       expect(projectPath).toContain('my-site');
@@ -211,22 +210,21 @@ describe('Cross-Platform Path Handling', () => {
       expect(configPath).toBe('apps/my-site/astro.config.mjs');
     });
 
-    it('should construct schema file paths', () => {
-      const sourceRoot = 'apps/my-site/src';
+    it('should construct the central content config path', () => {
+      const projectRoot = 'apps/my-site';
       const schemaPath = joinPathFragments(
-        sourceRoot,
-        'content',
-        'config.ts'
+        projectRoot,
+        'src',
+        'content.config.ts',
       );
-      expect(schemaPath).toBe('apps/my-site/src/content/config.ts');
+      expect(schemaPath).toBe('apps/my-site/src/content.config.ts');
     });
   });
 
   describe('Executor working directory scenarios', () => {
     it('should construct project cwd from context', () => {
-      const workspaceRoot = process.platform === 'win32'
-        ? 'C:\\workspace'
-        : '/workspace';
+      const workspaceRoot =
+        process.platform === 'win32' ? 'C:\\workspace' : '/workspace';
       const projectRoot = 'apps/my-site';
       const cwd = join(workspaceRoot, projectRoot);
 
@@ -241,7 +239,7 @@ describe('Cross-Platform Path Handling', () => {
     it('should handle binary resolution paths', () => {
       const projectCwd = join('apps', 'my-site');
       const binPath = join(projectCwd, 'node_modules', '.bin', 'astro');
-      
+
       expect(binPath).toContain('apps');
       expect(binPath).toContain('my-site');
       expect(binPath).toContain('node_modules');
@@ -253,18 +251,18 @@ describe('Cross-Platform Path Handling', () => {
     it('should compare paths after normalization', () => {
       const path1 = 'apps/my-site/src';
       const path2 = 'apps\\my-site\\src';
-      
+
       // Normalize both before comparison
       const normalized1 = path1.replace(/\\/g, '/');
       const normalized2 = path2.replace(/\\/g, '/');
-      
+
       expect(normalized1).toBe(normalized2);
     });
 
     it('should handle case sensitivity based on platform', () => {
       const path1 = 'apps/my-site';
       const path2 = 'Apps/My-Site';
-      
+
       if (process.platform === 'win32' || process.platform === 'darwin') {
         // Windows and macOS are case-insensitive for file systems
         expect(path1.toLowerCase()).toBe(path2.toLowerCase());

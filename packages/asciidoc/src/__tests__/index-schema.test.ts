@@ -19,12 +19,13 @@ describe('AsciiDoc Schema Tests', () => {
           author: 'John Doe',
           authors: 'John Doe',
           createdAt: '2023-12-25',
-          description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+          description:
+            'This is a valid description that meets the minimum length requirements for testing purposes.',
         };
 
         const result = asciidocBaseSchema.safeParse(minimalConfig);
         expect(result.success).toBe(true);
-        
+
         if (result.success) {
           expect(result.data.title).toBe('Test Document');
           expect(result.data.updatedAt).toBe('2023-12-25');
@@ -42,12 +43,13 @@ describe('AsciiDoc Schema Tests', () => {
           author: 'Jane Smith',
           authors: ['Jane Smith', 'John Doe'],
           createdAt: '2023-12-25',
-          description: 'This is a comprehensive description that provides detailed information about the document content and purpose.',
+          description:
+            'This is a comprehensive description that provides detailed information about the document content and purpose.',
         };
 
         const result = asciidocBaseSchema.safeParse(fullConfig);
         expect(result.success).toBe(true);
-        
+
         if (result.success) {
           expect(result.data.title).toBe('Complete Test Document');
           expect(result.data.authors).toEqual(['Jane Smith', 'John Doe']);
@@ -72,7 +74,8 @@ describe('AsciiDoc Schema Tests', () => {
             author,
             authors: author,
             createdAt: '2023-12-25',
-            description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+            description:
+              'This is a valid description that meets the minimum length requirements for testing purposes.',
           };
 
           const result = asciidocBaseSchema.safeParse(config);
@@ -91,25 +94,31 @@ describe('AsciiDoc Schema Tests', () => {
           author: 'John Doe',
           authors: 'John Doe',
           createdAt: '2023-12-25',
-          description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+          description:
+            'This is a valid description that meets the minimum length requirements for testing purposes.',
         };
 
         const result = asciidocBaseSchema.safeParse(invalidTitleConfig);
         expect(result.success).toBe(false);
-        
+
         if (!result.success) {
           expect(result.error.issues).toContainEqual(
             expect.objectContaining({
               path: ['doctitle'],
               code: 'invalid_format',
-            })
+            }),
           );
         }
       });
 
       it('should reject invalid date formats', () => {
-        const invalidDates = ['not-a-date', '2023/12/25', '25-12-2023', '2023-13-01'];
-        
+        const invalidDates = [
+          'not-a-date',
+          '2023/12/25',
+          '25-12-2023',
+          '2023-13-01',
+        ];
+
         invalidDates.forEach((invalidDate) => {
           const config = {
             doctitle: 'Test Document',
@@ -119,7 +128,8 @@ describe('AsciiDoc Schema Tests', () => {
             author: 'John Doe',
             authors: 'John Doe',
             createdAt: '2023-12-25',
-            description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+            description:
+              'This is a valid description that meets the minimum length requirements for testing purposes.',
           };
 
           const result = asciidocBaseSchema.safeParse(config);
@@ -128,8 +138,13 @@ describe('AsciiDoc Schema Tests', () => {
       });
 
       it('should reject invalid email formats', () => {
-        const invalidEmails = ['not-an-email', 'test@', '@example.com', 'test.example.com'];
-        
+        const invalidEmails = [
+          'not-an-email',
+          'test@',
+          '@example.com',
+          'test.example.com',
+        ];
+
         invalidEmails.forEach((invalidEmail) => {
           const config = {
             doctitle: 'Test Document',
@@ -139,7 +154,8 @@ describe('AsciiDoc Schema Tests', () => {
             author: 'John Doe',
             authors: 'John Doe',
             createdAt: '2023-12-25',
-            description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+            description:
+              'This is a valid description that meets the minimum length requirements for testing purposes.',
           };
 
           const result = asciidocBaseSchema.safeParse(config);
@@ -148,8 +164,14 @@ describe('AsciiDoc Schema Tests', () => {
       });
 
       it('should reject invalid author name formats', () => {
-        const invalidAuthors = ['john', 'JOHN DOE', 'john doe', '123 456', 'John'];
-        
+        const invalidAuthors = [
+          'john',
+          'JOHN DOE',
+          'john doe',
+          '123 456',
+          'John',
+        ];
+
         invalidAuthors.forEach((invalidAuthor) => {
           const config = {
             doctitle: 'Test Document',
@@ -159,7 +181,8 @@ describe('AsciiDoc Schema Tests', () => {
             author: invalidAuthor,
             authors: invalidAuthor,
             createdAt: '2023-12-25',
-            description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+            description:
+              'This is a valid description that meets the minimum length requirements for testing purposes.',
           };
 
           const result = asciidocBaseSchema.safeParse(config);
@@ -181,13 +204,13 @@ describe('AsciiDoc Schema Tests', () => {
 
         const result = asciidocBaseSchema.safeParse(config);
         expect(result.success).toBe(false);
-        
+
         if (!result.success) {
           expect(result.error.issues).toContainEqual(
             expect.objectContaining({
               path: ['description'],
               code: 'too_small',
-            })
+            }),
           );
         }
       });
@@ -206,13 +229,13 @@ describe('AsciiDoc Schema Tests', () => {
 
         const result = asciidocBaseSchema.safeParse(config);
         expect(result.success).toBe(false);
-        
+
         if (!result.success) {
           expect(result.error.issues).toContainEqual(
             expect.objectContaining({
               path: ['description'],
               code: 'too_big',
-            })
+            }),
           );
         }
       });
@@ -228,12 +251,13 @@ describe('AsciiDoc Schema Tests', () => {
           author: 'John Doe',
           authors: 'John Doe',
           createdAt: '2023-12-25',
-          description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+          description:
+            'This is a valid description that meets the minimum length requirements for testing purposes.',
         };
 
         const result = asciidocBaseSchema.safeParse(config);
         expect(result.success).toBe(true);
-        
+
         if (result.success) {
           expect(result.data).toHaveProperty('title', 'Original Title');
           expect(result.data).toHaveProperty('updatedAt', '2023-12-25');
@@ -251,12 +275,13 @@ describe('AsciiDoc Schema Tests', () => {
           author: 'John Doe',
           authors: 'John Doe',
           createdAt: '2023-12-23',
-          description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+          description:
+            'This is a valid description that meets the minimum length requirements for testing purposes.',
         };
 
         const result = asciidocBaseSchema.safeParse(config);
         expect(result.success).toBe(true);
-        
+
         if (result.success) {
           expect(result.data.email).toBe('test@example.com');
           expect(result.data.localdate).toBe('2023-12-24');
@@ -275,8 +300,12 @@ describe('AsciiDoc Schema Tests', () => {
     });
 
     it('should parse valid stage values', () => {
-      const validStages: AsciidocPostStage[] = ['draft', 'published', 'editing'];
-      
+      const validStages: AsciidocPostStage[] = [
+        'draft',
+        'published',
+        'editing',
+      ];
+
       validStages.forEach((stage) => {
         const result = ASCIIDOC_POST_STAGE.safeParse(stage);
         expect(result.success).toBe(true);
@@ -285,7 +314,7 @@ describe('AsciiDoc Schema Tests', () => {
 
     it('should reject invalid stage values', () => {
       const invalidStages = ['invalid', 'DRAFT', 'pending', ''];
-      
+
       invalidStages.forEach((stage) => {
         const result = ASCIIDOC_POST_STAGE.safeParse(stage);
         expect(result.success).toBe(false);
@@ -303,13 +332,14 @@ describe('AsciiDoc Schema Tests', () => {
         author: 'John Doe',
         authors: 'John Doe',
         createdAt: '2023-12-25',
-        description: 'This is a draft document with proper description length for testing purposes and validation.',
+        description:
+          'This is a draft document with proper description length for testing purposes and validation.',
         stage: 'draft' as AsciidocPostStage,
       };
 
       const result = asciidocDraftSchema.safeParse(draftConfig);
       expect(result.success).toBe(true);
-      
+
       if (result.success) {
         expect(result.data.stage).toBe('draft');
         expect(result.data.title).toBe('Draft Document');
@@ -325,13 +355,14 @@ describe('AsciiDoc Schema Tests', () => {
         author: 'John Doe',
         authors: 'John Doe',
         createdAt: '2023-12-25',
-        description: 'This is a published document with proper description length for testing purposes and validation.',
+        description:
+          'This is a published document with proper description length for testing purposes and validation.',
         stage: 'published' as AsciidocPostStage,
       };
 
       const result = asciidocDraftSchema.safeParse(publishedConfig);
       expect(result.success).toBe(true);
-      
+
       if (result.success) {
         expect(result.data.stage).toBe('published');
       }
@@ -346,7 +377,8 @@ describe('AsciiDoc Schema Tests', () => {
         author: 'John Doe',
         authors: 'John Doe',
         createdAt: '2023-12-25',
-        description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+        description:
+          'This is a valid description that meets the minimum length requirements for testing purposes.',
         stage: 'invalid-stage',
       };
 
@@ -382,12 +414,13 @@ describe('AsciiDoc Schema Tests', () => {
         author: 'John Doe',
         authors: 'John Doe',
         createdAt: '2023-12-25',
-        description: 'This is a valid description that meets the minimum length requirements for testing purposes.',
+        description:
+          'This is a valid description that meets the minimum length requirements for testing purposes.',
       };
 
       const result = asciidocBaseSchema.safeParse(config);
       expect(result.success).toBe(true);
-      
+
       if (result.success) {
         // TypeScript should infer this as AsciidocBaseSchema
         const data: AsciidocBaseSchema = result.data;

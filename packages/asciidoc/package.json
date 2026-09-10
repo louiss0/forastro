@@ -1,6 +1,7 @@
 {
   "name": "@forastro/asciidoc",
   "version": "2.5.1",
+  "license": "MIT",
   "peerDependencies": {
     "astro": ">5.0.0"
   },
@@ -50,7 +51,7 @@
   "repository": {
     "directory": "packages/asciidoc",
     "type": "git",
-    "url": "https://github.com/louiss0/forastro"
+    "url": "git+https://github.com/louiss0/forastro.git"
   },
   "keywords": [
     "astro",

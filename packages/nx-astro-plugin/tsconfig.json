@@ -4,7 +4,5 @@
     "rootDir": "./src",
     "noEmit": true
   },
-  "references": [
-    { "path": "./tsconfig.spec.json" }
-  ]
+  "references": [{ "path": "./tsconfig.spec.json" }]
 }

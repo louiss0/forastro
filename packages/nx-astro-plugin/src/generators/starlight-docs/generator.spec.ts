@@ -26,7 +26,9 @@ vi.mock('node:fs', () => ({
 
 describe('starlight-docs generator', () => {
   let tree: Tree;
-  const mockReadProjectConfiguration = vi.mocked(devkit.readProjectConfiguration);
+  const mockReadProjectConfiguration = vi.mocked(
+    devkit.readProjectConfiguration,
+  );
   const mockFormatFiles = vi.mocked(devkit.formatFiles);
   const mockDetectIntegrations = vi.mocked(astroUtils.detectIntegrations);
   const mockExistsSync = vi.mocked(fs.existsSync);
@@ -52,7 +54,10 @@ describe('starlight-docs generator', () => {
       root: '/workspace',
       exists: existsSpy as unknown as Tree['exists'],
       write: writeSpy as unknown as Tree['write'],
-      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+      read: vi.fn<
+        [string, string?],
+        string | null
+      >() as unknown as Tree['read'],
     } as unknown as Tree;
 
     mockReadProjectConfiguration.mockReturnValue({
@@ -130,7 +135,9 @@ describe('starlight-docs generator', () => {
     });
 
     it('does not overwrite existing index.mdx', async () => {
-      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const consoleLogSpy = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => {});
       existsSpy.mockReturnValue(true);
 
       await generator(tree, { project: 'site' });
@@ -162,8 +169,12 @@ describe('starlight-docs generator', () => {
       expect(paths).toContainEqual(
         expect.stringContaining('getting-started.mdx'),
       );
-      expect(paths).toContainEqual(expect.stringContaining('guides/overview.mdx'));
-      expect(paths).toContainEqual(expect.stringContaining('reference/cli.mdx'));
+      expect(paths).toContainEqual(
+        expect.stringContaining('guides/overview.mdx'),
+      );
+      expect(paths).toContainEqual(
+        expect.stringContaining('reference/cli.mdx'),
+      );
     });
 
     it('getting-started.mdx contains installation instructions', async () => {
@@ -200,7 +211,9 @@ describe('starlight-docs generator', () => {
     });
 
     it('skips existing example files', async () => {
-      const consoleLogSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
+      const consoleLogSpy = vi
+        .spyOn(console, 'log')
+        .mockImplementation(() => {});
       existsSpy.mockImplementation((path: string) =>
         path.includes('getting-started'),
       );

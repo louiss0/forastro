@@ -4,8 +4,8 @@ Nx plugin for Astro in package-based workspaces.
 
 Why
 
-- Scaffold Astro apps with create-astro non-interactively
-- Configure integrations via astro add behind the scenes
+- Scaffold Astro apps into the Nx virtual tree
+- Configure integrations in Astro config and defer package installation
 - Generate content tailored to installed integrations
 - Run Astro via Nx executors (dev/build/preview/check/sync)
 
@@ -13,8 +13,8 @@ What
 
 - Generators:
   - init: prepare workspace defaults (no integrated mode)
-  - app: create an Astro app using create-astro
-  - add-integration: add/configure integrations (astro add)
+  - app: create an Astro app in the Nx tree
+  - add-integration: add/configure integrations in the Nx tree
   - content: generate content files with validation
   - page: generate static or dynamic pages
   - component: generate Astro or framework components
@@ -28,15 +28,17 @@ How
 
 - Installation (in this repo, package-based):
   - Build and pack locally:
-    - pnpm -w nx build nx-astro-plugin
-    - cd packages/nx-astro-plugin/dist && npm pack
+    - pnpm nx build @forastro/nx-astro-plugin
+    - cd dist/packages/nx-astro-plugin && npm pack
   - Add to workspace (example):
-    - pnpm -w add file:packages/nx-astro-plugin/dist/forastro-nx-astro-plugin-0.1.0.tgz
+    - pnpm -w add file:./dist/packages/nx-astro-plugin
 
 Usage
 
-- Create an app (TS by default, no CSS framework):
-  - pnpm nx g @forastro/nx-astro-plugin:app my-site --template=minimal --directory=apps --eslint=auto
+- Create an app (TypeScript by default):
+  - pnpm nx g @forastro/nx-astro-plugin:app --name=my-site --directory=apps --eslint=auto
+  - Use `--typescript=false` for a JavaScript config and `--skipInstall` for a dry run.
+  - Select an installer with `--packageManager=pnpm|npm|yarn|bun`.
 - Run it:
   - pnpm nx dev my-site
   - pnpm nx build my-site && pnpm nx preview my-site
@@ -122,8 +124,15 @@ Validation Features
 
 Notes
 
-- The plugin detects the invoking package manager (JPD > pnpm > npm/yarn) based on user agent when commands run.
-- ESLint is not forced. If ESLint is already present, Astro lint can be configured accordingly.
+- Package installation is deferred through Nx's installation task and can be selected with `--packageManager`.
+- Use `--skipInstall` to keep generation entirely inside the Nx tree.
+- ESLint is controlled by `--eslint=auto|true|false`; `auto` detects an existing workspace ESLint setup.
+
+Troubleshooting
+
+- If Astro cannot be found, install it in the project or workspace with `pnpm add -D astro`.
+- If a framework is not detected, add it first with the `add-integration` generator.
+- If content generation reports a missing collection, create it with `collection-schema` and use Astro's `src/content.config.ts`.
 - This plugin supports only package-based Nx workspaces.
 - CI-centric workflows using GitHub Actions are supported; configure Nx Release for publishing (NPM_TOKEN required).
 
@@ -148,7 +157,7 @@ All public APIs in this plugin include comprehensive JSDoc documentation with:
 - Usage examples (both CLI and programmatic)
 - Error conditions and troubleshooting tips
 
-Current test coverage: **97.93%** (267 tests passing)
+Current test coverage is reported by the plugin test target.
 
 ## License
 

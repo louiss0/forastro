@@ -254,7 +254,7 @@ describe('content generator', () => {
       expect(path).toContain('ascii-doc-post.adoc');
       expect(content).toContain('= Ascii Doc Post');
       expect(content).toContain(':description:');
-      expect(content).toContain(':draft: true');
+      expect(content).toContain(':author: Generated Author');
       expect(content).toContain('== Introduction');
     });
 

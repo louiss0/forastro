@@ -4,8 +4,13 @@
   "type": "object",
   "properties": {
     "project": { "type": "string" },
-    "names": { "type": "array", "items": { "type": "string" } },
-    "eslint": { "type": "string", "enum": ["auto", "true", "false"], "default": "auto" }
+    "names": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "packageManager": {
+      "type": "string",
+      "enum": ["auto", "pnpm", "npm", "yarn", "bun"],
+      "default": "auto"
+    },
+    "skipInstall": { "type": "boolean", "default": false }
   },
   "required": ["project", "names"]
 }

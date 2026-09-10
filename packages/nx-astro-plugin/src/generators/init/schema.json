@@ -3,7 +3,11 @@
   "title": "Init Astro Nx",
   "type": "object",
   "properties": {
-    "eslint": { "type": "string", "enum": ["auto", "true", "false"], "default": "auto" },
+    "eslint": {
+      "type": "string",
+      "enum": ["auto", "true", "false"],
+      "default": "auto"
+    },
     "addTargetDefaults": { "type": "boolean", "default": true },
     "astroVersion": { "type": "string" }
   }

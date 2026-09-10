@@ -1,4 +1,12 @@
-import { cpSync, mkdirSync, existsSync, readdirSync, statSync, readFileSync, writeFileSync } from 'node:fs';
+import {
+  cpSync,
+  mkdirSync,
+  existsSync,
+  readdirSync,
+  statSync,
+  readFileSync,
+  writeFileSync,
+} from 'node:fs';
 import { join, dirname } from 'node:path';
 
 // Flatten build structure - NO src/ folder in output
@@ -34,22 +42,34 @@ function copyDirRecursive(src, dest, filter) {
 }
 
 // 1) Copy schema.json files to generators/**/schema.json and executors/**/schema.json
-copyDirRecursive(join(SRC_DIR, 'generators'), join(PUBLISH_ROOT, 'generators'), (abs, rel, isFile) => {
-  if (!isFile) return true;
-  return abs.endsWith('schema.json');
-});
+copyDirRecursive(
+  join(SRC_DIR, 'generators'),
+  join(PUBLISH_ROOT, 'generators'),
+  (abs, rel, isFile) => {
+    if (!isFile) return true;
+    return abs.endsWith('schema.json');
+  },
+);
 
-copyDirRecursive(join(SRC_DIR, 'executors'), join(PUBLISH_ROOT, 'executors'), (abs, rel, isFile) => {
-  if (!isFile) return true;
-  return abs.endsWith('schema.json');
-});
+copyDirRecursive(
+  join(SRC_DIR, 'executors'),
+  join(PUBLISH_ROOT, 'executors'),
+  (abs, rel, isFile) => {
+    if (!isFile) return true;
+    return abs.endsWith('schema.json');
+  },
+);
 
 // 2) Copy generator templates to generators/**/templates/**
-copyDirRecursive(join(SRC_DIR, 'generators'), join(PUBLISH_ROOT, 'generators'), (abs, rel, isFile) => {
-  if (!isFile) return true;
-  const parts = abs.split(/[/\\]/g);
-  return parts.includes('templates');
-});
+copyDirRecursive(
+  join(SRC_DIR, 'generators'),
+  join(PUBLISH_ROOT, 'generators'),
+  (abs, rel, isFile) => {
+    if (!isFile) return true;
+    const parts = abs.split(/[/\\]/g);
+    return parts.includes('templates');
+  },
+);
 
 // Local Nx execution resolves TypeScript from src, while the published package is flattened.
 function copyManifestForPublishing(name) {
@@ -63,10 +83,15 @@ for (const name of ['executors.json', 'generators.json']) {
 }
 
 cpSync(join(PKG_ROOT, 'README.md'), join(PUBLISH_ROOT, 'README.md'));
+cpSync(join(PKG_ROOT, '../../LICENSE'), join(PUBLISH_ROOT, 'LICENSE'));
 
 // 4) Copy package.json
 const pkg = JSON.parse(readFileSync(join(PKG_ROOT, 'package.json'), 'utf-8'));
-writeFileSync(join(PUBLISH_ROOT, 'package.json'), JSON.stringify(pkg, null, 2), 'utf-8');
+writeFileSync(
+  join(PUBLISH_ROOT, 'package.json'),
+  JSON.stringify(pkg, null, 2),
+  'utf-8',
+);
 
 console.log('✓ Build complete!');
 console.log('  • Compiled JS: dist/packages/nx-astro-plugin/');

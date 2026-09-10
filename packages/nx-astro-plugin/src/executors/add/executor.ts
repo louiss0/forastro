@@ -19,10 +19,15 @@ interface Options {
 function projectCwd(context: ExecutorContext): string {
   const projectName = context.projectName;
   if (!projectName) {
-    throw new Error('Project name is required but was not found in executor context');
+    throw new Error(
+      'Project name is required but was not found in executor context',
+    );
   }
-  const projRoot = context.projectsConfigurations?.projects?.[projectName]?.root;
-  return projRoot ? join(context.root || process.cwd(), projRoot) : (context.root || process.cwd());
+  const projRoot =
+    context.projectsConfigurations?.projects?.[projectName]?.root;
+  return projRoot
+    ? join(context.root || process.cwd(), projRoot)
+    : context.root || process.cwd();
 }
 
 /**
@@ -48,19 +53,30 @@ function projectCwd(context: ExecutorContext): string {
  * // Add multiple integrations at once
  * nx run my-site:add --names=react,tailwind,mdx
  */
-export default async function runExecutor(options: Options, context: ExecutorContext) {
+export default async function runExecutor(
+  options: Options,
+  context: ExecutorContext,
+) {
   const { execa } = await import('execa');
   const cwd = projectCwd(context);
   const workspaceRoot = context.root || process.cwd();
 
   if (!options.names || options.names.length === 0) {
-    console.error('No integration names provided. Use --names=<name1,name2,...>');
+    console.error(
+      'No integration names provided. Use --names=<name1,name2,...>',
+    );
     return { success: false };
   }
 
   let astroBin: string;
   try {
-    astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? false));
+    astroBin =
+      options.binOverride ||
+      (await resolveAstroBinary(
+        cwd,
+        workspaceRoot,
+        options.allowGlobal ?? false,
+      ));
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(msg);

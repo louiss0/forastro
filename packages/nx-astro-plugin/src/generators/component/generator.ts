@@ -100,7 +100,7 @@ export default async function generator(tree: Tree, options: Schema) {
       }
     } else if (installedFrameworks.length === 1) {
       // Auto-select single installed framework
-      framework = installedFrameworks[0];
+      framework = installedFrameworks[0] ?? null;
     } else if (installedFrameworks.length === 0) {
       throw new Error(
         'No client framework integrations found.\n' +
@@ -114,6 +114,9 @@ export default async function generator(tree: Tree, options: Schema) {
       );
     }
 
+    if (!framework) {
+      throw new Error('Unable to determine a client framework.');
+    }
     extension = FRAMEWORK_EXTENSIONS[framework];
   }
 

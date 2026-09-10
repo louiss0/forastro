@@ -1,8 +1,7 @@
-
-import { type BorderOrOutlineSizes } from "~/utilities/types";
-import { allTailwindColors } from "~/utilities/constants";
-import type { FunctionComponent } from "preact";
-import { windiCN_EFS } from "@code-fixer-23/cn-efs";
+import { type BorderOrOutlineSizes } from '~/utilities/types';
+import { allTailwindColors } from '~/utilities/constants';
+import type { FunctionComponent } from 'preact';
+import { windiCN_EFS } from '@code-fixer-23/cn-efs';
 
 /**
  ** The border component by default creates a border that surrounds a component
@@ -13,48 +12,41 @@ import { windiCN_EFS } from "@code-fixer-23/cn-efs";
 
 type Props =
   | {
-    borderSizeClass?: `border-${BorderOrOutlineSizes}`;
-    class?: never;
-  }
+      borderSizeClass?: `border-${BorderOrOutlineSizes}`;
+      class?: never;
+    }
   | {
-    class: string;
-    borderSizeClass?: never;
-  };
+      class: string;
+      borderSizeClass?: never;
+    };
 
 const borderColors = allTailwindColors.map((value) => `border-${value}`);
 
 const errorMessage =
-  () => `This class can only use border classes  you can use responsive and media classes but nothing else  
-    remember the valid tailwind classes ${borderColors.join(", ")}
+  () => `This class can only use border classes  you can use responsive and media classes but nothing else
+    remember the valid tailwind classes ${borderColors.join(', ')}
     `;
 
-
 export const Border: FunctionComponent<Props> = (props) => {
-
   const { borderSizeClass, class: $class, children } = props;
 
   const borderClassesAreValid =
-    typeof $class === "undefined"
+    typeof $class === 'undefined'
       ? true
       : $class
-        .split(" ")
-        .every((classColor) =>
-          borderColors.some((borderColor) => classColor.includes(borderColor))
-        );
+          .split(' ')
+          .every((classColor) =>
+            borderColors.some((borderColor) =>
+              classColor.includes(borderColor),
+            ),
+          );
 
-
-
-  return <div
-    data-border-box
-    class={windiCN_EFS(
-      "border border-current",
-      borderSizeClass,
-      $class
-    )
-    }
-  >
-    {borderClassesAreValid ? children : errorMessage()}
-  </div>
-
-}
-
+  return (
+    <div
+      data-border-box
+      class={windiCN_EFS('border border-current', borderSizeClass, $class)}
+    >
+      {borderClassesAreValid ? children : errorMessage()}
+    </div>
+  );
+};

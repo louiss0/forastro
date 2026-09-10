@@ -56,7 +56,7 @@ This was a version bump only for asciidoc to align it with other projects, there
 
 ### 🩹 Fixes
 
-- **asciidoc:** add optional dependencies to the package.json file  Not having a optional dependencies was never intended.  This only happened because I placed the information in the wrong package file. ([8741ebd](https://github.com/louiss0/forastro/commit/8741ebd))
+- **asciidoc:** add optional dependencies to the package.json file Not having a optional dependencies was never intended. This only happened because I placed the information in the wrong package file. ([8741ebd](https://github.com/louiss0/forastro/commit/8741ebd))
 
 ### ❤️ Thank You
 
@@ -136,9 +136,9 @@ This was a version bump only for asciidoc to align it with other projects, there
 - register blocks and macros globally Creating an extension didn't work for some reason. I don't know why but it just didn't. I used the asciidoc-loader-mock project to test this out ([8b0b884](https://github.com/louiss0/forastro/commit/8b0b884))
 - when creating documents load paths using the content folder path ([1bf368c](https://github.com/louiss0/forastro/commit/1bf368c))
 - make a default theme is passed for highlightjs so if unspecified the user can simply omit it as well ([d7a2038](https://github.com/louiss0/forastro/commit/d7a2038))
-- remove config folder  argument from asciidoc loader ([ded5558](https://github.com/louiss0/forastro/commit/ded5558))
+- remove config folder argument from asciidoc loader ([ded5558](https://github.com/louiss0/forastro/commit/ded5558))
 - replace Asciidoctor type with one from the asciidoctor's return type Typescript doesn't process types from asciidoc I forgot ([7b30972](https://github.com/louiss0/forastro/commit/7b30972))
-- use dash case to access object's instead of camelCase  I made zod turn all attributes into lower dashed case when attributes are being parsed ([11bd491](https://github.com/louiss0/forastro/commit/11bd491))
+- use dash case to access object's instead of camelCase I made zod turn all attributes into lower dashed case when attributes are being parsed ([11bd491](https://github.com/louiss0/forastro/commit/11bd491))
 - remove highlighter options and only use only highlight'js with proper options ([a0311ba](https://github.com/louiss0/forastro/commit/a0311ba))
 
 ### ❤️ Thank You
@@ -163,9 +163,9 @@ This was a version bump only for asciidoc to align it with other projects, there
 - register blocks and macros globally Creating an extension didn't work for some reason. I don't know why but it just didn't. I used the asciidoc-loader-mock project to test this out ([8b0b884](https://github.com/louiss0/forastro/commit/8b0b884))
 - when creating documents load paths using the content folder path ([1bf368c](https://github.com/louiss0/forastro/commit/1bf368c))
 - make a default theme is passed for highlightjs so if unspecified the user can simply omit it as well ([d7a2038](https://github.com/louiss0/forastro/commit/d7a2038))
-- remove config folder  argument from asciidoc loader ([ded5558](https://github.com/louiss0/forastro/commit/ded5558))
+- remove config folder argument from asciidoc loader ([ded5558](https://github.com/louiss0/forastro/commit/ded5558))
 - replace Asciidoctor type with one from the asciidoctor's return type Typescript doesn't process types from asciidoc I forgot ([7b30972](https://github.com/louiss0/forastro/commit/7b30972))
-- use dash case to access object's instead of camelCase  I made zod turn all attributes into lower dashed case when attributes are being parsed ([11bd491](https://github.com/louiss0/forastro/commit/11bd491))
+- use dash case to access object's instead of camelCase I made zod turn all attributes into lower dashed case when attributes are being parsed ([11bd491](https://github.com/louiss0/forastro/commit/11bd491))
 - remove highlighter options and only use only highlight'js with proper options ([a0311ba](https://github.com/louiss0/forastro/commit/a0311ba))
 
 ### ❤️ Thank You

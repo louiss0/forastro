@@ -1,3 +1,12 @@
+overrides:
+  'minimatch@5>brace-expansion': '2.1.4'
+  handlebars: '>=4.7.9'
+  smol-toml: '>=1.8.0'
+  defu: '>=6.1.5'
+  'picomatch@<2.3.2': '>=2.3.2'
+  'picomatch@>=4.0.0 <4.0.4': '>=4.0.4'
+  mdast-util-to-hast: '>=13.2.1'
+
 allowBuilds:
   '@swc/core': true
   esbuild: true
@@ -6,7 +15,7 @@ allowBuilds:
   unrs-resolver: true
 
 packages:
-  - "apps/*"
-  - "packages/*"
-  - "tools/*"
-  - "templates/*"
+  - 'apps/*'
+  - 'packages/*'
+  - 'tools/*'
+  - 'templates/*'

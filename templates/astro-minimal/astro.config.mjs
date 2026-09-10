@@ -1,8 +1,7 @@
-import { defineConfig } from "astro/config";
+import { defineConfig } from 'astro/config';
 // https://astro.build/config
-import UnoCSS from 'unocss/astro'
-
+import UnoCSS from 'unocss/astro';
 
 export default defineConfig({
-  integrations: [UnoCSS({ injectReset: true }),],
+  integrations: [UnoCSS({ injectReset: true })],
 });

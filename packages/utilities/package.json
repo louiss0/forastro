@@ -1,6 +1,7 @@
 {
   "name": "@forastro/utilities",
   "version": "7.0.1",
+  "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
@@ -8,6 +9,7 @@
     "astro": ">5.0.0"
   },
   "type": "module",
+  "main": "./index.js",
   "scripts": {
     "build": "tsup --outDir ../../dist/packages/utilities",
     "test": "vitest run",
@@ -20,13 +22,13 @@
       "import": "./src/index.ts"
     },
     "./components": {
-      "import": "./components/index.ts"
+      "import": "./public/components/index.ts"
     }
   },
   "homepage": "https://forastro-docs.onrender.com/libraries/utilities",
   "repository": {
     "directory": "packages/utilities",
-    "url": "https://github.com/louiss0/forastro",
+    "url": "git+https://github.com/louiss0/forastro.git",
     "type": "git"
   },
   "bugs": {

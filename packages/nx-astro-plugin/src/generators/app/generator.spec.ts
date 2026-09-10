@@ -1,8 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { Tree } from '@nx/devkit';
 import generator from './generator.js';
 import * as devkit from '@nx/devkit';
-import { execa } from 'execa';
 
 vi.mock('@nx/devkit', async () => {
   const actual = await vi.importActual<typeof devkit>('@nx/devkit');
@@ -10,242 +9,128 @@ vi.mock('@nx/devkit', async () => {
     ...actual,
     formatFiles: vi.fn(),
     generateFiles: vi.fn(),
-    joinPathFragments: actual.joinPathFragments,
+    installPackagesTask: vi.fn(),
     updateJson: vi.fn(),
   };
 });
 
-vi.mock('execa');
-
 describe('app generator', () => {
   let tree: Tree;
-  const mockExeca = vi.mocked(execa);
   const mockFormatFiles = vi.mocked(devkit.formatFiles);
   const mockGenerateFiles = vi.mocked(devkit.generateFiles);
+  const mockInstallPackagesTask = vi.mocked(devkit.installPackagesTask);
   const mockUpdateJson = vi.mocked(devkit.updateJson);
   const writeMock = vi.fn<[string, string], void>();
 
   beforeEach(() => {
     tree = {
       root: '/workspace',
-      exists: vi
-        .fn<[string], boolean>()
-        .mockReturnValue(false) as unknown as Tree['exists'],
-      write: writeMock as unknown as Tree['write'],
-      read: vi.fn<
-        [string, string?],
-        string | null
-      >() as unknown as Tree['read'],
+      exists: vi.fn().mockReturnValue(false),
+      write: writeMock,
+      read: vi.fn().mockReturnValue(null),
+      delete: vi.fn(),
     } as unknown as Tree;
     vi.clearAllMocks();
+    mockInstallPackagesTask.mockReturnValue(undefined);
   });
 
-  it('should create project with copy-fixture offline strategy', async () => {
-    await generator(tree, {
-      name: 'test-app',
-      offlineStrategy: 'copy-fixture',
-    });
+  it('generates the application in the Nx tree without running an external scaffold', async () => {
+    const task = await generator(tree, { name: 'test-app' });
 
-    expect(mockGenerateFiles).toHaveBeenCalled();
-    expect(mockExeca).not.toHaveBeenCalled();
-    expect(tree.write).toHaveBeenCalledWith(
-      expect.stringContaining('project.json'),
-      expect.stringContaining('test-app'),
+    expect(mockGenerateFiles).toHaveBeenCalledWith(
+      tree,
+      expect.stringContaining('templates'),
+      'apps/test-app',
+      expect.objectContaining({ name: 'test-app' }),
     );
-    expect(mockFormatFiles).toHaveBeenCalled();
+    expect(task).toBeInstanceOf(Function);
+    expect(mockFormatFiles).toHaveBeenCalledWith(tree);
   });
 
-  it('should create project with npx create-astro by default', async () => {
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
-
-    await generator(tree, {
-      name: 'test-app',
-    });
-
-    expect(mockExeca).toHaveBeenCalledWith(
-      'npx',
-      expect.arrayContaining([
-        'create-astro@latest',
-        'apps/test-app',
-        '--template',
-        'minimal',
-        '--yes',
-      ]),
-      expect.any(Object),
-    );
-    expect(mockFormatFiles).toHaveBeenCalled();
-  });
-
-  it('should use custom template when specified', async () => {
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
-
-    await generator(tree, {
-      name: 'test-app',
-      template: 'blog',
-    });
-
-    expect(mockExeca).toHaveBeenCalledWith(
-      'npx',
-      expect.arrayContaining(['--template', 'blog']),
-      expect.any(Object),
-    );
-  });
-
-  it('should use custom directory', async () => {
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
-
+  it('supports a custom directory and writes the Nx project configuration', async () => {
     await generator(tree, {
       name: 'test-app',
       directory: 'packages',
+      skipInstall: true,
     });
 
-    const writeCall = writeMock.mock.calls[0];
-    const normalizedPath = writeCall[0].replace(/\\/g, '/');
-    expect(normalizedPath).toContain('packages/test-app/project.json');
+    const projectCall = writeMock.mock.calls.find(([path]) =>
+      path.includes('project.json'),
+    );
+    expect(projectCall).toBeDefined();
+    expect(projectCall?.[0].replace(/\\/g, '/')).toContain(
+      'packages/test-app/project.json',
+    );
+
+    const projectJson = JSON.parse(projectCall?.[1] ?? '{}');
+    expect(projectJson.targets).toMatchObject({
+      dev: { executor: '@forastro/nx-astro-plugin:dev' },
+      build: { executor: '@forastro/nx-astro-plugin:build' },
+      preview: { executor: '@forastro/nx-astro-plugin:preview' },
+      check: { executor: '@forastro/nx-astro-plugin:check' },
+      sync: { executor: '@forastro/nx-astro-plugin:sync' },
+    });
   });
 
-  it('should write project.json with correct executors', async () => {
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
+  it('adds integrations and package metadata in the tree', async () => {
+    tree.exists = vi
+      .fn()
+      .mockImplementation((path: string) => path.endsWith('package.json'));
+    tree.read = vi
+      .fn()
+      .mockImplementation((path: string) =>
+        path.endsWith('package.json') ? '{}' : null,
+      );
 
     await generator(tree, {
       name: 'test-app',
+      integrations: ['mdx', 'react'],
+      eslint: 'true',
+      skipInstall: true,
     });
 
-    const writeCall = writeMock.mock.calls.find((call) =>
-      call[0].includes('project.json'),
-    ) as [string, string] | undefined;
-    expect(writeCall).toBeDefined();
-    const projectJson = JSON.parse(writeCall[1]);
-    expect(projectJson.targets).toHaveProperty('dev');
-    expect(projectJson.targets).toHaveProperty('build');
-    expect(projectJson.targets).toHaveProperty('preview');
-    expect(projectJson.targets).toHaveProperty('check');
-    expect(projectJson.targets).toHaveProperty('sync');
-  });
-
-  it('should update package.json when it exists', async () => {
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
-    tree.exists = vi.fn().mockImplementation((path) => {
-      return path.includes('package.json');
-    });
-
-    await generator(tree, {
-      name: 'test-app',
-    });
+    const configCall = writeMock.mock.calls.find(([path]) =>
+      path.endsWith('astro.config.ts'),
+    );
+    expect(configCall?.[1]).toContain("from '@astrojs/mdx'");
+    expect(configCall?.[1]).toContain('mdxIntegration()');
+    expect(configCall?.[1]).toContain('reactIntegration()');
 
     expect(mockUpdateJson).toHaveBeenCalledWith(
       tree,
       expect.stringContaining('package.json'),
       expect.any(Function),
     );
-
-    // Test the updateJson callback
-    const updateCallback = mockUpdateJson.mock.calls[0][2];
-    const pkg = { devDependencies: {} };
-    const result = updateCallback(pkg);
-    expect(result.nx).toBeDefined();
-    expect(result.nx.name).toBe('test-app');
-    expect(result.devDependencies.astro).toBe('^7.3.2');
+    const updateCallback = mockUpdateJson.mock.calls[0]?.[2];
+    const result = updateCallback?.({ devDependencies: {} });
+    expect(result).toMatchObject({
+      name: 'test-app',
+      private: true,
+      dependencies: { '@astrojs/mdx': '^1.0.0', '@astrojs/react': '^1.0.0' },
+      devDependencies: {
+        astro: '^7.3.2',
+        eslint: '^9.33.0',
+        'eslint-plugin-astro': '^1.3.1',
+      },
+    });
   });
 
-  it('should preserve existing astro devDependency', async () => {
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
-    tree.exists = vi.fn().mockImplementation((path) => {
-      return path.includes('package.json');
-    });
+  it('does not install packages when skipInstall is enabled', async () => {
+    await generator(tree, { name: 'test-app', skipInstall: true });
 
-    await generator(tree, {
-      name: 'test-app',
-    });
-
-    // Test the updateJson callback with existing astro
-    const updateCallback = mockUpdateJson.mock.calls[0][2];
-    const pkg = { devDependencies: { astro: '^4.0.0' } };
-    const result = updateCallback(pkg);
-    expect(result.devDependencies.astro).toBe('^4.0.0');
+    expect(mockInstallPackagesTask).not.toHaveBeenCalled();
   });
 
-  it('should use jpd when FORASTRO_PM=jpd and jpd is available', async () => {
-    const originalEnv = process.env['FORASTRO_PM'];
-    process.env['FORASTRO_PM'] = 'jpd';
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
+  it('preserves an existing Astro version', async () => {
+    tree.exists = vi
+      .fn()
+      .mockImplementation((path: string) => path.endsWith('package.json'));
+    tree.read = vi.fn().mockReturnValue('{}');
 
-    await generator(tree, {
-      name: 'test-app',
-    });
+    await generator(tree, { name: 'test-app', skipInstall: true });
 
-    // First call checks jpd --version
-    expect(mockExeca).toHaveBeenNthCalledWith(
-      1,
-      'jpd',
-      ['--version'],
-      expect.objectContaining({ stdio: 'ignore' }),
-    );
-    // Second call uses jpd dlx
-    expect(mockExeca).toHaveBeenNthCalledWith(
-      2,
-      'jpd',
-      expect.arrayContaining(['dlx', 'create-astro@latest']),
-      expect.any(Object),
-    );
-
-    process.env['FORASTRO_PM'] = originalEnv;
-  });
-
-  it('should use pnpm when FORASTRO_PM=pnpm and pnpm is available', async () => {
-    const originalEnv = process.env['FORASTRO_PM'];
-    process.env['FORASTRO_PM'] = 'pnpm';
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca.mockResolvedValue(ok);
-
-    await generator(tree, {
-      name: 'test-app',
-    });
-
-    // First call checks pnpm --version
-    expect(mockExeca).toHaveBeenNthCalledWith(
-      1,
-      'pnpm',
-      ['--version'],
-      expect.objectContaining({ stdio: 'ignore' }),
-    );
-    // Second call uses pnpm dlx
-    expect(mockExeca).toHaveBeenNthCalledWith(
-      2,
-      'pnpm',
-      expect.arrayContaining(['dlx', 'create-astro@latest']),
-      expect.any(Object),
-    );
-
-    process.env['FORASTRO_PM'] = originalEnv;
-  });
-
-  it('should fallback to npx when preferred PM is not available', async () => {
-    const originalEnv = process.env['FORASTRO_PM'];
-    process.env['FORASTRO_PM'] = 'jpd';
-    const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
-    mockExeca
-      .mockRejectedValueOnce(new Error('jpd not found'))
-      .mockResolvedValue(ok);
-
-    await generator(tree, {
-      name: 'test-app',
-    });
-
-    // Should fallback to npx
-    expect(mockExeca).toHaveBeenCalledWith(
-      'npx',
-      expect.arrayContaining(['create-astro@latest']),
-      expect.any(Object),
-    );
-
-    process.env['FORASTRO_PM'] = originalEnv;
+    const updateCallback = mockUpdateJson.mock.calls[0]?.[2];
+    const result = updateCallback?.({ devDependencies: { astro: '^4.0.0' } });
+    expect(result?.devDependencies?.astro).toBe('^4.0.0');
   });
 });

@@ -12,7 +12,7 @@
 
 ### 🩹 Fixes
 
-- merge js and d.ts files into single ts file  Types were broken after using the latest versions Typescript now only looks for specific files for bundling Esbuild can only make one ([d962523](https://github.com/louiss0/forastro/commit/d962523))
+- merge js and d.ts files into single ts file Types were broken after using the latest versions Typescript now only looks for specific files for bundling Esbuild can only make one ([d962523](https://github.com/louiss0/forastro/commit/d962523))
 
 ### ❤️ Thank You
 
@@ -65,6 +65,7 @@ This was a version bump only for utilities to align it with other projects, ther
 ## 5.1.2 (2025-01-23)
 
 ### Fixes
+
 - **utilities:** Change order or `createAstroFunctionalComponent` arguments **Astro went back to the original order**.
 - **utilites** remove string check **Astro adds props to components**
 - **utilites** remove string check **Astro adds props to components**
@@ -97,7 +98,6 @@ The main purpose of this release is to write a better Read me.
 This readme is important now because it leads to the docs.
 It also gives the user some examples of what the library provides.
 
-
 # 5.0.0 (2025-01-03)
 
 ### 🚀 Features
@@ -111,7 +111,7 @@ It also gives the user some examples of what the library provides.
 
 ### 🩹 Fixes
 
-- remove main and module and use exports instead  I discovered that exports aren't ignored by typescript instead main and module are ([6a65b6b](https://github.com/louiss0/forastro/commit/6a65b6b))
+- remove main and module and use exports instead I discovered that exports aren't ignored by typescript instead main and module are ([6a65b6b](https://github.com/louiss0/forastro/commit/6a65b6b))
 - remove content collection types from the library into a place to be tested It's best not to create an api around virual modules They are hard to update and change the file will turn into a set of snippets instead once tested ([1f6bcf9](https://github.com/louiss0/forastro/commit/1f6bcf9))
 - allow astro files to be imported ([18b6f6d](https://github.com/louiss0/forastro/commit/18b6f6d))
 - return undefined to check lint error ([50634ed](https://github.com/louiss0/forastro/commit/50634ed))
@@ -122,9 +122,9 @@ It also gives the user some examples of what the library provides.
 - Use better condition for checking if an the first param is an object with the a ([7956beb](https://github.com/louiss0/forastro/commit/7956beb))
 - use proper object checking methods for Tempalter and Projector and remember to use and don't return from function at all ([0f90d2d](https://github.com/louiss0/forastro/commit/0f90d2d))
 - write proper check for rather props are defined and don't use Object.freeze() unless props is an object ([d7dd73a](https://github.com/louiss0/forastro/commit/d7dd73a))
-- Remove the condition that checks if the function is a child while template props are filled.  It's better to the projector adjust it's code to what is written in Templater. ([e8c50e8](https://github.com/louiss0/forastro/commit/e8c50e8))
+- Remove the condition that checks if the function is a child while template props are filled. It's better to the projector adjust it's code to what is written in Templater. ([e8c50e8](https://github.com/louiss0/forastro/commit/e8c50e8))
 - **utilities:** Remove all unused imports. ([12c04cc](https://github.com/louiss0/forastro/commit/12c04cc))
-- Type `executeIf` `executeUnless`  `throwIf` `throwUnless` properly. ([a6cfe9e](https://github.com/louiss0/forastro/commit/a6cfe9e))
+- Type `executeIf` `executeUnless` `throwIf` `throwUnless` properly. ([a6cfe9e](https://github.com/louiss0/forastro/commit/a6cfe9e))
 - remove args from function type. ([e4c3685](https://github.com/louiss0/forastro/commit/e4c3685))
 - @forastro/utilities is not at 4.0.2 it's at 0.1 ([9c4f3c9](https://github.com/louiss0/forastro/commit/9c4f3c9))
 - Remove all uses of the third argument from this codebase. ([ceb5836](https://github.com/louiss0/forastro/commit/ceb5836))
@@ -166,7 +166,7 @@ It also gives the user some examples of what the library provides.
 
 ### 🩹 Fixes
 
-- remove main and module and use exports instead  I discovered that exports aren't ignored by typescript instead main and module are ([6a65b6b](https://github.com/louiss0/forastro/commit/6a65b6b))
+- remove main and module and use exports instead I discovered that exports aren't ignored by typescript instead main and module are ([6a65b6b](https://github.com/louiss0/forastro/commit/6a65b6b))
 - remove content collection types from the library into a place to be tested It's best not to create an api around virual modules They are hard to update and change the file will turn into a set of snippets instead once tested ([1f6bcf9](https://github.com/louiss0/forastro/commit/1f6bcf9))
 - allow astro files to be imported ([18b6f6d](https://github.com/louiss0/forastro/commit/18b6f6d))
 - return undefined to check lint error ([50634ed](https://github.com/louiss0/forastro/commit/50634ed))
@@ -176,9 +176,9 @@ It also gives the user some examples of what the library provides.
 - Use better condition for checking if an the first param is an object with the a ([7956beb](https://github.com/louiss0/forastro/commit/7956beb))
 - use proper object checking methods for Tempalter and Projector and remember to use and don't return from function at all ([0f90d2d](https://github.com/louiss0/forastro/commit/0f90d2d))
 - write proper check for rather props are defined and don't use Object.freeze() unless props is an object ([d7dd73a](https://github.com/louiss0/forastro/commit/d7dd73a))
-- Remove the condition that checks if the function is a child while template props are filled.  It's better to the projector adjust it's code to what is written in Templater. ([e8c50e8](https://github.com/louiss0/forastro/commit/e8c50e8))
+- Remove the condition that checks if the function is a child while template props are filled. It's better to the projector adjust it's code to what is written in Templater. ([e8c50e8](https://github.com/louiss0/forastro/commit/e8c50e8))
 - **utilities:** Remove all unused imports. ([12c04cc](https://github.com/louiss0/forastro/commit/12c04cc))
-- Type `executeIf` `executeUnless`  `throwIf` `throwUnless` properly. ([a6cfe9e](https://github.com/louiss0/forastro/commit/a6cfe9e))
+- Type `executeIf` `executeUnless` `throwIf` `throwUnless` properly. ([a6cfe9e](https://github.com/louiss0/forastro/commit/a6cfe9e))
 - remove args from function type. ([e4c3685](https://github.com/louiss0/forastro/commit/e4c3685))
 - @forastro/utilities is not at 4.0.2 it's at 0.1 ([9c4f3c9](https://github.com/louiss0/forastro/commit/9c4f3c9))
 - Remove all uses of the third argument from this codebase. ([ceb5836](https://github.com/louiss0/forastro/commit/ceb5836))

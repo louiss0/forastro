@@ -25,7 +25,7 @@ export default [
   },
   // TypeScript rules
   {
-    files: ['**/*.ts', '**/*.tsx'] ,
+    files: ['**/*.ts', '**/*.tsx'],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
@@ -45,7 +45,10 @@ export default [
     rules: {
       '@typescript-eslint/prefer-promise-reject-errors': 'off',
       '@typescript-eslint/no-empty-function': 'off',
-      '@typescript-eslint/no-unused-vars': ['warn', { 'argsIgnorePattern': '^_', 'varsIgnorePattern': '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
+      ],
     },
   },
   // Ignore/relax for generated declaration files
@@ -54,7 +57,7 @@ export default [
     rules: {
       '@typescript-eslint/consistent-type-imports': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
-    }
+    },
   },
   // Astro files
   ...astro.configs.recommended,

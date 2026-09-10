@@ -1,11 +1,11 @@
-import { defineConfig } from "astro/config";
-import tailwind from 'unocss/astro';
+import { defineConfig } from 'astro/config';
+import unocss from 'unocss/astro';
 
 export default defineConfig({
-    vite: {
-        ssr: {
-            noExternal: ["svgo"]
-        }
+  vite: {
+    ssr: {
+      noExternal: ['svgo'],
     },
-    integrations: [unocss()],
-})
+  },
+  integrations: [unocss()],
+});

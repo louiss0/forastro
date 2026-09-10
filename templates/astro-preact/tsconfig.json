@@ -6,12 +6,8 @@
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
-      "~/*": [
-        "./src/*"
-      ],
+      "~/*": ["./src/*"]
     },
-    "types": [
-      "unplugin-icons/types/preact",
-    ]
+    "types": ["unplugin-icons/types/preact"]
   }
 }

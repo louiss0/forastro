@@ -131,13 +131,12 @@ export function detectContentTypeSupport(
     asciidoc: false,
   };
 
-  // Check astro config for integrations
+  // Check Astro config for integrations.
   const cfg = projectAstroConfigPath(projectRoot);
-  if (cfg) {
-    const content = readFileSync(cfg, 'utf8');
-    if (/@astrojs\/mdx/.test(content)) support.mdx = true;
-    if (/@astrojs\/markdoc/.test(content)) support.markdoc = true;
-  }
+  const configContent = cfg ? readFileSync(cfg, 'utf8') : '';
+  if (/@astrojs\/mdx/.test(configContent)) support.mdx = true;
+  if (/@astrojs\/markdoc/.test(configContent)) support.markdoc = true;
+  if (/@forastro\/asciidoc/.test(configContent)) support.asciidoc = true;
 
   // Check package.json for dependencies
   const pkgPath = join(projectRoot, 'package.json');
@@ -153,7 +152,8 @@ export function detectContentTypeSupport(
     if (
       allDeps['asciidoctor'] ||
       allDeps['astro-asciidoc'] ||
-      allDeps['@astrolib/asciidoc']
+      allDeps['@astrolib/asciidoc'] ||
+      allDeps['@forastro/asciidoc']
     ) {
       support.asciidoc = true;
     }
@@ -166,7 +166,7 @@ export function detectContentTypeSupport(
  * List all content collections in the project.
  *
  * Uses a dual-strategy approach:
- * 1. Parses config.ts to find collection names in the collections object
+ * 1. Parses Astro 7's content.config.ts and the legacy config.ts for collection names
  * 2. Lists directories in the content folder
  *
  * @param projectRoot - Absolute path to the project root directory
@@ -177,43 +177,42 @@ export function detectContentTypeSupport(
  * // Returns: ['blog', 'docs', 'posts']
  */
 export function listContentCollections(projectRoot: string): string[] {
-  const { contentDir } = parseAstroConfigDirs(projectRoot);
-  const fullPath = join(projectRoot, contentDir);
+  const { srcDir, contentDir } = parseAstroConfigDirs(projectRoot);
+  const contentDirectory = join(projectRoot, contentDir);
+  const configPaths = [
+    join(projectRoot, srcDir, 'content.config.ts'),
+    join(contentDirectory, 'config.ts'),
+  ];
+  const collections = new Set<string>();
 
-  if (!existsSync(fullPath)) return [];
+  for (const configPath of configPaths) {
+    if (!existsSync(configPath)) continue;
 
-  const configPath = join(fullPath, 'config.ts');
-  const collections: string[] = [];
-
-  // Strategy A: Parse config.ts for defineCollection keys
-  if (existsSync(configPath)) {
     const content = readFileSync(configPath, 'utf8');
-    const collectionsMatch = content.match(/collections\s*:\s*\{([\s\S]*?)\}/);
-    if (collectionsMatch) {
-      const collectionsBlock = collectionsMatch[1];
-      const keyMatches = collectionsBlock.matchAll(
-        /['"` ]([a-zA-Z0-9_-]+)['"` ]\s*:/g,
-      );
-      for (const m of keyMatches) {
-        if (m[1]) collections.push(m[1]);
-      }
+    const collectionsMatch = content.match(
+      /collections\s*(?::[^={]+)?\s*=?\s*\{([\s\S]*?)\}/,
+    );
+    const collectionsBlock = collectionsMatch?.[1] ?? '';
+    for (const match of collectionsBlock.matchAll(
+      /(?:^|[,\n])\s*['"`]?(?<name>[a-zA-Z0-9_-]+)['"`]?\s*:/g,
+    )) {
+      if (match.groups?.name) collections.add(match.groups.name);
     }
   }
 
-  // Strategy B: List directories
-  try {
-    const entries = readdirSync(fullPath);
-    for (const entry of entries) {
-      const entryPath = join(fullPath, entry);
-      if (statSync(entryPath).isDirectory()) {
-        if (!collections.includes(entry)) {
-          collections.push(entry);
+  // Directory-backed collections remain valid in Astro, including projects
+  // that have not yet migrated their collection definitions to Astro 7.
+  if (existsSync(contentDirectory)) {
+    try {
+      for (const entry of readdirSync(contentDirectory)) {
+        if (statSync(join(contentDirectory, entry)).isDirectory()) {
+          collections.add(entry);
         }
       }
+    } catch {
+      // A missing or unreadable content directory has no directory collections.
     }
-  } catch {
-    // Ignore errors
   }
 
-  return Array.from(new Set(collections)).sort();
+  return Array.from(collections).sort();
 }

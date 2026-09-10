@@ -9,7 +9,7 @@
     "app": {
       "factory": "./src/generators/app/generator",
       "schema": "./src/generators/app/schema.json",
-      "description": "Create an Astro application using create-astro (non-interactive)"
+      "description": "Create an Astro application in the Nx virtual tree"
     },
     "add-integration": {
       "factory": "./src/generators/add-integration/generator",

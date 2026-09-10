@@ -2,15 +2,16 @@ name: CI
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 env:
   NX_DAEMON: 'false'
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
 
 jobs:
-  build:
+  verify:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -27,25 +28,49 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '24'
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Print nx version
+      - name: Determine Nx comparison range
+        id: nx-range
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            base="${{ github.event.pull_request.base.sha }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+          if [[ -z "$base" || "$base" =~ ^0+$ ]]; then
+            base="$(git rev-parse HEAD^ 2>/dev/null || git rev-parse HEAD)"
+          fi
+          echo "base=$base" >> "$GITHUB_OUTPUT"
+          echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+
+      - name: Print Nx version
         run: pnpm nx --version
 
-      - name: Lint (affected)
-        run: pnpm nx affected -t lint --parallel --base=origin/main
+      - name: Check formatting
+        run: pnpm run format:check
 
-      - name: Test packages only (libraries)
+      - name: Lint affected projects
+        run: pnpm nx affected -t lint --parallel --base=${{ steps.nx-range.outputs.base }} --head=${{ steps.nx-range.outputs.head }}
+
+      - name: Test all library projects
         run: pnpm nx run-many -t test --projects="tag:nx:lib" --parallel
 
-      - name: Test utilities with coverage
-        run: pnpm nx test utilities -- --coverage --coverage.reporter=text-summary --coverage.reporter=lcov
+      - name: Type-check all projects that provide the target
+        run: pnpm nx run-many -t type-check --all --parallel
 
-      - name: Astro check (affected, exclude problematic projects)
-        run: pnpm nx affected -t check --parallel --base=origin/main
+      - name: Run Astro checks for affected projects
+        run: pnpm nx affected -t check --parallel --base=${{ steps.nx-range.outputs.base }} --head=${{ steps.nx-range.outputs.head }}
 
-      - name: Build (affected, exclude problematic projects)
-        run: pnpm nx affected -t build --parallel --base=origin/main --exclude=@forastro/template_astro-preact
+      - name: Build affected projects
+        run: pnpm nx affected -t build --parallel --base=${{ steps.nx-range.outputs.base }} --head=${{ steps.nx-range.outputs.head }}
+
+      - name: Verify generated project
+        run: pnpm run verify:generated-app
+
+      - name: Verify packed packages and exports
+        run: pnpm run verify:packages

@@ -4,28 +4,26 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-  pull_request:
-    types: [closed]
-    branches: [main]
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   NODE_VERSION: '24'
   NX_DAEMON: 'false'
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
   PNPM_VERSION: '11.24.0'
 
 jobs:
-  # Test and Build Job
-  test-and-build:
-    name: Test and Build
+  verify:
+    name: Verify workspace
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -36,34 +34,43 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
+          registry-url: https://registry.npmjs.org
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Run tests (packages only)
-        run: pnpm nx run-many -t test --projects="tag:nx:lib" --parallel
+      - name: Check formatting
+        run: pnpm run format:check
 
-      - name: Lint code
-        run: pnpm nx affected -t lint --parallel
+      - name: Test every project with a test target
+        run: pnpm nx run-many -t test --all --parallel
 
-      - name: Astro check
-        run: pnpm nx affected -t check --parallel
+      - name: Lint every project with a lint target
+        run: pnpm nx run-many -t lint --all --parallel
 
-      - name: Build packages
-        run: pnpm nx affected -t build --parallel
+      - name: Type-check every project with a type-check target
+        run: pnpm nx run-many -t type-check --all --parallel
 
-  # Release Job (only on main branch)
+      - name: Check every project with a check target
+        run: pnpm nx run-many -t check --all --parallel
+
+      - name: Build every project with a build target
+        run: pnpm nx run-many -t build --all --parallel
+
+      - name: Verify generated project
+        run: pnpm run verify:generated-app
+
+      - name: Verify packed packages and exports
+        run: pnpm run verify:packages
+
   release:
-    name: Release Packages
+    name: Release packages
     runs-on: ubuntu-latest
-    needs: test-and-build
-    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+    needs: verify
     permissions:
       contents: write
       packages: write
-    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -80,9 +87,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: https://registry.npmjs.org
           always-auth: true
-          cache: 'pnpm'
+          cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -92,86 +99,9 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Build packages
-        run: pnpm nx run-many --target=build --projects='tag:nx:lib:ongoing' --parallel
-
       - name: Release packages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          pnpm exec nx release  --verbose
-
-  # Dry Run Job (for develop branch and PRs)
-  release-dry-run:
-    name: Release Dry Run
-    runs-on: ubuntu-latest
-    needs: test-and-build
-    if: github.ref == 'refs/heads/develop' || (github.event_name == 'pull_request' && github.base_ref == 'main')
-    
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: ${{ env.PNPM_VERSION }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Build packages
-        run: pnpm nx run-many --target=build --projects='tag:nx:lib:ongoing' --parallel
-
-      - name: Release dry run
-        run: |
-          pnpm nx release publish --dry-run --verbose
-
-      - name: Comment PR with release preview
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const { execSync } = require('child_process');
-            
-            try {
-              const changelog = execSync('pnpm nx release changelog --dry-run', { encoding: 'utf8' });
-              const version = execSync('pnpm nx release version --dry-run', { encoding: 'utf8' });
-              
-              const body = `## 📦 Release Preview
-              
-              This PR will trigger the following releases when merged to main:
-              
-              ### Version Changes
-              \`\`\`
-              ${version}
-              \`\`\`
-              
-              ### Changelog Preview
-              \`\`\`
-              ${changelog}
-              \`\`\`
-              
-              *This is an automated preview. Actual release will happen after merge.*`;
-              
-              github.rest.issues.createComment({
-                issue_number: context.issue.number,
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                body: body
-              });
-            } catch (error) {
-              console.log('No release changes detected or error running dry run:', error.message);
-            }
+        run: pnpm exec nx release --verbose

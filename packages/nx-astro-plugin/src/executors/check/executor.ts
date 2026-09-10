@@ -21,10 +21,15 @@ interface Options {
 function projectCwd(context: ExecutorContext): string {
   const projectName = context.projectName;
   if (!projectName) {
-    throw new Error('Project name is required but was not found in executor context');
+    throw new Error(
+      'Project name is required but was not found in executor context',
+    );
   }
-  const projRoot = context.projectsConfigurations?.projects?.[projectName]?.root;
-  return projRoot ? join(context.root, projRoot) : (context.root || process.cwd());
+  const projRoot =
+    context.projectsConfigurations?.projects?.[projectName]?.root;
+  return projRoot
+    ? join(context.root, projRoot)
+    : context.root || process.cwd();
 }
 
 /**
@@ -55,14 +60,23 @@ function projectCwd(context: ExecutorContext): string {
  * // With custom tsconfig
  * nx run my-site:check --tsconfig=tsconfig.strict.json
  */
-export default async function runExecutor(options: Options, context: ExecutorContext) {
+export default async function runExecutor(
+  options: Options,
+  context: ExecutorContext,
+) {
   const { execa } = await import('execa');
   const cwd = projectCwd(context);
   const workspaceRoot = context.root || process.cwd();
 
   let astroBin: string;
   try {
-astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? true));
+    astroBin =
+      options.binOverride ||
+      (await resolveAstroBinary(
+        cwd,
+        workspaceRoot,
+        options.allowGlobal ?? true,
+      ));
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(msg);

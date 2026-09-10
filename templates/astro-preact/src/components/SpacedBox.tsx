@@ -1,10 +1,10 @@
-/** 
+/**
  * The point of this component is to just create space between elements.
- * The vertical prop is to add flex col and make sure that there is vertical spacing. 
+ * The vertical prop is to add flex col and make sure that there is vertical spacing.
  ** Remember that you can use both the spacing class and the gap class at the same time.
  ** The spacing class is the class that makes sure that the elements are spaced as far as possible.
  ** The rest of the gap classes are there to make sure that gaps exist on different screen sizes.
- 
+
  */
 
 import type { FunctionalComponent } from 'preact';

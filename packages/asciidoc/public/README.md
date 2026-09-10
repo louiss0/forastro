@@ -14,7 +14,7 @@ To install the library all you have to do is use your favorite package manager.
 To use this library all you have to do is import `asciidocLoader` from `@forastro/asciidoc`.
 
 ```ts
-import { asciidocLoader } from "@forastro/asciidoc"
+import { asciidocLoader } from '@forastro/asciidoc';
 ```
 
 Then go to the content collection file in Astro's file and type this.
@@ -104,20 +104,16 @@ Remember to `export default` the config file.
 If you need help with the types please use the config file use the `AsciidocConfigObject` type.
 
 ```ts
-import { AsciidocConfigObject } from "@forastro/asciidoc"
+import { AsciidocConfigObject } from '@forastro/asciidoc';
 
- export default {
-    attributes: {
-
-    },
-    blocks: {
-
-    },
-    macros:{
-        inline:{},
-        block:{}
-    }
- } satisfies AsciidocConfigObject
+export default {
+  attributes: {},
+  blocks: {},
+  macros: {
+    inline: {},
+    block: {},
+  },
+} satisfies AsciidocConfigObject;
 ```
 
 ### Styling
@@ -128,25 +124,21 @@ To use either use the appropriate module from `@forastro/asciidoc`.
 Tailwind
 
 ```ts
-import { tailwindAsciidocTypography } from "@forastro/asciidoc/tailwind"
+import { tailwindAsciidocTypography } from '@forastro/asciidoc/tailwind';
 
 export default {
-    plugins:[
-        tailwindAsciidocTypography
-    ]
-}
+  plugins: [tailwindAsciidocTypography],
+};
 ```
 
 Uno
 
 ```ts
-import { presetAsciidocTypography } from "@forastro/asciidoc/unocss"
+import { presetAsciidocTypography } from '@forastro/asciidoc/unocss';
 
 export default {
-    plugins:[
-        presetAsciidocTypography()
-    ]
-}
+  plugins: [presetAsciidocTypography()],
+};
 ```
 
 When using For astro Asciidoc **only shiki and prisma are supported** for syntax highlighting.

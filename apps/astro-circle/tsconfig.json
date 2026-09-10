@@ -9,5 +9,11 @@
     "verbatimModuleSyntax": true
   },
   "include": ["src", "**/*.ts", "**/*.tsx", "**/*.astro"],
-  "exclude": ["dist", "node_modules", "astro.config.*", "vite.config.*", "../../packages/**"]
+  "exclude": [
+    "dist",
+    "node_modules",
+    "astro.config.*",
+    "vite.config.*",
+    "../../packages/**"
+  ]
 }

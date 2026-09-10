@@ -7,7 +7,7 @@ export default defineConfig({
     globals: true,
     environment: 'node',
     passWithNoTests: false,
-    include: ['src/**/__tests__/**/*.{spec,test}.{ts,tsx}'],
+    include: ['src/**/*.{spec,test}.{ts,tsx,mts,cts}'],
     exclude: [
       'node_modules',
       'dist/**',

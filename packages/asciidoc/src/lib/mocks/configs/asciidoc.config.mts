@@ -1,31 +1,28 @@
-import { type AsciidocConfigObject } from "../../asciidoc"
+import { type AsciidocConfigObject } from '../../asciidoc';
 
 export default {
-    attributes: {
+  attributes: {
+    author: 'Shelton Louis',
+  },
 
-        author: "Shelton Louis"
+  blocks: {
+    shout: {
+      context: 'literal',
+      render: (content) => `SHOUT:\n${content}`,
     },
-
-    blocks: {
-        shout: {
-            context: "literal",
-            render: (content) => `SHOUT:\n${content}`
-        }
+  },
+  macros: {
+    inline: {
+      info: {
+        context: 'anchor',
+        render: (target) => `Info ${target}`,
+      },
     },
-    macros: {
-        inline: {
-            info: {
-                context: "anchor",
-                render: (target) => `Info ${target}`
-            }
-        },
-        block: {
-            message: {
-                context: 'literal',
-                render: (target) => `MESSAGE: ${target}`
-            }
-        }
-    }
-
-
-} satisfies AsciidocConfigObject
+    block: {
+      message: {
+        context: 'literal',
+        render: (target) => `MESSAGE: ${target}`,
+      },
+    },
+  },
+} satisfies AsciidocConfigObject;

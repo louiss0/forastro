@@ -70,7 +70,7 @@ const LOCKFILE_MAP: Array<{ file: string; pm: PackageManager }> = [
  */
 export async function detectPackageManager(
   projectRoot: string,
-  workspaceRoot: string
+  workspaceRoot: string,
 ): Promise<PackageManager> {
   // 1. Check project root for lockfiles
   for (const { file, pm } of LOCKFILE_MAP) {
@@ -97,7 +97,9 @@ export async function detectPackageManager(
     }
   }
 
-  throw new Error('No package manager detected. Install pnpm, npm, yarn, or bun.');
+  throw new Error(
+    'No package manager detected. Install pnpm, npm, yarn, or bun.',
+  );
 }
 
 /**
@@ -141,7 +143,7 @@ export async function detectPackageManager(
 export async function resolveAstroBinary(
   projectRoot: string,
   workspaceRoot: string,
-  allowGlobal = true
+  allowGlobal = true,
 ): Promise<string> {
   const isWindows = process.platform === 'win32';
   const binName = isWindows ? 'astro.cmd' : 'astro';
@@ -186,12 +188,14 @@ export async function resolveAstroBinary(
   }
 
   // 4. Not found
-  const pm = await detectPackageManager(projectRoot, workspaceRoot).catch(() => 'pnpm');
+  const pm = await detectPackageManager(projectRoot, workspaceRoot).catch(
+    () => 'pnpm',
+  );
   throw new Error(
     `Astro is not installed locally or in the workspace.\n` +
       `Please install it as a devDependency:\n\n` +
       `  ${pm} add -D astro\n\n` +
-      `If you have astro installed globally and want to use it, ensure allowGlobal is enabled.`
+      `If you have astro installed globally and want to use it, ensure allowGlobal is enabled.`,
   );
 }
 
@@ -217,7 +221,9 @@ export async function resolveAstroBinary(
  */
 export function workspaceHasEslint(workspaceRoot: string): boolean {
   try {
-    const pkg = JSON.parse(readFileSync(join(workspaceRoot, 'package.json'), 'utf8'));
+    const pkg = JSON.parse(
+      readFileSync(join(workspaceRoot, 'package.json'), 'utf8'),
+    );
     const dev = pkg.devDependencies || {};
     return Boolean(dev.eslint);
   } catch {

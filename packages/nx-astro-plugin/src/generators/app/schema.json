@@ -5,13 +5,19 @@
   "properties": {
     "name": { "type": "string" },
     "directory": { "type": "string", "default": "apps" },
-    "template": { "type": "string", "default": "minimal" },
     "typescript": { "type": "boolean", "default": true },
     "integrations": { "type": "array", "items": { "type": "string" } },
-    "eslint": { "type": "string", "enum": ["auto", "true", "false"], "default": "auto" },
+    "eslint": {
+      "type": "string",
+      "enum": ["auto", "true", "false"],
+      "default": "auto"
+    },
     "skipInstall": { "type": "boolean", "default": false },
-    "offlineStrategy": { "type": "string", "enum": ["none", "copy-fixture"], "default": "none" },
-    "packageManager": { "type": "string", "enum": ["auto", "jpd", "pnpm", "npm", "yarn"], "default": "auto" }
+    "packageManager": {
+      "type": "string",
+      "enum": ["auto", "pnpm", "npm", "yarn", "bun"],
+      "default": "auto"
+    }
   },
   "required": ["name"]
 }

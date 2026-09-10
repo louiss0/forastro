@@ -32,7 +32,9 @@ describe('dev executor', () => {
   });
 
   it('should run dev server with default options', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -44,7 +46,9 @@ describe('dev executor', () => {
   });
 
   it('should pass port option', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -56,7 +60,9 @@ describe('dev executor', () => {
   });
 
   it('should pass host option', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -68,7 +74,9 @@ describe('dev executor', () => {
   });
 
   it('should pass open flag', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -79,7 +87,9 @@ describe('dev executor', () => {
   });
 
   it('should return failure if execution fails', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     mockExeca.mockRejectedValue(new Error('Dev server failed'));
 
     const result = await runExecutor({}, mockContext);

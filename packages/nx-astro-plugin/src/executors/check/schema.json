@@ -6,8 +6,19 @@
     "config": { "type": "string", "description": "Path to config file" },
     "tsconfig": { "type": "string", "description": "Path to tsconfig file" },
     "verbose": { "type": "boolean", "description": "Enable verbose output" },
-    "allowGlobal": { "type": "boolean", "default": true, "description": "Allow global astro binary as fallback" },
-    "binOverride": { "type": "string", "description": "Explicit path to astro binary" },
-    "args": { "type": "array", "items": { "type": "string" }, "description": "Extra CLI arguments" }
+    "allowGlobal": {
+      "type": "boolean",
+      "default": true,
+      "description": "Allow global astro binary as fallback"
+    },
+    "binOverride": {
+      "type": "string",
+      "description": "Explicit path to astro binary"
+    },
+    "args": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Extra CLI arguments"
+    }
   }
 }

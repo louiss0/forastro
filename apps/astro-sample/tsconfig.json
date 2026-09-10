@@ -3,8 +3,5 @@
   "compilerOptions": {
     "moduleResolution": "Bundler"
   },
-  "include": [
-    "src",
-    "astro.config.*"
-  ]
+  "include": ["src", "astro.config.*"]
 }

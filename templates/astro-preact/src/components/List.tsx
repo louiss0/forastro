@@ -1,7 +1,7 @@
 import { windiCN_EFS } from '@code-fixer-23/cn-efs';
 import type { FunctionComponent } from 'preact';
 
-/**  
+/**
 
 ** The point of this component is to render a list with a title when necessary
 ** The list of items are just that a list of items.

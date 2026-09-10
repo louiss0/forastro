@@ -22,18 +22,19 @@ describe('exec utils', () => {
 
       await run('node', ['--version'], '/workspace/project');
 
-      expect(mockExeca).toHaveBeenCalledWith(
-        'node',
-        ['--version'],
-        { cwd: '/workspace/project', stdio: 'inherit' }
-      );
+      expect(mockExeca).toHaveBeenCalledWith('node', ['--version'], {
+        cwd: '/workspace/project',
+        stdio: 'inherit',
+      });
     });
 
     it('should propagate errors from execa', async () => {
       const error = new Error('Command failed');
       mockExeca.mockRejectedValue(error);
 
-      await expect(run('node', ['--version'], '/workspace/project')).rejects.toThrow('Command failed');
+      await expect(
+        run('node', ['--version'], '/workspace/project'),
+      ).rejects.toThrow('Command failed');
     });
 
     it('should handle empty args array', async () => {
@@ -42,11 +43,10 @@ describe('exec utils', () => {
 
       await run('pwd', [], '/workspace/project');
 
-      expect(mockExeca).toHaveBeenCalledWith(
-        'pwd',
-        [],
-        { cwd: '/workspace/project', stdio: 'inherit' }
-      );
+      expect(mockExeca).toHaveBeenCalledWith('pwd', [], {
+        cwd: '/workspace/project',
+        stdio: 'inherit',
+      });
     });
   });
 
@@ -58,17 +58,20 @@ describe('exec utils', () => {
       const result = await tryRun('node', ['--version'], '/workspace/project');
 
       expect(result).toBe(true);
-      expect(mockExeca).toHaveBeenCalledWith(
-        'node',
-        ['--version'],
-        { cwd: '/workspace/project', stdio: 'inherit' }
-      );
+      expect(mockExeca).toHaveBeenCalledWith('node', ['--version'], {
+        cwd: '/workspace/project',
+        stdio: 'inherit',
+      });
     });
 
     it('should return false on failed execution', async () => {
       mockExeca.mockRejectedValue(new Error('Command failed'));
 
-      const result = await tryRun('nonexistent-cmd', ['--version'], '/workspace/project');
+      const result = await tryRun(
+        'nonexistent-cmd',
+        ['--version'],
+        '/workspace/project',
+      );
 
       expect(result).toBe(false);
     });

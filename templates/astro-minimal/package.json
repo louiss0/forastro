@@ -16,16 +16,16 @@
     "directory": "/packages/astro-minimal"
   },
   "dependencies": {
-    "@code-fixer-23/cn-efs": "*",
+    "@code-fixer-23/cn-efs": "^3.0.1",
     "@forastro/flow": "2.5.4",
-    "@forastro/utilities": "*",
-    "ts-pattern": "*",
+    "@forastro/utilities": "workspace:*",
+    "ts-pattern": "^5.8.0",
     "astro-icon": "^1.2.0"
   },
   "devDependencies": {
-    "@fontsource/lato": "*",
-    "@fontsource/raleway": "*",
+    "@fontsource/lato": "^5.3.0",
+    "@fontsource/raleway": "^5.3.0",
     "astro": "^7.3.2",
-    "unocss": "*"
+    "unocss": "^66.5.0"
   }
 }

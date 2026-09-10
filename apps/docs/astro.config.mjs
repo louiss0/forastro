@@ -9,7 +9,7 @@ export default defineConfig({
   image: {
     service: { entrypoint: 'astro/assets/services/noop' },
   },
-  site: "https://forastro-docs.onrender.com",
+  site: 'https://forastro-docs.onrender.com',
   integrations: [
     starlight({
       title: 'For Astro',
@@ -17,8 +17,8 @@ export default defineConfig({
         {
           icon: 'github',
           label: 'GitHub',
-          href: 'https://github.com/louiss0/forastro'
-        }
+          href: 'https://github.com/louiss0/forastro',
+        },
       ],
     }),
     markdoc(),

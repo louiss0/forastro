@@ -384,6 +384,20 @@ import markdoc from '@astrojs/markdoc';
       expect(result).toEqual([]);
     });
 
+    it('should parse collections from Astro 7 content.config.ts', () => {
+      mockExistsSync.mockImplementation((path: unknown) =>
+        String(path).replaceAll('\\', '/').endsWith('src/content.config.ts'),
+      );
+      mockReadFileSync.mockReturnValue(`
+import { defineCollection } from 'astro:content';
+
+const posts = defineCollection({ type: 'content' });
+export const collections = { 'posts': posts };
+      `);
+
+      expect(listContentCollections('/workspace/project')).toEqual(['posts']);
+    });
+
     it('should parse collections from config.ts', () => {
       mockExistsSync.mockReturnValue(true); // All paths exist
       mockReadFileSync.mockImplementation((path: unknown) => {

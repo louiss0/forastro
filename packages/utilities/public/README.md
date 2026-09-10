@@ -23,11 +23,11 @@ To install this package `npm i @forastro/utilities`
 `iterate<T HasForEachMethod | Generator, U>(iterable:T, (value:unknown: info:IterationInfo, key:unknown)=> U):AsyncGenerator`
 
 ```tsx
-{iterate([1, 2, 3, 4, 5, 6], (value:number, info:IterationInfo) => (
-<div style={{backgroundColor: info.isOdd ? 'red': 'blue' }} >
-    {value}
-</div>
-))}
+{
+  iterate([1, 2, 3, 4, 5, 6], (value: number, info: IterationInfo) => (
+    <div style={{ backgroundColor: info.isOdd ? 'red' : 'blue' }}>{value}</div>
+  ));
+}
 ```
 
 ```ts

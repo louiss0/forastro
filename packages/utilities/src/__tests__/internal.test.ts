@@ -8,7 +8,6 @@ import {
   wrapFunctionInAsyncGenerator,
   hasForEachMethod,
   createAstroFunctionalComponent,
-  type HasForEachMethod,
 } from '../lib/internal';
 
 describe('IterationInfo', () => {
@@ -123,7 +122,9 @@ describe('IterationInfo', () => {
 describe('generateIterationInfoForIterablesThatAreNotGenerators', () => {
   it('should generate iteration info for arrays', () => {
     const array = ['a', 'b', 'c'];
-    const results = Array.from(generateIterationInfoForIterablesThatAreNotGenerators(array));
+    const results = Array.from(
+      generateIterationInfoForIterablesThatAreNotGenerators(array),
+    );
 
     expect(results).toHaveLength(3);
 
@@ -147,7 +148,9 @@ describe('generateIterationInfoForIterablesThatAreNotGenerators', () => {
       ['key1', 'value1'],
       ['key2', 'value2'],
     ]);
-    const results = Array.from(generateIterationInfoForIterablesThatAreNotGenerators(map));
+    const results = Array.from(
+      generateIterationInfoForIterablesThatAreNotGenerators(map),
+    );
 
     expect(results).toHaveLength(2);
     expect(results[0].value).toBe('value1');
@@ -158,7 +161,9 @@ describe('generateIterationInfoForIterablesThatAreNotGenerators', () => {
 
   it('should handle empty iterables', () => {
     const emptyArray: string[] = [];
-    const results = Array.from(generateIterationInfoForIterablesThatAreNotGenerators(emptyArray));
+    const results = Array.from(
+      generateIterationInfoForIterablesThatAreNotGenerators(emptyArray),
+    );
 
     expect(results).toHaveLength(0);
   });
@@ -207,7 +212,11 @@ describe('isIterable', () => {
 describe('isObject', () => {
   const testCases = [
     { input: {}, expected: true, description: 'empty object' },
-    { input: { key: 'value' }, expected: true, description: 'object with properties' },
+    {
+      input: { key: 'value' },
+      expected: true,
+      description: 'object with properties',
+    },
     { input: [], expected: true, description: 'array' },
     { input: new Date(), expected: true, description: 'Date object' },
     { input: null, expected: false, description: 'null' },
@@ -320,12 +329,7 @@ describe('wrapFunctionInAsyncGenerator', () => {
 
 describe('hasForEachMethod', () => {
   it('should return true for objects with forEach method', () => {
-    const testCases = [
-      [],
-      new Map(),
-      new Set(),
-      { forEach: () => {} },
-    ];
+    const testCases = [[], new Map(), new Set(), { forEach: () => {} }];
 
     testCases.forEach((input) => {
       expect(hasForEachMethod(input)).toBe(true);
@@ -396,7 +400,7 @@ describe('createAstroFunctionalComponent', () => {
     const mockSlots = { default: vi.fn() };
 
     const result = component(mockResult, mockProps, mockSlots);
-    
+
     // Trigger the async iterator to call the render function
     result[Symbol.asyncIterator]().next();
 

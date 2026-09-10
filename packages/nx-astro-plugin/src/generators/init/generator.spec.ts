@@ -36,7 +36,11 @@ describe('init generator', () => {
   it('should add target defaults to nx.json by default', async () => {
     await generator(tree, {});
 
-    expect(mockUpdateJson).toHaveBeenCalledWith(tree, 'nx.json', expect.any(Function));
+    expect(mockUpdateJson).toHaveBeenCalledWith(
+      tree,
+      'nx.json',
+      expect.any(Function),
+    );
     expect(mockFormatFiles).toHaveBeenCalled();
 
     // Test the updateJson callback
@@ -48,10 +52,18 @@ describe('init generator', () => {
       cache: true,
       outputs: ['{projectRoot}/dist'],
     });
-    expect(result.targetDefaults['@forastro/nx-astro-plugin:dev']).toEqual({ cache: false });
-    expect(result.targetDefaults['@forastro/nx-astro-plugin:preview']).toEqual({ cache: false });
-    expect(result.targetDefaults['@forastro/nx-astro-plugin:check']).toEqual({ cache: true });
-    expect(result.targetDefaults['@forastro/nx-astro-plugin:sync']).toEqual({ cache: false });
+    expect(result.targetDefaults['@forastro/nx-astro-plugin:dev']).toEqual({
+      cache: false,
+    });
+    expect(result.targetDefaults['@forastro/nx-astro-plugin:preview']).toEqual({
+      cache: false,
+    });
+    expect(result.targetDefaults['@forastro/nx-astro-plugin:check']).toEqual({
+      cache: true,
+    });
+    expect(result.targetDefaults['@forastro/nx-astro-plugin:sync']).toEqual({
+      cache: false,
+    });
   });
 
   it('should skip target defaults if addTargetDefaults is false', async () => {
@@ -82,7 +94,9 @@ describe('init generator', () => {
     const result = updateCallback(nx);
 
     expect(result.targetDefaults['some-other:target']).toEqual({ cache: true });
-    expect(result.targetDefaults['@forastro/nx-astro-plugin:build']).toBeDefined();
+    expect(
+      result.targetDefaults['@forastro/nx-astro-plugin:build'],
+    ).toBeDefined();
   });
 
   it('should create targetDefaults if it does not exist', async () => {
@@ -93,7 +107,9 @@ describe('init generator', () => {
     const result = updateCallback(nx);
 
     expect(result.targetDefaults).toBeDefined();
-    expect(result.targetDefaults['@forastro/nx-astro-plugin:build']).toBeDefined();
+    expect(
+      result.targetDefaults['@forastro/nx-astro-plugin:build'],
+    ).toBeDefined();
   });
 
   it('should check for eslint when workspace has it', async () => {

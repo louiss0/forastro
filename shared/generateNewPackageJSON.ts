@@ -16,6 +16,7 @@ export function createPackageJsonSchema(
   return z.object({
     name: z.string(),
     version: z.string(),
+    license: z.string().optional(),
     peerDependencies: z.record(z.string(), z.string()),
     publishConfig: z.object({
       access: z.literal('public'),
@@ -72,10 +73,10 @@ export function transformPackageJSON_ExportsForBuild(
       Object.entries(value).map(([key, value]) => [
         key,
         typeof value === 'string'
-          ? value.replace(/^\.\/src/, '')
+          ? value.replace(/^\.\/src/, '.')
           : {
               import: value.import.replace(/^\.\/src/, '.'),
-              types: value.types,
+              types: value.types?.replace(/^\.\/src/, '.'),
             },
       ]),
     );
@@ -132,12 +133,12 @@ export function transformPackageJSON_ExportsForBuild(
       newPackageJSON.exports,
       valuesToIgnoreInExports,
     );
-  
+
   // Transform the files array to exclude src/ directory and remove test files
   newPackageJSON.files = newPackageJSON.files
-    .filter(file => !file.startsWith('src/'))
+    .filter((file) => !file.startsWith('src/'))
     .concat(['*.js', '*.d.ts', 'lib/**/*'])
     .filter((file, index, self) => self.indexOf(file) === index); // Remove duplicates
-  
+
   return newPackageJSON;
 }

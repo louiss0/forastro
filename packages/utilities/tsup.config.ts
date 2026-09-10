@@ -1,5 +1,6 @@
 import { defineConfig } from 'tsup';
 import fs from 'node:fs';
+import path from 'node:path';
 import {
   createPackageJsonSchema,
   transformPackageJSON_ExportsForBuild,
@@ -25,32 +26,51 @@ const PackageJsonSchema = PackageJsonSchemaResult;
 export default defineConfig((ctx) => ({
   entry: ['./src/index.ts'],
   format: ['esm'],
-  dts: true, // Generate .d.ts files
+  dts: true,
   minify: true,
-  clean: true, // Clean output directory before building
+  clean: true,
   async onSuccess() {
-    fs.readFile(
-      'package.json',
-      { encoding: 'utf-8', flag: 'r' },
-      function (err, data) {
-        if (err) throw err;
+    const outputDirectory = path.resolve(ctx.outDir);
+    const packageJSON: PackageJSON = PackageJsonSchema.parse(
+      JSON.parse(fs.readFileSync('package.json', 'utf-8')),
+    );
+    const newPackageJSON = transformPackageJSON_ExportsForBuild(
+      packageJSON,
+      [],
+    );
+    newPackageJSON.exports['./components'] = {
+      import: './components/index.js',
+    };
 
-        const packageJSON: PackageJSON = PackageJsonSchema.parse(
-          JSON.parse(data),
-        );
+    // Astro components are publishable assets rather than tsup entry points.
+    // Copy them beside a JavaScript barrel so the declared subpath exists in
+    // both the dist directory and the packed tarball.
+    const sourceComponentsDirectory = path.resolve('public/components');
+    const outputComponentsDirectory = path.join(outputDirectory, 'components');
+    fs.cpSync(sourceComponentsDirectory, outputComponentsDirectory, {
+      recursive: true,
+    });
+    fs.renameSync(
+      path.join(outputComponentsDirectory, 'index.ts'),
+      path.join(outputComponentsDirectory, 'index.js'),
+    );
 
-        const newPackageJSON: PackageJSON =
-          transformPackageJSON_ExportsForBuild(packageJSON, ['components']);
-
-        fs.writeFile(
-          `${ctx.outDir}/package.json`,
-          JSON.stringify(newPackageJSON, null, 2),
-          { encoding: 'utf-8', flag: 'w' },
-          function (err) {
-            if (err) throw err;
-          },
-        );
-      },
+    fs.copyFileSync(
+      path.resolve('public/README.md'),
+      path.join(outputDirectory, 'README.md'),
+    );
+    fs.copyFileSync(
+      path.resolve('CHANGELOG.md'),
+      path.join(outputDirectory, 'CHANGELOG.md'),
+    );
+    fs.copyFileSync(
+      path.resolve('../../LICENSE'),
+      path.join(outputDirectory, 'LICENSE'),
+    );
+    fs.writeFileSync(
+      path.join(outputDirectory, 'package.json'),
+      JSON.stringify(newPackageJSON, null, 2),
+      'utf-8',
     );
   },
 }));

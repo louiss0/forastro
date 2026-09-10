@@ -28,10 +28,14 @@ interface Options {
 function projectCwd(context: ExecutorContext): string {
   const projectName = context.projectName;
   if (!projectName) {
-    throw new Error('Project name is required but was not found in executor context');
+    throw new Error(
+      'Project name is required but was not found in executor context',
+    );
   }
-  const projRoot = context.projectsConfigurations?.projects?.[projectName]?.root;
-  return projRoot ? join(context.root, projRoot) : (context.root || process.cwd());
+  const projRoot =
+    context.projectsConfigurations?.projects?.[projectName]?.root;
+  const workspaceRoot = context.root || process.cwd();
+  return projRoot ? join(workspaceRoot, projRoot) : workspaceRoot;
 }
 
 /**
@@ -68,14 +72,23 @@ function projectCwd(context: ExecutorContext): string {
  *   console.log('Build completed successfully');
  * }
  */
-export default async function runExecutor(options: Options, context: ExecutorContext) {
+export default async function runExecutor(
+  options: Options,
+  context: ExecutorContext,
+) {
   const { execa } = await import('execa');
   const cwd = projectCwd(context);
   const workspaceRoot = context.root || process.cwd();
 
   let astroBin: string;
   try {
-astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, options.allowGlobal ?? true));
+    astroBin =
+      options.binOverride ||
+      (await resolveAstroBinary(
+        cwd,
+        workspaceRoot,
+        options.allowGlobal ?? true,
+      ));
   } catch (err: unknown) {
     const msg = err instanceof Error ? err.message : String(err);
     console.error(msg);
@@ -83,6 +96,7 @@ astroBin = options.binOverride || (await resolveAstroBinary(cwd, workspaceRoot, 
   }
 
   const args = ['build'];
+  if (options.outDir) args.push('--outDir', options.outDir);
   if (options.config) args.push('--config', options.config);
   if (options.args) args.push(...options.args);
 

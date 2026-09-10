@@ -77,7 +77,6 @@
   "affected": {
     "defaultBase": "main"
   },
-  "nxCloudAccessToken": "M2RkODMwNDktNTBmNi00NzJhLWIxYjctYzI0NjExMTVhZDgxfHJlYWQtd3JpdGU=",
   "useInferencePlugins": false,
   "release": {
     "projects": ["packages/*"],
@@ -88,7 +87,7 @@
       }
     },
     "version": {
-      "preVersionCommand": "pnpm exec nx run-many --target 'build' --projects 'tag:nx:lib:ongoing'",
+      "preVersionCommand": "pnpm exec cross-env NX_DAEMON=false pnpm exec nx run-many --target 'build' --projects 'tag:nx:lib:ongoing'",
       "conventionalCommits": true,
       "preserveLocalDependencyProtocols": false,
       "versionActionsOptions": {

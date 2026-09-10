@@ -48,7 +48,7 @@ export default async function init(tree: Tree, options: Schema) {
       nx.targetDefaults = nx.targetDefaults || {};
       nx.targetDefaults['@forastro/nx-astro-plugin:build'] = {
         cache: true,
-        outputs: ['{projectRoot}/dist']
+        outputs: ['{projectRoot}/dist'],
       };
       nx.targetDefaults['@forastro/nx-astro-plugin:dev'] = { cache: false };
       nx.targetDefaults['@forastro/nx-astro-plugin:preview'] = { cache: false };

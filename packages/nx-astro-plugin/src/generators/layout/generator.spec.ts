@@ -15,7 +15,9 @@ vi.mock('@nx/devkit', async () => {
 
 describe('layout generator', () => {
   let tree: Tree;
-  const mockReadProjectConfiguration = vi.mocked(devkit.readProjectConfiguration);
+  const mockReadProjectConfiguration = vi.mocked(
+    devkit.readProjectConfiguration,
+  );
   const mockFormatFiles = vi.mocked(devkit.formatFiles);
   const writeSpy = vi.fn<[string, string], void>();
 
@@ -23,9 +25,14 @@ describe('layout generator', () => {
     writeSpy.mockReset();
     tree = {
       root: '/workspace',
-      exists: vi.fn<[string], boolean>().mockReturnValue(false) as unknown as Tree['exists'],
+      exists: vi
+        .fn<[string], boolean>()
+        .mockReturnValue(false) as unknown as Tree['exists'],
       write: writeSpy as unknown as Tree['write'],
-      read: vi.fn<[string, string?], string | null>() as unknown as Tree['read'],
+      read: vi.fn<
+        [string, string?],
+        string | null
+      >() as unknown as Tree['read'],
     } as unknown as Tree;
 
     mockReadProjectConfiguration.mockReturnValue({
@@ -44,7 +51,11 @@ describe('layout generator', () => {
   });
 
   it('supports directory option under src/layouts', async () => {
-    await generator(tree, { project: 'site', name: 'Docs', directory: 'shared' });
+    await generator(tree, {
+      project: 'site',
+      name: 'Docs',
+      directory: 'shared',
+    });
 
     const call = writeSpy.mock.calls[0];
     const path = call[0].replace(/\\/g, '/');
@@ -71,14 +82,20 @@ describe('layout generator', () => {
       expect(content).toContain('interface Props');
       expect(content).toContain('entry: CollectionEntry');
       expect(content).toContain('const { entry } = Astro.props');
-      expect(content).toContain('const { title, description, pubDate, author, heroImage }');
+      expect(content).toContain(
+        'const { title, description, pubDate, author, heroImage }',
+      );
       expect(content).toContain('og:type" content="article');
       expect(content).toContain('article:author');
       expect(content).toContain('article:published_time');
     });
 
     it('generates docs layout with navigation structure', async () => {
-      await generator(tree, { project: 'site', name: 'Documentation', type: 'docs' });
+      await generator(tree, {
+        project: 'site',
+        name: 'Documentation',
+        type: 'docs',
+      });
 
       const content = writeSpy.mock.calls[0][1];
       expect(content).toContain('interface Props');
@@ -90,7 +107,11 @@ describe('layout generator', () => {
     });
 
     it('generates marketing layout with hero and sections', async () => {
-      await generator(tree, { project: 'site', name: 'Landing', type: 'marketing' });
+      await generator(tree, {
+        project: 'site',
+        name: 'Landing',
+        type: 'marketing',
+      });
 
       const content = writeSpy.mock.calls[0][1];
       expect(content).toContain('interface Props');

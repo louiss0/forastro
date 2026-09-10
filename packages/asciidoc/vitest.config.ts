@@ -3,16 +3,13 @@ import { defineConfig } from 'vitest/config';
 // Per repo policy, .astro components are excluded from tests/coverage.
 // We focus on TypeScript modules only (loaders, schemas, plugins, utilities).
 //
-// Coverage thresholds are set based on testable modules:
-// - 100% coverage on schemas and plugins (index.ts, tailwind.ts)
-// - 71% coverage on internal utilities (internal.ts)
-// - Partial coverage on loader (asciidoc.ts) due to complex integration dependencies
-// - The main loader integration tests are disabled due to mocking complexity
+// Coverage thresholds are set based on the TypeScript modules exercised by the
+// unit and loader integration suites.
 export default defineConfig({
   test: {
     globals: true,
     environment: 'node',
-    include: ['src/**/__tests__/**/*.{test,spec}.ts'],
+    include: ['src/**/*.{test,spec}.{ts,mts,cts,tsx}'],
     exclude: [
       '**/__fixtures__/**',
       'dist/**',

@@ -22,9 +22,9 @@ This was a version bump only for @forastro/nx-astro-plugin to align it with othe
 - **nx-astro-plugin:** enhance page generator with layout support ([833d9a2](https://github.com/louiss0/forastro/commit/833d9a2))
 - **nx-astro-plugin:** add layout types with SEO support ([e5545e4](https://github.com/louiss0/forastro/commit/e5545e4))
 - **nx-astro-plugin:** enhance component generator with framework support ([854a5aa](https://github.com/louiss0/forastro/commit/854a5aa))
-- ⚠️  **nx-astro-plugin:** implement content generator with validation ([56bd368](https://github.com/louiss0/forastro/commit/56bd368))
+- ⚠️ **nx-astro-plugin:** implement content generator with validation ([56bd368](https://github.com/louiss0/forastro/commit/56bd368))
 - **nx-astro-plugin:** add content generator with validation ([7054438](https://github.com/louiss0/forastro/commit/7054438))
-- ⚠️  **nx-astro-plugin:** add static and dynamic page types with dir detection ([53720f1](https://github.com/louiss0/forastro/commit/53720f1))
+- ⚠️ **nx-astro-plugin:** add static and dynamic page types with dir detection ([53720f1](https://github.com/louiss0/forastro/commit/53720f1))
 
 ### 🩹 Fixes
 
@@ -32,7 +32,7 @@ This was a version bump only for @forastro/nx-astro-plugin to align it with othe
 - **nx-astro-plugin:** correct packaging paths for distribution ([486e8a0](https://github.com/louiss0/forastro/commit/486e8a0))
 - **nx-astro-plugin:** run create-astro before project.json ([4cd5e23](https://github.com/louiss0/forastro/commit/4cd5e23))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
 - **nx-astro-plugin:** The 'generate-content' generator has been renamed to 'content'. Update your workspace configuration to use the new name.
 - **nx-astro-plugin:** none

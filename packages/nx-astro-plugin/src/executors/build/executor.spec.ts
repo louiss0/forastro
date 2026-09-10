@@ -36,7 +36,9 @@ describe('build executor', () => {
   });
 
   it('should successfully build project with default options', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -44,7 +46,8 @@ describe('build executor', () => {
 
     expect(result.success).toBe(true);
     expect(mockResolveAstroBinary).toHaveBeenCalled();
-    const [projectRoot, workspaceRoot, allowGlobal] = mockResolveAstroBinary.mock.calls[0];
+    const [projectRoot, workspaceRoot, allowGlobal] =
+      mockResolveAstroBinary.mock.calls[0];
     expect(projectRoot.replace(/\\/g, '/')).toBe('/workspace/apps/test-app');
     expect(workspaceRoot).toBe('/workspace');
     expect(allowGlobal).toBe(true);
@@ -59,44 +62,57 @@ describe('build executor', () => {
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
-    const result = await runExecutor({ binOverride: '/custom/astro' }, mockContext);
+    const result = await runExecutor(
+      { binOverride: '/custom/astro' },
+      mockContext,
+    );
 
     expect(result.success).toBe(true);
     expect(mockResolveAstroBinary).not.toHaveBeenCalled();
     expect(mockExeca).toHaveBeenCalledWith(
       '/custom/astro',
       ['build'],
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
   it('should pass config option to astro command', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
-    const result = await runExecutor({ config: 'custom.config.ts' }, mockContext);
+    const result = await runExecutor(
+      { config: 'custom.config.ts' },
+      mockContext,
+    );
 
     expect(result.success).toBe(true);
     expect(mockExeca).toHaveBeenCalledWith(
       '/workspace/node_modules/.bin/astro',
       ['build', '--config', 'custom.config.ts'],
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
   it('should pass additional args', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
-    const result = await runExecutor({ args: ['--verbose', '--silent'] }, mockContext);
+    const result = await runExecutor(
+      { args: ['--verbose', '--silent'] },
+      mockContext,
+    );
 
     expect(result.success).toBe(true);
     expect(mockExeca).toHaveBeenCalledWith(
       '/workspace/node_modules/.bin/astro',
       ['build', '--verbose', '--silent'],
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 
@@ -109,14 +125,17 @@ describe('build executor', () => {
 
     expect(result.success).toBe(true);
     expect(mockResolveAstroBinary).toHaveBeenCalled();
-    const [projectRoot, workspaceRoot, allowGlobal] = mockResolveAstroBinary.mock.calls[0];
+    const [projectRoot, workspaceRoot, allowGlobal] =
+      mockResolveAstroBinary.mock.calls[0];
     expect(projectRoot.replace(/\\/g, '/')).toBe('/workspace/apps/test-app');
     expect(workspaceRoot).toBe('/workspace');
     expect(allowGlobal).toBe(true);
   });
 
   it('should default allowGlobal to true (matches schema default)', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok);
 
@@ -125,13 +144,17 @@ describe('build executor', () => {
     expect(mockResolveAstroBinary).toHaveBeenCalledWith(
       expect.any(String),
       expect.any(String),
-      true
+      true,
     );
   });
 
   it('should return failure if resolveAstroBinary throws', async () => {
-    mockResolveAstroBinary.mockRejectedValue(new Error('Astro is not installed'));
-const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => undefined);
+    mockResolveAstroBinary.mockRejectedValue(
+      new Error('Astro is not installed'),
+    );
+    const consoleErrorSpy = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
 
     const result = await runExecutor({}, mockContext);
 
@@ -143,7 +166,9 @@ const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => unde
   });
 
   it('should return failure if execa throws', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     mockExeca.mockRejectedValue(new Error('Build failed'));
 
     const result = await runExecutor({}, mockContext);
@@ -158,7 +183,7 @@ const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => unde
     } as unknown as ExecutorContext;
 
     await expect(runExecutor({}, contextWithoutProject)).rejects.toThrow(
-      'Project name is required but was not found in executor context'
+      'Project name is required but was not found in executor context',
     );
   });
 
@@ -166,10 +191,13 @@ const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => unde
     const contextNoConfig: ExecutorContext = {
       root: '/workspace',
       projectName: 'test-app',
-      projectsConfigurations: undefined as unknown as ExecutorContext['projectsConfigurations'],
+      projectsConfigurations:
+        undefined as unknown as ExecutorContext['projectsConfigurations'],
     } as unknown as ExecutorContext;
 
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok2 = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok2);
 
@@ -180,12 +208,14 @@ const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => unde
     expect(mockResolveAstroBinary).toHaveBeenCalledWith(
       '/workspace',
       '/workspace',
-      true
+      true,
     );
   });
 
   it('should combine config and additional args correctly', async () => {
-    mockResolveAstroBinary.mockResolvedValue('/workspace/node_modules/.bin/astro');
+    mockResolveAstroBinary.mockResolvedValue(
+      '/workspace/node_modules/.bin/astro',
+    );
     const ok3 = {} as unknown as Awaited<ReturnType<typeof execa>>;
     mockExeca.mockResolvedValue(ok3);
 
@@ -194,14 +224,14 @@ const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => unde
         config: 'custom.config.ts',
         args: ['--verbose'],
       },
-      mockContext
+      mockContext,
     );
 
     expect(result.success).toBe(true);
     expect(mockExeca).toHaveBeenCalledWith(
       '/workspace/node_modules/.bin/astro',
       ['build', '--config', 'custom.config.ts', '--verbose'],
-      expect.any(Object)
+      expect.any(Object),
     );
   });
 });

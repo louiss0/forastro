@@ -28,7 +28,9 @@ describe('Index exports', () => {
   describe('re-exports from lib', () => {
     it('should export useTemplaterAndProjector from lib/useTemplaterAndProjector', () => {
       expect(typeof UtilitiesIndex.useTemplaterAndProjector).toBe('function');
-      expect(UtilitiesIndex.useTemplaterAndProjector).toBe(useTemplaterAndProjector);
+      expect(UtilitiesIndex.useTemplaterAndProjector).toBe(
+        useTemplaterAndProjector,
+      );
     });
   });
 
@@ -66,14 +68,18 @@ describe('Index exports', () => {
 
     it('should export async functions properly', async () => {
       const promise = Promise.resolve('success');
-      const [result, error] = await UtilitiesIndex.returnErrorAndResultFromPromise(promise);
+      const [result, error] =
+        await UtilitiesIndex.returnErrorAndResultFromPromise(promise);
       expect(result).toBe('success');
       expect(error).toBeNull();
     });
 
     it('should export generator functions properly', async () => {
       const results = [];
-      for await (const item of UtilitiesIndex.iterate([1, 2, 3], (val) => val * 2)) {
+      for await (const item of UtilitiesIndex.iterate(
+        [1, 2, 3],
+        (val) => val * 2,
+      )) {
         results.push(item);
       }
       expect(results).toEqual([2, 4, 6]);
@@ -82,13 +88,19 @@ describe('Index exports', () => {
 
   describe('error handling functions', () => {
     it('should export throwIf that throws on truthy conditions', () => {
-      expect(() => UtilitiesIndex.throwIf(true, 'test error')).toThrow('test error');
+      expect(() => UtilitiesIndex.throwIf(true, 'test error')).toThrow(
+        'test error',
+      );
       expect(() => UtilitiesIndex.throwIf(false, 'test error')).not.toThrow();
     });
 
     it('should export throwUnless that throws on falsy conditions', () => {
-      expect(() => UtilitiesIndex.throwUnless(false, 'test error')).toThrow('test error');
-      expect(() => UtilitiesIndex.throwUnless(true, 'test error')).not.toThrow();
+      expect(() => UtilitiesIndex.throwUnless(false, 'test error')).toThrow(
+        'test error',
+      );
+      expect(() =>
+        UtilitiesIndex.throwUnless(true, 'test error'),
+      ).not.toThrow();
     });
   });
 
@@ -132,7 +144,9 @@ describe('Index exports', () => {
 
   describe('iteration functions', () => {
     it('should export syncIterate for synchronous iteration', () => {
-      const results = Array.from(UtilitiesIndex.syncIterate([1, 2, 3], (val) => val * 2));
+      const results = Array.from(
+        UtilitiesIndex.syncIterate([1, 2, 3], (val) => val * 2),
+      );
       expect(results).toEqual([2, 4, 6]);
     });
 
@@ -141,16 +155,18 @@ describe('Index exports', () => {
         yield 1;
         yield 2;
       }
-      const results = Array.from(UtilitiesIndex.syncIterate(gen(), (val) => val * 2));
+      const results = Array.from(
+        UtilitiesIndex.syncIterate(gen(), (val) => val * 2),
+      );
       expect(results).toEqual([2, 4]);
     });
 
     it('should export iterateRange for range iteration', async () => {
       const results = [];
-      for await (const item of UtilitiesIndex.iterateRange(
-        (val) => val * 2,
-        { start: 1, stop: 4 }
-      )) {
+      for await (const item of UtilitiesIndex.iterateRange((val) => val * 2, {
+        start: 1,
+        stop: 4,
+      })) {
         results.push(item);
       }
       expect(results).toEqual([2, 4, 6]);
@@ -162,7 +178,10 @@ describe('Index exports', () => {
         yield 20;
       }
       const results = [];
-      for await (const item of UtilitiesIndex.iterate(gen(), (val) => val / 2)) {
+      for await (const item of UtilitiesIndex.iterate(
+        gen(),
+        (val) => val / 2,
+      )) {
         results.push(item);
       }
       expect(results).toEqual([5, 10]);
@@ -171,12 +190,16 @@ describe('Index exports', () => {
 
   describe('range function edge cases', () => {
     it('should handle descending range with inclusive option', () => {
-      const result = Array.from(UtilitiesIndex.range(10, 5, { inclusive: true }));
+      const result = Array.from(
+        UtilitiesIndex.range(10, 5, { inclusive: true }),
+      );
       expect(result).toEqual([10, 9, 8, 7, 6, 5]);
     });
 
     it('should handle ascending range with inclusive option', () => {
-      const result = Array.from(UtilitiesIndex.range(1, 5, { inclusive: true }));
+      const result = Array.from(
+        UtilitiesIndex.range(1, 5, { inclusive: true }),
+      );
       expect(result).toEqual([1, 2, 3, 4, 5]);
     });
 
@@ -190,9 +213,9 @@ describe('Index exports', () => {
     it('should handle callback with no parameters', () => {
       const callback = vi.fn(() => 'no-params');
       const markdocFn = UtilitiesIndex.createMarkdocFunction(callback);
-      
+
       const result = markdocFn.transform({});
-      
+
       expect(callback).toHaveBeenCalledWith();
       expect(result).toBe('no-params');
     });
@@ -200,9 +223,9 @@ describe('Index exports', () => {
     it('should handle callback with many parameters', () => {
       const callback = vi.fn((...args: unknown[]) => args.join('-'));
       const markdocFn = UtilitiesIndex.createMarkdocFunction(callback);
-      
+
       const result = markdocFn.transform({ 0: 'a', 1: 'b', 2: 'c', 3: 'd' });
-      
+
       expect(callback).toHaveBeenCalledWith('a', 'b', 'c', 'd');
       expect(result).toBe('a-b-c-d');
     });
@@ -212,16 +235,18 @@ describe('Index exports', () => {
     it('should handle different error types in returnErrorAndResultFromPromise', async () => {
       // Test object error
       const objectError = { code: 500, message: 'Server error' };
-      const [result1, error1] = await UtilitiesIndex.returnErrorAndResultFromPromise(
-        Promise.reject(objectError)
-      );
+      const [result1, error1] =
+        await UtilitiesIndex.returnErrorAndResultFromPromise(
+          Promise.reject(objectError),
+        );
       expect(result1).toBeNull();
       expect(error1?.message).toBe(JSON.stringify(objectError, null, 2));
-      
+
       // Test unknown error type (number)
-      const [result2, error2] = await UtilitiesIndex.returnErrorAndResultFromPromise(
-        Promise.reject(123)
-      );
+      const [result2, error2] =
+        await UtilitiesIndex.returnErrorAndResultFromPromise(
+          Promise.reject(123),
+        );
       expect(result2).toBeNull();
       expect(error2?.message).toBe('Something went wrong');
     });

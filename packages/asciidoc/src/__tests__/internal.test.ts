@@ -2,22 +2,22 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 // Mock external dependencies
 vi.mock('c12', () => ({
-  loadConfig: vi.fn()
+  loadConfig: vi.fn(),
 }));
 
 vi.mock('fast-glob', () => ({
-  default: vi.fn()
+  default: vi.fn(),
 }));
 
 vi.mock('slugify', () => ({
-  default: vi.fn()
+  default: vi.fn(),
 }));
 
 // Import the functions under test after mocking
-import { 
-  getAsciidocPaths, 
-  loadAsciidocConfig, 
-  generateSlug
+import {
+  getAsciidocPaths,
+  loadAsciidocConfig,
+  generateSlug,
 } from '../lib/internal';
 import glob from 'fast-glob';
 import slugify from 'slugify';
@@ -30,13 +30,17 @@ describe('Internal Utilities Tests', () => {
 
   describe('getAsciidocPaths', () => {
     it('should return array of AsciiDoc file paths', async () => {
-      const mockPaths = ['doc1.adoc', 'folder/doc2.asciidoc', 'nested/doc3.adoc'];
+      const mockPaths = [
+        'doc1.adoc',
+        'folder/doc2.asciidoc',
+        'nested/doc3.adoc',
+      ];
       vi.mocked(glob).mockResolvedValue(mockPaths);
 
       const result = await getAsciidocPaths('content');
 
       expect(glob).toHaveBeenCalledWith('**/*.{adoc,asciidoc}', {
-        cwd: 'content'
+        cwd: 'content',
       });
       expect(result).toEqual(mockPaths);
     });
@@ -48,7 +52,7 @@ describe('Internal Utilities Tests', () => {
       const result = await getAsciidocPaths('docs');
 
       expect(glob).toHaveBeenCalledWith('**/*.{adoc,asciidoc}', {
-        cwd: 'docs'
+        cwd: 'docs',
       });
       expect(result).toEqual(mockPaths);
     });
@@ -68,7 +72,9 @@ describe('Internal Utilities Tests', () => {
     it('should handle glob errors', async () => {
       vi.mocked(glob).mockRejectedValue(new Error('Permission denied'));
 
-      await expect(getAsciidocPaths('restricted')).rejects.toThrow('Permission denied');
+      await expect(getAsciidocPaths('restricted')).rejects.toThrow(
+        'Permission denied',
+      );
     });
   });
 
@@ -76,7 +82,7 @@ describe('Internal Utilities Tests', () => {
     it('should load config with defaults when no config file exists', async () => {
       vi.mocked(loadConfig).mockResolvedValue({
         config: {},
-        configFile: 'asciidoc.config.mts'
+        configFile: 'asciidoc.config.mts',
       });
 
       const result = await loadAsciidocConfig('/project');
@@ -84,7 +90,7 @@ describe('Internal Utilities Tests', () => {
       expect(loadConfig).toHaveBeenCalledWith({
         name: 'asciidoc',
         cwd: '/project',
-        omit$Keys: true
+        omit$Keys: true,
       });
       expect(result).toEqual({});
     });
@@ -92,7 +98,9 @@ describe('Internal Utilities Tests', () => {
     it('should handle config loading errors gracefully', async () => {
       vi.mocked(loadConfig).mockRejectedValue(new Error('Config file corrupt'));
 
-      await expect(loadAsciidocConfig('/invalid')).rejects.toThrow('Config file corrupt');
+      await expect(loadAsciidocConfig('/invalid')).rejects.toThrow(
+        'Config file corrupt',
+      );
     });
   });
 
@@ -105,7 +113,7 @@ describe('Internal Utilities Tests', () => {
       expect(slugify).toHaveBeenCalledWith('Hello World', {
         lower: true,
         trim: true,
-        remove: /[*+~.()'"!:@]/g
+        remove: /[*+~.()'"!:@]/g,
       });
       expect(result).toBe('hello-world');
     });
@@ -118,7 +126,7 @@ describe('Internal Utilities Tests', () => {
       expect(slugify).toHaveBeenCalledWith('My: Awesome! Post@2023', {
         lower: true,
         trim: true,
-        remove: /[*+~.()'"!:@]/g
+        remove: /[*+~.()'"!:@]/g,
       });
       expect(result).toBe('my-awesome-post');
     });
@@ -147,7 +155,6 @@ describe('Internal Utilities Tests', () => {
       expect(result).toBe('hello-unicode');
     });
   });
-
 });
 
 // Additional tests can be added here for schema validation
