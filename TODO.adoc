@@ -1,134 +1,45 @@
 = TODO
 
-== Bugs
+== Tests that are failing
 
-[CAUTION]
-.StarligthConfigSyntax
-====
+The normal Nx test target currently passes 423 tests when run with `NX_DAEMON=false`, but test discovery excludes suites that are not healthy.
 
-File: apps/docs/astro.config.mjs
-Object: social configuration needs to be an array instead of object
-Description:
-• Change social config from object to array format for Starlight v0.35.2
-• Update the social links to use new array syntax
-====
+* `packages/asciidoc/src/lib/internal.spec.ts` fails one assertion when run through `vite.config.ts`: the empty-folder rejection is a `$ZodError`, but the test expects it to satisfy `instanceof ZodError` at line 137.
+* `packages/utilities/src/lib/utilities.spec.ts` cannot be transformed because the test at lines 309-315 uses `await` inside a non-`async` test callback.
+* `packages/asciidoc/src/__tests__/asciidoc-loader.test.ts.disabled` is disabled, leaving the primary loader and watcher behavior outside the normal suite.
+* `packages/asciidoc/vitest.config.ts` and `packages/utilities/vitest.config.ts` only include tests under `src/**/__tests__`, silently excluding colocated `src/lib/*.spec.ts` suites.
+* `pnpm prettier --check .` fails on 227 files.
+* `pnpm dlx publint dist/packages/utilities` fails because `./src/index.d.ts` and `./components/index.js` do not exist in the packed package.
 
-[CAUTION] 
-.AstroIconVirtualImport
-====
+== What bugs are present
 
-File: apps/astro-circle/package.json
-Dependencies: astro-icon package causing build failures
-Description:
-• astro-icon virtual import is failing during build
-• May need to update or replace with newer icon solution
-====
+* `@forastro/utilities` publishes a broken package. Its generated exports reference a missing type declaration and a missing components entry point; the tarball contains only `index.js`, `index.d.ts`, and `package.json`.
+* The AsciiDoc loader uses `astroConfig.root.pathname` as a filesystem path. On Windows this becomes `/C:/...`, causing `fast-glob` to find no content. Use `fileURLToPath(astroConfig.root)` and platform-safe path operations.
+* `apps/mock-blog/src/content.config.ts` passes `src/content/blog` even though the loader appends the collection name, producing `src/content/blog/blog`.
+* The AsciiDoc watcher `add` handler reverses the `projectRelativePath` and `slug` arguments passed to `setStoreUsingExtractedInfo`.
+* Loader entries are keyed only by filename, so equal filenames in different directories collide. Loader configuration is also cached in mutable module-global state and can leak between loader instances.
+* The Nx page generator emits obsolete Astro content APIs: `entry.slug` and `entry.render()`. It also generates incorrect fixed `../layouts` imports for nested pages.
+* The collection-schema generator writes legacy per-collection `src/content/<collection>/config.ts` files instead of updating `src/content.config.ts` for Astro 7.
+* AsciiDoc support detection does not recognize `@forastro/asciidoc`, and generated AsciiDoc content does not satisfy `asciidocBaseSchema`.
+* The app and add-integration generators execute external commands directly instead of deferring side effects through Nx tasks. They can mutate disk during a dry run, and the current Tree may not see the generated files.
+* Generator options including `typescript`, `integrations`, `eslint`, `skipInstall`, and `packageManager` are exposed but ignored. Executor options including build/preview `outDir` and dev `root` are also ignored.
+* The root `ci` script lacks command separators. The AsciiDoc and utilities `check` targets are no-ops, CI omits the real `type-check` targets, and affected commands can select nothing after a push to `main`.
+* The release workflow can run for both a merged pull request and its push to `main`, risking duplicate release attempts.
+* Template dependencies use unrestricted `*` ranges. Their `@forastro/utilities` dependency resolves to registry version 5.1.3 instead of workspace version 7.0.1, so template builds do not test current code.
+* `pnpm audit --prod` reports 27 vulnerabilities: 1 critical, 19 high, 6 moderate, and 1 low. Important paths include Handlebars through Asciidoctor, direct old Sharp versions, Preact, and `smol-toml` through Nx.
+* `nx.json` contains a committed read-write Nx Cloud token that must be rotated and moved to CI secrets.
+* Builds still report empty blog collections, a missing Astro Icon source directory, an implicit-any hint, and deprecated UnoCSS `presetWind` usage.
+* README package versions and build instructions are stale, and `TRIAGE.md` describes obsolete failures and nonexistent files.
 
-[CAUTION]
-.TestConfigurationErrors
-====
+== What to do next
 
-File: packages/nx-astro-plugin/vite.config.ts
-Configuration: NX workspace root does not exist issue
-Description:
-• Fix vite test configuration for astro-nx project
-• Ensure proper workspace root configuration
-====
-
-[CAUTION]
-.MissingTestScripts
-====
-
-File: apps/astro-circle/package.json
-Scripts: test script only echoes error message
-Description:
-• Implement proper test script for astro-circle app
-• Add test dependencies and configuration
-====
-
-== Refactors
-
-[WARNING]
-.ESLintErrors
-====
-
-File: packages/nx-astro-plugin/src/generators/component/generator.ts
-Function: unused import 'buildPath'
-Description:
-• Remove unused import 'buildPath' from component generator
-• Clean up other unused variables and imports across the project
-====
-
-[WARNING]
-.TypeScriptStrictness
-====
-
-File: packages/nx-astro-plugin/src/generators/page/generator.ts
-Type: title property type 'unknown' should be 'string'
-Description:
-• Fix type assertions and ensure proper TypeScript typing
-• Remove trivial type annotations that can be inferred
-• Fix no-explicit-any warnings by providing proper types
-====
-
-[WARNING]
-.ESLintConfigurationUpdate
-====
-
-File: eslint.config.cjs
-Configuration: missing astro plugin and better TypeScript rules
-Description:
-• Add astro-specific ESLint rules for .astro files  
-• Enhance TypeScript ESLint rules to match coding philosophy
-• Add proper configuration for different file types
-====
-
-[WARNING]
-.WorkspacePackageStructure
-====
-
-File: package.json, pnpm-workspace.yaml
-Configuration: workspace should be fully package-based without root node_modules
-Description:
-• Remove root node_modules and ensure all dependencies are in packages
-• Update workspace configuration to prevent hoisting
-• Ensure proper package isolation
-====
-
-== Features
-
-[IMPORTANT]
-.ComprehensiveTestSuite
-====
-
-File: packages/utilities/package.json
-Testing: no test configuration present
-Description:
-• Add vitest configuration for utilities package
-• Implement unit tests with 80%+ coverage
-• Add integration tests for complex functionality
-====
-
-[IMPORTANT]
-.ProperLintingStandards
-====
-
-File: eslint.config.cjs
-Configuration: enhance with coding philosophy rules
-Description:
-• Add custom ESLint rules matching user's coding philosophy
-• Implement rules for clarity, self-documentation, and state management
-• Add automatic formatting integration with consistent style
-====
-
-[IMPORTANT]
-.BuildSystemOptimization
-====
-
-File: nx.json
-Configuration: optimize build caching and dependency management
-Description:
-• Ensure proper build dependencies and caching
-• Fix build outputs and target configurations
-• Optimize build performance across all packages
-====
+. Rotate the committed Nx Cloud token immediately and move Nx credentials to repository secrets. Upgrade or override vulnerable production dependencies, beginning with Asciidoctor/Handlebars, Sharp, Preact, and Nx's vulnerable transitive dependency.
+. Repair `@forastro/utilities` packaging: emit `./index.d.ts`, build or copy `components/index.js` and component assets, copy package documentation/license files, and add packed-package import tests plus Publint to CI.
+. Fix the AsciiDoc loader path conversion, define one unambiguous content-root contract, correct the mock-blog configuration, repair watcher argument order, key entries by relative path, and remove module-global configuration state.
+. Re-enable and repair the loader integration suite. Expand Vitest includes to cover colocated specs, fix the utilities parse error, and run loader tests on both Windows and Linux.
+. Update all generators for Astro 7. Generate `render(entry)`/`entry.id`, calculate nested layout imports, manage `src/content.config.ts`, recognize `@forastro/asciidoc`, and generate schema-valid AsciiDoc content. Validate this with generated-project `astro check` integration tests.
+. Refactor generators so filesystem and installation side effects are represented in the Nx Tree or returned as deferred tasks. Add dry-run tests proving no external files or dependencies are changed.
+. Either implement every advertised generator/executor option or remove it from the schemas and documentation.
+. Repair CI: add command separators to the root script, replace no-op checks with type checking, run formatting and Publint, use correct base/head SHAs, test all projects before release, and add release workflow concurrency with a single automatic trigger.
+. Replace internal template dependencies with workspace protocols and replace all `*` ranges with reviewed bounds. Mark non-publishable apps/templates private.
+. Apply Prettier, resolve lint and Astro hints, replace deprecated UnoCSS APIs, and remove or update stale reports and README sections.
