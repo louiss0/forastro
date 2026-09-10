@@ -1,3 +1,13 @@
+## 7.0.1 (2026-09-10)
+
+### 🩹 Fixes
+
+- **ci:** restore Vitest coverage checks ([1bd32d3](https://github.com/louiss0/forastro/commit/1bd32d3))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 # 7.0.0 (2025-10-07)
 
 ### 🚀 Features

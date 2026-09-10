@@ -1,3 +1,7 @@
+## 1.0.2 (2026-09-10)
+
+This was a version bump only for @forastro/nx-astro-plugin to align it with other projects, there were no code changes.
+
 ## 1.0.1 (2025-10-09)
 
 ### 🩹 Fixes

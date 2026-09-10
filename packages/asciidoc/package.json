@@ -1,6 +1,6 @@
 {
   "name": "@forastro/asciidoc",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "peerDependencies": {
     "astro": ">5.0.0"
   },
