@@ -100,15 +100,33 @@ describe('Index exports', () => {
     });
 
     it('should export executeIfElse with both syntax forms', () => {
-      const result1 = UtilitiesIndex.executeIfElse(true, () => 'if', () => 'else');
-      expect(result1).toBe('if');
+      const parameterIfResult = UtilitiesIndex.executeIfElse(
+        true,
+        () => 'if',
+        () => 'else',
+      );
+      expect(parameterIfResult).toBe('if');
 
-      const result2 = UtilitiesIndex.executeIfElse({
+      const parameterElseResult = UtilitiesIndex.executeIfElse(
+        false,
+        () => 'if',
+        () => 'else',
+      );
+      expect(parameterElseResult).toBe('else');
+
+      const optionsIfResult = UtilitiesIndex.executeIfElse({
+        condition: true,
+        ifCb: () => 'if',
+        elseCb: () => 'else',
+      });
+      expect(optionsIfResult).toBe('if');
+
+      const optionsElseResult = UtilitiesIndex.executeIfElse({
         condition: false,
         ifCb: () => 'if',
         elseCb: () => 'else',
       });
-      expect(result2).toBe('else');
+      expect(optionsElseResult).toBe('else');
     });
   });
 

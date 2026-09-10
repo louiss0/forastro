@@ -9,8 +9,9 @@ on:
     branches: [main]
 
 env:
-  NODE_VERSION: '20'
-  PNPM_VERSION: '9'
+  NODE_VERSION: '24'
+  NX_DAEMON: 'false'
+  PNPM_VERSION: '11.24.0'
 
 jobs:
   # Test and Build Job

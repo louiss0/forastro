@@ -6,6 +6,9 @@ on:
   pull_request:
     branches: [ main, master ]
 
+env:
+  NX_DAEMON: 'false'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -39,7 +42,7 @@ jobs:
         run: pnpm nx run-many -t test --projects="tag:nx:lib" --parallel
 
       - name: Test utilities with coverage
-        run: pnpm nx test utilities -- --coverage --coverageReporters="text-summary,lcov"
+        run: pnpm nx test utilities -- --coverage --coverage.reporter=text-summary --coverage.reporter=lcov
 
       - name: Astro check (affected, exclude problematic projects)
         run: pnpm nx affected -t check --parallel --base=origin/main
