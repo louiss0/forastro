@@ -1,6 +1,6 @@
 {
   "name": "@forastro/asciidoc",
-  "version": "2.5.1",
+  "version": "2.5.2",
   "license": "MIT",
   "peerDependencies": {
     "astro": ">5.0.0"

@@ -1,3 +1,14 @@
+## 7.0.2 (2026-09-11)
+
+### 🩹 Fixes
+
+- **build:** resolve UnoCSS + Vite 8 (rolldown) incompatibility ([d55e7dd](https://github.com/louiss0/forastro/commit/d55e7dd))
+- **workspace:** complete Astro workspace remediation ([602e207](https://github.com/louiss0/forastro/commit/602e207))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 7.0.1 (2026-09-10)
 
 ### 🩹 Fixes

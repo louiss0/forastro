@@ -1,3 +1,14 @@
+## 1.0.3 (2026-09-11)
+
+### 🩹 Fixes
+
+- **build:** resolve UnoCSS + Vite 8 (rolldown) incompatibility ([d55e7dd](https://github.com/louiss0/forastro/commit/d55e7dd))
+- **workspace:** complete Astro workspace remediation ([602e207](https://github.com/louiss0/forastro/commit/602e207))
+
+### ❤️ Thank You
+
+- louiss0 @louiss0
+
 ## 1.0.2 (2026-09-10)
 
 This was a version bump only for @forastro/nx-astro-plugin to align it with other projects, there were no code changes.
