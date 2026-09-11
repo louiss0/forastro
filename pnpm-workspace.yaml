@@ -6,6 +6,7 @@ overrides:
   'picomatch@<2.3.2': '>=2.3.2'
   'picomatch@>=4.0.0 <4.0.4': '>=4.0.4'
   mdast-util-to-hast: '>=13.2.1'
+  rollup: '>=4.59.0'
 
 allowBuilds:
   '@swc/core': true

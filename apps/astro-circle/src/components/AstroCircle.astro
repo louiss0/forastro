@@ -11,7 +11,6 @@ const { class:$class="", ...attrs} = props
 ---
 
 
-
 <button class={$class} {...attrs} data-element="circle" aria-label="Astro Icon Circle">
   <div data-element="inner" class="top">
     <div data-content>
@@ -67,6 +66,8 @@ button[data-element="circle"] {
 
 
 
+
+
 & [data-element="inner"].top-left {
     rotate: -45deg;
     
@@ -86,7 +87,6 @@ button[data-element="circle"] {
   & [data-content] { rotate: 135deg; }
 
 }
-
 & [data-element="inner"].bottom-right {
     rotate: 135deg;
 

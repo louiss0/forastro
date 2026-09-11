@@ -1,15 +1,9 @@
 import { defineConfig } from 'vite';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig({
   root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/packages/utilities',
-  plugins: [nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+  resolve: { tsconfigPaths: true },
   test: {
     watch: false,
     globals: true,

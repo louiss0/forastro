@@ -12,10 +12,11 @@
   },
   "dependencies": {
     "@forastro/utilities": "workspace:*",
-    "@iconify-json/simple-icons": "^1.2.25",
-    "@iconify-json/logos": "^1.2.9"
+    "@iconify-json/logos": "^1.2.9",
+    "@iconify-json/simple-icons": "^1.2.25"
   },
   "devDependencies": {
+    "@unocss/astro": "^66.10.1",
     "astro": "^7.3.2"
   },
   "keywords": [],

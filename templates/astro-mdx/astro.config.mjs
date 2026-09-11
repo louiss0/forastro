@@ -1,11 +1,10 @@
 import { defineConfig } from 'astro/config';
-import UnoCSS from 'unocss/astro';
 import mdx from '@astrojs/mdx';
 
 // https://astro.build/config
 export default defineConfig({
-  integrations: [
-    UnoCSS({ injectReset: true }),
-    mdx({ extendMarkdownConfig: true }),
-  ],
+  integrations: [mdx({ extendMarkdownConfig: true })],
+  vite: {
+    // UnoCSS is configured via vite.config.ts
+  },
 });

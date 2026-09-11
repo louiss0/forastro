@@ -21,7 +21,7 @@
   },
   "optionalDependencies": {
     "tailwindcss": "^4.1.11",
-    "unocss": "^66.3.3"
+    "unocss": "^66.10.1"
   },
   "type": "module",
   "main": "./index.js",
