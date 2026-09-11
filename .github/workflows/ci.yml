@@ -54,6 +54,9 @@ jobs:
       - name: Check formatting
         run: pnpm run format:check
 
+      - name: Verify Render deployment configuration
+        run: pnpm run verify:render
+
       - name: Lint affected projects
         run: pnpm nx affected -t lint --parallel --base=${{ steps.nx-range.outputs.base }} --head=${{ steps.nx-range.outputs.head }}
 

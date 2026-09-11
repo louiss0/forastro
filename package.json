@@ -16,7 +16,8 @@
     "format:check": "prettier --check .",
     "verify:packages": "cross-env NX_DAEMON=false pnpm nx run-many -t build --projects=asciidoc,utilities,@forastro/nx-astro-plugin --parallel && pnpm exec publint dist/packages/asciidoc && pnpm exec publint dist/packages/utilities && pnpm exec publint dist/packages/nx-astro-plugin && node tools/scripts/verify-packed-packages.mjs",
     "verify:generated-app": "node tools/scripts/verify-generated-app.mjs",
-    "ci": "pnpm -w install --frozen-lockfile && pnpm run format:check && cross-env NX_DAEMON=false pnpm nx run-many -t lint --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t test --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t type-check --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t check --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t build --all --parallel=1 && pnpm run verify:packages"
+    "verify:render": "node tools/scripts/verify-render-config.mjs",
+    "ci": "pnpm -w install --frozen-lockfile && pnpm run format:check && pnpm run verify:render && cross-env NX_DAEMON=false pnpm nx run-many -t lint --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t test --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t type-check --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t check --all --parallel=3 && cross-env NX_DAEMON=false pnpm nx run-many -t build --all --parallel=1 && pnpm run verify:packages"
   },
   "private": true,
   "devDependencies": {

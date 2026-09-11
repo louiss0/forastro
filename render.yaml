@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: forastro-docs
+    runtime: static
+    repo: https://github.com/louiss0/forastro
+    branch: main
+    rootDir: .
+    buildCommand: corepack pnpm install --frozen-lockfile && corepack pnpm nx build docs
+    staticPublishPath: ./apps/docs/dist
+    autoDeployTrigger: commit
+    buildFilter:
+      paths:
+        - apps/docs/**
+        - nx.json
+        - package.json
+        - pnpm-lock.yaml
+        - pnpm-workspace.yaml
+        - render.yaml
+    envVars:
+      - key: NODE_VERSION
+        value: '22.23.2'

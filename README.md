@@ -81,6 +81,16 @@ Publishing requires the `NPM_TOKEN` repository secret. Nx Cloud credentials
 are supplied through the `NX_CLOUD_ACCESS_TOKEN` repository secret and are not
 committed to this repository.
 
+## Render deployment
+
+[`render.yaml`](render.yaml) deploys the documentation from the monorepo root so
+Render uses the committed pnpm workspace lockfile. The Blueprint builds the
+`docs` Nx project and publishes `apps/docs/dist`.
+
+After linking or syncing the Blueprint with the existing `forastro-docs`
+service, clear Render's build cache once to remove the stale npm installation.
+Future deployments then use pnpm with `--frozen-lockfile`.
+
 ## License
 
 MIT. See [`LICENSE`](LICENSE).

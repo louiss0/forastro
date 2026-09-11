@@ -43,6 +43,9 @@ jobs:
       - name: Check formatting
         run: pnpm run format:check
 
+      - name: Verify Render deployment configuration
+        run: pnpm run verify:render
+
       - name: Test every project with a test target
         run: pnpm nx run-many -t test --all --parallel
 
